@@ -31,6 +31,7 @@ import javax.swing.JFileChooser;
 // @MultipartConfig
 public class FirstServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
 	@Override
 	/*
 	 * Usually called when the page is opened for the first time.
@@ -44,15 +45,18 @@ public class FirstServlet extends HttpServlet {
 		dispatcher.forward(req, resp);
 
 	}
+
 	/*
-	 * Usually called when we press the "Browse" button. We open a file selection window, select a root directory,
-	 * and then add each file to a list. We then open the starting screen again, and give it the new file list.
+	 * Usually called when we press the "Browse" button. We open a file
+	 * selection window, select a root directory, and then add each file to a
+	 * list. We then open the starting screen again, and give it the new file
+	 * list.
 	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		System.out.println("doPost ");
 
-		//Open the file selection dialog
+		// Open the file selection dialog
 		String selectFileButton = req.getParameter("selectFileButton");
 		if (selectFileButton != null) {
 			System.out.println("selectFiles");
@@ -61,18 +65,20 @@ public class FirstServlet extends HttpServlet {
 			if (filechooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				FileList.getInstance().clear();
 				FileContainer.resetCount();
-				//Add each file to the list 
+				// Add each file to the list
 				for (File file : filechooser.getSelectedFile().listFiles()) {
-					if (file.isFile()) {
-						FileList.getInstance().add(new FileContainer(file.getName(), file.getAbsolutePath()));
-						System.out.println(file.getName());
-					}
+					// if (file.isFile()) {
+					FileContainer fileContainer = new FileContainer(file.getName(), file.getAbsolutePath(),
+							file.length());
+					FileList.getInstance().add(fileContainer);
+					System.out.println(file.getName());
+					// }
 				}
 			}
 			System.out.println("Done with selecting files");
 		}
-		
-		//Forward the new Page
+
+		// Forward the new Page
 		req.setAttribute("fileList", FileList.getInstance());
 		String nextJSP = "/jsp/startingscreen.jsp";
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
