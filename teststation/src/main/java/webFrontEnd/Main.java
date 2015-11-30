@@ -6,7 +6,7 @@ import org.apache.catalina.startup.Tomcat;
 public class Main {
     
     public static final Optional<String> port = Optional.ofNullable(System.getenv("PORT"));
-    
+    //Start the Tomcat server
     public static void main(String[] args) throws Exception {
         String contextPath = "/";
         String appBase = ".";

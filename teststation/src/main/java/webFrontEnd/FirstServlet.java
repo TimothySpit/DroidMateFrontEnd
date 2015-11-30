@@ -21,122 +21,62 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.swing.JFileChooser;
 
+/*
+ * The FirstServlet Servlet handles the "post" and "get" requests from "/select" actions.
+ * These actions from a webpage call the "doPost" and "doGet" functions, which then call 
+ * apropriate java funtions, and then give it the next Pages to open.
+ */
+
 @WebServlet(name = "FirstServlet", urlPatterns = { "/select" })
 // @MultipartConfig
 public class FirstServlet extends HttpServlet {
-	static String result = "";
-	
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
 	@Override
+	/*
+	 * Usually called when the page is opened for the first time.
+	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String action = req.getParameter("selectAction");
 
+		System.out.println("doGet in FirstServlet");
+		String nextJSP = "/jsp/startingscreen.jsp";
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 		req.setAttribute("fileList", FileList.getInstance());
-		System.out.println("doGet " + action);
-		if (action != null) {
-			switch (action) {
-			case "selected":
-
-				break;
-			case "searchByName":
-				// searchEmployeeByName(req, resp);
-				break;
-			}
-		} else {
-			System.out.println("else");
-			String nextJSP = "/jsp/startingscreen.jsp";
-			// String nextJSP = "/jsp/list-employees.jsp";
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-			req.setAttribute("employeeList", result);
-			req.setAttribute("fileList", FileList.getInstance());
-			dispatcher.forward(req, resp);
-
-		}
+		dispatcher.forward(req, resp);
 
 	}
-
+	/*
+	 * Usually called when we press the "Browse" button. We open a file selection window, select a root directory,
+	 * and then add each file to a list. We then open the starting screen again, and give it the new file list.
+	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String action2 = req.getParameter("selectFileButton");
-		System.out.println("selectfile ");
-		System.out.println(req.getParameter("selectFileButton"));
-		String action = req.getParameter("selectAction");
-		System.out.println("doPost " + action);
-		System.out.println("test");
-		System.out.println(req.getParts().size());
-		PrintWriter writer = resp.getWriter();
+		System.out.println("doPost ");
 
-		if (req.getParts().size() != 0) {
-			for (Part a : req.getParts()) {
-				System.out.println(a.getContentType());
-				System.out.println("b");
-				if (a.getContentType() != null && a.getContentType().equals("text/plain")) {
-					System.out.println("a");
-					result = "";
-					InputStream x = a.getInputStream();
-					int read = x.read();
-					while (read != -1) {
-						System.out.print((char) read);
-						writer.write((char) read);
-						result += (char) read;
-						if (read == '\n') {
-							// result += "<BR />";
-						}
-
-						read = x.read();
-					}
-
-					System.out.println(result);
-
-				}
-			}
-
-		}
-		;
-
-		System.out.println("selectfile ");
-		System.out.println(req.getParameter("selectFileButton"));
-		if (action2.equals("selectFile")) {
+		//Open the file selection dialog
+		String selectFileButton = req.getParameter("selectFileButton");
+		if (selectFileButton != null) {
+			System.out.println("selectFiles");
 			JFileChooser filechooser = new JFileChooser();
-
 			filechooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			if (filechooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				FileList.getInstance().clear();
-				System.out.println(filechooser.getSelectedFile().getAbsolutePath());
-				for (File list : filechooser.getSelectedFile().listFiles()) {
-					FileList.getInstance().add(new FileContainer(list.getName(), list.getAbsolutePath()));
-					System.out.println(list.getName());
-
+				FileContainer.resetCount();
+				//Add each file to the list 
+				for (File file : filechooser.getSelectedFile().listFiles()) {
+					if (file.isFile()) {
+						FileList.getInstance().add(new FileContainer(file.getName(), file.getAbsolutePath()));
+						System.out.println(file.getName());
+					}
 				}
 			}
-			
-
-			System.out.println("done");
+			System.out.println("Done with selecting files");
 		}
-
-		if (action != null) {
-			switch (action) {
-			case "select":
-
-				System.out.println("test");
-				break;
-			case "selectFile":
-
-				break;
-			}
-
-		}
+		
+		//Forward the new Page
 		req.setAttribute("fileList", FileList.getInstance());
 		String nextJSP = "/jsp/startingscreen.jsp";
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 		dispatcher.forward(req, resp);
 	}
-	
-
 
 }

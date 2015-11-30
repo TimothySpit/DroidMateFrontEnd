@@ -13,8 +13,12 @@
 
 
 <form action="/select" method="post">
-	<input type="submit" name="selectFileButton" value="selectFile">
+	<input type="submit" id="selectFile" name="selectFileButton" value="Browse">
 	</input>
+</form>
+<form action="/test" method="post">
+	<input type="submit" name="testButton" value="Test">
+</input>
 </form>
 <div class="container">
 	<form action="/select" method="post" id="employeeForm" role="form">

@@ -7,7 +7,7 @@ public class FileContainer
 	private long id;
 	private String name;
 	private String absoluteFilePath;
-	private static final AtomicLong counter = new AtomicLong(1);
+	private static final AtomicLong counter = new AtomicLong();
 
 	public FileContainer(String name,String absoluteFilePath, long id)
         {
@@ -40,6 +40,10 @@ public class FileContainer
 
 	public void setAbsoluteFilePath(String absoluteFilePath)
         {this.absoluteFilePath = absoluteFilePath;}
+	
+	public static void resetCount(){
+		counter.set(0);
+	}
 
 	@Override
 	public String toString()
