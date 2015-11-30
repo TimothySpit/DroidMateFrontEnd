@@ -28,10 +28,10 @@
 							<td>Absolute Path</td>
 						</tr>
 					</thead>
-					<c:forEach var="employee" items="${fileList}">
-						<td>${employee.id}</td>
-						<td>${employee.name}</td>
-						<td>${employee.lastName}</td>
+					<c:forEach var="fileContainer" items="${fileList}">
+						<td>${fileContainer.id}</td>
+						<td>${fileContainer.name}</td>
+						<td>${fileContainer.absoluteFilePath}</td>
 						</tr>
 					</c:forEach>
 				</table>

@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.example.teststation</groupId>
+  <groupId>webFrontEnd</groupId>
   <artifactId>teststation</artifactId>
   <packaging>war</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.1</version>
   <name>teststation Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <properties>
@@ -55,7 +55,7 @@
   </dependencies>
 
  <build>
-  <finalName>employees-app</finalName>
+  <finalName>web-front-end</finalName>
   <resources>
       <resource>
           <directory>src/main/webapp</directory>
@@ -80,10 +80,10 @@
               <descriptorRefs>
                   <descriptorRef>jar-with-dependencies</descriptorRef>
               </descriptorRefs>
-              <finalName>employees-app-${project.version}</finalName>
+              <finalName>web-front-end-${project.version}</finalName>
               <archive>
                   <manifest>
-                      <mainClass>com.example.employees.Main</mainClass>
+                      <mainClass>webFrontEnd.Main</mainClass>
                   </manifest>
               </archive>
           </configuration>
