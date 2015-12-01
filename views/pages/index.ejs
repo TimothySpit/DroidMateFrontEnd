@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/header %>
+</head>
+<body class="container">
+<main>
+    <div>
+        <div class="row">
+            <div class="col-md-12"><h1 class="text-center">DroidMate</h1></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <form id="mainform">
+                    <input class="form-control" id="folder" type="text" placeholder="Select folder"/>
+                    <button data-toggle="modal" data-target="#myModal" class="btn btn-default" type="button"
+                            id="selectfolder">Select Folder
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+            <button data-toggle="modal" class="btn btn-default disabled" type="button" id="startexploration">Start exploration
+            </button>
+            </div>
+        </div>
+    </div>
+</main>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <!-- Body -->
+            <div class="modal-body">
+                <div class="panel panel-default mainpanel">
+                    <div class="panel-heading">
+                        File Browser
+                   <span class="up">
+                    <i class="fa fa-level-up"></i> Up
+                   </span>
+                    </div>
+                    <div class="panel-body">
+
+                    </div>
+                    <table class="linksholder">
+                    </table>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="selFolder" type="button" data-dismiss="modal" class="btn btn-primary">Select folder</button>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<table id="example" class="hide" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Age</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <th>Name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Age</th>
+        <th>Start date</th>
+        <th>Salary</th>
+    </tr>
+    </tfoot>
+    <tbody>
+    <tr>
+        <td>Rhona Davidson</td>
+        <td>Integration Specialist</td>
+        <td>Tokyo</td>
+        <td>55</td>
+        <td>2010/10/14</td>
+        <td>$327,900</td>
+    </tr>
+    <tr>
+        <td>Colleen Hurst</td>
+        <td>Javascript Developer</td>
+        <td>San Francisco</td>
+        <td>39</td>
+        <td>2009/09/15</td>
+        <td>$205,500</td>
+    </tr>
+    <tr>
+        <td>Sonya Frost</td>
+        <td>Software Engineer</td>
+        <td>Edinburgh</td>
+        <td>23</td>
+        <td>2008/12/13</td>
+        <td>$103,600</td>
+    </tr>
+    <tr>
+        <td>Jena Gaines</td>
+        <td>Office Manager</td>
+        <td>London</td>
+        <td>30</td>
+        <td>2008/12/19</td>
+        <td>$90,560</td>
+    </tr>
+    <tr>
+        <td>Quinn Flynn</td>
+        <td>Support Lead</td>
+        <td>Edinburgh</td>
+        <td>22</td>
+        <td>2013/03/03</td>
+        <td>$342,000</td>
+    </tr>
+    <tr>
+        <td>Fiona Green</td>
+        <td>Chief Operating Officer (COO)</td>
+        <td>San Francisco</td>
+        <td>48</td>
+        <td>2010/03/11</td>
+        <td>$850,000</td>
+    </tr>
+    <tr>
+        <td>Shou Itou</td>
+        <td>Regional Marketing</td>
+        <td>Tokyo</td>
+        <td>20</td>
+        <td>2011/08/14</td>
+        <td>$163,000</td>
+    </tr>
+    <tr>
+        <td>Michelle House</td>
+        <td>Integration Specialist</td>
+        <td>Sidney</td>
+        <td>37</td>
+        <td>2011/06/02</td>
+        <td>$95,400</td>
+    </tr>
+    <tr>
+        <td>Suki Burks</td>
+        <td>Developer</td>
+        <td>London</td>
+        <td>53</td>
+        <td>2009/10/22</td>
+        <td>$114,500</td>
+    </tr>
+    <tr>
+        <td>Prescott Bartlett</td>
+        <td>Technical Author</td>
+        <td>London</td>
+        <td>27</td>
+        <td>2011/05/07</td>
+        <td>$145,000</td>
+    </tr>
+    </tbody>
+</table>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+
+<script src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+<script src="js/tableupdate.js"></script>
+
+
+</body>
+</html>

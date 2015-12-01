@@ -6,3 +6,31 @@ body {
 a {
   color: #00B7FF;
 }
+
+
+.form-signin {
+ margin-top: 200px;
+}
+body { left:10%;position:absolute; top:10%; color: black!important;}
+
+#mainform {
+    width: 50%;
+    height: 25px;
+    margin: 20px auto;
+    display: block;
+}
+
+#mainform #folder {
+    width:80%;
+    display: block;
+    float:left;
+}
+
+#mainform #selectfolder {
+width:20%;
+    float:right;
+}
+
+main {
+    margin-bottom:100px;
+}
