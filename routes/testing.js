@@ -1,20 +1,30 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-    res.writeHead(200, {"Content-Type":"text/event-stream", "Cache-Control":"no-cache", "Connection":"keep-alive"});
-    res.write("retry: 10000\n");
-    res.write("event: connecttime\n");
-    res.write("data: " + (new Date()) + "\n\n");
-    res.write("data: " + (new Date()) + "\n\n");
+function writeData(res, event, data) {
+    res.write("event: " + event + "\n");
+    var str = data.split("\n");
+    for(var i = 0; i < str.length; i++) {
+        res.write('data: ' + str[i] + "\n\n");
+    }
+}
 
-    interval = setInterval(function() {
-        res.write("data: " + (new Date()) + "\n\n");
-    }, 1000);
-    req.connection.addListener("close", function () {
-        clearInterval(interval);
-    }, false);
+/* GET home page. */
+router.get('/', function (req, res, next) {
+    res.writeHead(200, {"Content-Type": "text/event-stream", "Cache-Control": "no-cache", "Connection": "keep-alive"});
+    res.write("retry: 10000\n");
+
+    var spawn = require('child_process').spawn;
+    var process = spawn(
+        'java', ['-jar', 'C:/Informatik/Web/WebStorm-Projekte/web-front-end-for-android-gui-test-generator/bin/test.jar']
+    );
+    process.stdout.on('data', function (data) {
+        writeData(res, "stdout", data.toString());
+    });
+
+    process.stderr.on("data", function (data) {
+        writeData(res, "stderr", data.toString());
+    });
 });
 
 module.exports = router;

@@ -8,21 +8,31 @@
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
     <a href="testing" class="btn" >Browse...</a>
-    <div id="text"></div>
+    <pre id="info"></pre>
+    <h3>Standard-Output:</h3>
+    <code id="stdout"></code>
+    <h3>Error-Output:</h3>
+    <code id="stderr"></code>
   </body>
   <script>
     window.addEventListener("load", function() {
-      var label = document.getElementById("text");
+      var label = document.getElementById("info");
+      var stdoutLabel = document.getElementById("stdout");
+      var stderrLabel = document.getElementById("stderr");
       var source;
 
       function connect() {
         source = new EventSource("testing");
         source.addEventListener("message", function(event) {
-          label.innerHTML += event.data;
+          if(event.data != null && event.data != '') {
+            label.innerHTML += event.data + '<br>';
+          }
         }, false);
-
-        source.addEventListener("connecttime", function(event) {
-          label.innerHTML += "Connection was last established at: " + event.data;
+        source.addEventListener("stderr", function(event) {
+          stderrLabel.innerHTML += event.data + '<br>';
+        }, false);
+        source.addEventListener("stdout", function(event) {
+          stdoutLabel.innerHTML += event.data + '<br>';
         }, false);
 
         source.addEventListener("error", function(event) {
