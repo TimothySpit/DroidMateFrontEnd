@@ -15,14 +15,14 @@ router.get('/', function (req, res, next) {
     res.write("retry: 10000\n");
 
     var spawn = require('child_process').spawn;
-    var process = spawn(
-        'java', ['-jar', 'C:/Informatik/Web/WebStorm-Projekte/web-front-end-for-android-gui-test-generator/bin/test.jar']
+    var proc = spawn(
+        'java', ['-jar', process.cwd() + '/bin/test.jar']
     );
-    process.stdout.on('data', function (data) {
+    proc.stdout.on('data', function (data) {
         writeData(res, "stdout", data.toString());
     });
 
-    process.stderr.on("data", function (data) {
+    proc.stderr.on("data", function (data) {
         writeData(res, "stderr", data.toString());
     });
 });

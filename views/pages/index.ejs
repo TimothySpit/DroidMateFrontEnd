@@ -20,13 +20,59 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 text-center">
+            <div class="col-sm-12 text-center"><a href="/exploration">
             <button data-toggle="modal" class="btn btn-default disabled" type="button" id="startexploration">Start exploration
-            </button>
+            </button></a>
             </div>
         </div>
     </div>
 </main>
+
+<div id="info"></div>
+<div id="stderr"></div>
+<div id="stdout"></div>
+
+<script>
+    window.addEventListener("load", function() {
+        var label = document.getElementById("info");
+        var stdoutLabel = document.getElementById("stdout");
+        var stderrLabel = document.getElementById("stderr");
+        var source;
+
+        function connect() {
+            source = new EventSource("testing");
+            source.addEventListener("message", function(event) {
+                if(event.data != null && event.data != '') {
+                    label.innerHTML += event.data + '<br>';
+                }
+            }, false);
+            source.addEventListener("stderr", function(event) {
+                stderrLabel.innerHTML += event.data + '<br>';
+            }, false);
+            source.addEventListener("stdout", function(event) {
+                stdoutLabel.innerHTML += event.data + '<br>';
+            }, false);
+
+            source.addEventListener("error", function(event) {
+                if (event.target.readyState === EventSource.CLOSED) {
+                    source.close();
+                    label.innerHTML += "Connection closed!";
+                } else if (event.target.readyState === EventSource.CONNECTING) {
+                    label.innerHTML += "Connection closed. Attempting to reconnect!";
+                } else {
+                    label.innerHTML += "Connection closed. Unknown error!";
+                }
+            }, false);
+        }
+
+        if (!!window.EventSource) {
+            connect();
+        } else {
+            label.innerHTML = "Sorry, your browser doesn't support server-sent events";
+        }
+    }, false);
+</script>
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

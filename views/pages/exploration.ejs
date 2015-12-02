@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/header %>
+</head>
+<body class="container">
+<main>
+    <div>
+        <div class="row">
+            <div class="col-md-12"><h1 class="text-center">DroidMate</h1></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <form class="pull-left">
+                    <button class="btn btn-default" type="button"
+                    >Return to start
+                    </button>
+                </form>
+            </div>
+            <div class="col-sm-4 text-center">
+                <form>
+                    <button class="btn btn-default" type="button" id="apkInfoBtn"
+                    >Show details for selected .apks
+                    </button>
+                </form>
+            </div>
+            <div class="col-sm-4">
+                <form class="pull-right">
+                    <button class="btn btn-default" type="button"
+                    >Stop All
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <table id="example" class="display" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Filename</th>
+                        <th>Progress</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Filename</th>
+                        <th>Progress</th>
+                        <th>Status</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+
+                    <tr>
+                        <td>Colleen Hurst</td>
+                        <td>Javascript Developer</td>
+                        <td>San Francisco</td>
+                    </tr>
+                    <tr>
+                        <td>Sonya Frost</td>
+                        <td>Software Engineer</td>
+                        <td>Edinburgh</td>
+                    </tr>
+                    <tr>
+                        <td>Jena Gaines</td>
+                        <td>Office Manager</td>
+                        <td>London</td>
+                    </tr>
+                    <tr>
+                        <td>Quinn Flynn</td>
+                        <td>Support Lead</td>
+                        <td>Edinburgh</td>
+                    </tr>
+                    <tr>
+                        <td>Fiona Green</td>
+                        <td>Chief Operating Officer (COO)</td>
+                        <td>San Francisco</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <div class="row" id="buttonNavExploration">
+            <div class="col-sm-4">
+                <button class="btn btn-default" type="button"
+                >Open output folder
+                </button>
+            </div>
+            <div class="col-sm-4">
+
+            </div>
+            <div class="col-sm-4">
+
+            </div>
+        </div>
+        <div class="row progressbar">
+            <div class="col-sm-12">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40"
+                         aria-valuemin="0" aria-valuemax="100" style="width:40%">
+                        40% Complete (success)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+
+<script src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+<script src="js/tableupdate.js"></script>
+
+<script>$('#example').DataTable({
+        "paging": false,
+        "ordering": false,
+        "info": false,
+        "searching": false
+    });</script>
+</body>
+</html>

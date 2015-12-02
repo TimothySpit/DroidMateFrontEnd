@@ -11,7 +11,7 @@ a {
 .form-signin {
  margin-top: 200px;
 }
-body { left:10%;position:absolute; top:10%; color: black!important;}
+body { margin: 0 auto; top:10%; color: black!important;}
 
 #mainform {
     width: 50%;
@@ -33,4 +33,12 @@ width:20%;
 
 main {
     margin-bottom:100px;
+}
+
+.progressbar {
+    margin-top:50px;
+}
+
+#buttonNavExploration {
+    margin: 10px 0 50px 0;
 }
