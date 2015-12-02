@@ -1,1 +1,0 @@
-## web-front-end-for-android-gui-test-generator

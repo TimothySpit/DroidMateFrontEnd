@@ -3,3 +3,5 @@
 /employees-app/tomcat.8080/*
 .project
 .class
+/target/
+/bin/
