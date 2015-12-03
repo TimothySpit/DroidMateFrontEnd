@@ -45,9 +45,8 @@
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Size</th>
-						<th>Package</th>
-						<th>Version</th>
+						<th>Progress</th>
+						<th>Status</th>
 					</tr>
 				</thead>
 			</table>
@@ -57,8 +56,13 @@
 			<%
 				String res = "";
 					for (JSONObject obj : files) {
-						res += "[\"" + obj.getString("name") + "\",\"" + obj.getString("size") + "\",\""
-								+ obj.getString("package") + "\",\"" + obj.getString("version") + "\"],";
+						res += "[\"" + obj.getString("name") + "\",'" + 
+								 "<div class=\"progress\">" 
+									+ "<div class=\"progress-bar progress-bar-success pb-file\" role=\"progressbar\""
+									+ "aria-valuenow=\"10\" aria-valuemin=\"10\" aria-valuemax=\"100\""
+									+ "style=\"width: 40%\">" + obj.getString("name") + "</div>" + "</div>" 
+									+ "',\""
+								+ obj.getString("version") + "\"],";
 					}
 					res = res.substring(0, res.length() - 1);
 			%>
