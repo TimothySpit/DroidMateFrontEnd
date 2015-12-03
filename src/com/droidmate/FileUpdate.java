@@ -18,13 +18,13 @@ import org.json.JSONObject;
  * Servlet implementation class fileUpdate
  */
 @WebServlet("/fileUpdate")
-public class fileUpdate extends HttpServlet {
+public class FileUpdate extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public fileUpdate() {
+    public FileUpdate() {
         super();
         // TODO Auto-generated constructor stub
     }

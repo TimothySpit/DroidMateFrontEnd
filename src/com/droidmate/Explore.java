@@ -12,13 +12,13 @@ import javax.servlet.http.HttpSession;
  * Servlet implementation class explore
  */
 @WebServlet("/explore")
-public class explore extends HttpServlet {
+public class Explore extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public explore() {
+    public Explore() {
         super();
     }
 
