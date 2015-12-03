@@ -79,8 +79,7 @@
 			</div>
 			<div class="col-sm-4"></div>
 			<div class="col-sm-4">
-				<button class="btn btn-default pull-right"" type="button">Open
-					output folder</button>
+				
 			</div>
 		</div>
 	</div>

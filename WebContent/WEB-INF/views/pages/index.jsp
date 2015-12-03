@@ -23,13 +23,12 @@
 					action="${pageContext.request.contextPath}/index" method="post">
 					<div class="form-group folder-select">
 						<input class="form-control" id="folder" name="filebrowser"
-							value=<%
-			if (request.getAttribute("selpath") != null) {
+							value=<%if (request.getAttribute("selpath") != null) {
 				out.print("\"" + request.getAttribute("selpath") + "\"");
 			} else {
 				out.print("\"Please select a folder\"");
-			}
-		%> type="text" placeholder="Select folder" />
+			}%>
+							type="text" placeholder="Select folder" />
 						<button type="submit" data-toggle="modal" data-target="#myModal"
 							class="btn btn-default" type="button" id="selectfolder">Select
 							Folder</button>
@@ -40,8 +39,8 @@
 		<div class="row main_start">
 			<div class="col-sm-12 text-center">
 				<a href="${pageContext.request.contextPath}/explore">
-					<button data-toggle="modal" class=<%
-			if (request.getAttribute("selpath") != null) {
+					<button data-toggle="modal"
+						class=<%if (request.getAttribute("selpath") != null) {
 				out.print("\"btn btn-default\"");
 			} else {
 				out.print("\"btn btn-default disabled\"");
@@ -53,6 +52,12 @@
 		<%
 			if (request.getAttribute("files") != null) {
 		%>
+		<div class="row">
+			<div class="col-sm-12 text-center">
+			<a href="${pageContext.request.contextPath}/apkListingStatic"><button type="submit" class="btn btn-default pull-right" type="button" id="selectfolder">Show
+						details for selected .apks</button></a>
+			</div>
+		</div>
 		<div class="row apk-data">
 			<table id="example" class="display" cellspacing="0" width="100%">
 				<thead>
@@ -76,7 +81,8 @@
 					res = res.substring(0, res.length() - 1);
 			%>
 			<script>
-				$('#example').DataTable(
+				$('#example')
+						.DataTable(
 			<%out.println("{ \"paging\": false,\"searching\": false, \"data\":[" + res + " ]}");%>
 				);
 			</script>
