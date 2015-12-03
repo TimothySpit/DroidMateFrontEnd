@@ -20,20 +20,20 @@
 		<div class="row">
 			<div class="col-sm-4">
 				<form class="pull-left">
-					<button class="btn btn-default" type="button">Return
-						to start</button>
+					<a href="${pageContext.request.contextPath}/index">
+						<button data-toggle="modal"
+							class="btn btn-default" type="button" id="returnStart">Return to start</button>
+					</a>
 				</form>
 			</div>
 			<div class="col-sm-4 text-center">
 				<form>
-					<button class="btn btn-default" type="button" id="apkInfoBtn">Show
-						details for selected .apks</button>
+					<button class="btn btn-default" type="button" id="apkInfoBtn">Show details for selected .apks</button>
 				</form>
 			</div>
 			<div class="col-sm-4">
 				<form class="pull-right">
-					<button class="btn btn-default" type="button">Stop
-						All</button>
+					<button class="btn btn-default" type="button">Stop All</button>
 				</form>
 			</div>
 		</div>
@@ -63,24 +63,23 @@
 					res = res.substring(0, res.length() - 1);
 			%>
 			<script>
-				$('#example').DataTable(
-			<%out.println("{ \"paging\": false,\"searching\": false, \"data\":[" + res + " ]}");%>
+				$('#example')
+						.DataTable(
+			<%out.println("{ \"paging\": false,\"searching\": false, \"data\":[" + res + " ], }");%>
 				);
 			</script>
 		</div>
 		<%
 			}
 		%>
-		
+
 		<div class="row">
 			<div class="col-sm-4">
 				<button class="btn btn-default pull-left" type="button">Open
 					output folder</button>
 			</div>
 			<div class="col-sm-4"></div>
-			<div class="col-sm-4">
-				
-			</div>
+			<div class="col-sm-4"></div>
 		</div>
 	</div>
 	</main>
