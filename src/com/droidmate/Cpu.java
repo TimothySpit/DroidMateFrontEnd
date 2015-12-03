@@ -31,7 +31,7 @@ public class Cpu extends HttpServlet {
 		Random rnd = new Random();
 		 
 	    int CPUloading = rnd.nextInt(100);
-	    int CPUcore = CPUloading - 30 < 0 ? 0 : rnd.nextInt( Math.max(0,CPUloading - 30));
+	    int CPUcore = CPUloading - 30 < 0 ? 0 : rnd.nextInt( Math.max(1,CPUloading - 30));
 	    int Disk = rnd.nextInt(1024-56)+56;
 	 
 	    response.getWriter().append("{\"cpu\":" + CPUloading + ", \"core\":" + CPUcore + ", \"disk\":" + Disk + "}");
