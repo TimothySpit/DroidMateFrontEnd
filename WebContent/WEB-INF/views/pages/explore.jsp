@@ -18,36 +18,23 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-sm-12">
-				<form class="form-inline text-center"
-					action="${pageContext.request.contextPath}/index" method="post">
-					<div class="form-group folder-select">
-						<input class="form-control" id="folder" name="filebrowser"
-							value=<%
-			if (request.getAttribute("selpath") != null) {
-				out.print("\"" + request.getAttribute("selpath") + "\"");
-			} else {
-				out.print("\"Please select a folder\"");
-			}
-		%> type="text" placeholder="Select folder" />
-						<button type="submit" data-toggle="modal" data-target="#myModal"
-							class="btn btn-default" type="button" id="selectfolder">Select
-							Folder</button>
-					</div>
+			<div class="col-sm-4">
+				<form class="pull-left">
+					<button class="btn btn-default" type="button">Return
+						to start</button>
 				</form>
 			</div>
-		</div>
-		<div class="row main_start">
-			<div class="col-sm-12 text-center">
-				<a href="${pageContext.request.contextPath}/explore">
-					<button data-toggle="modal" class=<%
-			if (request.getAttribute("selpath") != null) {
-				out.print("\"btn btn-default\"");
-			} else {
-				out.print("\"btn btn-default disabled\"");
-			}%>
-						type="button" id="startexploration">Start exploration</button>
-				</a>
+			<div class="col-sm-4 text-center">
+				<form>
+					<button class="btn btn-default" type="button" id="apkInfoBtn">Show
+						details for selected .apks</button>
+				</form>
+			</div>
+			<div class="col-sm-4">
+				<form class="pull-right">
+					<button class="btn btn-default" type="button">Stop
+						All</button>
+				</form>
 			</div>
 		</div>
 		<%
@@ -84,7 +71,18 @@
 		<%
 			}
 		%>
-
+		
+		<div class="row">
+			<div class="col-sm-4">
+				<button class="btn btn-default pull-left" type="button">Open
+					output folder</button>
+			</div>
+			<div class="col-sm-4"></div>
+			<div class="col-sm-4">
+				<button class="btn btn-default pull-right"" type="button">Open
+					output folder</button>
+			</div>
+		</div>
 	</div>
 	</main>
 </body>
