@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class explore
+ * Servlet implementation class Explore
  */
 @WebServlet("/explore")
 public class Explore extends HttpServlet {
