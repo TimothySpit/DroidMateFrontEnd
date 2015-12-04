@@ -2,7 +2,7 @@
 <%@page import="java.util.Date"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="java.util.List"%>
-<%@ page language="java" contentType="text/html; charset=US-ASCII"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="US-ASCII"%>
 <!DOCTYPE html>
 <html lang="en">
