@@ -33,10 +33,10 @@
 		</script>
 	</head>
 	<body>
-		<div class="example">
+		
 			<h2>Default options</h2>
 			<div id="fileTree" class="file_selector"></div>
-		</div>
+		
 	</body>
 	<jsp:include page="../partials/footer.jsp" />
 </html>
