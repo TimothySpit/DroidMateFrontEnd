@@ -27,7 +27,7 @@ public class ApkListingStatic extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("title") == null) {
+		if (session == null) {
 			response.getWriter().append("You are not authorized!");
 			return;
 		} else {

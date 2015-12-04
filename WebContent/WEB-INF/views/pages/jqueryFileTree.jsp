@@ -18,7 +18,7 @@
 	    dir += "/";
 	}
 	if(!(new File(dir)).exists()) {
-		dir = java.net.URLDecoder.decode(dir.replace("+", "%2B"), "UTF-8");
+		dir = java.net.URLDecoder.decode(dir, "UTF-8");
 	}
     if (new File(dir).exists()) {
 		String[] files = new File(dir).list(new FilenameFilter() {

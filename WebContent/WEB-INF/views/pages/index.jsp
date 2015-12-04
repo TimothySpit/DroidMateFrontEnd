@@ -43,6 +43,13 @@
 				});
 			});
 		});
+		$("#startexploration").click(function() {
+			var form = $('<form action="${pageContext.request.contextPath}/explore" method="post">' +
+			  '<input type="text" name="files" value="" />' +
+			  '</form>');
+			$('body').append(form);
+			form.submit();
+		});
 	});
 </script>
 </head>
