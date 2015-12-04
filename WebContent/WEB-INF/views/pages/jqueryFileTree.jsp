@@ -23,7 +23,7 @@
     if (new File(dir).exists()) {
 		String[] files = new File(dir).list(new FilenameFilter() {
 		    public boolean accept(File dir, String name) {
-				return name.charAt(0) != '.';
+				return true;
 		    }
 		});
 		Arrays.sort(files, String.CASE_INSENSITIVE_ORDER);
