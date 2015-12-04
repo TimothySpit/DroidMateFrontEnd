@@ -58,7 +58,7 @@
 					for (JSONObject obj : files) {
 						res += "[\"" + obj.getString("name") + "\",'" + 
 								 "<div class=\"progress\">" 
-									+ "<div class=\"progress-bar progress-bar-success pb-file\" role=\"progressbar\""
+									+ "<div class=\"progress-bar progress-bar-striped active\" role=\"progressbar\""
 									+ "aria-valuenow=\"10\" aria-valuemin=\"10\" aria-valuemax=\"100\""
 									+ "style=\"width: 40%\">" + obj.getString("name") + "</div>" + "</div>" 
 									+ "',\""
