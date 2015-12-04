@@ -22,6 +22,8 @@
 	src="${pageContext.request.contextPath}/resources/js/flot-tickrotor/jquery.flot.tickrotor.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/flot/jquery.flot.pie.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/flot-axislabels/jquery.flot.axislabels.js"></script>
 
 </head>
 </head>
@@ -66,24 +68,56 @@
 
 <!-- gui elements not yet seen chart -->
 <script type="text/javascript">	
-var d1 = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
- 
 $(document).ready(function () {
-    $.plot($("#flot-gui-elements-not-seen"), [d1]);
+	var d1 = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
+	var options =  {
+		    yaxis: {
+		        labelWidth: 30,
+		        axisLabel: 'GUI Elements not yet seen',
+	            axisLabelUseCanvas: true,
+	            axisLabelFontSizePixels: 20,
+	            axisLabelFontFamily: 'Arial'
+		    },
+		    xaxis: {
+		        labelHeight: 30,
+		        axisLabel: 'time (min)',
+	            axisLabelUseCanvas: true,
+	            axisLabelFontSizePixels: 15,
+	            axisLabelFontFamily: 'Arial'
+		    }
+		};
+    $.plot($("#flot-gui-elements-not-seen"), [d1], options);
 });
 </script>
 
 <!-- gui elements explored chart-->
 <script type="text/javascript">	
-var d1 = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
- 
 $(document).ready(function () {
-    $.plot($("#flot-gui-elements-explored"), [d1]);
+	var d1 = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
+	var options =  {
+		    yaxis: {
+		        labelWidth: 30,
+		        axisLabel: 'GUI elements explored',
+	            axisLabelUseCanvas: true,
+	            axisLabelFontSizePixels: 20,
+	            axisLabelFontFamily: 'Arial'
+		    },
+		    xaxis: {
+		        labelHeight: 30,
+		        axisLabel: 'time (min)',
+	            axisLabelUseCanvas: true,
+	            axisLabelFontSizePixels: 15,
+	            axisLabelFontFamily: 'Arial'
+		    }
+		};
+	
+    $.plot($("#flot-gui-elements-explored"), [d1], options);
 });
 </script>
 
 <!-- apkstatus chart-->
 <script type="text/javascript">	
+$(document).ready(function () {
 var dataSet = [
                {label: "Successful", data: 4119630000, color: "#005CDE" },
                { label: "Failed", data: 590950000, color: "#00A36A" },
@@ -109,14 +143,31 @@ var options = {
         }
 };
 $.plot($("#flot-apks-status"), dataSet, options);    
+});
 </script>
 
 <!-- gui screens explored chart-->
 <script type="text/javascript">	
-var d1 = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
- 
 $(document).ready(function () {
-    $.plot($("#flot-gui-screens-explored"), [d1]);
+	var d1 = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
+	var options =  {
+		    yaxis: {
+		        labelWidth: 30,
+		        axisLabel: 'GUI screens explored',
+	            axisLabelUseCanvas: true,
+	            axisLabelFontSizePixels: 20,
+	            axisLabelFontFamily: 'Arial'
+		    },
+		    xaxis: {
+		        labelHeight: 30,
+		        axisLabel: 'time (min)',
+	            axisLabelUseCanvas: true,
+	            axisLabelFontSizePixels: 15,
+	            axisLabelFontFamily: 'Arial'
+		    }
+		};
+	
+    $.plot($("#flot-gui-screens-explored"), [d1], options);
 });
 </script>
 
