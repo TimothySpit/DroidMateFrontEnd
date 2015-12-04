@@ -66,6 +66,7 @@
 						<th>Size</th>
 						<th>Package</th>
 						<th>Version</th>
+						<th>Analyse</th>
 					</tr>
 				</thead>
 			</table>
@@ -76,7 +77,11 @@
 				String res = "";
 					for (JSONObject obj : files) {
 						res += "[\"" + obj.getString("name") + "\",\"" + obj.getString("size") + "\",\""
-								+ obj.getString("package") + "\",\"" + obj.getString("version") + "\"],";
+								+ obj.getString("package") + "\",\"" + obj.getString("version") + "\",'" + 
+								"<div class=\"ratio\">" 
+									+ "<label><input type=\"checkbox\" value=\"\"></label>"	
+									+ "</div>" + "',\""
+								+ "\"],";
 					}
 					res = res.substring(0, res.length() - 1);
 			%>
