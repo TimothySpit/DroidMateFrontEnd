@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.swing.JFileChooser;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.json.JSONObject;
 
@@ -40,8 +42,7 @@ public class Index extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
 		request.getRequestDispatcher("/WEB-INF/views/pages/index.jsp").forward(request, response);
 	}
@@ -50,13 +51,22 @@ public class Index extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
 		if (request.getParameter("filebrowser") != null) {
+			try {
+				for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+					if ("Nimbus".equals(info.getName())) {
+						UIManager.setLookAndFeel(info.getClassName());
+						break;
+					}
+				}
+			} catch (Exception e) {
+				// Default look and feel
+			}
 			JFileChooser filechooser = new JFileChooser();
 			filechooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			if (filechooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+			if (filechooser.showOpenDialog(filechooser) == JFileChooser.APPROVE_OPTION) {
 				List<JSONObject> jsonFiles = new LinkedList<>();
 				for (File file : filechooser.getSelectedFile().listFiles()) {
 					JSONObject jsonFile = new JSONObject();
@@ -66,13 +76,13 @@ public class Index extends HttpServlet {
 					jsonFile.put("version", Long.toString((new Random()).nextInt(10)));
 					jsonFiles.add(jsonFile);
 				}
-				request.setAttribute("files",jsonFiles);
-				request.setAttribute("selpath",filechooser.getSelectedFile());
-				session.setAttribute("files",jsonFiles);
-				session.setAttribute("title","user");
+				request.setAttribute("files", jsonFiles);
+				request.setAttribute("selpath", filechooser.getSelectedFile());
+				session.setAttribute("files", jsonFiles);
+				session.setAttribute("title", "user");
 			}
 		}
-		doGet(request,response);
+		doGet(request, response);
 	}
 
 }
