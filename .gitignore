@@ -5,3 +5,6 @@
 .class
 /target/
 /bin/
+.classpath
+.settings/
+.gitignore
