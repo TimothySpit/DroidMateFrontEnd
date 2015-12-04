@@ -28,7 +28,7 @@
 			</div>
 			<div class="col-sm-4 text-center">
 				<form>
-					<button class="btn btn-default" type="button" id="apkInfoBtn">Show details for selected .apks</button>
+					<a href="${pageContext.request.contextPath}/apkListingDynamic"><button class="btn btn-default" type="button" id="apkInfoBtn">Show details for selected .apks</button></a>
 				</form>
 			</div>
 			<div class="col-sm-4">
