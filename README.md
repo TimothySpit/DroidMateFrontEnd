@@ -68,7 +68,9 @@ To build DroidMate for first time, follow these steps:
 
 5. Place the .war file in your apache-tomcat-folder\webapps\ folder.
 
-6. Visit the url: http://localhost.com:8080/DroidMate
+6. Go to apache-tomcat-folder\bin and start startup.bat with administrator rights.
+
+7. Visit the url: http://localhost.com:8080/DroidMate/index
 
 
 ### Dependencies ###
