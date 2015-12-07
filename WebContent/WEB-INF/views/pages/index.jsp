@@ -44,11 +44,12 @@
 			});
 		});
 		$("#startexploration").click(function() {
-			var form = $('<form action="${pageContext.request.contextPath}/explore" method="post">' +
+			var form = $('<form action="${pageContext.request.contextPath}/explore" method="post" id="temp_form">' +
 			  '<input type="text" name="files" value="" />' +
 			  '</form>');
 			$('body').append(form);
 			form.submit();
+			 $('#temp_form').remove();
 		});
 	});
 </script>
