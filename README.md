@@ -38,14 +38,14 @@ It reads DroidMates` output via stdout and visualizes it in realtime in the brow
 As input, DroidMateGUI takes a folder containing .apk files for testing. This folder can be selected by the user in the browser in which DroidMateGUI runs.
 After folder selection, DroidMateGUI passes the file path of the selected files to DroidMate for processing.
 
-# Building and testing DroidMate #
+# Building and testing DroidMateGUI #
 
 DroidMateGUI is built as a .war using e.g. an IDE like eclipse EE (http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/mars1). 
 
 
 ## First build (just after cloning from repo)
 
-To build DroidMate for first time, follow these steps:
+To build DroidMateGUI for first time, follow these steps:
 
 
 ### 1. Setup the dependencies ###
