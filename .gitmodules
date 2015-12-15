@@ -1,0 +1,3 @@
+[submodule "droidmate"]
+	path = droidmate
+	url = https://github.com/rumpelheinz/droidmate.git
