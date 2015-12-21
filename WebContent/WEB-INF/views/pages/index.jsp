@@ -13,11 +13,20 @@
 	href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/themes/default/style.min.css" />
 <script
 	src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/jstree.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/js-cookie/src/js.cookie.js"></script>
 <!-- file tree end -->
 </head>
 <body class="container">
 	<main>
 	<div>
+		<div class="settings-button">
+			<form action="${pageContext.request.contextPath}/settings">
+				<button class="btn btn-default" id="settings">
+					<span class="glyphicon glyphicon-cog"></span>
+				</button>
+			</form>
+		</div>
 		<div class="row">
 			<div class="col-md-12 main-heading">
 				<h1 class="text-center">DroidMate</h1>
@@ -60,9 +69,11 @@
 					<div class="col-sm-4"></div>
 					<div class="col-sm-4"></div>
 					<div class="col-sm-4">
-						<button class="btn btn-default pull-left " data-toggle="modal"
-							data-target="#staticinfomodal" id="show-static"
-							type="button">Show details for selected .apks</button>
+						<button class="btn btn-default pull-right hide"
+							data-toggle="modal" data-target="#staticinfomodal"
+							id="show-static" type="button">
+							<span class="glyphicon glyphicon-list-alt"></span> Show details
+						</button>
 						<!-- js tree -->
 						<jsp:include page="../partials/staticInfoModal.jsp" />
 						<!-- js tree -->
@@ -91,6 +102,7 @@
 				</div>
 			</div>
 		</div>
+	</div>
 	</main>
 </body>
 
