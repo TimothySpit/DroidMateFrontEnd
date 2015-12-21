@@ -27,12 +27,12 @@ public class Explore extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		if (session == null) {
-			response.getWriter().append("You are not authorized!");
+		if (session == null || session.getAttribute("selectedAPKS") == null) {
 			return;
-		} else {
-			request.setAttribute("files", session.getAttribute("files"));
-		}
+		} 
+		
+		request.setAttribute("selectedAPKS", session.getAttribute("selectedAPKS"));
+		
 		request.getRequestDispatcher("/WEB-INF/views/pages/explore.jsp").forward(request, response);
 }
 
@@ -40,7 +40,6 @@ public class Explore extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

@@ -8,51 +8,12 @@
 <html lang="en">
 <head>
 <jsp:include page="../partials/header.jsp" />
+<!-- file tree start-->
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/themes/default/style.min.css" />
 <script
-	src="${pageContext.request.contextPath}/resources/js/jqueryFileTree.js"
-	type="text/javascript"></script>
-<link
-	href="${pageContext.request.contextPath}/resources/css/jqueryFileTree.css"
-	rel="stylesheet" type="text/css" media="screen" />
-<script>
-	$(document).ready(function() {
-		$('#fileTree').hide();
-		$('#startexploration').hide();
-		$("#appstuff").hide();
-		$("#selectfolder").click(function() {
-			$('#fileTree').toggle();
-			$('#fileTree').fileTree({
-				root : '/',
-				script : '${pageContext.request.contextPath}/JQueryFileTree'
-			}, function(file) {
-				var foldername = file.substr(0, file.lastIndexOf("/") + 1);
-				$("#folder_name").val(foldername);
-				$('#fileTree').hide();
-				$('#startexploration').show();
-
-				$.post('${pageContext.request.contextPath}/FileSelection', {
-					dir : foldername
-				}, function(data, status) {
-					$('#appstuff').show();
-					var values = JSON.parse(data);
-					$('#selectiontable').DataTable({
-						paging : false,
-						searching : false,
-						data : values
-					});
-				});
-			});
-		});
-		$("#startexploration").click(function() {
-			var form = $('<form action="${pageContext.request.contextPath}/explore" method="post" id="temp_form">' +
-			  '<input type="text" name="files" value="" />' +
-			  '</form>');
-			$('body').append(form);
-			form.submit();
-			 $('#temp_form').remove();
-		});
-	});
-</script>
+	src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/jstree.min.js"></script>
+<!-- file tree end -->
 </head>
 <body class="container">
 	<main>
@@ -67,45 +28,63 @@
 				<form class="form-inline text-center">
 					<div class="form-group folder-select">
 						<input class="form-control" id="folder_name" name="filebrowser"
-							type="text" placeholder="Select folder" />
-						<div class="btn btn-default" id="selectfolder">Select folder</div>
+							type="text" placeholder="Select folder" onfocus="this.blur()"
+							readonly />
+						<div class="btn btn-default" id="selectfolder" data-toggle="modal"
+							data-target="#folderSelectModal">Select folder</div>
 					</div>
 				</form>
 			</div>
 		</div>
-
 		<div class="row">
 			<div class="col-sm-4"></div>
 			<div class="col-sm-4">
-				<div id="fileTree" class="file_selector"></div>
+				<!-- js tree -->
+				<jsp:include page="../partials/directoryTreeDialog.jsp" />
+				<!-- js tree -->
 				<div class="col-sm-4"></div>
 			</div>
 
 			<div class="row main_start">
 				<div class="col-sm-12 text-center">
-					<div class="btn btn-default" id="startexploration">Start
-						exploration</div>
+					<form name="frm-explore" id="frm-explore"
+						action="${pageContext.request.contextPath}/explore">
+						<button type="submit" class="btn btn-default hide"
+							id="startexploration">Start exploration</button>
+					</form>
 				</div>
 			</div>
 
 			<div id="appstuff">
 				<div class="row">
-					<div class="col-sm-12 text-center">
-						<a href="${pageContext.request.contextPath}/apkListingStatic"><button
-								type="submit" class="btn btn-default pull-right" type="button"
-								id="selectfolder">Show details for selected .apks</button></a>
+					<div class="col-sm-4"></div>
+					<div class="col-sm-4"></div>
+					<div class="col-sm-4">
+						<button class="btn btn-default pull-left " data-toggle="modal"
+							data-target="#staticinfomodal" id="show-static"
+							type="button">Show details for selected .apks</button>
+						<!-- js tree -->
+						<jsp:include page="../partials/staticInfoModal.jsp" />
+						<!-- js tree -->
 					</div>
 				</div>
-				<div class="row apk-data">
-					<table id="selectiontable" class="display" cellspacing="0"
-						width="100%">
+				<div class="row">
+					<div class="col-sm-12 text-center">
+						<a href="${pageContext.request.contextPath}/apkListingStatic"><button
+								type="submit" class="btn btn-default pull-right hide"
+								type="button" id="selectfolder">Show details for
+								selected .apks</button></a>
+					</div>
+				</div>
+				<div class="row apk-data hide">
+					<table id="selectiontable" cellspacing="0" width="100%">
 						<thead>
 							<tr>
+								<th><input name="select_all" value="1" type="checkbox"></th>
 								<th>Name</th>
 								<th>Size</th>
 								<th>Package</th>
 								<th>Version</th>
-								<th>Analyse</th>
 							</tr>
 						</thead>
 					</table>

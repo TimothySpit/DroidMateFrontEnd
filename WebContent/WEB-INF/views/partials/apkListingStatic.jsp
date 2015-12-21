@@ -35,9 +35,7 @@
 		</div>
 		<div class="row">
 			<div class="col-sm-12 text-center">
-				<div id="flot-placeholder"
-					style="width: 450px; height: 300px; margin: 0 auto"></div>
-			</div>
+				
 		</div>
 		<div class="row">
 			<div class="col-sm-12 text-center">

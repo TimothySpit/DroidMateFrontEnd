@@ -26,3 +26,7 @@ footer {
 	bottom:0;
 	left:0;
 }
+
+input#folder_name {
+    cursor: default;
+}
