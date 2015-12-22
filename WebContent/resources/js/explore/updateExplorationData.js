@@ -16,7 +16,7 @@ $(function() {
 
 		var fileName = $('#exploreFiles tbody tr:nth-child(' + (counter+1) + ') td:first-child');
 		$.ajax({
-			url : "explorationData?update="
+			url : "ExplorationData?update="
 					+ fileName.text(),
 			dataType : 'json',
 			success : updateExplorationStatus,
@@ -26,7 +26,7 @@ $(function() {
 		});
 	}
 
-	function updateExplorationStatus(_data) {console.log(_data);
+	function updateExplorationStatus(_data) {
 		var row = $('#exploreFiles tbody tr:nth-child(' + (counter+1) + ')');
 		var progressBar = row.find('.progress-bar');
 		progressBar.width(_data.progress+'%');
@@ -40,13 +40,13 @@ $(function() {
 
 	$(document).ready(function() {
 	// init update
-	$.getJSON("explorationData?filesCount",
+	$.getJSON("ExplorationData?filesCount",
 			function(data) {
 				if (data.count) {
 					//set up table
 					$('#exploreFiles').DataTable({
 						"ajax": {
-				        	'url':'explorationData?apkTableData',
+				        	'url':'ExplorationData?apkTableData',
 				        	'dataSrc': function (json) {
 				        		$( ".apk-data" ).removeClass( "hide" );
 								 

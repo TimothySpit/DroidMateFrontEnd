@@ -51,7 +51,7 @@
 		</div>
 		<div class="row bottom-navi">
 			<div class="col-sm-4">
-				<form action="${pageContext.request.contextPath}/index">
+				<form action="${pageContext.request.contextPath}/Index">
 					<button class="btn btn-default btn-default">
 						<span class="glyphicon glyphicon-circle-arrow-left"></span> Back
 					</button>
