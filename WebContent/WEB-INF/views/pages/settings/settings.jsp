@@ -2,6 +2,7 @@
 <%@page import="java.util.Date"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="java.util.List"%>
+<%@page import="com.droidmate.settings.GUISettings"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -14,6 +15,9 @@
 <script
 	src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/jstree.min.js"></script>
 <!-- file tree end -->
+<script
+	src="${pageContext.request.contextPath}/resources/js/settings/formHandling.js"></script>
+	
 </head>
 <body class="container">
 	<main>
@@ -30,7 +34,8 @@
 			<div class="col-sm-4">
 				<input class="form-control" id="output-folder-name"
 					name="filebrowser" type="text" placeholder="Select folder"
-					onfocus="this.blur()" readonly />
+					onfocus="this.blur()"
+					value="<%=(new GUISettings()).getOutputFolder()%>" readonly />
 			</div>
 			<div class="col-sm-4">
 				<button type="button" class="btn btn-default btn-default">
@@ -40,12 +45,22 @@
 		</div>
 		<div class="row input-row">
 			<div class="col-sm-4">
-				<label class="pull-right" for="filebrowser">Exploration
+				<label class="pull-right" for="explorationTime">Exploration
 					Timeout (min):</label>
 			</div>
 			<div class="col-sm-4">
-				<input class="form-control" id="output-folder-name"
-					name="filebrowser" type="text" placeholder="Select folder" />
+				<input class="form-control" id="explorationTime"
+					name="explorationTime" type="text"
+					value="<%=(new GUISettings()).getExplorationTimeout()%>"
+					placeholder="Timeout" />
+			</div>
+			<div class="col-sm-4"></div>
+		</div>
+		<div class="row input-row">
+			<div class="col-sm-4">
+			</div>
+			<div class="col-sm-4">
+			<span id="result-indikator" class="label"></span>
 			</div>
 			<div class="col-sm-4"></div>
 		</div>
@@ -59,7 +74,7 @@
 			</div>
 			<div class="col-sm-4"></div>
 			<div class="col-sm-4">
-				<button type="button" class="btn btn-default btn-default pull-right">
+				<button type="button" name="save-button" id="save-button" class="btn btn-default btn-default pull-right">
 					<span class="glyphicon glyphicon-floppy-disk"></span> Save changes
 				</button>
 			</div>

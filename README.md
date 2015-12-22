@@ -49,7 +49,7 @@ To build DroidMateGUI for first time, follow these steps:
 
 
 ### 1. Setup the dependencies ###
-1. Install Java Development Kit (JDK) 8, 7 and 6.
+1. Install Java Development Kit (JDK) 8.
 
 2. Install Tomcat 8.0
 
@@ -64,13 +64,15 @@ To build DroidMateGUI for first time, follow these steps:
 
 3. Install maven dependencies via maven update and maven install.
 
-4. Build the .war file by File->Export->WAR File
+4. Set the JDK 8 runtime environment (Properties -> Java Build Path -> Change the current JRE to the JDK or add it)
 
-5. Place the .war file in your apache-tomcat-folder\webapps\ folder.
+5. Build the .war file by File->Export->WAR File
 
-6. Go to apache-tomcat-folder\bin and start startup.bat with administrator rights.
+6. Place the .war file in your apache-tomcat-folder\webapps\ folder.
 
-7. Visit the url: http://localhost.com:8080/DroidMate/index
+7. Go to apache-tomcat-folder\bin and start startup.bat with administrator rights.
+
+8. Visit the url: http://localhost.com:8080/DroidMate/index
 
 
 ### Dependencies ###
