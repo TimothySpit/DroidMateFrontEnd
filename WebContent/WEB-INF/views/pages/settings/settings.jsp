@@ -18,7 +18,7 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/settings/formHandling.js"></script>
 <script
-	src="${pageContext.request.contextPath}/resources/js/settings/fileSaving.js"></script>
+	src="${pageContext.request.contextPath}/resources/js/settings/outputFolderTree.js"></script>
 </head>
 <body class="container">
 	<div id="saveinfo-box">
