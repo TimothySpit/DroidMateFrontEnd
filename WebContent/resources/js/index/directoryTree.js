@@ -30,10 +30,12 @@ $(function() {
 						"dataSrc" : function(json) {
 							if (json.data.length <= 0) {
 								$(".apk-data").addClass("hide");
+								$('#load-result-indikator').html('<span class="label label-danger text-center">no apks loaded.</span>');
 								$("#startexploration").addClass("hide");
 								$("#show-static").addClass("hide");
 							} else {
 								$(".apk-data").removeClass("hide");
+								$('#load-result-indikator').html('<span class="label label-success text-center">' + json.data.length + ' apks loaded.</span>');
 								$("#startexploration").removeClass("hide");
 								$("#show-static").removeClass("hide");
 							}

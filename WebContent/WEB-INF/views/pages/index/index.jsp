@@ -35,8 +35,8 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-sm-12">
-				<form class="form-inline text-center">
+			<div class="col-sm-12 text-center">
+				<form class="form-inline">
 					<div class="form-group folder-select">
 						<input class="form-control" id="folder_name" name="filebrowser"
 							type="text" placeholder="Select folder" onfocus="this.blur()"
@@ -45,6 +45,7 @@
 							data-target="#folderSelectModal">Select folder</div>
 					</div>
 				</form>
+				<div id="load-result-indikator"></div>
 			</div>
 		</div>
 		<div class="row">
@@ -90,7 +91,7 @@
 					</div>
 				</div>
 				<div class="row apk-data hide">
-					<table id="selectiontable" cellspacing="0" width="100%">
+					<table id="selectiontable">
 						<thead>
 							<tr>
 								<th><input name="select_all" value="1" type="checkbox"></th>
