@@ -39,10 +39,11 @@ public class FileSystem extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("selectedAPKS") == null) {
+	
+		if (session == null) {
 			return;
 		}
-
+		
 		// get requested types to return
 		FileType fileType = requestedFileType(request.getParameter("type"));
 		if (fileType.equals(FileType.UNKNOWN))

@@ -9,52 +9,62 @@ import java.util.prefs.Preferences;
 public class GUISettings {
 
 	private Preferences prefs;
-	
+
 	private Path outputFolder;
 	private int explorationTimeout;
-	
+
 	public GUISettings() {
-		this.prefs = Preferences.userNodeForPackage(GUISettings.class);
-		
-		File currentDirFile = new File("");
-		String pathString = prefs.get("OutputFolderPath", currentDirFile.getAbsolutePath());
 		try {
-			outputFolder = (Paths.get(pathString));
+			this.prefs = Preferences.userNodeForPackage(GUISettings.class);
+
+			File currentDirFile = new File("");
+			String pathString = prefs.get("OutputFolderPath", currentDirFile.getAbsolutePath());
+			try {
+				outputFolder = (Paths.get(pathString));
+			} catch (InvalidPathException e) {
+				outputFolder = (Paths.get(currentDirFile.getAbsolutePath()));
+				prefs.put("OutputFolderPath", currentDirFile.getAbsolutePath());
+			}
+
+			explorationTimeout = prefs.getInt("ExplorationTimeout", 10);
+			if (explorationTimeout <= 0) {
+				explorationTimeout = 10;
+				prefs.putInt("ExplorationTimeout", explorationTimeout);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		catch (InvalidPathException e) {
-			outputFolder = (Paths.get(currentDirFile.getAbsolutePath()));
-			prefs.put("OutputFolderPath", currentDirFile.getAbsolutePath());
-		}
-		
-		explorationTimeout = prefs.getInt("ExplorationTimeout", 10);
-		if(explorationTimeout <= 0) {
-			explorationTimeout = 10;
-			prefs.putInt("ExplorationTimeout", explorationTimeout);
-		}
-		
 	}
 
 	public int getExplorationTimeout() {
 		return explorationTimeout;
 	}
-	
+
 	public void setExplorationTimeout(int newTimeout) {
-		if(newTimeout <= 0) {
+		if (newTimeout <= 0) {
 			throw new IllegalArgumentException("Timeout must be greater zero.");
 		}
 		this.explorationTimeout = newTimeout;
-		prefs.putInt("ExplorationTimeout", explorationTimeout);
+		try {
+			prefs.putInt("ExplorationTimeout", explorationTimeout);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	public Path getOutputFolder() {
 		return outputFolder;
 	}
 
 	public void setOutputFolder(Path outputFolder) {
-		if(outputFolder == null) {
+		if (outputFolder == null) {
 			throw new IllegalArgumentException("Path must not be null.");
 		}
 		this.outputFolder = outputFolder;
-		prefs.put("OutputFolderPath", outputFolder.toString());
+		try {
+			prefs.put("OutputFolderPath", outputFolder.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
