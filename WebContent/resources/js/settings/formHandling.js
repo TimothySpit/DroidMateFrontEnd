@@ -34,7 +34,7 @@ $(function() {
 
 	function bootstrap_alert(elem, message, alerttype, timeout) {
 		var res = $('<div id="alertdiv" class="alert ' + alerttype
-				+ '"><a class="close" data-dismiss="alert">×</a><span>'
+				+ '"><a class="close" data-dismiss="alert">&times;</a><span>'
 				+ message + '</span></div>')
 		elem.append(res);
 		if (timeout || timeout === 0) {
