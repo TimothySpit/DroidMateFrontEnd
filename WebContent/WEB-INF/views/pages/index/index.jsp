@@ -15,7 +15,8 @@
 	src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/jstree.min.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/js-cookie/src/js.cookie.js"></script>
-	
+<script
+	src="${pageContext.request.contextPath}/resources/js/index/directoryTree.js"></script>	
 <!-- file tree end -->
 </head>
 <body class="container">

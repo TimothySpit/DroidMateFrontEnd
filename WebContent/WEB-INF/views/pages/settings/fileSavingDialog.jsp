@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-<div id="folderSelectModal" class="modal fade" role="dialog">
+<div id="fileSavingDialog" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 
 		<!-- Modal content-->
@@ -11,7 +11,7 @@
 				<h4 class="modal-title">Select folder with .apk files</h4>
 			</div>
 			<div class="modal-body">
-				<div id="folderTree"></div>
+				<div id="fileTree"></div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Select

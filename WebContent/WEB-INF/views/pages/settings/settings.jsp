@@ -17,9 +17,12 @@
 <!-- file tree end -->
 <script
 	src="${pageContext.request.contextPath}/resources/js/settings/formHandling.js"></script>
-	
+<script
+	src="${pageContext.request.contextPath}/resources/js/settings/fileSaving.js"></script>
 </head>
 <body class="container">
+	<div id="saveinfo-box">
+	</div>
 	<main>
 	<div>
 		<div class="row">
@@ -38,11 +41,15 @@
 					value="<%=(new GUISettings()).getOutputFolder()%>" readonly />
 			</div>
 			<div class="col-sm-4">
-				<button type="button" class="btn btn-default btn-default">
+				<button type="button" class="btn btn-default btn-default" data-toggle="modal"
+							data-target="#fileSavingDialog">
 					<span class="glyphicon glyphicon-folder-open"></span>
 				</button>
 			</div>
 		</div>
+		<!-- file dialog -->
+		<jsp:include page="fileSavingDialog.jsp" />
+		<!-- file dialog -->
 		<div class="row input-row">
 			<div class="col-sm-4">
 				<label class="pull-right" for="explorationTime">Exploration
@@ -56,14 +63,6 @@
 			</div>
 			<div class="col-sm-4"></div>
 		</div>
-		<div class="row input-row">
-			<div class="col-sm-4">
-			</div>
-			<div class="col-sm-4">
-			<span id="result-indikator" class="label"></span>
-			</div>
-			<div class="col-sm-4"></div>
-		</div>
 		<div class="row bottom-navi">
 			<div class="col-sm-4">
 				<form action="${pageContext.request.contextPath}/Index">
@@ -74,7 +73,8 @@
 			</div>
 			<div class="col-sm-4"></div>
 			<div class="col-sm-4">
-				<button type="button" name="save-button" id="save-button" class="btn btn-default btn-default pull-right">
+				<button type="button" name="save-button" id="save-button"
+					class="btn btn-default btn-default pull-right">
 					<span class="glyphicon glyphicon-floppy-disk"></span> Save changes
 				</button>
 			</div>
