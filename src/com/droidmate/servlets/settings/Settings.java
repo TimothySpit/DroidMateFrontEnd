@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.droidmate.settings.GUISettings;
@@ -42,6 +43,36 @@ public class Settings extends HttpServlet {
 			return;
 		}
 
+		PrintWriter out = response.getWriter();
+		JSONObject result = new JSONObject();
+		GUISettings settings = new GUISettings();
+
+		// return requested setting
+		if (request.getParameterValues("get[]") != null) {
+			try {
+				JSONArray parameters = new JSONArray(request.getParameterValues("get[]"));
+				for (int i = 0; i < parameters.length(); i++) {
+					String current = parameters.optString(i);
+					switch (current) {
+					case "path":
+						result.put("path", settings.getOutputFolder());
+						break;
+					case "time":
+						result.put("time", settings.getExplorationTimeout());
+					default:
+						break;
+					}
+				}
+				out.print(result);
+				out.flush();
+			} catch (Exception e) {
+				// Json not parable
+				e.printStackTrace();
+				return;
+			}
+		}
+
+		// save
 		if (request.getParameter("save") != null && request.getParameter("save").equals("true")) {
 			if (request.getParameter("path") == null || request.getParameter("time") == null) {
 				return;
@@ -49,10 +80,6 @@ public class Settings extends HttpServlet {
 
 			String outputPath = request.getParameter("path");
 			String explorationTime = request.getParameter("time");
-
-			PrintWriter out = response.getWriter();
-			JSONObject result = new JSONObject();
-			GUISettings settings = new GUISettings();
 			boolean settingsCorrect = true;
 
 			try {
@@ -78,9 +105,11 @@ public class Settings extends HttpServlet {
 			result.put("success", settingsCorrect);
 			out.print(result);
 			out.flush();
-		} else {
-			request.getRequestDispatcher("/WEB-INF/views/pages/settings/settings.jsp").forward(request, response);
 		}
+
+		if (request.getParameterMap().size() == 0)
+			request.getRequestDispatcher("/WEB-INF/views/pages/settings/settings.jsp").forward(request, response);
+
 	}
 
 	/**
@@ -89,7 +118,6 @@ public class Settings extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

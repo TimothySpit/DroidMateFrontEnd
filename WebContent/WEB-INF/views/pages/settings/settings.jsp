@@ -38,7 +38,7 @@
 				<input class="form-control" id="output-folder-name"
 					name="filebrowser" type="text" placeholder="Select folder"
 					onfocus="this.blur()"
-					value="<%=(new GUISettings()).getOutputFolder()%>" readonly />
+					readonly />
 			</div>
 			<div class="col-sm-4">
 				<button type="button" class="btn btn-default btn-default" data-toggle="modal"
@@ -58,7 +58,6 @@
 			<div class="col-sm-4">
 				<input class="form-control" id="explorationTime"
 					name="explorationTime" type="text"
-					value="<%=(new GUISettings()).getExplorationTimeout()%>"
 					placeholder="Timeout" />
 			</div>
 			<div class="col-sm-4"></div>

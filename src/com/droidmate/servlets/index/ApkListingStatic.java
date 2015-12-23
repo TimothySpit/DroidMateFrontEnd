@@ -41,7 +41,7 @@ public class ApkListingStatic extends HttpServlet {
 		if (session == null || session.getAttribute("selectedAPKS") == null) {
 			return;
 		}
-		
+
 		List<APKInformation> apkInfos = (List<APKInformation>) session.getAttribute("selectedAPKS");
 		JSONObject apkData = new JSONObject();
 		JSONArray ticks = new JSONArray();
@@ -53,7 +53,7 @@ public class ApkListingStatic extends HttpServlet {
 			size.put(counter);
 			size.put(apkInformation.getFile().length());
 			sizes.put(size);
-			
+
 			JSONArray tick = new JSONArray();
 			tick.put(counter);
 			tick.put(apkInformation.getFile().getName());

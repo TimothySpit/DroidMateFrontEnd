@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
-import java.util.function.Consumer;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,17 +41,16 @@ public class ExplorationData extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		if (session == null || session.getAttribute("selectedAPKS") == null) {
 			return;
-		} 
-		
-		if(request.getParameter("filesCount") != null) {
+		}
+
+		if (request.getParameter("filesCount") != null) {
 			PrintWriter out = response.getWriter();
 			List<APKInformation> apkInfo = (List<APKInformation>) session.getAttribute("selectedAPKS");
 			JSONObject sizeObject = new JSONObject();
 			sizeObject.put("count", apkInfo.size());
 			out.print(sizeObject);
 			out.flush();
-		}
-		else if(request.getParameter("apkTableData") != null) {
+		} else if (request.getParameter("apkTableData") != null) {
 			List<APKInformation> apkInfos = (List<APKInformation>) session.getAttribute("selectedAPKS");
 			JSONArray apkData = new JSONArray();
 			for (Iterator<APKInformation> iterator = apkInfos.iterator(); iterator.hasNext();) {
@@ -69,12 +66,12 @@ public class ExplorationData extends HttpServlet {
 			data.put("data", apkData);
 			out.print(data);
 			out.flush();
-		} else if(request.getParameter("update") != null) {
+		} else if (request.getParameter("update") != null) {
 			List<APKInformation> apkInfos = (List<APKInformation>) session.getAttribute("selectedAPKS");
 			String file = request.getParameter("update");
 			for (Iterator<APKInformation> iterator = apkInfos.iterator(); iterator.hasNext();) {
 				APKInformation apkInformation = (APKInformation) iterator.next();
-				if(apkInformation.getFile().getName().equals(file)) {
+				if (apkInformation.getFile().getName().equals(file)) {
 					JSONObject data = new JSONObject();
 					data.put("progress", apkInformation.getProgress());
 					data.put("state", apkInformation.getStatus());

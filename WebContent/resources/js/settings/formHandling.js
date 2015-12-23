@@ -46,4 +46,14 @@ $(function() {
 		}
 	}
 	;
-})
+});
+
+//fill edit boxes
+$(function() {
+	$.get( "Settings", {get:["path","time"],}, function( data ) {
+		var json = JSON.parse(data);
+		  $('#output-folder-name').val(json.path);
+		  $('#explorationTime').val(json.time);
+		});
+	
+});

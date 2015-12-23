@@ -5,11 +5,11 @@ import java.io.File;
 public class APKInformation {
 
 	private final File file;
-	private int	progress = 0;
-	private APKExplorationStatus status =APKExplorationStatus.NOT_RUNNING;
-	
+	private int progress = 0;
+	private APKExplorationStatus status = APKExplorationStatus.NOT_RUNNING;
+
 	public APKInformation(File apk) {
-		this.file =apk;
+		this.file = apk;
 	}
 
 	public File getFile() {

@@ -70,7 +70,8 @@
 						axisLabelFontSizePixels : 12,
 						axisLabelFontFamily : 'Verdana, Arial',
 						axisLabelPadding : 10,
-						ticks : data.ticks
+						ticks : data.ticks,
+						rotateTicks: 90
 					},
 
 					legend : {

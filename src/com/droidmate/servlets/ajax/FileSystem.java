@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,13 +35,14 @@ public class FileSystem extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-	
+
 		if (session == null) {
 			return;
 		}
-		
+
 		// get requested types to return
 		FileType fileType = requestedFileType(request.getParameter("type"));
 		if (fileType.equals(FileType.UNKNOWN))
@@ -99,9 +98,9 @@ public class FileSystem extends HttpServlet {
 
 				if (childFiles != null && childFiles.length > 0) {
 					hasSubDirectories = true;
-				} 
-			}else {
-				child.put("icon","jstree-file");
+				}
+			} else {
+				child.put("icon", "jstree-file");
 			}
 			child.put("children", hasSubDirectories);
 			result.put(child);
@@ -114,7 +113,8 @@ public class FileSystem extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 
