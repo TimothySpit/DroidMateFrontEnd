@@ -49,6 +49,7 @@ public class Index extends HttpServlet {
 		if (request.getParameter("apkInfo") != null) {
 			// apk info
 			String path = request.getParameter("apkInfo");
+			session.setAttribute("path", path);
 			File apkFolder = new File(path);
 			if (apkFolder.exists() && apkFolder.isDirectory()) {
 				PrintWriter out = response.getWriter();
