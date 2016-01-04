@@ -26,12 +26,20 @@ $(function() {
 		});
 	}
 
+	function showReportButton(row) {
+		
+	}
+	
 	function updateExplorationStatus(_data) {
 		var row = $('#exploreFiles tbody tr:nth-child(' + (counter+1) + ')');
 		var progressBar = row.find('.progress-bar');
 		progressBar.width(_data.progress+'%');
 		progressBar.text(_data.progress+'%');
 		counter = Math.min(numItems, counter + 1);
+		
+		if(_data.status == 'FINISHED') {
+			showReportButton(row);
+		}
 		
 		if (counter == numItems)
 			counter = 0;
@@ -59,6 +67,15 @@ $(function() {
 						 'searching': false,
 				         'paging': false,
 				         "columnDefs": [ {
+				             "targets": 0,
+				             "searchable": false,
+				             "render": function ( data, type, row ) {
+				                    return data + '<button ' +
+				                    'class="btn btn-default pull-right" type="button">Show report' +
+				                  '</button>'
+				                }
+				           }
+				                         ,{
 				             "targets": 1,
 				             "searchable": false,
 				             "render": function ( data, type, row ) {
