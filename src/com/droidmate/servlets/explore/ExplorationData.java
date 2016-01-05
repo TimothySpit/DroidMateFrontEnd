@@ -36,25 +36,32 @@ public class ExplorationData extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("selectedAPKS") == null) {
+		if (session == null || session.getAttribute("apkInfo") == null) {
 			return;
 		}
 
 		if (request.getParameter("filesCount") != null) {
 			PrintWriter out = response.getWriter();
-			List<APKInformation> apkInfo = (List<APKInformation>) session.getAttribute("selectedAPKS");
+			List<APKInformation> apkInfo = (List<APKInformation>) session.getAttribute("apkInfo");
 			JSONObject sizeObject = new JSONObject();
-			sizeObject.put("count", apkInfo.size());
+			int count = 0;
+			for (APKInformation apkInformation : apkInfo) {
+				if(apkInformation.isSelected()) {
+					count++;
+				}
+			}
+			sizeObject.put("count", count);
 			out.print(sizeObject);
 			out.flush();
 		} else if (request.getParameter("apkTableData") != null) {
-			List<APKInformation> apkInfos = (List<APKInformation>) session.getAttribute("selectedAPKS");
+			List<APKInformation> apkInfos = (List<APKInformation>) session.getAttribute("apkInfo");
 			JSONArray apkData = new JSONArray();
 			for (Iterator<APKInformation> iterator = apkInfos.iterator(); iterator.hasNext();) {
 				APKInformation apkInformation = (APKInformation) iterator.next();
+				if(!apkInformation.isSelected())
+					continue;
 				JSONArray jsonInfo = new JSONArray();
 				jsonInfo.put(apkInformation.getFile().getName());
 				jsonInfo.put(apkInformation.getProgress());
@@ -67,7 +74,7 @@ public class ExplorationData extends HttpServlet {
 			out.print(data);
 			out.flush();
 		} else if (request.getParameter("update") != null) {
-			List<APKInformation> apkInfos = (List<APKInformation>) session.getAttribute("selectedAPKS");
+			List<APKInformation> apkInfos = (List<APKInformation>) session.getAttribute("apkInfo");
 			String file = request.getParameter("update");
 			for (Iterator<APKInformation> iterator = apkInfos.iterator(); iterator.hasNext();) {
 				APKInformation apkInformation = (APKInformation) iterator.next();
@@ -88,8 +95,7 @@ public class ExplorationData extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
 

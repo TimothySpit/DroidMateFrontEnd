@@ -8,6 +8,8 @@ public class APKInformation {
 	private int progress = 0;
 	private APKExplorationStatus status = APKExplorationStatus.NOT_RUNNING;
 
+	private boolean selected = false;
+	
 	public APKInformation(File apk) {
 		this.file = apk;
 	}
@@ -30,6 +32,14 @@ public class APKInformation {
 
 	public void setProgress(int progress) {
 		this.progress = progress;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 
 }

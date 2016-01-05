@@ -43,8 +43,7 @@ public class Index extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
 		if (request.getParameter("apkInfo") != null) {
 			// apk info
@@ -84,8 +83,8 @@ public class Index extends HttpServlet {
 			apkInfoArray.put(apkInfo);
 			files.add(new APKInformation(apk));
 		}
-		//change later from list to something else
-		session.setAttribute("selectedAPKS", files);
+		// change later from list to something else
+		session.setAttribute("apkInfo", files);
 		JSONObject res = new JSONObject();
 		res.put("data", apkInfoArray);
 		return res;
@@ -95,8 +94,7 @@ public class Index extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
 		doGet(request, response);
 	}
