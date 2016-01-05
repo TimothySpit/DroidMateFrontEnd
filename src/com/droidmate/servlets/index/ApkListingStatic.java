@@ -37,11 +37,11 @@ public class ApkListingStatic extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("selectedAPKS") == null) {
+		if (session == null || session.getAttribute("apkInfo") == null) {
 			return;
 		}
 
-		List<APKInformation> apkInfos = (List<APKInformation>) session.getAttribute("selectedAPKS");
+		List<APKInformation> apkInfos = (List<APKInformation>) session.getAttribute("apkInfo");
 		JSONObject apkData = new JSONObject();
 		JSONArray ticks = new JSONArray();
 		JSONArray sizes = new JSONArray();
