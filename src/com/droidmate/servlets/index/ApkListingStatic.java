@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.droidmate.apk.APKInformation;
+import com.droidmate.user.DroidMateUser;
 
 /**
  * Servlet implementation class apkListingStatic
@@ -37,16 +38,16 @@ public class ApkListingStatic extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("apkInfo") == null) {
+		if (session == null || session.getAttribute("user") == null) {
 			return;
 		}
 
-		List<APKInformation> apkInfos = (List<APKInformation>) session.getAttribute("apkInfo");
+		DroidMateUser apkInfos = (DroidMateUser) session.getAttribute("user");
 		JSONObject apkData = new JSONObject();
 		JSONArray ticks = new JSONArray();
 		JSONArray sizes = new JSONArray();
 		int counter = 0;
-		for (Iterator<APKInformation> iterator = apkInfos.iterator(); iterator.hasNext();) {
+		for (Iterator<APKInformation> iterator = apkInfos.getAPKS().iterator(); iterator.hasNext();) {
 			APKInformation apkInformation = (APKInformation) iterator.next();
 			JSONArray size = new JSONArray();
 			size.put(counter);

@@ -1,4 +1,4 @@
-package com.droidmate.servlets.explore;
+package com.droidmate.servlets.ajax;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.droidmate.apk.APKInformation;
+import com.droidmate.user.DroidMateUser;
 
 /**
  * Servlet implementation class Exploration
@@ -29,7 +30,6 @@ public class ExplorationData extends HttpServlet {
 	 */
 	public ExplorationData() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -38,16 +38,16 @@ public class ExplorationData extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("apkInfo") == null) {
+		if (session == null || session.getAttribute("user") == null) {
 			return;
 		}
 
+		DroidMateUser apkInfo = (DroidMateUser) session.getAttribute("user");
 		if (request.getParameter("filesCount") != null) {
 			PrintWriter out = response.getWriter();
-			List<APKInformation> apkInfo = (List<APKInformation>) session.getAttribute("apkInfo");
 			JSONObject sizeObject = new JSONObject();
 			int count = 0;
-			for (APKInformation apkInformation : apkInfo) {
+			for (APKInformation apkInformation : apkInfo.getAPKS()) {
 				if(apkInformation.isSelected()) {
 					count++;
 				}
@@ -56,9 +56,8 @@ public class ExplorationData extends HttpServlet {
 			out.print(sizeObject);
 			out.flush();
 		} else if (request.getParameter("apkTableData") != null) {
-			List<APKInformation> apkInfos = (List<APKInformation>) session.getAttribute("apkInfo");
 			JSONArray apkData = new JSONArray();
-			for (Iterator<APKInformation> iterator = apkInfos.iterator(); iterator.hasNext();) {
+			for (Iterator<APKInformation> iterator = apkInfo.getAPKS().iterator(); iterator.hasNext();) {
 				APKInformation apkInformation = (APKInformation) iterator.next();
 				if(!apkInformation.isSelected())
 					continue;
@@ -74,9 +73,8 @@ public class ExplorationData extends HttpServlet {
 			out.print(data);
 			out.flush();
 		} else if (request.getParameter("update") != null) {
-			List<APKInformation> apkInfos = (List<APKInformation>) session.getAttribute("apkInfo");
 			String file = request.getParameter("update");
-			for (Iterator<APKInformation> iterator = apkInfos.iterator(); iterator.hasNext();) {
+			for (Iterator<APKInformation> iterator = apkInfo.getAPKS().iterator(); iterator.hasNext();) {
 				APKInformation apkInformation = (APKInformation) iterator.next();
 				if (apkInformation.getFile().getName().equals(file)) {
 					JSONObject data = new JSONObject();

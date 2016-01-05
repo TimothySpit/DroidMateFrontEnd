@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.droidmate.apk.APKInformation;
+import com.droidmate.user.DroidMateUser;
 
 /**
  * Servlet implementation class DroidMateServlet
@@ -45,14 +47,16 @@ public class Index extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
+
 		if (request.getParameter("apkInfo") != null) {
-			// apk info
+			//create new user
 			String path = request.getParameter("apkInfo");
-			session.setAttribute("path", path);
+			DroidMateUser newUser = new DroidMateUser(Paths.get(path));
+			session.setAttribute("user", newUser);
 			File apkFolder = new File(path);
 			if (apkFolder.exists() && apkFolder.isDirectory()) {
 				PrintWriter out = response.getWriter();
-				JSONObject apks = generateAPKInfoForFolder(apkFolder, session);
+				JSONObject apks = generateAPKInfoForFolder(newUser);
 				out.print(apks);
 				out.flush();
 			}
@@ -62,29 +66,19 @@ public class Index extends HttpServlet {
 		}
 	}
 
-	private JSONObject generateAPKInfoForFolder(File apkFolder, HttpSession session) {
-		File[] apks = apkFolder.listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(File current, String name) {
-				return name.toLowerCase().endsWith(".apk");
-			}
-		});
-
+	private JSONObject generateAPKInfoForFolder(DroidMateUser user) {
 		JSONArray apkInfoArray = new JSONArray();
-		List<APKInformation> files = new LinkedList<>();
 		int counter = 0;
-		for (File apk : apks) {
+		for (APKInformation apk : user.getAPKS()) {
 			JSONArray apkInfo = new JSONArray();
 			apkInfo.put(counter++);
-			apkInfo.put(apk.getName());
-			apkInfo.put(apk.length());
+			apkInfo.put(apk.getFile().getName());
+			apkInfo.put(apk.getFile().length());
 			apkInfo.put("package");
 			apkInfo.put("version");
 			apkInfoArray.put(apkInfo);
-			files.add(new APKInformation(apk));
 		}
 		// change later from list to something else
-		session.setAttribute("apkInfo", files);
 		JSONObject res = new JSONObject();
 		res.put("data", apkInfoArray);
 		return res;

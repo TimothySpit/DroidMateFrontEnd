@@ -19,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.droidmate.apk.APKInformation;
+import com.droidmate.user.DroidMateUser;
 
 /**
  * Servlet implementation class Explore
@@ -40,20 +41,20 @@ public class Explore extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("apkInfo") == null || 
+		if (session == null || session.getAttribute("user") == null || 
 				request.getParameterValues("id[]") == null) {
 			return;
 		}
 
 		// set up datatable from selected apks
 		String[] requestedIDs = request.getParameterValues("id[]");
-		List<APKInformation> apkInfo = (List<APKInformation>) session.getAttribute("apkInfo");
+		DroidMateUser apkInfo = (DroidMateUser) session.getAttribute("user");
 		
 		for (String id : requestedIDs) {
 			if (NumberUtils.isDigits(id) && NumberUtils.isNumber(id)) {
 				int index = Integer.parseInt(id);
-				if(index < apkInfo.size()) {
-					apkInfo.get(index).setSelected(true);
+				if(index < apkInfo.getAPKS().size()) {
+					apkInfo.getAPKS().get(index).setSelected(true);
 				}
 			}
 		}
@@ -62,7 +63,7 @@ public class Explore extends HttpServlet {
 		if (session.getAttribute("status") == null || session.getAttribute("status") == "failed") {
 			session.setAttribute("status", "failed");
 			// inline apks and start droidmate
-			boolean status = inlineAPKS(Paths.get((String) session.getAttribute("path")));
+			boolean status = inlineAPKS( apkInfo.getAPKPath());
 			if (status)
 				session.setAttribute("status", "inlined");
 
