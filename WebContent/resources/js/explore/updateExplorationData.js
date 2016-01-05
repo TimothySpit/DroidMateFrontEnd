@@ -14,7 +14,7 @@ $(function() {
 			cache : false
 		});
 
-		var fileName = $('#exploreFiles tbody tr:nth-child(' + (counter+1) + ') td:first-child');
+		var fileName = $('#exploreFiles tbody tr:nth-child(' + (counter+1) + ') td:first-child .apk-name');
 		$.ajax({
 			url : "ExplorationData?update="
 					+ fileName.text(),
@@ -70,7 +70,7 @@ $(function() {
 				             "targets": 0,
 				             "searchable": false,
 				             "render": function ( data, type, row ) {
-				                    return data + '<button ' +
+				                    return '<span class="apk-name">' + data + '</span>' + '<button ' +
 				                    'class="btn btn-default pull-right" type="button">Show report' +
 				                  '</button>'
 				                }
