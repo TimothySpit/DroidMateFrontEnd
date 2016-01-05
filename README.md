@@ -55,6 +55,9 @@ To build DroidMateGUI for first time, follow these steps:
 
 3. Install Eclipse EE
 
+4. Set up DroidMate
+
+5. Set 'DROIDMATE' as a system variable pointing to 'YourDroidMatePath\droidmate\dev\droidmate\'
 
 ### 2. Do the build ###
 
