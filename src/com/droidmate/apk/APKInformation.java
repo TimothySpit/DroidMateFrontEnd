@@ -8,7 +8,7 @@ public class APKInformation {
 	private int progress = 0;
 	private APKExplorationStatus status = APKExplorationStatus.NOT_RUNNING;
 
-	private boolean selected = false;
+	private boolean selected = true;
 	
 	public APKInformation(File apk) {
 		this.file = apk;

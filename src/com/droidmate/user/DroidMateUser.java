@@ -6,24 +6,19 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
-
 import com.droidmate.apk.APKInformation;
 
 public class DroidMateUser {
 	
-	private Path apkPath;
+	private Path apkPath = null;
 	
 	private List<APKInformation> apks = new LinkedList<>();
 	
-	public Path getAPKPath() {
-		return apkPath;
-	}
+	private boolean apksInlined = false;
 	
-	public List<APKInformation> getAPKS() {
-		return apks;
-	}
+	private boolean explorationStated = false;
 	
-	public DroidMateUser(Path apkPathToAnalyse) {
+	public void setAPKPath(Path apkPathToAnalyse) {
 		if (apkPathToAnalyse == null) {
 			throw new NullPointerException();
 		}
@@ -35,6 +30,14 @@ public class DroidMateUser {
 		
 		loadAPKInformationForPath();
 	}
+	
+	public Path getAPKPath() {
+		return apkPath;
+	}
+	
+	public List<APKInformation> getAPKS() {
+		return apks;
+	}
 
 	private void loadAPKInformationForPath() {
 		File[] apkFiles = apkPath.toFile().listFiles(new FilenameFilter() {
@@ -44,9 +47,38 @@ public class DroidMateUser {
 			}
 		});
 		
+		apks.clear();
+		
 		for (File apk : apkFiles) {
 			apks.add(new APKInformation(apk));
 		}
+	}
+
+	
+	public int getSelectedAPKSCount() {
+		int counter = 0;
+		for (APKInformation apk : apks) {
+			if (apk.isSelected()) {
+				counter++;
+			}
+		}
+		return counter;
+	}
+	
+	public boolean isApksInlined() {
+		return apksInlined;
+	}
+
+	public void setApksInlined(boolean apksInlined) {
+		this.apksInlined = apksInlined;
+	}
+
+	public boolean isExplorationStated() {
+		return explorationStated;
+	}
+
+	public void setExplorationStated(boolean explorationStated) {
+		this.explorationStated = explorationStated;
 	}
 	
 }

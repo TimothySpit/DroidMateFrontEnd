@@ -54,7 +54,7 @@ $(function() {
 					//set up table
 					$('#exploreFiles').DataTable({
 						"ajax": {
-				        	'url':'ExplorationData?apkTableData',
+				        	'url':'/DroidMate/ExplorationData?apkTableData',
 				        	'dataSrc': function (json) {
 				        		$( ".apk-data" ).removeClass( "hide" );
 								 

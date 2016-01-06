@@ -11,6 +11,7 @@ public class GUISettings {
 	private Preferences prefs;
 
 	private Path outputFolder;
+	private Path droidMatePath;
 	private int explorationTimeout;
 
 	public GUISettings() {
@@ -19,6 +20,7 @@ public class GUISettings {
 
 			File currentDirFile = new File("");
 			String pathString = prefs.get("OutputFolderPath", currentDirFile.getAbsolutePath());
+			String dmPath = prefs.get("DroidMatePath", currentDirFile.getAbsolutePath());
 			try {
 				outputFolder = (Paths.get(pathString));
 			} catch (InvalidPathException e) {
@@ -26,6 +28,13 @@ public class GUISettings {
 				prefs.put("OutputFolderPath", currentDirFile.getAbsolutePath());
 			}
 
+			try {
+				droidMatePath = (Paths.get(dmPath));
+			} catch (InvalidPathException e) {
+				droidMatePath = (Paths.get(currentDirFile.getAbsolutePath()));
+				prefs.put("DroidMatePath", currentDirFile.getAbsolutePath());
+			}
+			
 			explorationTimeout = prefs.getInt("ExplorationTimeout", 10);
 			if (explorationTimeout <= 0) {
 				explorationTimeout = 10;
@@ -63,6 +72,22 @@ public class GUISettings {
 		this.outputFolder = outputFolder;
 		try {
 			prefs.put("OutputFolderPath", outputFolder.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Path getDroidMatePath() {
+		return droidMatePath;
+	}
+
+	public void setDroidMatePath(Path droidMatePath) {
+		if (droidMatePath == null) {
+			throw new IllegalArgumentException("Path must not be null.");
+		}
+		this.droidMatePath = droidMatePath;
+		try {
+			prefs.put("DroidMatePath", droidMatePath.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -57,8 +57,6 @@ To build DroidMateGUI for first time, follow these steps:
 
 4. Set up DroidMate
 
-5. Set 'DROIDMATE' as a system variable pointing to 'YourDroidMatePath\droidmate\dev\droidmate\'
-
 ### 2. Do the build ###
 
 1. Import the project in Eclipse.
@@ -75,8 +73,9 @@ To build DroidMateGUI for first time, follow these steps:
 
 7. Go to apache-tomcat-folder\bin and start startup.bat with administrator rights.
 
-8. Visit the url: http://localhost.com:8080/DroidMate/index
+8. Visit the url: http://localhost.com:8080/DroidMate/Index
 
+9. Configure DroidMate Path and reports path in the settings (http://localhost.com:8080/DroidMate/Settings).
 
 ### Dependencies ###
 

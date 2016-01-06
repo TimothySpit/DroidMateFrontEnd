@@ -41,7 +41,7 @@
 			type : "GET",
 			contentType : 'application/json; charset=utf-8',
 			dataType : 'json',
-			url : 'ApkListingStatic',
+			url : '/DroidMate/ApkListingStatic',
 			error : function() {
 				console.log("An error occurred.");
 			},

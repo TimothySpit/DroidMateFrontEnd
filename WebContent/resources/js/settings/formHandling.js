@@ -1,12 +1,13 @@
 $(function() {
 
-	function saveSettings(outputPath, explorationTime) {
+	function saveSettings(outputPath, dmPath, explorationTime) {
 		$
 				.get(
 						"Settings",
 						{
 							save : true,
-							path : outputPath,
+							outputPath : outputPath,
+							droidmatePath : dmPath,
 							time : explorationTime
 						},
 						function(data) {
@@ -28,8 +29,9 @@ $(function() {
 
 	$('#save-button').on('click', function(e) {
 		var outputPath = $('#output-folder-name').val();
+		var droidmatePath = $('#dm-output-folder-name').val();
 		var explorationTime = $('#explorationTime').val();
-		saveSettings(outputPath, explorationTime);
+		saveSettings(outputPath,droidmatePath, explorationTime);
 	});
 
 	function bootstrap_alert(elem, message, alerttype, timeout) {
@@ -50,9 +52,10 @@ $(function() {
 
 //fill edit boxes
 $(function() {
-	$.get( "Settings", {get:["path","time"],}, function( data ) {
+	$.get( "Settings", {get:["outputPath","droidmatePath","time"],}, function( data ) {
 		var json = JSON.parse(data);
-		  $('#output-folder-name').val(json.path);
+		  $('#output-folder-name').val(json.outputPath);
+		  $('#dm-output-folder-name').val(json.droidmatePath);
 		  $('#explorationTime').val(json.time);
 		});
 	

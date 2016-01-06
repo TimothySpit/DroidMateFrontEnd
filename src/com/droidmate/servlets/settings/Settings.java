@@ -53,8 +53,11 @@ public class Settings extends HttpServlet {
 				for (int i = 0; i < parameters.length(); i++) {
 					String current = parameters.optString(i);
 					switch (current) {
-					case "path":
-						result.put("path", settings.getOutputFolder());
+					case "outputPath":
+						result.put("outputPath", settings.getOutputFolder());
+						break;
+					case "droidmatePath":
+						result.put("droidmatePath", settings.getDroidMatePath());
 						break;
 					case "time":
 						result.put("time", settings.getExplorationTimeout());
@@ -73,11 +76,12 @@ public class Settings extends HttpServlet {
 
 		// save
 		if (request.getParameter("save") != null && request.getParameter("save").equals("true")) {
-			if (request.getParameter("path") == null || request.getParameter("time") == null) {
+			if (request.getParameter("outputPath") == null || request.getParameter("time") == null || request.getParameter("droidmatePath") == null) {
 				return;
 			}
 
-			String outputPath = request.getParameter("path");
+			String outputPath = request.getParameter("outputPath");
+			String droidmatePath = request.getParameter("droidmatePath");
 			String explorationTime = request.getParameter("time");
 			boolean settingsCorrect = true;
 
@@ -86,6 +90,15 @@ public class Settings extends HttpServlet {
 			} catch (InvalidPathException e) {
 				result.put("reason", "Not a valid path.");
 				settingsCorrect = false;
+			}
+
+			if (settingsCorrect) {
+				try {
+					settings.setDroidMatePath(Paths.get(droidmatePath));
+				} catch (InvalidPathException e) {
+					result.put("reason", "Not a valid path.");
+					settingsCorrect = false;
+				}
 			}
 
 			if (settingsCorrect && NumberUtils.isDigits(explorationTime)) {

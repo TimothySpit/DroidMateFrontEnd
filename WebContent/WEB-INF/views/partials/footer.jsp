@@ -1,3 +1,3 @@
 <footer>
-<p class="text-center text-muted">&copy; Chuck Norris </p>
+<p class="text-center text-muted">&copy; DroidMate </p>
 </footer>

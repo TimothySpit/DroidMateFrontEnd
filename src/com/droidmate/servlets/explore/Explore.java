@@ -5,20 +5,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import com.droidmate.apk.APKInformation;
+import com.droidmate.settings.GUISettings;
+import com.droidmate.settings.ServletContextConstants;
 import com.droidmate.user.DroidMateUser;
 
 /**
@@ -40,41 +38,48 @@ public class Explore extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("user") == null || 
-				request.getParameterValues("id[]") == null) {
-			return;
+		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
+		
+		//no apks were selected, redirect to index
+		if (user.getSelectedAPKSCount() <= 0) {
+			request.getRequestDispatcher("/WEB-INF/views/pages/index/index.jsp").forward(request, response);
 		}
-
+		
 		// set up datatable from selected apks
 		String[] requestedIDs = request.getParameterValues("id[]");
-		DroidMateUser apkInfo = (DroidMateUser) session.getAttribute("user");
-		
+
 		for (String id : requestedIDs) {
 			if (NumberUtils.isDigits(id) && NumberUtils.isNumber(id)) {
 				int index = Integer.parseInt(id);
-				if(index < apkInfo.getAPKS().size()) {
-					apkInfo.getAPKS().get(index).setSelected(true);
+				if (index < user.getAPKS().size()) {
+					user.getAPKS().get(index).setSelected(true);
 				}
 			}
 		}
 
-		// first visit?
-		if (session.getAttribute("status") == null || session.getAttribute("status") == "failed") {
-			session.setAttribute("status", "failed");
-			// inline apks and start droidmate
-			boolean status = inlineAPKS( apkInfo.getAPKPath());
-			if (status)
-				session.setAttribute("status", "inlined");
-
+		if(!user.isApksInlined()) {
+			boolean status = inlineAPKS(user.getAPKPath());
+			if (status) {
+				user.setApksInlined(status);
+				user.setExplorationStated(startDroidMate());
+			}
 		}
 
 		request.getRequestDispatcher("/WEB-INF/views/pages/explore/explore.jsp").forward(request, response);
 	}
 
+
+
+	private boolean startDroidMate() {
+		
+		return true;
+	}
+
 	private boolean inlineAPKS(Path path) {
-		Path droidMatePath = Paths.get(System.getenv("DROIDMATE"), "/gradlew.bat");
-		Path inputAPKsPath = Paths.get(System.getenv("DROIDMATE"), "/projects/apk-inliner/input-apks");
+		GUISettings settings = new GUISettings();
+		Path droidMateRoot = settings.getDroidMatePath();
+		Path droidMatePath = Paths.get(droidMateRoot.toString(), "/gradlew.bat");
+		Path inputAPKsPath = Paths.get(droidMateRoot.toString(), "/projects/apk-inliner/input-apks");
 
 		// empty inline directory
 		try {
@@ -95,7 +100,7 @@ public class Explore extends HttpServlet {
 
 		// start inliner
 		ProcessBuilder pb = new ProcessBuilder(droidMatePath.toString(), "--stacktrace", ":projects:core:prepareInlinedApks");
-		pb.directory(Paths.get(System.getenv("DROIDMATE")).toFile());
+		pb.directory(droidMateRoot.toFile());
 		pb.redirectErrorStream(true);
 		try {
 			Process p = pb.start();

@@ -3,19 +3,18 @@ package com.droidmate.servlets.index;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.droidmate.apk.APKInformation;
+import com.droidmate.settings.ServletContextConstants;
 import com.droidmate.user.DroidMateUser;
 
 /**
@@ -37,17 +36,13 @@ public class ApkListingStatic extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("user") == null) {
-			return;
-		}
+		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 
-		DroidMateUser apkInfos = (DroidMateUser) session.getAttribute("user");
 		JSONObject apkData = new JSONObject();
 		JSONArray ticks = new JSONArray();
 		JSONArray sizes = new JSONArray();
 		int counter = 0;
-		for (Iterator<APKInformation> iterator = apkInfos.getAPKS().iterator(); iterator.hasNext();) {
+		for (Iterator<APKInformation> iterator = user.getAPKS().iterator(); iterator.hasNext();) {
 			APKInformation apkInformation = (APKInformation) iterator.next();
 			JSONArray size = new JSONArray();
 			size.put(counter);

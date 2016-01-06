@@ -19,10 +19,11 @@
 	src="${pageContext.request.contextPath}/resources/js/settings/formHandling.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/settings/outputFolderTree.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/settings/droidMateTree.js"></script>
 </head>
 <body class="container">
-	<div id="saveinfo-box">
-	</div>
+	<div id="saveinfo-box"></div>
 	<main>
 	<div>
 		<div class="row">
@@ -37,12 +38,11 @@
 			<div class="col-sm-4">
 				<input class="form-control" id="output-folder-name"
 					name="filebrowser" type="text" placeholder="Select folder"
-					onfocus="this.blur()"
-					readonly />
+					  />
 			</div>
 			<div class="col-sm-4">
-				<button type="button" class="btn btn-default btn-default" data-toggle="modal"
-							data-target="#fileSavingDialog">
+				<button type="button" class="btn btn-default btn-default"
+					data-toggle="modal" data-target="#fileSavingDialog">
 					<span class="glyphicon glyphicon-folder-open"></span>
 				</button>
 			</div>
@@ -50,6 +50,29 @@
 		<!-- file dialog -->
 		<jsp:include page="fileSavingDialog.jsp" />
 		<!-- file dialog -->
+
+
+		<div class="row input-row">
+			<div class="col-sm-4">
+				<label class="pull-right" for="dm-output-folder-name">DroidMate
+					Path:</label>
+			</div>
+			<div class="col-sm-4">
+				<input class="form-control" id="dm-output-folder-name"
+					name="droidMatePath" type="text" placeholder="DroidMate Path"
+					  />
+			</div>
+			<div class="col-sm-4">
+				<button type="button" class="btn btn-default btn-default"
+					data-toggle="modal" data-target="#droidmateDialog">
+					<span class="glyphicon glyphicon-folder-open"></span>
+				</button>
+			</div>
+		</div>
+		<!-- file dialog -->
+		<jsp:include page="droidmateDialog.jsp" />
+		<!-- file dialog -->
+
 		<div class="row input-row">
 			<div class="col-sm-4">
 				<label class="pull-right" for="explorationTime">Exploration
@@ -57,11 +80,12 @@
 			</div>
 			<div class="col-sm-4">
 				<input class="form-control" id="explorationTime"
-					name="explorationTime" type="text"
-					placeholder="Timeout" />
+					name="explorationTime" type="text" placeholder="Timeout" />
 			</div>
 			<div class="col-sm-4"></div>
 		</div>
+
+
 		<div class="row bottom-navi">
 			<div class="col-sm-4">
 				<form action="${pageContext.request.contextPath}/Index">
