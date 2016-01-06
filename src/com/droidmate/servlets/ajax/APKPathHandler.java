@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -53,8 +54,27 @@ public class APKPathHandler extends HttpServlet {
 			handleSaveAPKRoot(apkSaveRoot);
 		}
 
+		//handle save selected apk indices
+		String[] save_selectedAPKS = request.getParameterValues(AjaxConstants.APKPathHandeler_SAVE_SELECTED_APKS);
+		if (save_selectedAPKS != null) {
+			handleSaveSelectedAPKS(save_selectedAPKS);
+		}
+		
 		out.print(result);
 		out.flush();
+	}
+
+	private void handleSaveSelectedAPKS(String[] save_selectedAPKS) {
+		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
+
+		for (String id : save_selectedAPKS) {
+			if (NumberUtils.isDigits(id) && NumberUtils.isNumber(id)) {
+				int index = Integer.parseInt(id);
+				if (index < user.getAPKS().size()) {
+					user.getAPKS().get(index).setSelected(true);
+				}
+			}
+		}		
 	}
 
 	private JSONObject handleInformationGetRequest(String[] get_info) {

@@ -16,7 +16,7 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/js-cookie/src/js.cookie.js"></script>
 <script
-	src="${pageContext.request.contextPath}/resources/js/index/directoryTree.js"></script>	
+	src="${pageContext.request.contextPath}/resources/js/index/directoryTree.js"></script>
 <!-- file tree end -->
 </head>
 <body class="container">
@@ -59,11 +59,8 @@
 
 			<div class="row main_start">
 				<div class="col-sm-12 text-center">
-					<form name="frm-explore" id="frm-explore"
-						action="${pageContext.request.contextPath}/Explore">
-						<button type="submit" class="btn btn-default hide"
-							id="startexploration">Start exploration</button>
-					</form>
+					<button type="submit" class="btn btn-default hide"
+						id="startexploration">Start exploration</button>
 				</div>
 			</div>
 

@@ -19,8 +19,8 @@ $(function() {
 });
 
 $(function() {
+	var rows_selected = [];
 	function createTable() {
-		var rows_selected = [];
 
 		$('#selectiontable').DataTable().destroy();
 		var table = $('#selectiontable')
@@ -82,8 +82,7 @@ $(function() {
 					$table);
 			var chkbox_select_all = $('thead input[name="select_all"]', $table)
 					.get(0);
-			
-		
+
 			// If none of the checkboxes are checked
 			if ($chkbox_checked.length === 0) {
 				chkbox_select_all.checked = false;
@@ -144,47 +143,48 @@ $(function() {
 
 			// Prevent click event from propagating to parent
 			e.stopPropagation();
-		};
-		
+		}
+		;
+
 		// set up checkbox handlers
 		$('#selectiontable tbody').off('click', 'input[type="checkbox"]');
 		$('#selectiontable tbody').on('click', 'input[type="checkbox"]',
 				function(e) {
-			var $row = $(this).closest('tr');
+					var $row = $(this).closest('tr');
 
-			// Get row data
-			var data = table.row($row).data();
+					// Get row data
+					var data = table.row($row).data();
 
-			// Get row ID
-			var rowId = data[0];
+					// Get row ID
+					var rowId = data[0];
 
-			// Determine whether row ID is in the list of selected row
-			// IDs
-			var index = $.inArray(rowId, rows_selected);
+					// Determine whether row ID is in the list of selected row
+					// IDs
+					var index = $.inArray(rowId, rows_selected);
 
-			// If checkbox is checked and row ID is not in list of
-			// selected row IDs
-			if (this.checked && index === -1) {
-				rows_selected.push(rowId);
+					// If checkbox is checked and row ID is not in list of
+					// selected row IDs
+					if (this.checked && index === -1) {
+						rows_selected.push(rowId);
 
-				// Otherwise, if checkbox is not checked and row ID is
-				// in list of selected row IDs
-			} else if (!this.checked && index !== -1) {
-				rows_selected.splice(index, 1);
-			}
+						// Otherwise, if checkbox is not checked and row ID is
+						// in list of selected row IDs
+					} else if (!this.checked && index !== -1) {
+						rows_selected.splice(index, 1);
+					}
 
-			if (this.checked) {
-				$row.addClass('selected');
-			} else {
-				$row.removeClass('selected');
-			}
+					if (this.checked) {
+						$row.addClass('selected');
+					} else {
+						$row.removeClass('selected');
+					}
 
-			// Update state of "Select all" control
-			updateDataTableSelectAllCtrl(table);
+					// Update state of "Select all" control
+					updateDataTableSelectAllCtrl(table);
 
-			// Prevent click event from propagating to parent
-			e.stopPropagation();
-		});
+					// Prevent click event from propagating to parent
+					e.stopPropagation();
+				});
 
 		// Handle click on table cells with checkboxes
 		$('#selectiontable').off('click', 'tbody td, thead tr:first-child');
@@ -218,28 +218,11 @@ $(function() {
 
 		// Handle table draw event
 		table.on('draw', function() {
-			$(
-			'#selectiontable tbody input[type="checkbox"]:not(:checked)')
-			.trigger('click');
+			$('#selectiontable tbody input[type="checkbox"]:not(:checked)')
+					.trigger('click');
 			// Update state of "Select all" control
 			updateDataTableSelectAllCtrl(table);
 		});
-
-		// Handle form submission event
-		$('#frm-explore').off('submit');
-		$('#frm-explore').on(
-				'submit',
-				function(e) {
-					var form = this;
-
-					// Iterate over all selected checkboxes
-					$.each(rows_selected, function(index, rowId) {
-						// Create a hidden element
-						$(form).append(
-								$('<input>').attr('type', 'hidden').attr(
-										'name', 'id[]').val(rowId));
-					});
-				});
 
 		return table;
 	}
@@ -269,4 +252,12 @@ $(function() {
 			var table = createTable();
 		}
 	});
+	
+	$('#startexploration').click(
+			function(e) {
+				$.get("/DroidMate/APKPathHandler",{selApks : rows_selected}, function(data) {
+					window.location = "/DroidMate/Explore";
+				});
+				
+			});
 });

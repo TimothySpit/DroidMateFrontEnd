@@ -10,4 +10,15 @@ public class AjaxConstants {
 	
 	//save requests
 	public final static String APKPathHandeler_SAVE_APKROOT = "apkRoot";
+	public static final String APKPathHandeler_SAVE_SELECTED_APKS = "selApks[]";
+	
+	
+	
+	//get requests
+	public final static String APKInlineHandler_GET_INLINE_STATUS = "inlineStatus";
+	
+	//save requests
+	public final static String APKInlineHandler_SAVE_INLINE = "inline";
+	
+	
 }

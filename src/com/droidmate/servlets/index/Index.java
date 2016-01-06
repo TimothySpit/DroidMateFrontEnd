@@ -14,7 +14,7 @@ import com.droidmate.user.DroidMateUser;
 /**
  * Servlet implementation class DroidMateServlet
  */
-@WebServlet(urlPatterns={"/Index"}, loadOnStartup=1)
+@WebServlet(urlPatterns = { "/Index" }, loadOnStartup = 1)
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -28,8 +28,8 @@ public class Index extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		
-		//create new DroidMate-user for the whole server run
+
+		// create new DroidMate-user for the whole server run
 		DroidMateUser globalUser = new DroidMateUser();
 		getServletContext().setAttribute(ServletContextConstants.DROIDMATE_USER, globalUser);
 	}
@@ -39,8 +39,16 @@ public class Index extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			// standard request
-			request.getRequestDispatcher("/WEB-INF/views/pages/index/index.jsp").forward(request, response);
+		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
+
+		if (user.isExplorationStarted()) {
+			//no access to this page, redirect to exploration
+			request.getRequestDispatcher("/WEB-INF/views/pages/explore/explore.jsp").forward(request, response);
+			return;
+		}
+		
+		// standard request
+		request.getRequestDispatcher("/WEB-INF/views/pages/index/index.jsp").forward(request, response);
 	}
 
 }
