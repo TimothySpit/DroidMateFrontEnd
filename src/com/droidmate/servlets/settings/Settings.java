@@ -17,6 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.droidmate.settings.GUISettings;
+import com.droidmate.settings.ServletContextConstants;
+import com.droidmate.user.DroidMateUser;
 
 /**
  * Servlet implementation class Settings
@@ -37,11 +39,14 @@ public class Settings extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
-		if (session == null) {
+		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
+
+		if (user.isExplorationStarted()) {
+			//no access to this page, redirect to exploration
+			request.getRequestDispatcher("/WEB-INF/views/pages/explore/explore.jsp").forward(request, response);
 			return;
 		}
-
+		
 		PrintWriter out = response.getWriter();
 		JSONObject result = new JSONObject();
 		GUISettings settings = new GUISettings();

@@ -21,7 +21,6 @@ public class ApkListingDynamic extends HttpServlet {
 	 */
 	public ApkListingDynamic() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -29,23 +28,7 @@ public class ApkListingDynamic extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
-		if (session == null) {
-			response.getWriter().append("You are not authorized!");
-			return;
-		} else {
-			request.setAttribute("files", session.getAttribute("files"));
-		}
 		request.getRequestDispatcher("/WEB-INF/views/pages/explore/apkListingDynamic.jsp").forward(request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
 	}
 
 }
