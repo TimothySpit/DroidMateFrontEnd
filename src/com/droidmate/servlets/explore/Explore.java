@@ -39,22 +39,26 @@ public class Explore extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
-		
-		//no apks were selected, redirect to index
-		if (user.getSelectedAPKSCount() <= 0) {
-			request.getRequestDispatcher("/WEB-INF/views/pages/index/index.jsp").forward(request, response);
-		}
-		
+
 		// set up datatable from selected apks
 		String[] requestedIDs = request.getParameterValues("id[]");
-
+		
+		//no apk was selected, redirect to index
+		if (requestedIDs == null)
+			request.getRequestDispatcher("/WEB-INF/views/pages/index/index.jsp").forward(request, response);
+				
 		for (String id : requestedIDs) {
 			if (NumberUtils.isDigits(id) && NumberUtils.isNumber(id)) {
 				int index = Integer.parseInt(id);
-				if (index < user.getAPKS().size()) {
-					user.getAPKS().get(index).setSelected(true);
+					if (index < user.getAPKS().size()) {
+						user.getAPKS().get(index).setSelected(true);
+						}
 				}
 			}
+				
+		//no valid apks were selected, redirect to index
+		if (user.getSelectedAPKSCount() <= 0) {
+			request.getRequestDispatcher("/WEB-INF/views/pages/index/index.jsp").forward(request, response);
 		}
 
 		if(!user.isApksInlined()) {
