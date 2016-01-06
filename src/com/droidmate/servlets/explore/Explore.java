@@ -44,9 +44,9 @@ public class Explore extends HttpServlet {
 		String[] requestedIDs = request.getParameterValues("id[]");
 		
 		//no apk was selected, redirect to index
-		if (requestedIDs == null)
+		if (requestedIDs == null) {
 			request.getRequestDispatcher("/WEB-INF/views/pages/index/index.jsp").forward(request, response);
-				
+		}
 		for (String id : requestedIDs) {
 			if (NumberUtils.isDigits(id) && NumberUtils.isNumber(id)) {
 				int index = Integer.parseInt(id);
