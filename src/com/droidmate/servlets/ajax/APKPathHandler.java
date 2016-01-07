@@ -108,15 +108,8 @@ public class APKPathHandler extends HttpServlet {
 			case AjaxConstants.APKPathHandeler_GET_INFORMATION_APKS: {
 				// returns the apks in the folder
 				JSONArray selectedAPKInfo = new JSONArray();
-				int counter = 0;
 				for (APKInformation apk : user.getAPKS()) {
-					JSONArray apkInfo = new JSONArray();
-					apkInfo.put(counter++);
-					apkInfo.put(apk.getFile().getName());
-					apkInfo.put(apk.getFile().length());
-					apkInfo.put("package");
-					apkInfo.put("version");
-					selectedAPKInfo.put(apkInfo);
+					selectedAPKInfo.put(apk.toJSONArray());
 				}
 				JSONObject res = new JSONObject();
 				res.put("data", selectedAPKInfo);
