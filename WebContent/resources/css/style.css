@@ -58,3 +58,13 @@ input#folder_name {
     z-index: 2;
     left: -50%;
 }
+
+/*scrollbars for file dialogs*/
+#folderSelectModal .modal-body, #droidmateDialog .modal-body, #fileSavingDialog .modal-body {
+    max-height:calc(100vh - 150px);
+    overflow-y:auto;
+    overflow-x:auto;
+    white-space:pre;
+    font-family:monospace;
+    height: 70%;
+}
