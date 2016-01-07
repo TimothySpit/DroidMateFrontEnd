@@ -75,9 +75,10 @@ public class DroidMateUser {
 			while ((s = stdout.readLine()) != null) {
 				output.append(s);
 			}
-			p.getInputStream().close();
+			stdout.close();
 			p.getOutputStream().close();
 			p.getErrorStream().close();
+			p.waitFor();
 			
 			return output.toString();
 		} catch (Exception ex) {
