@@ -43,6 +43,7 @@ public class APKInliningHandler extends HttpServlet {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 
 		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
 		JSONObject result = new JSONObject();
 
 		// handle information get request

@@ -37,6 +37,7 @@ public class ExplorationData extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
+		response.setContentType("application/json");
 		
 		if (request.getParameter("filesCount") != null) {
 			PrintWriter out = response.getWriter();
