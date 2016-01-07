@@ -52,7 +52,7 @@ public class APKPathHandler extends HttpServlet {
 		// handle saving get requests
 		String apkSaveRoot = request.getParameter(AjaxConstants.APKPathHandeler_SAVE_APKROOT);
 		if (apkSaveRoot != null) {
-			handleSaveAPKRoot(apkSaveRoot);
+			result.put("success", handleSaveAPKRoot(apkSaveRoot));
 		}
 
 		//handle save selected apk indices
@@ -123,11 +123,11 @@ public class APKPathHandler extends HttpServlet {
 		return apkInfoResult;
 	}
 
-	private void handleSaveAPKRoot(String saveAPKRoot) {
+	private boolean handleSaveAPKRoot(String saveAPKRoot) {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 		
 		Path newAPKRoot = Paths.get(saveAPKRoot);
-		user.setAPKPath(newAPKRoot);
+		return user.setAPKPath(newAPKRoot);
 		
 	}
 }

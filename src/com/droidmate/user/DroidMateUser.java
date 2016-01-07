@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.droidmate.apk.APKInformation;
+import com.droidmate.settings.GUISettings;
 
 public class DroidMateUser {
 	
@@ -18,7 +19,7 @@ public class DroidMateUser {
 	
 	private boolean explorationStarted = false;
 	
-	public void setAPKPath(Path apkPathToAnalyse) {
+	public boolean setAPKPath(Path apkPathToAnalyse) {
 		if (apkPathToAnalyse == null) {
 			throw new NullPointerException();
 		}
@@ -28,7 +29,13 @@ public class DroidMateUser {
 		
 		apkPath = apkPathToAnalyse;
 		
-		loadAPKInformationForPath();
+		try {
+			loadAPKInformationForPath();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	public synchronized Path getAPKPath() {
@@ -65,7 +72,9 @@ public class DroidMateUser {
 	}
 	
 	private String getAaptOutput(File apk) {
-		ProcessBuilder pb = new ProcessBuilder("aapt", "d", "badging", apk.getAbsolutePath());
+		GUISettings settings = new GUISettings();
+		Path sdkPath = settings.getAndroidSDKPath();
+		ProcessBuilder pb = new ProcessBuilder(sdkPath.toString() + "/aapt", "d", "badging", apk.getAbsolutePath());
 		pb.redirectErrorStream(false);
 		try {
 			Process p = pb.start();
