@@ -133,8 +133,9 @@ public class APKPathHandler extends HttpServlet {
 
 	private void handleSaveAPKRoot(String saveAPKRoot) {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
-
+		
 		Path newAPKRoot = Paths.get(saveAPKRoot);
 		user.setAPKPath(newAPKRoot);
+		
 	}
 }
