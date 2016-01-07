@@ -76,7 +76,7 @@
 		<div class="row input-row">
 			<div class="col-sm-4">
 				<label class="pull-right" for="explorationTime">Exploration
-					Timeout (min):</label>
+					Timeout (sec):</label>
 			</div>
 			<div class="col-sm-4">
 				<input class="form-control" id="explorationTime"
