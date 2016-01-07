@@ -40,6 +40,7 @@ public class APKPathHandler extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
 		JSONObject result = new JSONObject();
 
 		// handle information get request

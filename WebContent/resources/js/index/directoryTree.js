@@ -2,7 +2,7 @@ $(function() {
 	$('#folderTree').jstree({
 		'core' : {
 			'data' : {
-				"url" : "/DroidMate/FileSystem?type=dir",
+				"url" : "/DroidMate/FileSystem?type=directory",
 				"data" : function(node) {
 					if (node.text)
 						return {
@@ -230,9 +230,8 @@ $(function() {
 	$.get("/DroidMate/APKPathHandler", {
 		info : [ "apkRoot" ]
 	}, function(data) {
-		var res = JSON.parse(data);
-		if (res && res["info[]"] && res["info[]"].apkRoot) {
-			$('#folder_name').val(res["info[]"].apkRoot);
+		if (data && data["info[]"] && data["info[]"].apkRoot) {
+			$('#folder_name').val(data["info[]"].apkRoot);
 			createTable();
 		}
 	});
