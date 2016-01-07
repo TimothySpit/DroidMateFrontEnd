@@ -1,17 +1,31 @@
 package com.droidmate.apk;
 
 import java.io.File;
+import java.util.Collection;
+
+import org.json.JSONArray;
 
 public class APKInformation {
 
+	private final int id;
 	private final File file;
 	private int progress = 0;
 	private APKExplorationStatus status = APKExplorationStatus.NOT_RUNNING;
+	private String packageName, versionCode, versionName;
+
+	public int getId() {
+		return id;
+	}
 
 	private boolean selected = false;
-	
-	public APKInformation(File apk) {
-		this.file = apk;
+
+	public APKInformation(int id, File file, String packageName, String versionCode, String versionName) {
+		super();
+		this.id = id;
+		this.file = file;
+		this.packageName = packageName;
+		this.versionCode = versionCode;
+		this.versionName = versionName;
 	}
 
 	public synchronized File getFile() {
@@ -40,6 +54,29 @@ public class APKInformation {
 
 	public synchronized void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public String getVersionCode() {
+		return versionCode;
+	}
+
+	public String getVersionName() {
+		return versionName;
+	}
+
+	public JSONArray toJSONArray() {
+		JSONArray array = new JSONArray();
+		array.put(getId());
+		array.put(getFile().getName());
+		array.put(getFile().length());
+		array.put(getPackageName());
+		array.put(getVersionName());
+		
+		return array;
 	}
 
 }
