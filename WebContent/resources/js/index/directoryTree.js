@@ -243,7 +243,6 @@ $(function() {
 			$('#folder_name').val(selectedItems[0].text);
 
 			var path = encodeURIComponent(selectedItems[0].text);
-
 			$.get("/DroidMate/APKPathHandler", {
 				apkRoot : selectedItems[0].text
 			});
