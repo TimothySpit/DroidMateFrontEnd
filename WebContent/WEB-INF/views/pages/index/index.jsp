@@ -40,7 +40,7 @@
 					<div class="form-group folder-select">
 						<input class="form-control" id="folder_name" name="filebrowser"
 							type="text" placeholder="Select folder" onfocus="this.blur()"
-							readonly />
+							 />
 						<div class="btn btn-default" id="selectfolder" data-toggle="modal"
 							data-target="#folderSelectModal">Select folder</div>
 					</div>
