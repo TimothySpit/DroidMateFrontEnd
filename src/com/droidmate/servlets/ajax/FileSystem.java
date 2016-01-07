@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -65,6 +66,7 @@ public class FileSystem extends HttpServlet {
 					return false;
 				}
 			});
+			Arrays.sort(currentRoots);
 		}
 
 		JSONArray result = new JSONArray();
