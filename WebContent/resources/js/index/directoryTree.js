@@ -243,8 +243,13 @@ $(function() {
 			$('#folder_name').val(selectedItems[0].text);
 
 			var path = encodeURIComponent(selectedItems[0].text);
-			$.get("/DroidMate/APKPathHandler", {
-				apkRoot : selectedItems[0].text
+
+			$.ajax({
+				//Wait for the server to finish apk list and request the table data afterwards
+			     async: false,
+			     type: 'GET',
+			     url: "/DroidMate/APKPathHandler",
+			     data: { apkRoot : selectedItems[0].text }
 			});
 
 			var table = createTable();
