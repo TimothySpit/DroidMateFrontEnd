@@ -38,7 +38,11 @@ public class APKInliner implements Runnable {
 		inliningStatus =  InliningStatus.INLINING;
 		GUISettings settings = new GUISettings();
 		Path droidMateRoot = settings.getDroidMatePath();
-		Path droidMateExecutable = Paths.get(droidMateRoot.toString(), "/gradlew.bat");
+		String gradlewName="/gradlew.bat";
+		if (System.getProperty("os.name").equals("Linux")){
+			gradlewName="/gradlew";
+		}
+		Path droidMateExecutable = Paths.get(droidMateRoot.toString(), gradlewName);
 		Path inputAPKsPath = Paths.get(droidMateRoot.toString(), "/projects/apk-inliner/input-apks/");
 
 		// empty inlining directory 
