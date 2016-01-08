@@ -15,14 +15,31 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * 
+ * Parses xml log using the following format:
+ *	<exploration>
+ *		<apk>
+ *			<name>org.bla.droidmate</name>
+ *			<events>
+ *				<elements_seen>16</elements>seen>
+ *			</events\>
+ *			<success>true</success>
+ *		</apk>
+ *		<apk>
+ *			...
+ *	</exploration> *
+ */
 public class XMLLogReader {
 
 	private class LogReaderHandler extends DefaultHandler {
 		// Flags to determine state
+		boolean readExploration = false;
 		boolean readApk = false;
 		boolean readName = false;
 		boolean readEvents = false;
 		boolean readElementsSeen = false;
+		boolean readSuccess = false;
 
 		@Override
 		public void startDocument() {
@@ -38,22 +55,26 @@ public class XMLLogReader {
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 			System.out.println("Start Element :" + qName);
 
-			if (qName.equalsIgnoreCase("apk")) {
+			switch (qName.toLowerCase()) {
+			case "exploration":
+				readExploration = true;
+				break;
+			case "apk":
 				readApk = true;
-			}
-
-			if (qName.equalsIgnoreCase("name")) {
+				break;
+			case "name":
 				readName = true;
-			}
-
-			if (qName.equalsIgnoreCase("events")) {
+				break;
+			case "events":
 				readEvents = true;
-			}
-
-			if (qName.equalsIgnoreCase("elements_seen")) {
+				break;
+			case "elements_seen":
 				readElementsSeen = true;
+				break;
+			case "success":
+				readSuccess = true;
+				break;
 			}
-
 		}
 
 		@Override
