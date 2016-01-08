@@ -13,7 +13,8 @@
 	src="${pageContext.request.contextPath}/resources/js/flot/excanvas.min.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/flot-tickrotor/jquery.flot.tickrotor.js"></script>
-
+<script
+	src="${pageContext.request.contextPath}/resources/js/flot-tooltip/jquery.flot.tooltip.min.js"></script>
 <div id="staticinfomodal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 
@@ -46,8 +47,6 @@
 				console.log("An error occurred.");
 			},
 			success : function(data) {
-				//alert("Success.");
-
 				var dataset = [ {
 					label : "File Sizes",
 					data : data.data,
@@ -64,16 +63,6 @@
 						align : "center",
 						barWidth : 0.5
 					},
-					xaxis : {
-						axisLabel : "World Cities",
-						axisLabelUseCanvas : true,
-						axisLabelFontSizePixels : 12,
-						axisLabelFontFamily : 'Verdana, Arial',
-						axisLabelPadding : 10,
-						ticks : data.ticks,
-						rotateTicks: 90
-					},
-
 					legend : {
 						noColumns : 0,
 						labelBoxBorderColor : "#000000",
@@ -81,13 +70,14 @@
 					},
 					grid : {
 						hoverable : true,
-						borderWidth : 2,
-						backgroundColor : {
-							colors : [ "#ffffff", "#EDF5FF" ]
-						}
+						
+					},
+					tooltip: {
+					    show:           true ,  
+					    content:        function(label, xval, yval, flotItem) {return data.ticks[xval][1];},
 					}
 				};
-				console.log("aa");
+				
 				$('#staticinfomodal').on('shown.bs.modal', function() {
 					$.plot($("#fileSizes"), dataset, options);
 				})

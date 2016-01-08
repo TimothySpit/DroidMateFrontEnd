@@ -249,10 +249,10 @@ $(function() {
 			     async: false,
 			     type: 'GET',
 			     url: "/DroidMate/APKPathHandler",
-			     data: { apkRoot : selectedItems[0].text }
+			     data: { apkRoot : selectedItems[0].text },
+			     success: function(data) {if(data.success) {createTable();} },
 			});
 
-			var table = createTable();
 		}
 	});
 	

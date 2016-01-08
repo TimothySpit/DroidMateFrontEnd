@@ -72,7 +72,7 @@ public class Settings extends HttpServlet {
 				out.print(result);
 				out.flush();
 			} catch (Exception e) {
-				// Json not parable
+				// Json not parsable
 				e.printStackTrace();
 				return;
 			}
@@ -127,13 +127,4 @@ public class Settings extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/views/pages/settings/settings.jsp").forward(request, response);
 
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}
-
 }

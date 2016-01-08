@@ -69,6 +69,7 @@
 				</button>
 			</div>
 		</div>
+			
 		<!-- file dialog -->
 		<jsp:include page="droidmateDialog.jsp" />
 		<!-- file dialog -->
