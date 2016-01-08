@@ -125,11 +125,6 @@ public class XMLLogReader {
 			//System.out.println("Document ends.");
 		}
 	}
-	
-	public static void main(String[] args) {
-		XMLLogReader r = new XMLLogReader(new File("D:\\test.xml"));
-		r.startConcurrentReading();
-	}
 
 	private final File sourceFile;
 	private final ConcurrentHashMap<String, APKExplorationInfo> apks = new ConcurrentHashMap<>();
@@ -166,7 +161,7 @@ public class XMLLogReader {
 			e.printStackTrace();
 		} finally {
 			for(Object o : apks.entrySet()) {
-				System.out.println(o);
+				//System.out.println(o);
 			}
 		}
 	}
