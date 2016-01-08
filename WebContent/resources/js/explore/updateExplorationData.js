@@ -32,7 +32,7 @@ $(function() {
 	}
 
 	function showReportButton(row) {
-		row.find(".apk-name button").show();
+		row.find(".apk-name button").disabled=false;
 	}
 
 	function updateExplorationStatus(_data) {
@@ -67,7 +67,7 @@ $(function() {
 														$(".apk-data")
 																.removeClass(
 																		"hide");
-
+														
 														// start
 														// updating
 														// data
@@ -90,7 +90,8 @@ $(function() {
 																		+ data
 																		+ '</span>'
 																		+ '<button '
-																		+ 'class="btn btn-default pull-right" type="button">Show report'
+																		+ 'class="btn btn-default pull-right" type="button" disabled>'
+																		+ 'Show report'
 																		+ '</button>'
 															}
 														},

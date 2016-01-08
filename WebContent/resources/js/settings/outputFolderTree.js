@@ -2,7 +2,7 @@ $(function() {
 	$('#fileTree').jstree({
 		'core' : {
 			'data' : {
-				"url" : "FileSystem?type=dir",
+				"url" : "FileSystem?type=directory",
 				"data" : function(node) {
 					if (node.text)
 						return {

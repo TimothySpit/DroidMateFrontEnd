@@ -1,12 +1,15 @@
 package com.droidmate.user;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.droidmate.apk.APKInformation;
+import com.droidmate.settings.GUISettings;
 
 public class DroidMateUser {
 	
@@ -16,7 +19,7 @@ public class DroidMateUser {
 	
 	private boolean explorationStarted = false;
 	
-	public void setAPKPath(Path apkPathToAnalyse) {
+	public boolean setAPKPath(Path apkPathToAnalyse) {
 		if (apkPathToAnalyse == null) {
 			throw new NullPointerException();
 		}
@@ -26,7 +29,13 @@ public class DroidMateUser {
 		
 		apkPath = apkPathToAnalyse;
 		
-		loadAPKInformationForPath();
+		try {
+			loadAPKInformationForPath();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	public synchronized Path getAPKPath() {
@@ -47,8 +56,41 @@ public class DroidMateUser {
 		
 		apks.clear();
 		
+		int idCounter = 0;
 		for (File apk : apkFiles) {
-			apks.add(new APKInformation(apk));
+			String output = getAaptOutput(apk);
+			String packageName = getValueFromAaptOutput(output, "name");
+			String packageVersionCode = getValueFromAaptOutput(output, "versionCode");
+			String packageVersionName = getValueFromAaptOutput(output, "versionName");
+			apks.add(new APKInformation(idCounter++, apk, packageName, packageVersionCode, packageVersionName));
+		}
+	}
+	
+	private String getValueFromAaptOutput(String output, String value) {
+		int index = output.indexOf(value + "='") + value.length() + 2;
+		return output.substring(index, output.indexOf("'", index + 1));
+	}
+	
+	private String getAaptOutput(File apk) {
+		ProcessBuilder pb = new ProcessBuilder("aapt", "d", "badging", apk.getAbsolutePath());
+		pb.redirectErrorStream(false);
+		try {
+			Process p = pb.start();
+			StringBuilder output = new StringBuilder();
+			BufferedReader stdout = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String s;
+			while ((s = stdout.readLine()) != null) {
+				output.append(s);
+			}
+			stdout.close();
+			p.getOutputStream().close();
+			p.getErrorStream().close();
+			p.waitFor();
+			
+			return output.toString();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
 		}
 	}
 

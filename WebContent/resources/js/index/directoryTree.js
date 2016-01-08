@@ -2,7 +2,7 @@ $(function() {
 	$('#folderTree').jstree({
 		'core' : {
 			'data' : {
-				"url" : "/DroidMate/FileSystem?type=dir",
+				"url" : "/DroidMate/FileSystem?type=directory",
 				"data" : function(node) {
 					if (node.text)
 						return {
@@ -230,9 +230,8 @@ $(function() {
 	$.get("/DroidMate/APKPathHandler", {
 		info : [ "apkRoot" ]
 	}, function(data) {
-		var res = JSON.parse(data);
-		if (res && res["info[]"] && res["info[]"].apkRoot) {
-			$('#folder_name').val(res["info[]"].apkRoot);
+		if (data && data["info[]"] && data["info[]"].apkRoot) {
+			$('#folder_name').val(data["info[]"].apkRoot);
 			createTable();
 		}
 	});
@@ -245,11 +244,15 @@ $(function() {
 
 			var path = encodeURIComponent(selectedItems[0].text);
 
-			$.get("/DroidMate/APKPathHandler", {
-				apkRoot : selectedItems[0].text
+			$.ajax({
+				//Wait for the server to finish apk list and request the table data afterwards
+			     async: false,
+			     type: 'GET',
+			     url: "/DroidMate/APKPathHandler",
+			     data: { apkRoot : selectedItems[0].text },
+			     success: function(data) {if(data.success) {createTable();} },
 			});
 
-			var table = createTable();
 		}
 	});
 	

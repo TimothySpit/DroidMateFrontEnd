@@ -10,13 +10,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.droidmate.settings.GUISettings;
+import com.droidmate.settings.ServletContextConstants;
+import com.droidmate.user.DroidMateUser;
 
 /**
  * Servlet implementation class Settings
@@ -37,11 +38,14 @@ public class Settings extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
-		if (session == null) {
+		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
+
+		if (user.isExplorationStarted()) {
+			//no access to this page, redirect to exploration
+			request.getRequestDispatcher("/WEB-INF/views/pages/explore/explore.jsp").forward(request, response);
 			return;
 		}
-
+		
 		PrintWriter out = response.getWriter();
 		JSONObject result = new JSONObject();
 		GUISettings settings = new GUISettings();
@@ -68,7 +72,7 @@ public class Settings extends HttpServlet {
 				out.print(result);
 				out.flush();
 			} catch (Exception e) {
-				// Json not parable
+				// Json not parsable
 				e.printStackTrace();
 				return;
 			}
@@ -123,13 +127,4 @@ public class Settings extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/views/pages/settings/settings.jsp").forward(request, response);
 
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}
-
 }

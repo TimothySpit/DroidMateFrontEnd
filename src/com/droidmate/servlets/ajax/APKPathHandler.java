@@ -40,6 +40,7 @@ public class APKPathHandler extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
 		JSONObject result = new JSONObject();
 
 		// handle information get request
@@ -51,7 +52,7 @@ public class APKPathHandler extends HttpServlet {
 		// handle saving get requests
 		String apkSaveRoot = request.getParameter(AjaxConstants.APKPathHandeler_SAVE_APKROOT);
 		if (apkSaveRoot != null) {
-			handleSaveAPKRoot(apkSaveRoot);
+			result.put("success", handleSaveAPKRoot(apkSaveRoot));
 		}
 
 		//handle save selected apk indices
@@ -86,17 +87,10 @@ public class APKPathHandler extends HttpServlet {
 			switch (info_data) {
 			case AjaxConstants.APKPathHandeler_GET_INFORMATION_SELECTEDAPKS: {
 				JSONArray selectedAPKInfo = new JSONArray();
-				int counter = 0;
 				for (APKInformation apk : user.getAPKS()) {
 					if (!apk.isSelected())
 						continue;
-					JSONArray apkInfo = new JSONArray();
-					apkInfo.put(counter++);
-					apkInfo.put(apk.getFile().getName());
-					apkInfo.put(apk.getFile().length());
-					apkInfo.put("package");
-					apkInfo.put("version");
-					selectedAPKInfo.put(apkInfo);
+					selectedAPKInfo.put(apk.toJSONArray());
 				}
 				JSONObject res = new JSONObject();
 				res.put("data", selectedAPKInfo);
@@ -113,15 +107,8 @@ public class APKPathHandler extends HttpServlet {
 			case AjaxConstants.APKPathHandeler_GET_INFORMATION_APKS: {
 				// returns the apks in the folder
 				JSONArray selectedAPKInfo = new JSONArray();
-				int counter = 0;
 				for (APKInformation apk : user.getAPKS()) {
-					JSONArray apkInfo = new JSONArray();
-					apkInfo.put(counter++);
-					apkInfo.put(apk.getFile().getName());
-					apkInfo.put(apk.getFile().length());
-					apkInfo.put("package");
-					apkInfo.put("version");
-					selectedAPKInfo.put(apkInfo);
+					selectedAPKInfo.put(apk.toJSONArray());
 				}
 				JSONObject res = new JSONObject();
 				res.put("data", selectedAPKInfo);
@@ -136,10 +123,11 @@ public class APKPathHandler extends HttpServlet {
 		return apkInfoResult;
 	}
 
-	private void handleSaveAPKRoot(String saveAPKRoot) {
+	private boolean handleSaveAPKRoot(String saveAPKRoot) {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
-
+		
 		Path newAPKRoot = Paths.get(saveAPKRoot);
-		user.setAPKPath(newAPKRoot);
+		return user.setAPKPath(newAPKRoot);
+		
 	}
 }

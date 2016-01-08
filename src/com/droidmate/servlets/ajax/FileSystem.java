@@ -4,18 +4,19 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.droidmate.filehandling.FileType;
+import com.droidmate.settings.AjaxConstants;
 
 /**
  * Servlet implementation class FileSystem
@@ -36,24 +37,14 @@ public class FileSystem extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
+		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
 
-		if (session == null) {
-			return;
-		}
-
-		// get requested types to return
-		FileType fileType = requestedFileType(request.getParameter("type"));
-		if (fileType.equals(FileType.UNKNOWN))
-			return;
-
-		String path = request.getParameter("path");
+		FileType fileType = FileType.fromString(request.getParameter(AjaxConstants.FileSystem_GET_FILETYPE));
+		String path = request.getParameter(AjaxConstants.FileSystem_GET_PATH);
 		if (path == null || (!path.equals("root") && !(new File(path)).exists()))
 			return;
 
-		// get current path to get data for
-		response.setContentType("application/json");
-		PrintWriter out = response.getWriter();
 		out.print(getFileData(fileType, path));
 		out.flush();
 	}
@@ -75,6 +66,7 @@ public class FileSystem extends HttpServlet {
 					return false;
 				}
 			});
+			Arrays.sort(currentRoots);
 		}
 
 		JSONArray result = new JSONArray();
@@ -106,24 +98,5 @@ public class FileSystem extends HttpServlet {
 		}
 
 		return result;
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}
-
-	private FileType requestedFileType(String parameter) {
-		if (parameter == null) {
-			return FileType.UNKNOWN;
-		}
-		if (parameter.equals("dir"))
-			return FileType.DIRECTORY;
-		if (parameter.equals("all"))
-			return FileType.ALL;
-		return FileType.UNKNOWN;
 	}
 }
