@@ -57,10 +57,10 @@
 			</div>
 
 			<div class="row main_start">
-				<div class="col-sm-12 text-center" id="btns-field">
-					<button type="submit" class="btn btn-default "
+				<div class="col-sm-12 text-center hide" id="btns-field">
+					<button type="submit" class="btn btn-default"
 						id="startexploration">Start exploration</button>
-					<button type="submit" class="btn btn-default "
+					<button type="submit" class="btn btn-default"
 						id="inline_files">Inline files</button>
 				</div>
 			</div>
