@@ -34,7 +34,7 @@ $(function() {
 										$('#load-result-indikator')
 												.html(
 														'<span class="label label-danger text-center">no apks loaded.</span>');
-										$("#startexploration").addClass("hide");
+										$("#btns-field").addClass("hide");
 										$("#show-static").addClass("hide");
 									} else {
 										$(".apk-data").removeClass("hide");
@@ -43,7 +43,7 @@ $(function() {
 														'<span class="label label-success text-center">'
 																+ json["info[]"].apks.data.length
 																+ ' apks loaded.</span>');
-										$("#startexploration").removeClass(
+										$("#btns-field").removeClass(
 												"hide");
 										$("#show-static").removeClass("hide");
 									}
