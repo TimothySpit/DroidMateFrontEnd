@@ -12,7 +12,6 @@ public class GUISettings {
 
 	private Path outputFolder;
 	private Path droidMatePath;
-	private Path androidSDKPath;
 	
 	private int explorationTimeout;
 
@@ -37,13 +36,6 @@ public class GUISettings {
 			} catch (InvalidPathException e) {
 				droidMatePath = (Paths.get(currentDirFile.getAbsolutePath()));
 				prefs.put("DroidMatePath", currentDirFile.getAbsolutePath());
-			}
-			
-			try {
-				androidSDKPath = (Paths.get(aSDKPath));
-			} catch (InvalidPathException e) {
-				androidSDKPath = (Paths.get(currentDirFile.getAbsolutePath()));
-				prefs.put("AndroidSDKPath", currentDirFile.getAbsolutePath());
 			}
 			
 			explorationTimeout = prefs.getInt("ExplorationTimeout", 10);
@@ -104,19 +96,4 @@ public class GUISettings {
 		}
 	}
 	
-	public Path getAndroidSDKPath() {
-		return androidSDKPath;
-	}
-
-	public void setAndroidSDKPath(Path androidSDKPath) {
-		if (androidSDKPath == null) {
-			throw new IllegalArgumentException("Path must not be null.");
-		}
-		this.androidSDKPath = androidSDKPath;
-		try {
-			prefs.put("AndroidSDKPath", androidSDKPath.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

@@ -21,8 +21,6 @@
 	src="${pageContext.request.contextPath}/resources/js/settings/outputFolderTree.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/settings/droidMateTree.js"></script>
-	<script
-	src="${pageContext.request.contextPath}/resources/js/settings/androidSDKTree.js"></script>
 </head>
 <body class="container">
 	<div id="saveinfo-box"></div>
@@ -75,29 +73,6 @@
 		<!-- file dialog -->
 		<jsp:include page="droidmateDialog.jsp" />
 		<!-- file dialog -->
-		
-		<div class="row input-row">
-			<div class="col-sm-4">
-				<label class="pull-right" for="androidSDK-folder-name">Android SDK
-					Build Tools Version:</label>
-			</div>
-			<div class="col-sm-4">
-				<input class="form-control" id="androidSDK-folder-name"
-					name="androidSDKPath" type="text" placeholder="Android SDK Path"
-					  />
-			</div>
-			<div class="col-sm-4">
-				<button type="button" class="btn btn-default btn-default"
-					data-toggle="modal" data-target="#androidSDKDialog">
-					<span class="glyphicon glyphicon-folder-open"></span>
-				</button>
-			</div>
-		</div>
-		
-		<!-- file dialog -->
-		<jsp:include page="androidSDKDialog.jsp" />
-		<!-- file dialog -->
-	
 
 		<div class="row input-row">
 			<div class="col-sm-4">

@@ -1,6 +1,6 @@
 $(function() {
 
-	function saveSettings(outputPath, dmPath, androidSDKPath, explorationTime) {
+	function saveSettings(outputPath, dmPath, explorationTime) {
 		$
 				.get(
 						"Settings",
@@ -8,7 +8,6 @@ $(function() {
 							save : true,
 							outputPath : outputPath,
 							droidmatePath : dmPath,
-							androidSDKPath : androidSDKPath,
 							time : explorationTime
 						},
 						function(data) {
@@ -31,9 +30,8 @@ $(function() {
 	$('#save-button').on('click', function(e) {
 		var outputPath = $('#output-folder-name').val();
 		var droidmatePath = $('#dm-output-folder-name').val();
-		var androidSDKPath = $('#androidSDK-folder-name').val();
 		var explorationTime = $('#explorationTime').val();
-		saveSettings(outputPath,droidmatePath, androidSDKPath, explorationTime);
+		saveSettings(outputPath,droidmatePath, explorationTime);
 	});
 
 	function bootstrap_alert(elem, message, alerttype, timeout) {
@@ -54,11 +52,10 @@ $(function() {
 
 //fill edit boxes
 $(function() {
-	$.get( "Settings", {get:["outputPath","droidmatePath","androidSDKPath","time"],}, function( data ) {
+	$.get( "Settings", {get:["outputPath","droidmatePath","time"],}, function( data ) {
 		var json = JSON.parse(data);
 		  $('#output-folder-name').val(json.outputPath);
 		  $('#dm-output-folder-name').val(json.droidmatePath);
-		  $('#androidSDK-folder-name').val(json.androidSDKPath);
 		  $('#explorationTime').val(json.time);
 		});
 	

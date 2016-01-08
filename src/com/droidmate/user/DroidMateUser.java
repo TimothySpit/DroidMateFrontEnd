@@ -72,9 +72,7 @@ public class DroidMateUser {
 	}
 	
 	private String getAaptOutput(File apk) {
-		GUISettings settings = new GUISettings();
-		Path sdkPath = settings.getAndroidSDKPath();
-		ProcessBuilder pb = new ProcessBuilder(sdkPath.toString() + "/aapt", "d", "badging", apk.getAbsolutePath());
+		ProcessBuilder pb = new ProcessBuilder("aapt", "d", "badging", apk.getAbsolutePath());
 		pb.redirectErrorStream(false);
 		try {
 			Process p = pb.start();

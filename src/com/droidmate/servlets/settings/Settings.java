@@ -63,9 +63,6 @@ public class Settings extends HttpServlet {
 					case "droidmatePath":
 						result.put("droidmatePath", settings.getDroidMatePath());
 						break;
-					case "androidSDKPath":
-						result.put("androidSDKPath", settings.getAndroidSDKPath());
-						break;
 					case "time":
 						result.put("time", settings.getExplorationTimeout());
 					default:
@@ -89,7 +86,6 @@ public class Settings extends HttpServlet {
 
 			String outputPath = request.getParameter("outputPath");
 			String droidmatePath = request.getParameter("droidmatePath");
-			String androidSDKPath = request.getParameter("androidSDKPath");
 			String explorationTime = request.getParameter("time");
 			boolean settingsCorrect = true;
 
@@ -109,15 +105,6 @@ public class Settings extends HttpServlet {
 				}
 			}
 
-			if (settingsCorrect) {
-				try {
-					settings.setAndroidSDKPath(Paths.get(androidSDKPath));
-				} catch (InvalidPathException e) {
-					result.put("reason", "Not a valid path.");
-					settingsCorrect = false;
-				}
-			}
-			
 			if (settingsCorrect && NumberUtils.isDigits(explorationTime)) {
 				try {
 					int number = Integer.parseInt(explorationTime);

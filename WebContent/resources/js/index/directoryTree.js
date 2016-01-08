@@ -33,7 +33,7 @@ $(function() {
 										$(".apk-data").addClass("hide");
 										$('#load-result-indikator')
 												.html(
-														'<span class="label label-danger text-center">no apks loaded. Please check the settings.</span>');
+														'<span class="label label-danger text-center">no apks loaded.</span>');
 										$("#startexploration").addClass("hide");
 										$("#show-static").addClass("hide");
 									} else {
