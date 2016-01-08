@@ -258,8 +258,13 @@ $(function() {
 	
 	$('#startexploration').click(
 			function(e) {
-				$.get("/DroidMate/APKPathHandler",{selApks : rows_selected}, function(data) {
-					window.location = "/DroidMate/Explore";
+				$.ajax({
+					//Wait for the server to finish apk list and request the table data afterwards
+				     async: false,
+				     type: 'GET',
+				     url: "/DroidMate/APKPathHandler",
+				     data: { selApks : rows_selected },
+				     success: function(data) {window.location = "/DroidMate/Explore";},
 				});
 				
 			});
