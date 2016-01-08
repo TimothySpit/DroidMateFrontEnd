@@ -8,37 +8,37 @@ public class APKInformation {
 	private int progress = 0;
 	private APKExplorationStatus status = APKExplorationStatus.NOT_RUNNING;
 
-	private boolean selected = true;
+	private boolean selected = false;
 	
 	public APKInformation(File apk) {
 		this.file = apk;
 	}
 
-	public File getFile() {
+	public synchronized File getFile() {
 		return file;
 	}
 
-	public APKExplorationStatus getStatus() {
+	public synchronized APKExplorationStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(APKExplorationStatus status) {
+	public synchronized void setStatus(APKExplorationStatus status) {
 		this.status = status;
 	}
 
-	public int getProgress() {
+	public synchronized int getProgress() {
 		return progress;
 	}
 
-	public void setProgress(int progress) {
+	public synchronized void setProgress(int progress) {
 		this.progress = progress;
 	}
 
-	public boolean isSelected() {
+	public synchronized boolean isSelected() {
 		return selected;
 	}
 
-	public void setSelected(boolean selected) {
+	public synchronized void setSelected(boolean selected) {
 		this.selected = selected;
 	}
 

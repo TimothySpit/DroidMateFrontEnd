@@ -14,9 +14,7 @@ public class DroidMateUser {
 	
 	private List<APKInformation> apks = new LinkedList<>();
 	
-	private boolean apksInlined = false;
-	
-	private boolean explorationStated = false;
+	private boolean explorationStarted = false;
 	
 	public void setAPKPath(Path apkPathToAnalyse) {
 		if (apkPathToAnalyse == null) {
@@ -31,11 +29,11 @@ public class DroidMateUser {
 		loadAPKInformationForPath();
 	}
 	
-	public Path getAPKPath() {
+	public synchronized Path getAPKPath() {
 		return apkPath;
 	}
 	
-	public List<APKInformation> getAPKS() {
+	public synchronized List<APKInformation> getAPKS() {
 		return apks;
 	}
 
@@ -65,20 +63,12 @@ public class DroidMateUser {
 		return counter;
 	}
 	
-	public boolean isApksInlined() {
-		return apksInlined;
+	public boolean isExplorationStarted() {
+		return explorationStarted;
 	}
 
-	public void setApksInlined(boolean apksInlined) {
-		this.apksInlined = apksInlined;
-	}
-
-	public boolean isExplorationStated() {
-		return explorationStated;
-	}
-
-	public void setExplorationStated(boolean explorationStated) {
-		this.explorationStated = explorationStated;
+	public void setExplorationStarted(boolean explorationStarted) {
+		this.explorationStarted = explorationStarted;
 	}
 	
 }
