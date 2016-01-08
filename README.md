@@ -53,9 +53,11 @@ To build DroidMateGUI for first time, follow these steps:
 
 2. Install Tomcat 8.0
 
-3. Install Eclipse EE
+3. Install Android SDK
 
-4. Set up DroidMate
+4. Install Eclipse EE
+
+5. Set up DroidMate
 
 ### 2. Do the build ###
 
@@ -76,6 +78,8 @@ To build DroidMateGUI for first time, follow these steps:
 8. Visit the url: http://localhost.com:8080/DroidMate/Index
 
 9. Configure DroidMate Path and reports path in the settings (http://localhost.com:8080/DroidMate/Settings).
+
+10. Configure Android-SDK build tools path in the settings (C:\Program Files (x86)\Android\android-sdk\build-tools\19.1.0).
 
 ### Dependencies ###
 

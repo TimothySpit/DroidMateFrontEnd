@@ -92,7 +92,10 @@ public class XMLLogReader {
 				System.out.println("ElementsSeen : " + new String(ch, start, length));
 				addElementsSeen(Integer.parseInt(new String(ch, start, length)));
 				readElementsSeen = false;
-			} else
+			} else if (readSuccess) {
+				System.out.println("Success:" + new String(ch, start, length));
+				readSuccess = false;
+			}
 			// Just for debugging
 			if (readApk) {
 				System.out.println("Apk: " + new String(ch, start, length));
@@ -100,6 +103,9 @@ public class XMLLogReader {
 			} else if (readEvents) {
 				System.out.println("Events : " + new String(ch, start, length));
 				readEvents = false;
+			}else if (readExploration) {
+				System.out.println("Exploration: " + new String(ch, start, length));
+				readExploration = false;
 			}
 
 		}
