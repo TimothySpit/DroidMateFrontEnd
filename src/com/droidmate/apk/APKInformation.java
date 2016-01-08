@@ -1,8 +1,6 @@
 package com.droidmate.apk;
 
 import java.io.File;
-import java.util.Collection;
-
 import org.json.JSONArray;
 
 public class APKInformation {

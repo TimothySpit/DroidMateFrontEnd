@@ -5,7 +5,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -33,6 +34,10 @@ import org.xml.sax.helpers.DefaultHandler;
 public class XMLLogReader {
 
 	private class LogReaderHandler extends DefaultHandler {
+
+		private Map<String, APKExplorationInfo> apks;
+		private APKExplorationInfo currentApk;
+		
 		// Flags to determine state
 		boolean readExploration = false;
 		boolean readApk = false;
@@ -41,14 +46,42 @@ public class XMLLogReader {
 		boolean readElementsSeen = false;
 		boolean readSuccess = false;
 
-		@Override
-		public void startDocument() {
-			System.out.println("Document starts.");
+		public LogReaderHandler(Map<String, APKExplorationInfo> apks) {
+			this.apks = apks;
 		}
 
 		@Override
-		public void endDocument() {
-			System.out.println("Document ends.");
+		public void characters(char ch[], int start, int length) throws SAXException {
+			String value = new String(ch, start, length);
+			if (readName) {
+				currentApk = new APKExplorationInfo(value);
+				apks.put(value, currentApk);
+				
+				System.out.println("Name : " + value);
+				readName = false;
+			} else if (readElementsSeen) {
+				currentApk.addElementsSeen(Integer.parseInt(value));
+				
+				System.out.println("ElementsSeen : " + new String(ch, start, length));
+				readElementsSeen = false;
+			} else if (readSuccess) {
+				currentApk.setSuccess(Boolean.parseBoolean(value));
+				
+				System.out.println("Success:" + new String(ch, start, length));
+				readSuccess = false;
+			}
+			// Just for debugging
+			if (readApk) {
+				System.out.println("Apk: " + new String(ch, start, length));
+				readApk = false;
+			} else if (readEvents) {
+				System.out.println("Events : " + new String(ch, start, length));
+				readEvents = false;
+			}else if (readExploration) {
+				System.out.println("Exploration: " + new String(ch, start, length));
+				readExploration = false;
+			}
+
 		}
 
 		@Override
@@ -83,37 +116,18 @@ public class XMLLogReader {
 		}
 
 		@Override
-		public void characters(char ch[], int start, int length) throws SAXException {
-			if (readName) {
-				// Not used yet
-				System.out.println("Name : " + new String(ch, start, length));
-				readName = false;
-			} else if (readElementsSeen) {
-				System.out.println("ElementsSeen : " + new String(ch, start, length));
-				addElementsSeen(Integer.parseInt(new String(ch, start, length)));
-				readElementsSeen = false;
-			} else if (readSuccess) {
-				System.out.println("Success:" + new String(ch, start, length));
-				readSuccess = false;
-			}
-			// Just for debugging
-			if (readApk) {
-				System.out.println("Apk: " + new String(ch, start, length));
-				readApk = false;
-			} else if (readEvents) {
-				System.out.println("Events : " + new String(ch, start, length));
-				readEvents = false;
-			}else if (readExploration) {
-				System.out.println("Exploration: " + new String(ch, start, length));
-				readExploration = false;
-			}
-
+		public void startDocument() {
+			System.out.println("Document starts.");
 		}
 
+		@Override
+		public void endDocument() {
+			System.out.println("Document ends.");
+		}
 	}
 
-	private File sourceFile;
-	private AtomicInteger elementsSeen = new AtomicInteger(0);
+	private final File sourceFile;
+	private final ConcurrentHashMap<String, APKExplorationInfo> apks = new ConcurrentHashMap<>();
 
 	public XMLLogReader(File source) {
 		this.sourceFile = source;
@@ -134,7 +148,7 @@ public class XMLLogReader {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 
-			DefaultHandler handler = new LogReaderHandler();
+			DefaultHandler handler = new LogReaderHandler(apks);
 
 			// Necessary for utf-8
 			InputStream inputStream = new FileInputStream(sourceFile);
@@ -150,11 +164,7 @@ public class XMLLogReader {
 		}
 	}
 
-	private void addElementsSeen(int newElementsSeen) {
-		elementsSeen.addAndGet(newElementsSeen);
-	}
-
-	public int getElementsSeen() {
-		return elementsSeen.get();
+	public Map<String, APKExplorationInfo> getApksMap() {
+		return apks;
 	}
 }
