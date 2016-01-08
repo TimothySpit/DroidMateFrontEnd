@@ -57,28 +57,28 @@ public class XMLLogReader {
 				currentApk = new APKExplorationInfo(value);
 				apks.put(value, currentApk);
 				
-				System.out.println("Name : " + value);
+				//System.out.println("Name : " + value);
 				readName = false;
 			} else if (readElementsSeen) {
 				currentApk.addElementsSeen(Integer.parseInt(value));
 				
-				System.out.println("ElementsSeen : " + new String(ch, start, length));
+				//System.out.println("ElementsSeen : " + new String(ch, start, length));
 				readElementsSeen = false;
 			} else if (readSuccess) {
 				currentApk.setSuccess(Boolean.parseBoolean(value));
 				
-				System.out.println("Success:" + new String(ch, start, length));
+				//System.out.println("Success:" + new String(ch, start, length));
 				readSuccess = false;
 			}
 			// Just for debugging
 			if (readApk) {
-				System.out.println("Apk: " + new String(ch, start, length));
+				//System.out.println("Apk: " + new String(ch, start, length));
 				readApk = false;
 			} else if (readEvents) {
-				System.out.println("Events : " + new String(ch, start, length));
+				//System.out.println("Events : " + new String(ch, start, length));
 				readEvents = false;
 			}else if (readExploration) {
-				System.out.println("Exploration: " + new String(ch, start, length));
+				//System.out.println("Exploration: " + new String(ch, start, length));
 				readExploration = false;
 			}
 
@@ -86,7 +86,7 @@ public class XMLLogReader {
 
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-			System.out.println("Start Element :" + qName);
+			//System.out.println("Start Element :" + qName);
 
 			switch (qName.toLowerCase()) {
 			case "exploration":
@@ -112,18 +112,23 @@ public class XMLLogReader {
 
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
-			System.out.println("End Element :" + qName);
+			//System.out.println("End Element :" + qName);
 		}
 
 		@Override
 		public void startDocument() {
-			System.out.println("Document starts.");
+			//System.out.println("Document starts.");
 		}
 
 		@Override
 		public void endDocument() {
-			System.out.println("Document ends.");
+			//System.out.println("Document ends.");
 		}
+	}
+	
+	public static void main(String[] args) {
+		XMLLogReader r = new XMLLogReader(new File("D:\\test.xml"));
+		r.startConcurrentReading();
 	}
 
 	private final File sourceFile;
@@ -144,7 +149,6 @@ public class XMLLogReader {
 
 	private void read() {
 		try {
-
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 
@@ -158,9 +162,12 @@ public class XMLLogReader {
 			is.setEncoding("UTF-8");
 
 			saxParser.parse(is, handler);
-
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			for(Object o : apks.entrySet()) {
+				System.out.println(o);
+			}
 		}
 	}
 
