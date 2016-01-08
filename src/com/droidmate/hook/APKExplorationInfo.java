@@ -37,4 +37,17 @@ public class APKExplorationInfo {
 	public String getName() {
 		return name;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("APKExplorationInfo [name=");
+		builder.append(name);
+		builder.append(", success=");
+		builder.append(success);
+		builder.append(", elementsSeen=");
+		builder.append(elementsSeen);
+		builder.append("]");
+		return builder.toString();
+	}
 }

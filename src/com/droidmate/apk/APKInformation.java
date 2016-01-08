@@ -1,6 +1,8 @@
 package com.droidmate.apk;
 
 import java.io.File;
+
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 
 public class APKInformation {
@@ -70,9 +72,9 @@ public class APKInformation {
 		JSONArray array = new JSONArray();
 		array.put(getId());
 		array.put(getFile().getName());
-		array.put(getFile().length());
+		array.put(FileUtils.byteCountToDisplaySize(getFile().length()));
 		array.put(getPackageName());
-		array.put(getVersionName());
+		array.put(getVersionName() + " (#" + getVersionCode() + ")");
 		
 		return array;
 	}
