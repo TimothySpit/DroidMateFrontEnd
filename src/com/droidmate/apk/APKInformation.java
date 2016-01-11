@@ -28,31 +28,31 @@ public class APKInformation {
 		this.versionName = versionName;
 	}
 
-	public synchronized File getFile() {
+	public File getFile() {
 		return file;
 	}
 
-	public synchronized APKExplorationStatus getStatus() {
+	public APKExplorationStatus getExplorationStatus() {
 		return status;
 	}
 
-	public synchronized void setStatus(APKExplorationStatus status) {
+	public void setExplorationStatus(APKExplorationStatus status) {
 		this.status = status;
 	}
 
-	public synchronized int getProgress() {
+	public int getProgress() {
 		return progress;
 	}
 
-	public synchronized void setProgress(int progress) {
+	public void setProgress(int progress) {
 		this.progress = progress;
 	}
 
-	public synchronized boolean isSelected() {
+	public boolean isSelected() {
 		return selected;
 	}
 
-	public synchronized void setSelected(boolean selected) {
+	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
 

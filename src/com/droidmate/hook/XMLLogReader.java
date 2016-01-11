@@ -2,9 +2,11 @@ package com.droidmate.hook;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,6 +34,70 @@ import org.xml.sax.helpers.DefaultHandler;
  *	</exploration> *
  */
 public class XMLLogReader {
+	
+	/**
+	 * Behaves exactly like FileInputStream, but never returns EOF until stop() is called.
+	 */
+	private class ForeverFileInputStream extends FileInputStream {
+			
+		private boolean stop = false;
+
+		public ForeverFileInputStream(File file) throws FileNotFoundException {
+			super(file);
+		}
+
+		public static final long REFRESH_INTERVAL = 100;
+
+		@Override
+		public int read() throws IOException {
+			int value = super.read();
+			if (value == -1 && !stop) {
+				try {
+					Thread.sleep(REFRESH_INTERVAL);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				return this.read();
+			} else {
+				return value;
+			}
+		}
+		
+		@Override
+		public int read(byte[] b) throws IOException {
+			int value = super.read(b);
+			if (value == -1 && !stop) {
+				try {
+					Thread.sleep(REFRESH_INTERVAL);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				return this.read(b);
+			} else {
+				return value;
+			}
+		}
+		
+		@Override
+		public int read(byte[] b, int off, int len) throws IOException {
+			int value = super.read(b, off, len);
+			if (value == -1 && !stop) {
+				try {
+					Thread.sleep(REFRESH_INTERVAL);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				System.out.println(".");
+				return this.read(b, off, len);
+			} else {
+				return value;
+			}
+		}
+		
+		public void stop() {
+			stop = true;
+		}
+	}
 
 	private class LogReaderHandler extends DefaultHandler {
 
@@ -128,9 +194,14 @@ public class XMLLogReader {
 
 	private final File sourceFile;
 	private final ConcurrentHashMap<String, APKExplorationInfo> apks = new ConcurrentHashMap<>();
+	private ForeverFileInputStream inputStream;
 
 	public XMLLogReader(File source) {
 		this.sourceFile = source;
+	}
+	
+	public void stopReading() {
+		inputStream.stop();
 	}
 
 	public void startConcurrentReading() {
@@ -149,21 +220,25 @@ public class XMLLogReader {
 
 			DefaultHandler handler = new LogReaderHandler(apks);
 
+			inputStream = new ForeverFileInputStream(sourceFile);
 			// Necessary for utf-8
-			InputStream inputStream = new FileInputStream(sourceFile);
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");
 
 			InputSource is = new InputSource(reader);
 			is.setEncoding("UTF-8");
 
-			saxParser.parse(is, handler);
+			saxParser.parse(inputStream, handler);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			for(Object o : apks.entrySet()) {
-				//System.out.println(o);
-			}
+			/*for(Object o : apks.entrySet()) {
+				System.out.println(o);
+			}*/
 		}
+	}
+	
+	public Collection<APKExplorationInfo> getApksInfo() {
+		return getApksMap().values();
 	}
 
 	public Map<String, APKExplorationInfo> getApksMap() {

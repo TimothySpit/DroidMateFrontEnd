@@ -58,7 +58,7 @@ public class ExplorationData extends HttpServlet {
 				JSONArray jsonInfo = new JSONArray();
 				jsonInfo.put(apkInformation.getFile().getName());
 				jsonInfo.put(apkInformation.getProgress());
-				jsonInfo.put(apkInformation.getStatus());
+				jsonInfo.put(apkInformation.getExplorationStatus());
 				apkData.put(jsonInfo);
 			}
 			PrintWriter out = response.getWriter();
@@ -73,7 +73,7 @@ public class ExplorationData extends HttpServlet {
 				if (apkInformation.getFile().getName().equals(file)) {
 					JSONObject data = new JSONObject();
 					data.put("progress", apkInformation.getProgress());
-					data.put("state", apkInformation.getStatus());
+					data.put("state", apkInformation.getExplorationStatus());
 					PrintWriter out = response.getWriter();
 					out.print(data);
 					out.flush();

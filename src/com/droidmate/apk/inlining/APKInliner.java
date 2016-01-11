@@ -68,7 +68,7 @@ public class APKInliner implements Runnable {
 				inliningStatus = InliningStatus.ERROR;
 				return;
 			}
-			apkInfo.setStatus(APKExplorationStatus.INLINING);
+			//apkInfo.setStatus(InliningStatus.INLINING);
 		}
 
 		

@@ -3,6 +3,8 @@ package com.droidmate.hook;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.json.JSONObject;
+
 public class APKExplorationInfo {
 	
 	private final String name;
@@ -36,6 +38,15 @@ public class APKExplorationInfo {
 
 	public String getName() {
 		return name;
+	}
+	
+	public JSONObject toJSONObject() {
+		JSONObject json = new JSONObject();
+		json.put("name", getName());
+		json.put("success", isSuccess());
+		json.put("elementsSeen", getElementsSeen());
+		
+		return json;
 	}
 
 	@Override
