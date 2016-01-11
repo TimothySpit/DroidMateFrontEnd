@@ -2,8 +2,6 @@ package com.droidmate.servlets.index;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,8 +40,7 @@ public class ApkListingStatic extends HttpServlet {
 		JSONArray ticks = new JSONArray();
 		JSONArray sizes = new JSONArray();
 		int counter = 0;
-		for (Iterator<APKInformation> iterator = user.getAPKS().iterator(); iterator.hasNext();) {
-			APKInformation apkInformation = (APKInformation) iterator.next();
+		for (APKInformation apkInformation : user.getAPKS()) {
 			JSONArray size = new JSONArray();
 			size.put(counter);
 			size.put(apkInformation.getFile().length());
