@@ -23,7 +23,6 @@
 	src="${pageContext.request.contextPath}/resources/js/settings/droidMateTree.js"></script>
 </head>
 <body class="container">
-	<div id="saveinfo-box"></div>
 	<main>
 	<div>
 		<div class="row">

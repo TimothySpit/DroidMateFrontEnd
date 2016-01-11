@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import com.droidmate.apk.inlining.APKInliner;
+import com.droidmate.apk.inlining.InliningStatus;
 import com.droidmate.settings.AjaxConstants;
 import com.droidmate.settings.ServletContextConstants;
 import com.droidmate.user.DroidMateUser;
@@ -51,10 +52,12 @@ public class APKInliningHandler extends HttpServlet {
 		if (get_inline != null) {
 			// check if inlining is not yet started
 			APKInliner inliner = (APKInliner) getServletContext().getAttribute(ServletContextConstants.APK_INLINER);
-			if (inliner == null) {
+			result.put("success", false);
+			if (inliner == null || !inliner.getInliningStatus().equals(InliningStatus.INLINING)) {
 				inliner = new APKInliner(user);
 				getServletContext().setAttribute(ServletContextConstants.APK_INLINER, inliner);
 				(new Thread(inliner)).start();
+				result.put("success", true);
 			}
 		}
 
@@ -63,11 +66,15 @@ public class APKInliningHandler extends HttpServlet {
 			APKInliner inliner = (APKInliner) getServletContext().getAttribute(ServletContextConstants.APK_INLINER);
 			if (inliner != null) {
 				result.put(AjaxConstants.APKInlineHandler_GET_INLINE_STATUS, inliner.getInliningStatus());
+			} else {
+				result.put(AjaxConstants.APKInlineHandler_GET_INLINE_STATUS, InliningStatus.ERROR);
 			}
-		}
-		
+		}		
 		out.print(result);
 		out.flush();
 	}
 
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
 }

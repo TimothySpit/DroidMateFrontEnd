@@ -15,6 +15,8 @@
 	src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/jstree.min.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/index/directoryTree.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/index/handleInlining.js"></script>
 <!-- file tree end -->
 </head>
 <body class="container">
@@ -56,10 +58,10 @@
 
 			<div class="row main_start">
 				<div class="col-sm-12 text-center hide" id="btns-field">
-					<button type="submit" class="btn btn-default"
-						id="startexploration">Start exploration</button>
-					<button type="submit" class="btn btn-default"
-						id="inline_files">Inline files</button>
+					<button type="submit" class="btn btn-default" id="startexploration">Start
+						exploration</button>
+					<button type="submit" class="btn btn-default" id="inline_files">Inline
+						files</button>
 				</div>
 			</div>
 

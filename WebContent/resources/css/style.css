@@ -47,13 +47,13 @@ input#folder_name {
 	z-index: 2;
 }
 
-#saveinfo-box {
+#droidMate-alert-container {
 	left:50%;
 	top: 2%;
 	position: absolute;
 }
 
-#saveinfo-box .alert{
+#droidMate-alert-container .alert{
 	position: relative;
     z-index: 2;
     left: -50%;

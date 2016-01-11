@@ -9,13 +9,13 @@ public class AjaxConstants {
 	public final static String APKPathHandeler_GET_INFORMATION_APKS = "apks";
 
 	// save requests
-	public final static String APKPathHandeler_SAVE_APKROOT = "apkRoot";
-	public static final String APKPathHandeler_SAVE_SELECTED_APKS = "selApks[]";
+	public final static String APKPathHandler_SAVE_APKROOT = "apkRoot";
+	public static final String APKPathHandler_SAVE_SELECTED_APKS = "selApks[]";
 
 	// -----------------------------------------------------------------------------
 
 	// get requests
-	public final static String APKInlineHandler_GET_INLINE_STATUS = "inlineStatus";
+	public final static String APKInlineHandler_GET_INLINE_STATUS = "status";
 
 	// save requests
 	public final static String APKInlineHandler_SAVE_INLINE = "inline";

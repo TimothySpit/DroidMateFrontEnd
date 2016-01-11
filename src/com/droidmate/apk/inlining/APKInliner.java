@@ -9,8 +9,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
-import com.droidmate.apk.APKExplorationStatus;
 import com.droidmate.apk.APKInformation;
 import com.droidmate.settings.GUISettings;
 import com.droidmate.user.DroidMateUser;
@@ -35,17 +35,58 @@ public class APKInliner implements Runnable {
 	}
 
 	private void inline() {
-		inliningStatus =  InliningStatus.INLINING;
+		inliningStatus = InliningStatus.INLINING;
 		GUISettings settings = new GUISettings();
 		Path droidMateRoot = settings.getDroidMatePath();
-		String gradlewName="/gradlew.bat";
-		if (System.getProperty("os.name").equals("Linux")){
-			gradlewName="/gradlew";
+		String gradlewName = "/gradlew.bat";
+		if (System.getProperty("os.name").equals("Linux")) {
+			gradlewName = "/gradlew";
 		}
 		Path droidMateExecutable = Paths.get(droidMateRoot.toString(), gradlewName);
 		Path inputAPKsPath = Paths.get(droidMateRoot.toString(), "/projects/apk-inliner/input-apks/");
 
-		// empty inlining directory 
+		Path apkPath = user.getAPKPath();
+
+		// check for already inlined files
+		for (APKInformation apk : user.getAPKS()) {
+			if (apk.getFile().toString().contains("-inlined")) {
+				inliningStatus = InliningStatus.ERROR;
+				return;
+			}
+		}
+
+		// check for "inlined" folder
+		Path inlinedFolder = Paths.get(apkPath.toString(), "/inlined");
+		if (inlinedFolder.toFile().exists()) {
+			int counter = 0;
+			// check if there are all files inlined
+			for (APKInformation apkInfo : user.getAPKS()) {
+				Path inlinedAPK = Paths.get(apkInfo.getFile().getParent().toString(), "/inlined",
+						FilenameUtils.removeExtension(apkInfo.getFile().getName()) + "-inlined.apk");
+				if (!inlinedAPK.toFile().exists()) {
+					// not all files exist, delete directory and inline again
+					try {
+						FileUtils.deleteDirectory(inlinedFolder.toFile());
+						break;
+					} catch (IOException e) {
+						e.printStackTrace();
+						inliningStatus = InliningStatus.ERROR;
+						return;
+					}
+				}
+			}
+
+			if (counter == user.getAPKS().length) {
+				// all files are already inlined
+				inliningStatus = InliningStatus.FINISHED;
+				return;
+			}
+		}
+
+		// create "inlined" folder
+		inlinedFolder.toFile().mkdir();
+
+		// empty inlining directory
 		try {
 			FileUtils.deleteDirectory(inputAPKsPath.toFile());
 			inputAPKsPath.toFile().mkdir();
@@ -58,20 +99,33 @@ public class APKInliner implements Runnable {
 		// for each apk, inline it
 		for (APKInformation apkInfo : user.getAPKS()) {
 			try {
-				Files.copy(apkInfo.getFile().toPath(), Paths.get(inputAPKsPath.toString(),apkInfo.getFile().getName()), StandardCopyOption.REPLACE_EXISTING);
+				Files.copy(apkInfo.getFile().toPath(), Paths.get(inputAPKsPath.toString(), apkInfo.getFile().getName()), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 				e.printStackTrace();
 				inliningStatus = InliningStatus.ERROR;
 				return;
 			}
-			if (!startDroidMateInliner(droidMateRoot, droidMateExecutable)) {
+
+			// apkInfo.setStatus(InliningStatus.INLINING);
+		}
+		if (!startDroidMateInliner(droidMateRoot, droidMateExecutable)) {
+			inliningStatus = InliningStatus.ERROR;
+			return;
+		}
+
+		// copy inlined apks to "inlined" folder
+		Path outputAPKsPath = Paths.get(droidMateRoot.toString(), "/projects/apk-inliner/output-apks/");
+		for (APKInformation apkInfo : user.getAPKS()) {
+			try {
+				Path src = Paths.get(outputAPKsPath.toString(), FilenameUtils.removeExtension(apkInfo.getFile().getName()) + "-inlined.apk");
+				Path dst = Paths.get(inlinedFolder.toString(), FilenameUtils.removeExtension(apkInfo.getFile().getName()) + "-inlined.apk");
+				Files.copy(src, dst, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				e.printStackTrace();
 				inliningStatus = InliningStatus.ERROR;
 				return;
 			}
-			//apkInfo.setStatus(InliningStatus.INLINING);
 		}
-
-		
 		inliningStatus = InliningStatus.FINISHED;
 	}
 

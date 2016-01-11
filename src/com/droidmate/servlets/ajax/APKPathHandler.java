@@ -50,13 +50,13 @@ public class APKPathHandler extends HttpServlet {
 		}
 
 		// handle saving get requests
-		String apkSaveRoot = request.getParameter(AjaxConstants.APKPathHandeler_SAVE_APKROOT);
+		String apkSaveRoot = request.getParameter(AjaxConstants.APKPathHandler_SAVE_APKROOT);
 		if (apkSaveRoot != null) {
 			result.put("success", handleSaveAPKRoot(apkSaveRoot));
 		}
 
 		//handle save selected apk indices
-		String[] save_selectedAPKS = request.getParameterValues(AjaxConstants.APKPathHandeler_SAVE_SELECTED_APKS);
+		String[] save_selectedAPKS = request.getParameterValues(AjaxConstants.APKPathHandler_SAVE_SELECTED_APKS);
 		if (save_selectedAPKS != null) {
 			handleSaveSelectedAPKS(save_selectedAPKS);
 		}
