@@ -71,8 +71,9 @@ public class APKPathHandler extends HttpServlet {
 		for (String id : save_selectedAPKS) {
 			if (NumberUtils.isDigits(id) && NumberUtils.isNumber(id)) {
 				int index = Integer.parseInt(id);
-				if (index < user.getAPKS().size()) {
-					user.getAPKS().get(index).setSelected(true);
+				APKInformation[] apks = user.getAPKS();
+				if (index < apks.length) {
+					apks[index].setSelected(true);
 				}
 			}
 		}		

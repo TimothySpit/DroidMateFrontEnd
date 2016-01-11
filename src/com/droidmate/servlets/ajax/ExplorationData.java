@@ -2,7 +2,6 @@ package com.droidmate.servlets.ajax;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -53,8 +52,7 @@ public class ExplorationData extends HttpServlet {
 			out.flush();
 		} else if (request.getParameter("apkTableData") != null) {
 			JSONArray apkData = new JSONArray();
-			for (Iterator<APKInformation> iterator = user.getAPKS().iterator(); iterator.hasNext();) {
-				APKInformation apkInformation = (APKInformation) iterator.next();
+			for (APKInformation apkInformation : user.getAPKS()) {
 				if(!apkInformation.isSelected())
 					continue;
 				JSONArray jsonInfo = new JSONArray();
@@ -71,8 +69,7 @@ public class ExplorationData extends HttpServlet {
 		} else if (request.getParameter("update") != null) {
 			String file = request.getParameter("update");
 			
-			for (Iterator<APKInformation> iterator = user.getAPKS().iterator(); iterator.hasNext();) {
-				APKInformation apkInformation = (APKInformation) iterator.next();
+			for (APKInformation apkInformation : user.getAPKS()) {
 				if (apkInformation.getFile().getName().equals(file)) {
 					JSONObject data = new JSONObject();
 					data.put("progress", apkInformation.getProgress());

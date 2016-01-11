@@ -52,7 +52,7 @@
 				<form>
 					<a href="${pageContext.request.contextPath}/ApkListingDynamic"><button
 							class="btn btn-default" type="button" id="apkInfoBtn">Show
-							details for selected .apks</button></a>
+							details for .apks</button></a>
 				</form>
 			</div>
 			<div class="col-sm-4">
