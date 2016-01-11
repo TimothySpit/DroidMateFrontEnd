@@ -1,6 +1,6 @@
 (function($) {
 	//ajax object
-	$.droidmate = {};
+	var droidmate = $.droidmate || {};
 	var ajax = {};
 	
 	//create ajax get functions
@@ -75,7 +75,7 @@
 	
 	ajax.get  = get;
 	ajax.post = post;
-	
-	$.droidmate.ajax = ajax;
+	droidmate.ajax = ajax;
+	$.droidmate = droidmate;
 	
 })(jQuery);

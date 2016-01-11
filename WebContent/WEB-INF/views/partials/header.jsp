@@ -20,6 +20,8 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/droidmate/jquery.droidmate.js"></script>
+	<script
+	src="${pageContext.request.contextPath}/resources/js/droidmate/jquery.droidmate.overlays.js"></script>
 <script
 	src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
 <!-- JS end -->

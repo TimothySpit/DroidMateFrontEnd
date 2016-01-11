@@ -1,10 +1,5 @@
 $(function() {
 
-	// inline apks
-	$.get("/DroidMate/APKInliningHandler", {
-		inline : true
-	});
-
 	// retrieve files count
 	$.ajaxSetup({
 		cache : false
