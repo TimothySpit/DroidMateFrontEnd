@@ -24,10 +24,7 @@ $(function() {
 		saveSettings(outputPath, droidmatePath, explorationTime);
 	});
 
-});
-
-// fill edit boxes
-$(function() {
+	//fill in textboxes
 	var settings = $.droidmate.ajax.get.getDroidMateSettings();
 	$('#output-folder-name').val(settings.outputPath);
 	$('#dm-output-folder-name').val(settings.droidmatePath);

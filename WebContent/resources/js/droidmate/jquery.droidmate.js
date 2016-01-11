@@ -9,9 +9,9 @@
 		var result = null;
 		$.ajax({
 	        url:  "/DroidMate/Settings",
-	        data: {get:["outputPath","droidmatePath","time"],},
-	        type: 'get',
 	        async: false,
+	        type: 'GET',
+	        data: {get:["outputPath","droidmatePath","time"],},
 	        success: function(data) {
 	            result = data;
 	        } 
@@ -21,6 +21,8 @@
 	get.getDroidMateSettings = getDroidMateSettings;
 	//----------------------------------
 	
+	
+	//----------------------------------
 	
 	//create ajax post functions
 	var post = {};

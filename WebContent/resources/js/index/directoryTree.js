@@ -43,8 +43,7 @@ $(function() {
 														'<span class="label label-success text-center">'
 																+ json["info[]"].apks.data.length
 																+ ' apks loaded.</span>');
-										$("#btns-field").removeClass(
-												"hide");
+										$("#btns-field").removeClass("hide");
 										$("#show-static").removeClass("hide");
 									}
 									return json["info[]"].apks.data;
@@ -143,7 +142,8 @@ $(function() {
 
 			// Prevent click event from propagating to parent
 			e.stopPropagation();
-		};
+		}
+		;
 
 		// set up checkbox handlers
 		$('#selectiontable tbody').off('click', 'input[type="checkbox"]');
@@ -235,28 +235,31 @@ $(function() {
 		}
 	});
 
-	$('#folderSelectModal .modal-footer button').on('click', function(e) {
+	$('#folderSelectModal .modal-footer button').on(
+			'click',
+			function(e) {
 
-		var selectedItems = $('#folderTree').jstree(true).get_selected(true);
-		if (selectedItems.length > 0) {
-			$('#folder_name').val(selectedItems[0].text);
+				var selectedItems = $('#folderTree').jstree(true).get_selected(
+						true);
+				if (selectedItems.length > 0) {
+					$('#folder_name').val(selectedItems[0].text);
 
-			var path = encodeURIComponent(selectedItems[0].text);
+					var path = encodeURIComponent(selectedItems[0].text);
 
-			$.droidmate.ajax.post.setAPKRoot(selectedItems[0].text,false,function(data) {if(data.success) {createTable();}});
-		}
-	});
-	
+					$.droidmate.ajax.post.setAPKRoot(selectedItems[0].text,
+							false, function(data) {
+								if (data.success) {
+									createTable();
+								}
+							});
+				}
+			});
+
 	$('#startexploration').click(
 			function(e) {
-				$.ajax({
-					//Wait for the server to finish apk list and request the table data afterwards
-				     async: false,
-				     type: 'GET',
-				     url: "/DroidMate/APKPathHandler",
-				     data: { selApks : rows_selected },
-				     success: function(data) {window.location = "/DroidMate/Explore";},
-				});
-				
+				$.droidmate.ajax.post.setSelectedAPKS(rows_selected, false,
+						function(data) {
+							window.location = "/DroidMate/Explore";
+						});
 			});
 });
