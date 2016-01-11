@@ -143,8 +143,7 @@ $(function() {
 
 			// Prevent click event from propagating to parent
 			e.stopPropagation();
-		}
-		;
+		};
 
 		// set up checkbox handlers
 		$('#selectiontable tbody').off('click', 'input[type="checkbox"]');
@@ -244,15 +243,7 @@ $(function() {
 
 			var path = encodeURIComponent(selectedItems[0].text);
 
-			$.ajax({
-				//Wait for the server to finish apk list and request the table data afterwards
-			     async: false,
-			     type: 'GET',
-			     url: "/DroidMate/APKPathHandler",
-			     data: { apkRoot : selectedItems[0].text },
-			     success: function(data) {if(data.success) {createTable();} },
-			});
-
+			$.droidmate.ajax.post.setAPKRoot(selectedItems[0].text,false,function(data) {if(data.success) {createTable();}});
 		}
 	});
 	

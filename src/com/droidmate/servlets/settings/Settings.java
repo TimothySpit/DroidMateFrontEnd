@@ -47,6 +47,7 @@ public class Settings extends HttpServlet {
 		}
 		
 		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
 		JSONObject result = new JSONObject();
 		GUISettings settings = new GUISettings();
 
@@ -127,4 +128,9 @@ public class Settings extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/views/pages/settings/settings.jsp").forward(request, response);
 
 	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+	
 }

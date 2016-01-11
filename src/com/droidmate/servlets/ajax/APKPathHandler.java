@@ -130,4 +130,8 @@ public class APKPathHandler extends HttpServlet {
 		return user.setAPKPath(newAPKRoot);
 		
 	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
 }
