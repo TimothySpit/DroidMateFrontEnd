@@ -42,6 +42,23 @@
 	get.getExplorationInfo = getExplorationInfo;
 	//----------------------------------
 	
+	function getReport() {
+		var result = null;
+		$.ajax({
+	        url:  "/DroidMate/APKExploreHandler",
+	        async: false,
+	        type: 'GET',
+	        dataType: "json",
+	        data: {explore_get_report: true},
+	        success: function(data) {
+	            result = data;
+	        } 
+	     });
+		return result;
+	}
+	get.getReport = getReport;
+	//----------------------------------
+	
 	
 	//----------------------------------
 	
