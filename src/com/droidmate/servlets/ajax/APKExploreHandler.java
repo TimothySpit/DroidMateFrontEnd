@@ -148,6 +148,7 @@ public class APKExploreHandler extends HttpServlet {
 				return false;
 			}
 
+			logReader.stopReading();
 			System.out.println("Exit value: " + droidmateProcess.exitValue());
 			droidmateProcess.getInputStream().close();
 			droidmateProcess.getOutputStream().close();
