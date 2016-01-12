@@ -73,6 +73,8 @@ public class APKInliner implements Runnable {
 						inliningStatus = InliningStatus.ERROR;
 						return;
 					}
+				} else {
+					counter++;
 				}
 			}
 
