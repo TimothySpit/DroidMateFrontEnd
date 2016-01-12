@@ -91,14 +91,17 @@
 	post.saveDroidMateSettings = saveDroidMateSettings;
 	//----------------------------------
 	
-	function startDroidMate() {
+	function startDroidMate(success, error, complete) {
 		return $.ajax({
 			async: true,
 			url: "/DroidMate/APKExploreHandler",
 			method: "POST",
 			data: {
 				explore_start : true
-			}
+			},
+			 success: success,
+			    error: error,
+			    complete: complete
 		});
 	}
 	post.startDroidMate = startDroidMate;
