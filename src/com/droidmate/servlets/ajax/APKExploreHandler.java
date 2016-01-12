@@ -116,7 +116,7 @@ public class APKExploreHandler extends HttpServlet {
 
 			out.print(result);
 		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_REPORT) != null) {
-			out.print(reportFile.toString());
+			out.print(reportFile);
 		} else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
@@ -141,6 +141,8 @@ public class APKExploreHandler extends HttpServlet {
 		logFile = new File(droidMateRoot.toString(), "/dev1/logs/gui.xml");
 		logFile.delete();
 		logReader = new XMLLogReader(logFile);
+		reportFile = Paths.get(settings.getOutputFolder().toString(), "DroidmateReport-" + System.currentTimeMillis() + ".html")
+				.toFile();
 
 		// empty apks directory
 		try {
@@ -171,39 +173,43 @@ public class APKExploreHandler extends HttpServlet {
 				"--project-prop", "timeLimit=" + settings.getExplorationTimeout());
 		pb.directory(droidMateRoot.toFile());
 		pb.redirectErrorStream(true);
+
 		try {
 			droidmateProcess = pb.start();
-			logReader.startConcurrentReading();
-			String s;
+		} catch (SecurityException | IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		logReader.startConcurrentReading();
+		String s;
+		try {
 			BufferedReader stdout = new BufferedReader(new InputStreamReader(droidmateProcess.getInputStream()));
 			while ((s = stdout.readLine()) != null) {
 				System.out.println(s);
 			}
+		} catch (IOException ex) {}
+		try {
 			droidmateProcess.waitFor();
+		} catch (InterruptedException e1) {}
 
-			logReader.stopReading();
-			saveReport(settings.getOutputFolder());
-			System.out.println("Exit value: " + droidmateProcess.exitValue());
+		logReader.stopReading();
+		System.out.println("Exit value: " + droidmateProcess.exitValue());
+		try {
 			droidmateProcess.getInputStream().close();
 			droidmateProcess.getOutputStream().close();
 			droidmateProcess.getErrorStream().close();
-
-			if (droidmateProcess.exitValue() != 0) {
-				return false;
-			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return false;
+		} catch (Exception e) {
 		}
+		saveReport();
 
-		return true;
+		return droidmateProcess.exitValue() == 0;
 	}
 
 	private void stopDroidmateForcibly() {
 		System.out.println("Stopping droidmate...");
 
 		logReader.stopReading();
+		saveReport();
 
 		try {
 			droidmateProcess.getInputStream().close();
@@ -223,9 +229,8 @@ public class APKExploreHandler extends HttpServlet {
 		droidmateProcess.destroyForcibly();
 	}
 
-	private void saveReport(Path path) {
+	private void saveReport() {
 		try {
-			reportFile = Paths.get(path.toString(), "DroidmateReport-" + System.currentTimeMillis() + ".html").toFile();
 			reportFile.createNewFile();
 			PrintWriter writer = new PrintWriter(reportFile);
 			writer.println(generateReport());

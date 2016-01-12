@@ -1,5 +1,7 @@
 package com.droidmate.hook;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -11,6 +13,7 @@ public class APKExplorationInfo {
 	private AtomicBoolean success = new AtomicBoolean(false);
 	private AtomicInteger elementsSeen = new AtomicInteger(0);
 	private AtomicBoolean finished = new AtomicBoolean(false);
+	private ConcurrentHashMap<Long, Integer> elementsSeenHistory = new ConcurrentHashMap<>();
 	
 	public APKExplorationInfo(String name) {
 		super();
@@ -23,6 +26,11 @@ public class APKExplorationInfo {
 	
 	public void addElementsSeen(int newElements) {
 		elementsSeen.addAndGet(newElements);
+		elementsSeenHistory.put(System.currentTimeMillis(), getElementsSeen());
+	}
+
+	public ConcurrentHashMap<Long, Integer> getElementsSeenHistory() {
+		return elementsSeenHistory;
 	}
 
 	public void setElementsSeen(int elementsSeen) {
