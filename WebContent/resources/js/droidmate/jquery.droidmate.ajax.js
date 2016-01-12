@@ -93,7 +93,7 @@
 	
 	function startDroidMate(success, error, complete) {
 		$.ajax({
-			async: false,
+			async: true,
 			url: "/DroidMate/APKExploreHandler",
 			method: 'POST',
 			data: {
