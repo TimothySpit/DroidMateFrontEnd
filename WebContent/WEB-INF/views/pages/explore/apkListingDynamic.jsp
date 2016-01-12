@@ -24,7 +24,8 @@
 	src="${pageContext.request.contextPath}/resources/js/flot/jquery.flot.pie.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/flot-axislabels/jquery.flot.axislabels.js"></script>
-
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/js/explore/exploreCharts.js"></script>
 </head>
 </head>
 <body class="container">
@@ -69,49 +70,14 @@
 <!-- gui elements not yet seen chart -->
 <script type="text/javascript">	
 $(document).ready(function () {
-	var d1 = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
-	var options =  {
-		    yaxis: {
-		        labelWidth: 30,
-		        axisLabel: 'GUI Elements not yet seen',
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 20,
-	            axisLabelFontFamily: 'Arial'
-		    },
-		    xaxis: {
-		        labelHeight: 30,
-		        axisLabel: 'time (min)',
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 15,
-	            axisLabelFontFamily: 'Arial'
-		    }
-		};
-    $.plot($("#flot-gui-elements-not-seen"), [d1], options);
+	window.createChartGUIElementsToExplore("#flot-gui-elements-not-seen");
 });
 </script>
 
 <!-- gui elements explored chart-->
 <script type="text/javascript">	
 $(document).ready(function () {
-	var d1 = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
-	var options =  {
-		    yaxis: {
-		        labelWidth: 30,
-		        axisLabel: 'GUI elements explored',
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 20,
-	            axisLabelFontFamily: 'Arial'
-		    },
-		    xaxis: {
-		        labelHeight: 30,
-		        axisLabel: 'time (min)',
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 15,
-	            axisLabelFontFamily: 'Arial'
-		    }
-		};
-	
-    $.plot($("#flot-gui-elements-explored"), [d1], options);
+	window.createChartGUIElementsExplored("#flot-gui-elements-explored");
 });
 </script>
 
@@ -149,7 +115,8 @@ $.plot($("#flot-apks-status"), dataSet, options);
 <!-- gui screens explored chart-->
 <script type="text/javascript">	
 $(document).ready(function () {
-	var d1 = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
+	window.createChartGUIScreensExplored("#flot-gui-screens-explored");
+	/*var d1 = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
 	var options =  {
 		    yaxis: {
 		        labelWidth: 30,
@@ -167,7 +134,7 @@ $(document).ready(function () {
 		    }
 		};
 	
-    $.plot($("#flot-gui-screens-explored"), [d1], options);
+    $.plot($("#flot-gui-screens-explored"), [d1], options);*/
 });
 </script>
 
