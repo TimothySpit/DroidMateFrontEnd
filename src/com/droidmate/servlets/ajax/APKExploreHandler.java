@@ -59,7 +59,7 @@ public class APKExploreHandler extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
-
+		System.out.println(request.getParameter(AjaxConstants.EXPLORE_START));
 		if (request.getParameter(AjaxConstants.EXPLORE_START) != null) {
 			startDroidmate(user.getAPKS());
 		} else if (request.getParameter(AjaxConstants.EXPLORE_STOP) != null) {
