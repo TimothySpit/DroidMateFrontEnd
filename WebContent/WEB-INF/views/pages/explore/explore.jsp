@@ -57,7 +57,7 @@
 			</div>
 			<div class="col-sm-4">
 				<form class="pull-right">
-					<button class="btn btn-default" type="button">Stop All</button>
+					<button id="stopAllBtn" class="btn btn-default" type="button">Stop All</button>
 				</form>
 			</div>
 		</div>
