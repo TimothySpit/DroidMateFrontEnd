@@ -106,6 +106,21 @@
 	post.startDroidMate = startDroidMate;
 	//-----------------------------------
 	
+	function restartDroidMate(success, error, complete) {
+		$ajax({
+			url: "/DroidMate/APKExploreHandler",
+			ethod: 'POST',
+			data: {
+				explore_restart : true
+			},
+			success: success,
+			error: error,
+			complete: complete
+		});
+	}
+	post.restartDroidMate = restartDroidMate;
+	//-----------------------------------
+	
 	function stopDroidMate(success, error, complete) {
 		$ajax({
 			url: "/DroidMate/APKExploreHandler",
