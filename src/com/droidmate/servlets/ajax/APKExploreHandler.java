@@ -101,7 +101,6 @@ public class APKExploreHandler extends HttpServlet {
 			}
 
 			out.print(result);
-			out.flush();
 		}else
 			if(request.getParameter(AjaxConstants.EXPLORE_GET_REPORT) != null) {
 				out.print(reportFile.toString());
@@ -111,6 +110,7 @@ public class APKExploreHandler extends HttpServlet {
 					System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
 				}
 			}
+		out.flush();
 	}
 
 	private boolean startDroidmate(APKInformation[] apks) {
