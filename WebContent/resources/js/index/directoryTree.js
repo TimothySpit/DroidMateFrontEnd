@@ -181,6 +181,9 @@ $(function() {
 					// Update state of "Select all" control
 					updateDataTableSelectAllCtrl(table);
 
+					//update selected apks
+					$.droidmate.ajax.post.setSelectedAPKS(rows_selected);
+					
 					// Prevent click event from propagating to parent
 					e.stopPropagation();
 				});
@@ -255,5 +258,4 @@ $(function() {
 				}
 			});
 
-	
 });

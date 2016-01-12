@@ -17,6 +17,8 @@
 	src="${pageContext.request.contextPath}/resources/js/index/directoryTree.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/index/handleInlining.js"></script>
+	<script
+	src="${pageContext.request.contextPath}/resources/js/index/handleExploration.js"></script>
 <!-- file tree end -->
 </head>
 <body class="container">
