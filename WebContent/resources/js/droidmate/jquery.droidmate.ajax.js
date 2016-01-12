@@ -76,7 +76,7 @@
 		$.ajax({
 			async: async,
 			url: "/DroidMate/Settings",
-			method: 'POST',
+			type: 'POST',
 			data: { 
 				save : true,
 				outputPath : outputPath,
@@ -91,46 +91,37 @@
 	post.saveDroidMateSettings = saveDroidMateSettings;
 	//----------------------------------
 	
-	function startDroidMate(success, error, complete) {
+	function startDroidMate() {
 		$.ajax({
 			url: "/DroidMate/APKExploreHandler",
-			method: 'POST',
+			method: "POST",
 			data: {
 				explore_start : true
-			},
-			success: success,
-			error: error,
-			complete: complete
+			}
 		});
 	}
 	post.startDroidMate = startDroidMate;
 	//-----------------------------------
 	
-	function restartDroidMate(success, error, complete) {
+	function restartDroidMate() {
 		$.ajax({
 			url: "/DroidMate/APKExploreHandler",
-			method: 'POST',
+			method: "POST",
 			data: {
 				explore_restart : true
-			},
-			success: success,
-			error: error,
-			complete: complete
+			}
 		});
 	}
 	post.restartDroidMate = restartDroidMate;
 	//-----------------------------------
 	
-	function stopDroidMate(success, error, complete) {
+	function stopDroidMate() {
 		$.ajax({
 			url: "/DroidMate/APKExploreHandler",
-			method: 'POST',
+			method: "POST",
 			data: {
 				explore_stop : true
-			},
-			success: success,
-			error: error,
-			complete: complete
+			}
 		});
 	}
 	post.stopDroidMate = stopDroidMate;

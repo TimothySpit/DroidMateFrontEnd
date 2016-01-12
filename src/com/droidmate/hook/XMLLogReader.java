@@ -87,7 +87,6 @@ public class XMLLogReader {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				System.out.println(".");
 				return this.read(b, off, len);
 			} else {
 				return value;
@@ -208,12 +207,21 @@ public class XMLLogReader {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				while(!sourceFile.exists()) {
+					System.out.println("Waiting...");
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 				read();
 			}
 		}).start();
 	}
 
 	private void read() {
+		System.out.println("Starting log reading...");
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
