@@ -66,7 +66,7 @@
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Progress</th>
+						<th>Elements seen</th>
 						<th>Status</th>
 					</tr>
 				</thead>

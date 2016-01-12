@@ -3,6 +3,10 @@
 	var droidmate = $.droidmate || {};
 	var ajax = {};
 	
+	//constants
+	ajax.UPDATE_EXPLORATION_INFO_INTERVAL = 1000;
+	//--------------------------------------
+	
 	//create ajax get functions
 	var get = {};
 	function getDroidMateSettings() {
@@ -27,6 +31,7 @@
 	        url:  "/DroidMate/APKExploreHandler",
 	        async: false,
 	        type: 'GET',
+	        dataType: "json",
 	        data: {explore_get_info: true},
 	        success: function(data) {
 	            result = data;

@@ -1,13 +1,43 @@
 $(function() {
 
+	// start updating
+	setTimeout(function() {
+		updateExplorationInfo();
+	}, $.droidmate.ajax.UPDATE_EXPLORATION_INFO_INTERVAL);
+
+	// update exploration info
+	function updateExplorationInfo() {
+		var status = $.droidmate.ajax.get.getExplorationInfo();
+
+		$.each(status, function(index, value) {
+			var name = value.name;
+			var elementsSeen = value.elementsSeen;
+			var success = value.success;
+
+			var apkRows = $('#exploreFiles_wrapper .apk-name');
+			apkRows.each(function(index) {
+				// check for name
+				if ($(this).text() == name) {
+					// found apk
+					var elementsSeenDiv = $(this.parentElement.parentElement)
+							.find('.elements-seen');
+					elementsSeenDiv.text(elementsSeen);
+					var statusDiv = $(this.parentElement.parentElement)
+							.find('.state');
+					statusDiv.text(success);
+				}
+			});
+		});
+		
+		setTimeout(function() {
+			updateExplorationInfo();
+		}, $.droidmate.ajax.UPDATE_EXPLORATION_INFO_INTERVAL);
+	}
+
 	// retrieve files count
 	$.ajaxSetup({
 		cache : false
 	});
-
-	var updateInterval = 1000;
-	var counter = 0;
-	var numItems = 0;
 
 	function getData() {
 		$.ajaxSetup({
@@ -16,39 +46,27 @@ $(function() {
 
 		var fileName = $('#exploreFiles tbody tr:nth-child(' + (counter + 1)
 				+ ') td:first-child .apk-name');
-		$.ajax({
-			url : "ExplorationData?update=" + fileName.text(),
-			dataType : 'json',
-			success : updateExplorationStatus,
-			error : function() {
-				setTimeout(getData, updateInterval);
-			}
-		});
 	}
 
 	function showReportButton(row) {
-		row.find(".apk-name button").disabled=false;
+		row.find(".apk-name button").disabled = false;
 	}
 
 	function updateExplorationStatus(_data) {
 		var row = $('#exploreFiles tbody tr:nth-child(' + (counter + 1) + ')');
 		var progressBar = row.find('.progress-bar');
-		progressBar.width(_data.progress + '%');
-		progressBar.text(_data.progress + '%');
 		row.find('td .state').text(_data.state);
-		counter = Math.min(numItems, counter + 1);
 
 		if (_data.state == 'FINISHED') {
 			showReportButton(row);
 		}
 
-		if (counter == numItems)
-			counter = 0;
 		setTimeout(getData, updateInterval);
 	}
 
 	// init update
-	$.getJSON(
+	$
+			.getJSON(
 					"ExplorationData?filesCount",
 					function(data) {
 						if (data.count) {
@@ -62,13 +80,6 @@ $(function() {
 														$(".apk-data")
 																.removeClass(
 																		"hide");
-														
-														// start
-														// updating
-														// data
-														numItems = json.data.length;
-														setTimeout(getData,
-																updateInterval);
 														return json.data;
 													}
 												},
@@ -96,11 +107,7 @@ $(function() {
 															"render" : function(
 																	data, type,
 																	row) {
-																return '<div class="progress-bar" role="progressbar" aria-valuenow="10"'
-																		+ 'aria-valuemin="0" aria-valuemax="100" style="width:70%">'
-																		+ data
-																		+ '%'
-																		+ '</div>'
+																return '<div class="elements-seen">0</div>';
 															}
 														},
 														{
