@@ -13,7 +13,8 @@ $(function() {
 			var name = value.name;
 			var elementsSeen = value.elementsSeen;
 			var success = value.success;
-
+			var finished = value.finished;
+			
 			var apkRows = $('#exploreFiles_wrapper .apk-name');
 			apkRows.each(function(index) {
 				// check for name
@@ -24,7 +25,15 @@ $(function() {
 					elementsSeenDiv.text(elementsSeen);
 					var statusDiv = $(this.parentElement.parentElement)
 							.find('.state');
-					statusDiv.text(success);
+					
+					if(finished) {
+						if(success) {
+							statusDiv.html('<span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>');
+							showReportButton($(this.parentElement.parentElement));
+						} else {
+							statusDiv.html('<span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>');
+						}
+					}
 				}
 			});
 		});
@@ -34,34 +43,9 @@ $(function() {
 		}, $.droidmate.ajax.UPDATE_EXPLORATION_INFO_INTERVAL);
 	}
 
-	// retrieve files count
-	$.ajaxSetup({
-		cache : false
-	});
-
-	function getData() {
-		$.ajaxSetup({
-			cache : false
-		});
-
-		var fileName = $('#exploreFiles tbody tr:nth-child(' + (counter + 1)
-				+ ') td:first-child .apk-name');
-	}
-
 	function showReportButton(row) {
-		row.find(".apk-name button").disabled = false;
-	}
-
-	function updateExplorationStatus(_data) {
-		var row = $('#exploreFiles tbody tr:nth-child(' + (counter + 1) + ')');
-		var progressBar = row.find('.progress-bar');
-		row.find('td .state').text(_data.state);
-
-		if (_data.state == 'FINISHED') {
-			showReportButton(row);
-		}
-
-		setTimeout(getData, updateInterval);
+		$(row).find("button").prop("disabled",false);
+		$(row).find("button").attr("href",$.droidmate.ajax.get.getReport());
 	}
 
 	// init update
@@ -117,7 +101,7 @@ $(function() {
 																	data, type,
 																	row) {
 																return '<div class="state">'
-																		+ data
+																		+ '<span class="glyphicon glyphicon glyphicon-asterisk" aria-hidden="true"></span>'
 																		+ '</div>'
 															}
 														} ]

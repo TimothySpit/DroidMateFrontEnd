@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
@@ -61,19 +63,38 @@ public class APKExploreHandler extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 
-		(new Thread(new Runnable() {
-			@Override
-			public void run() {
-				if (request.getParameter(AjaxConstants.EXPLORE_START) != null) {
+		Runnable r;
+		if (request.getParameter(AjaxConstants.EXPLORE_START) != null) {
+			r = new Runnable() {
+				@Override
+				public void run() {
 					startDroidmate(user.getAPKS());
-				} else if (request.getParameter(AjaxConstants.EXPLORE_STOP) != null) {
+				}
+			};
+		} else if (request.getParameter(AjaxConstants.EXPLORE_STOP) != null) {
+			r = new Runnable() {
+				@Override
+				public void run() {
 					stopDroidmateForcibly();
-				} else if (request.getParameter(AjaxConstants.EXPLORE_RESTART) != null) {
+				}
+			};
+		} else if (request.getParameter(AjaxConstants.EXPLORE_RESTART) != null) {
+			r = new Runnable() {
+				@Override
+				public void run() {
 					stopDroidmateForcibly();
 					startDroidmate(user.getAPKS());
 				}
+			};
+		} else {
+			System.out.println("Illegal POST request:");
+			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
+				System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
 			}
-		})).start();
+			return;
+		}
+
+		(new Thread(r)).start();
 	}
 
 	/**
@@ -94,11 +115,15 @@ public class APKExploreHandler extends HttpServlet {
 			}
 
 			out.print(result);
-			out.flush();
-		}else
-			if(request.getParameter(AjaxConstants.EXPLORE_GET_REPORT) != null) {
-				out.print(reportFile.toString());
+		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_REPORT) != null) {
+			out.print(reportFile.toString());
+		} else {
+			System.out.println("Illegal GET request:");
+			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
+				System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
 			}
+		}
+		out.flush();
 	}
 
 	private boolean startDroidmate(APKInformation[] apks) {
@@ -142,8 +167,8 @@ public class APKExploreHandler extends HttpServlet {
 			}
 		}
 
-		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace", ":projects:core:run", "--project-prop",
-				"timeLimit=" + settings.getExplorationTimeout());
+		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace", ":projects:core:run",
+				"--project-prop", "timeLimit=" + settings.getExplorationTimeout());
 		pb.directory(droidMateRoot.toFile());
 		pb.redirectErrorStream(true);
 		try {
@@ -216,93 +241,42 @@ public class APKExploreHandler extends HttpServlet {
 		}
 
 		// http://johnsardine.com/freebies/dl-html-css/simple-little-tab/
-		String css = "table {\r\n" + 
-				"	font-family:Arial, Helvetica, sans-serif;\r\n" + 
-				"	color:#666;\r\n" + 
-				"	text-shadow: 1px 1px 0px #fff;\r\n" + 
-				"	background:#eaebec;\r\n" + 
-				"	margin:20px;\r\n" + 
-				"	border:#ccc 1px solid;\r\n" + 
-				"\r\n" + 
-				"	-moz-border-radius:3px;\r\n" + 
-				"	-webkit-border-radius:3px;\r\n" + 
-				"	border-radius:3px;\r\n" + 
-				"\r\n" + 
-				"	-moz-box-shadow: 0 1px 2px #d1d1d1;\r\n" + 
-				"	-webkit-box-shadow: 0 1px 2px #d1d1d1;\r\n" + 
-				"	box-shadow: 0 1px 2px #d1d1d1;\r\n" + 
-				"}\r\n" + 
-				"table th {\r\n" + 
-				"	padding:21px 25px 22px 25px;\r\n" + 
-				"	border-top:1px solid #fafafa;\r\n" + 
-				"	border-bottom:1px solid #e0e0e0;\r\n" + 
-				"\r\n" + 
-				"	background: #ededed;\r\n" + 
-				"	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));\r\n" + 
-				"	background: -moz-linear-gradient(top,  #ededed,  #ebebeb);\r\n" + 
-				"}\r\n" + 
-				"table th:first-child {\r\n" + 
-				"	text-align: left;\r\n" + 
-				"	padding-left:20px;\r\n" + 
-				"}\r\n" + 
-				"table tr:first-child th:first-child {\r\n" + 
-				"	-moz-border-radius-topleft:3px;\r\n" + 
-				"	-webkit-border-top-left-radius:3px;\r\n" + 
-				"	border-top-left-radius:3px;\r\n" + 
-				"}\r\n" + 
-				"table tr:first-child th:last-child {\r\n" + 
-				"	-moz-border-radius-topright:3px;\r\n" + 
-				"	-webkit-border-top-right-radius:3px;\r\n" + 
-				"	border-top-right-radius:3px;\r\n" + 
-				"}\r\n" + 
-				"table tr {\r\n" + 
-				"	text-align: center;\r\n" + 
-				"	padding-left:20px;\r\n" + 
-				"}\r\n" + 
-				"table td:first-child {\r\n" + 
-				"	text-align: left;\r\n" + 
-				"	padding-left:20px;\r\n" + 
-				"	border-left: 0;\r\n" + 
-				"}\r\n" + 
-				"table td {\r\n" + 
-				"	padding:18px;\r\n" + 
-				"	border-top: 1px solid #ffffff;\r\n" + 
-				"	border-bottom:1px solid #e0e0e0;\r\n" + 
-				"	border-left: 1px solid #e0e0e0;\r\n" + 
-				"\r\n" + 
-				"	background: #fafafa;\r\n" + 
-				"	background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));\r\n" + 
-				"	background: -moz-linear-gradient(top,  #fbfbfb,  #fafafa);\r\n" + 
-				"}\r\n" + 
-				"table tr.even td {\r\n" + 
-				"	background: #f6f6f6;\r\n" + 
-				"	background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));\r\n" + 
-				"	background: -moz-linear-gradient(top,  #f8f8f8,  #f6f6f6);\r\n" + 
-				"}\r\n" + 
-				"table tr:last-child td {\r\n" + 
-				"	border-bottom:0;\r\n" + 
-				"}\r\n" + 
-				"table tr:last-child td:first-child {\r\n" + 
-				"	-moz-border-radius-bottomleft:3px;\r\n" + 
-				"	-webkit-border-bottom-left-radius:3px;\r\n" + 
-				"	border-bottom-left-radius:3px;\r\n" + 
-				"}\r\n" + 
-				"table tr:last-child td:last-child {\r\n" + 
-				"	-moz-border-radius-bottomright:3px;\r\n" + 
-				"	-webkit-border-bottom-right-radius:3px;\r\n" + 
-				"	border-bottom-right-radius:3px;\r\n" + 
-				"}\r\n" + 
-				"table tr:hover td {\r\n" + 
-				"	background: #f2f2f2;\r\n" + 
-				"	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));\r\n" + 
-				"	background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	\r\n" + 
-				"}";
+		String css = "table {\r\n" + "	font-family:Arial, Helvetica, sans-serif;\r\n" + "	color:#666;\r\n"
+				+ "	text-shadow: 1px 1px 0px #fff;\r\n" + "	background:#eaebec;\r\n" + "	margin:20px;\r\n"
+				+ "	border:#ccc 1px solid;\r\n" + "\r\n" + "	-moz-border-radius:3px;\r\n"
+				+ "	-webkit-border-radius:3px;\r\n" + "	border-radius:3px;\r\n" + "\r\n"
+				+ "	-moz-box-shadow: 0 1px 2px #d1d1d1;\r\n" + "	-webkit-box-shadow: 0 1px 2px #d1d1d1;\r\n"
+				+ "	box-shadow: 0 1px 2px #d1d1d1;\r\n" + "}\r\n" + "table th {\r\n" + "	padding:21px 25px 22px 25px;\r\n"
+				+ "	border-top:1px solid #fafafa;\r\n" + "	border-bottom:1px solid #e0e0e0;\r\n" + "\r\n"
+				+ "	background: #ededed;\r\n"
+				+ "	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));\r\n"
+				+ "	background: -moz-linear-gradient(top,  #ededed,  #ebebeb);\r\n" + "}\r\n" + "table th:first-child {\r\n"
+				+ "	text-align: left;\r\n" + "	padding-left:20px;\r\n" + "}\r\n" + "table tr:first-child th:first-child {\r\n"
+				+ "	-moz-border-radius-topleft:3px;\r\n" + "	-webkit-border-top-left-radius:3px;\r\n"
+				+ "	border-top-left-radius:3px;\r\n" + "}\r\n" + "table tr:first-child th:last-child {\r\n"
+				+ "	-moz-border-radius-topright:3px;\r\n" + "	-webkit-border-top-right-radius:3px;\r\n"
+				+ "	border-top-right-radius:3px;\r\n" + "}\r\n" + "table tr {\r\n" + "	text-align: center;\r\n"
+				+ "	padding-left:20px;\r\n" + "}\r\n" + "table td:first-child {\r\n" + "	text-align: left;\r\n"
+				+ "	padding-left:20px;\r\n" + "	border-left: 0;\r\n" + "}\r\n" + "table td {\r\n" + "	padding:18px;\r\n"
+				+ "	border-top: 1px solid #ffffff;\r\n" + "	border-bottom:1px solid #e0e0e0;\r\n"
+				+ "	border-left: 1px solid #e0e0e0;\r\n" + "\r\n" + "	background: #fafafa;\r\n"
+				+ "	background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));\r\n"
+				+ "	background: -moz-linear-gradient(top,  #fbfbfb,  #fafafa);\r\n" + "}\r\n" + "table tr.even td {\r\n"
+				+ "	background: #f6f6f6;\r\n"
+				+ "	background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));\r\n"
+				+ "	background: -moz-linear-gradient(top,  #f8f8f8,  #f6f6f6);\r\n" + "}\r\n" + "table tr:last-child td {\r\n"
+				+ "	border-bottom:0;\r\n" + "}\r\n" + "table tr:last-child td:first-child {\r\n"
+				+ "	-moz-border-radius-bottomleft:3px;\r\n" + "	-webkit-border-bottom-left-radius:3px;\r\n"
+				+ "	border-bottom-left-radius:3px;\r\n" + "}\r\n" + "table tr:last-child td:last-child {\r\n"
+				+ "	-moz-border-radius-bottomright:3px;\r\n" + "	-webkit-border-bottom-right-radius:3px;\r\n"
+				+ "	border-bottom-right-radius:3px;\r\n" + "}\r\n" + "table tr:hover td {\r\n" + "	background: #f2f2f2;\r\n"
+				+ "	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));\r\n"
+				+ "	background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	\r\n" + "}";
 
 		StringBuilder html = new StringBuilder();
 		html.append("<!DOCTYPE html><html><head><title>Droidmate report</title><style>");
 		html.append(css);
-		html.append(
-				"</style></head><body><table><tr><th>Name</th><th>Elements seen</th><th>Success</th></tr>");
+		html.append("</style></head><body><table><tr><th>Name</th><th>Elements seen</th><th>Success</th></tr>");
 		for (APKExplorationInfo apk : logReader.getApksInfo()) {
 			html.append("<tr><td>");
 			html.append(apk.getName());

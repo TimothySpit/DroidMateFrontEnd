@@ -115,15 +115,15 @@
 	
 	function startDroidMate(success, error, complete) {
 		return $.ajax({
-			async: true,
+			async: false,
 			url: "/DroidMate/APKExploreHandler",
 			method: "POST",
 			data: {
 				explore_start : true
 			},
 			 success: success,
-			    error: error,
-			    complete: complete
+			 error: error,
+			 complete: complete
 		});
 	}
 	post.startDroidMate = startDroidMate;

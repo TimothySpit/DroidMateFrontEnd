@@ -4,9 +4,3 @@ $(function() {
 		$.droidmate.ajax.post.startDroidMate(function(e){window.location = "/DroidMate/Explore";});
 	});
 });
-$(function() {
-	//
-	$('#stopAllBtn').click(function(e) {
-		$.droidmate.ajax.post.stopDroidMate();
-	});
-});
