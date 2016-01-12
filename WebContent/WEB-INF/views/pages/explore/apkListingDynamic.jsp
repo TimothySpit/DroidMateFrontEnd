@@ -84,31 +84,7 @@ $(document).ready(function () {
 <!-- apkstatus chart-->
 <script type="text/javascript">	
 $(document).ready(function () {
-var dataSet = [
-               {label: "Successful", data: 4119630000, color: "#005CDE" },
-               { label: "Failed", data: 590950000, color: "#00A36A" },
-               { label: "Aborted", data: 1012960000, color: "#7D0096" }    
-           ];
-var options = {
-        series: {
-            pie: { 
-                show: true,
-                radius: 1,
-                label: {
-                    show: true,
-                    radius: 1,
-                    formatter: function(label, series){
-                        return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-                    },
-                    background: { opacity: 0.8 }
-                }
-            }
-        },
-        legend: {
-            show: false
-        }
-};
-$.plot($("#flot-apks-status"), dataSet, options);    
+window.createChartAPKStatus('#flot-apks-status');
 });
 </script>
 
@@ -116,25 +92,7 @@ $.plot($("#flot-apks-status"), dataSet, options);
 <script type="text/javascript">	
 $(document).ready(function () {
 	window.createChartGUIScreensExplored("#flot-gui-screens-explored");
-	/*var d1 = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
-	var options =  {
-		    yaxis: {
-		        labelWidth: 30,
-		        axisLabel: 'GUI screens explored',
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 20,
-	            axisLabelFontFamily: 'Arial'
-		    },
-		    xaxis: {
-		        labelHeight: 30,
-		        axisLabel: 'time (min)',
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 15,
-	            axisLabelFontFamily: 'Arial'
-		    }
-		};
-	
-    $.plot($("#flot-gui-screens-explored"), [d1], options);*/
+
 });
 </script>
 

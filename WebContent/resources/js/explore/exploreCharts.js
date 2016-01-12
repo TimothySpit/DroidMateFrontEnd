@@ -3,10 +3,12 @@ $(document).ready()
 	var elementsToExplore = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
 	var elementsExplored = [[0,0],[0,0],[0,0],[0,0],[0,0]];
 	var screensExplored = [[1, 500], [2, 500], [3, 500], [4, 500], [5, 300]];
+	var successfullAPKs, failedAPKs, remainingAPKs;
 	var updateInterval = 1000;
 	var lastUpdate = 0;
-	var chartGUIElementsExplored, chartGUIElementsToExplore, chartGUIScreensExplored;
+	var chartGUIElementsExplored, chartGUIElementsToExplore, chartGUIScreensExplored, chart;
 	}
+
 
 
 function createChartGUIElementsToExplore(divname) {
@@ -72,6 +74,36 @@ function createChartGUIElementsExplored(divname) {
     setTimeout(updateElementsExplored, divname, updateInterval);
 };
 
+function createChartAPKStatus(divname)
+{
+	var dataSet = [
+	               {label: "Successful", data: 2, color: "#00A36A"},
+	               { label: "Failed", data: 4, color: "#005CDE"},
+	               { label: "Remaining", data: 8, color: "#7D0096" }    
+	           ];
+	var options = {
+	        series: {
+	            pie: { 
+	                show: true,
+	                radius: 1,
+	                label: {
+	                    show: true,
+	                    radius: 1,
+	                    formatter: function(label, series){
+	                        return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+	                    },
+	                    background: { opacity: 0.8 }
+	                }
+	            }
+	        },
+	        legend: {
+	            show: false
+	        }
+	};
+	$.plot($("#flot-apks-status"), dataSet, options);
+}
+
+
 function addRandomValue(currentData)
 {
 	currentData.shift();
@@ -86,7 +118,6 @@ function updateElementsExplored(divname)
 	chart = chartGUIElementsExplored;
 	data = elementsExplored;
 	addRandomValue(data); 
-	console.log(data);
 	chart.setData([data]);
 	chart.draw();
 	
