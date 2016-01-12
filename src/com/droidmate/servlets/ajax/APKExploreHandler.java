@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.json.JSONArray;
 
 import com.droidmate.apk.APKInformation;
@@ -115,7 +116,9 @@ public class APKExploreHandler extends HttpServlet {
 		// for each apk, copy it
 		for (APKInformation apkInfo : apks) {
 			try {
-				Files.copy(apkInfo.getFile().toPath(), Paths.get(inputAPKsPath.toString(), apkInfo.getFile().getName()),
+				Path inlinedAPK = Paths.get(apkInfo.getFile().getParent().toString(), "/inlined",
+						FilenameUtils.removeExtension(apkInfo.getFile().getName()) + "-inlined.apk");
+				Files.copy(inlinedAPK, Paths.get(inputAPKsPath.toString(), apkInfo.getFile().getName()),
 						StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 				e.printStackTrace();
