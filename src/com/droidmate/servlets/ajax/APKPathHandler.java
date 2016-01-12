@@ -68,6 +68,10 @@ public class APKPathHandler extends HttpServlet {
 	private void handleSaveSelectedAPKS(String[] save_selectedAPKS) {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 
+		for (APKInformation apk : user.getAPKS()) {
+			apk.setSelected(false);
+		}
+		
 		for (String id : save_selectedAPKS) {
 			if (NumberUtils.isDigits(id) && NumberUtils.isNumber(id)) {
 				int index = Integer.parseInt(id);
