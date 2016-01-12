@@ -74,7 +74,7 @@ public class APKExploreHandler extends HttpServlet {
 					stopDroidmateForcibly();
 					startDroidmate(user.getAPKS());
 				} else {
-					System.out.println("Illegal get request:");
+					System.out.println("Illegal POST request:");
 					for(Entry<String, String[]> s : request.getParameterMap().entrySet()) {
 						System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
 					}
@@ -105,7 +105,7 @@ public class APKExploreHandler extends HttpServlet {
 			if(request.getParameter(AjaxConstants.EXPLORE_GET_REPORT) != null) {
 				out.print(reportFile.toString());
 			}else {
-				System.out.println("Illegal get request:");
+				System.out.println("Illegal GET request:");
 				for(Entry<String, String[]> s : request.getParameterMap().entrySet()) {
 					System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
 				}
