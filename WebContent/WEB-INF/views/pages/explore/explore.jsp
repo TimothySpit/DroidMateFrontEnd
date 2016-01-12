@@ -29,6 +29,8 @@
 	src="${pageContext.request.contextPath}/resources/js/explore/exploreCharts.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/updateExplorationData.js"></script>
+	<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/js/explore/handleExplorationButtons.js"></script>
 
 </head>
 <body class="container">

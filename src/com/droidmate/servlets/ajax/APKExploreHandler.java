@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
@@ -71,6 +73,11 @@ public class APKExploreHandler extends HttpServlet {
 				} else if (request.getParameter(AjaxConstants.EXPLORE_RESTART) != null) {
 					stopDroidmateForcibly();
 					startDroidmate(user.getAPKS());
+				} else {
+					System.out.println("Illegal get request:");
+					for(Entry<String, String[]> s : request.getParameterMap().entrySet()) {
+						System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
+					}
 				}
 			}
 		})).start();
@@ -98,6 +105,11 @@ public class APKExploreHandler extends HttpServlet {
 		}else
 			if(request.getParameter(AjaxConstants.EXPLORE_GET_REPORT) != null) {
 				out.print(reportFile.toString());
+			}else {
+				System.out.println("Illegal get request:");
+				for(Entry<String, String[]> s : request.getParameterMap().entrySet()) {
+					System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
+				}
 			}
 	}
 
