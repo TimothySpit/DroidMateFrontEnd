@@ -21,25 +21,18 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * 
  * Parses xml log using the following format:
- *	<exploration>
- *		<apk>
- *			<name>org.bla.droidmate</name>
- *			<events>
- *				<elements_seen>16</elements>seen>
- *			</events\>
- *			<success>true</success>
- *		</apk>
- *		<apk>
- *			...
- *	</exploration> *
+ * <exploration> <apk> <name>org.bla.droidmate</name>
+ * <events> <elements_seen>16</elements>seen> </events\>
+ * <success>true</success> </apk> <apk> ... </exploration> *
  */
 public class XMLLogReader {
-	
+
 	/**
-	 * Behaves exactly like FileInputStream, but never returns EOF until stop() is called.
+	 * Behaves exactly like FileInputStream, but never returns EOF until stop()
+	 * is called.
 	 */
 	private class ForeverFileInputStream extends FileInputStream {
-			
+
 		private boolean stop = false;
 
 		public ForeverFileInputStream(File file) throws FileNotFoundException {
@@ -62,7 +55,7 @@ public class XMLLogReader {
 				return value;
 			}
 		}
-		
+
 		@Override
 		public int read(byte[] b) throws IOException {
 			int value = super.read(b);
@@ -77,7 +70,7 @@ public class XMLLogReader {
 				return value;
 			}
 		}
-		
+
 		@Override
 		public int read(byte[] b, int off, int len) throws IOException {
 			int value = super.read(b, off, len);
@@ -92,7 +85,7 @@ public class XMLLogReader {
 				return value;
 			}
 		}
-		
+
 		public void stop() {
 			stop = true;
 		}
@@ -102,7 +95,7 @@ public class XMLLogReader {
 
 		private Map<String, APKExplorationInfo> apks;
 		private APKExplorationInfo currentApk;
-		
+
 		// Flags to determine state
 		boolean readExploration = false;
 		boolean readApk = false;
@@ -121,29 +114,33 @@ public class XMLLogReader {
 			if (readName) {
 				currentApk = new APKExplorationInfo(value);
 				apks.put(value, currentApk);
-				
-				//System.out.println("Name : " + value);
+
+				// System.out.println("Name : " + value);
 				readName = false;
 			} else if (readElementsSeen) {
 				currentApk.addElementsSeen(Integer.parseInt(value));
-				
-				//System.out.println("ElementsSeen : " + new String(ch, start, length));
+
+				// System.out.println("ElementsSeen : " + new String(ch, start,
+				// length));
 				readElementsSeen = false;
 			} else if (readSuccess) {
 				currentApk.setSuccess(Boolean.parseBoolean(value));
-				
-				//System.out.println("Success:" + new String(ch, start, length));
+
+				// System.out.println("Success:" + new String(ch, start,
+				// length));
 				readSuccess = false;
 			}
 			// Just for debugging
 			if (readApk) {
-				//System.out.println("Apk: " + new String(ch, start, length));
+				// System.out.println("Apk: " + new String(ch, start, length));
 				readApk = false;
 			} else if (readEvents) {
-				//System.out.println("Events : " + new String(ch, start, length));
+				// System.out.println("Events : " + new String(ch, start,
+				// length));
 				readEvents = false;
-			}else if (readExploration) {
-				//System.out.println("Exploration: " + new String(ch, start, length));
+			} else if (readExploration) {
+				// System.out.println("Exploration: " + new String(ch, start,
+				// length));
 				readExploration = false;
 			}
 
@@ -151,7 +148,7 @@ public class XMLLogReader {
 
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-			//System.out.println("Start Element :" + qName);
+			// System.out.println("Start Element :" + qName);
 
 			switch (qName.toLowerCase()) {
 			case "exploration":
@@ -177,17 +174,17 @@ public class XMLLogReader {
 
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
-			//System.out.println("End Element :" + qName);
+			// System.out.println("End Element :" + qName);
 		}
 
 		@Override
 		public void startDocument() {
-			//System.out.println("Document starts.");
+			// System.out.println("Document starts.");
 		}
 
 		@Override
 		public void endDocument() {
-			//System.out.println("Document ends.");
+			// System.out.println("Document ends.");
 		}
 	}
 
@@ -198,17 +195,18 @@ public class XMLLogReader {
 	public XMLLogReader(File source) {
 		this.sourceFile = source;
 	}
-	
+
 	public void stopReading() {
-		inputStream.stop();
+		if (inputStream != null) {
+			inputStream.stop();
+		}
 	}
 
 	public void startConcurrentReading() {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while(!sourceFile.exists()) {
-					System.out.println("Waiting...");
+				while (!sourceFile.exists()) {
 					try {
 						Thread.sleep(2000);
 					} catch (InterruptedException e) {
@@ -239,12 +237,12 @@ public class XMLLogReader {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			/*for(Object o : apks.entrySet()) {
-				System.out.println(o);
-			}*/
+			/*
+			 * for(Object o : apks.entrySet()) { System.out.println(o); }
+			 */
 		}
 	}
-	
+
 	public Collection<APKExplorationInfo> getApksInfo() {
 		return getApksMap().values();
 	}

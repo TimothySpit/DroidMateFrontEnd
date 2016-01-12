@@ -59,15 +59,20 @@ public class APKExploreHandler extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
-		
-		if (request.getParameter(AjaxConstants.EXPLORE_START) != null) {
-			startDroidmate(user.getAPKS());
-		} else if (request.getParameter(AjaxConstants.EXPLORE_STOP) != null) {
-			stopDroidmateForcibly();
-		} else if (request.getParameter(AjaxConstants.EXPLORE_RESTART) != null) {
-			stopDroidmateForcibly();
-			startDroidmate(user.getAPKS());
-		}
+
+		(new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if (request.getParameter(AjaxConstants.EXPLORE_START) != null) {
+					startDroidmate(user.getAPKS());
+				} else if (request.getParameter(AjaxConstants.EXPLORE_STOP) != null) {
+					stopDroidmateForcibly();
+				} else if (request.getParameter(AjaxConstants.EXPLORE_RESTART) != null) {
+					stopDroidmateForcibly();
+					startDroidmate(user.getAPKS());
+				}
+			}
+		})).start();
 	}
 
 	/**
@@ -76,15 +81,15 @@ public class APKExploreHandler extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
-		
-		if(request.getParameter(AjaxConstants.EXPLORE_GET_INFO) != null) {
+
+		if (request.getParameter(AjaxConstants.EXPLORE_GET_INFO) != null) {
 			PrintWriter out = response.getWriter();
 			response.setContentType("application/json");
 			JSONArray result = new JSONArray();
-			for(APKExplorationInfo apk : logReader.getApksInfo()) {
+			for (APKExplorationInfo apk : logReader.getApksInfo()) {
 				result.put(apk.toJSONObject());
 			}
-			
+
 			out.print(result);
 			out.flush();
 		}
@@ -92,7 +97,7 @@ public class APKExploreHandler extends HttpServlet {
 
 	private boolean startDroidmate(APKInformation[] apks) {
 		System.out.println("Starting droidmate");
-		
+
 		GUISettings settings = new GUISettings();
 		Path droidMateRoot = settings.getDroidMatePath();
 		String gradlewName = "/gradlew.bat";
@@ -123,7 +128,7 @@ public class APKExploreHandler extends HttpServlet {
 							FilenameUtils.removeExtension(apkInfo.getFile().getName()) + "-inlined.apk");
 					Path target = Paths.get(inputAPKsPath.toString(), apkInfo.getFile().getName());
 					target.toFile().mkdirs();
-					Files.copy(inlinedAPK, target,StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(inlinedAPK, target, StandardCopyOption.REPLACE_EXISTING);
 				} catch (IOException e) {
 					e.printStackTrace();
 					return false;
@@ -168,9 +173,9 @@ public class APKExploreHandler extends HttpServlet {
 
 	private void stopDroidmateForcibly() {
 		System.out.println("Stopping droidmate...");
-		
+
 		logReader.stopReading();
-		
+
 		try {
 			droidmateProcess.getInputStream().close();
 		} catch (IOException e) {
