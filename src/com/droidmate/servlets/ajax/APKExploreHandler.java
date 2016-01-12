@@ -116,7 +116,7 @@ public class APKExploreHandler extends HttpServlet {
 
 			out.print(result);
 		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_REPORT) != null) {
-			out.print(reportFile.toString());
+			out.print(reportFile);
 		} else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
