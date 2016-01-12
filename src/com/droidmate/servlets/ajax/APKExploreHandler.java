@@ -219,7 +219,6 @@ public class APKExploreHandler extends HttpServlet {
 		String css = "table {\r\n" + 
 				"	font-family:Arial, Helvetica, sans-serif;\r\n" + 
 				"	color:#666;\r\n" + 
-				"	font-size:12px;\r\n" + 
 				"	text-shadow: 1px 1px 0px #fff;\r\n" + 
 				"	background:#eaebec;\r\n" + 
 				"	margin:20px;\r\n" + 
