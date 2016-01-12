@@ -21,6 +21,22 @@
 	get.getDroidMateSettings = getDroidMateSettings;
 	//----------------------------------
 	
+	function getExplorationInfo() {
+		var result = null;
+		$.ajax({
+	        url:  "/DroidMate/APKExploreHandler",
+	        async: false,
+	        type: 'GET',
+	        data: {explore_get_info: true},
+	        success: function(data) {
+	            result = data;
+	        } 
+	     });
+		return result;
+	}
+	get.getExplorationInfo = getExplorationInfo;
+	//----------------------------------
+	
 	
 	//----------------------------------
 	
@@ -74,6 +90,36 @@
 	}
 	post.saveDroidMateSettings = saveDroidMateSettings;
 	//----------------------------------
+	
+	function startDroidMate(success, error, complete) {
+		$ajax({
+			url: "/DroidMate/APKExploreHandler",
+			ethod: 'POST',
+			data: {
+				explore_start : true
+			},
+			success: success,
+			error: error,
+			complete: complete
+		});
+	}
+	post.startDroidMate = startDroidMate;
+	//-----------------------------------
+	
+	function stopDroidMate(success, error, complete) {
+		$ajax({
+			url: "/DroidMate/APKExploreHandler",
+			ethod: 'POST',
+			data: {
+				explore_stop : true
+			},
+			success: success,
+			error: error,
+			complete: complete
+		});
+	}
+	post.stopDroidMate = stopDroidMate;
+	//-----------------------------------
 	
 	ajax.get  = get;
 	ajax.post = post;
