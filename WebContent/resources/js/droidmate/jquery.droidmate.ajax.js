@@ -92,7 +92,7 @@
 	//----------------------------------
 	
 	function startDroidMate(success, error, complete) {
-		$ajax({
+		$.ajax({
 			url: "/DroidMate/APKExploreHandler",
 			ethod: 'POST',
 			data: {
@@ -107,7 +107,7 @@
 	//-----------------------------------
 	
 	function restartDroidMate(success, error, complete) {
-		$ajax({
+		$.ajax({
 			url: "/DroidMate/APKExploreHandler",
 			ethod: 'POST',
 			data: {
@@ -122,7 +122,7 @@
 	//-----------------------------------
 	
 	function stopDroidMate(success, error, complete) {
-		$ajax({
+		$.ajax({
 			url: "/DroidMate/APKExploreHandler",
 			ethod: 'POST',
 			data: {
