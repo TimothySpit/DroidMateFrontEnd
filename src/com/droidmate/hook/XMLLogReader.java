@@ -115,35 +115,17 @@ public class XMLLogReader {
 				currentApk = new APKExplorationInfo(value);
 				apks.put(value, currentApk);
 
-				// System.out.println("Name : " + value);
 				readName = false;
 			} else if (readElementsSeen) {
 				currentApk.addElementsSeen(Integer.parseInt(value));
 
-				// System.out.println("ElementsSeen : " + new String(ch, start,
-				// length));
 				readElementsSeen = false;
 			} else if (readSuccess) {
 				currentApk.setSuccess(Boolean.parseBoolean(value));
+				currentApk.setFinished(true);
 
-				// System.out.println("Success:" + new String(ch, start,
-				// length));
 				readSuccess = false;
 			}
-			// Just for debugging
-			if (readApk) {
-				// System.out.println("Apk: " + new String(ch, start, length));
-				readApk = false;
-			} else if (readEvents) {
-				// System.out.println("Events : " + new String(ch, start,
-				// length));
-				readEvents = false;
-			} else if (readExploration) {
-				// System.out.println("Exploration: " + new String(ch, start,
-				// length));
-				readExploration = false;
-			}
-
 		}
 
 		@Override
@@ -235,11 +217,9 @@ public class XMLLogReader {
 
 			saxParser.parse(inputStream, handler);
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			/*
-			 * for(Object o : apks.entrySet()) { System.out.println(o); }
-			 */
+			if (!e.getMessage().contains("XML-Dokumentstrukturen müssen innerhalb derselben Entität beginnen und enden.")) {
+				e.printStackTrace();
+			}
 		}
 	}
 

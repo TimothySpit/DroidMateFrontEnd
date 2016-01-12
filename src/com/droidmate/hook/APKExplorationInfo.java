@@ -10,6 +10,7 @@ public class APKExplorationInfo {
 	private final String name;
 	private AtomicBoolean success = new AtomicBoolean(false);
 	private AtomicInteger elementsSeen = new AtomicInteger(0);
+	private AtomicBoolean finished = new AtomicBoolean(false);
 	
 	public APKExplorationInfo(String name) {
 		super();
@@ -40,11 +41,20 @@ public class APKExplorationInfo {
 		return name;
 	}
 	
+	public void setFinished(boolean finished) {
+		this.finished.set(finished);
+	}
+	
+	public boolean isFinished() {
+		return finished.get();
+	}
+	
 	public JSONObject toJSONObject() {
 		JSONObject json = new JSONObject();
 		json.put("name", getName());
 		json.put("success", isSuccess());
 		json.put("elementsSeen", getElementsSeen());
+		json.put("finished", isFinished());
 		
 		return json;
 	}

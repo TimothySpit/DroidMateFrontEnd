@@ -102,7 +102,7 @@ public class APKExploreHandler extends HttpServlet {
 	}
 
 	private boolean startDroidmate(APKInformation[] apks) {
-		System.out.println("Starting droidmate");
+		System.out.println("Starting droidmate...");
 
 		GUISettings settings = new GUISettings();
 		Path droidMateRoot = settings.getDroidMatePath();
