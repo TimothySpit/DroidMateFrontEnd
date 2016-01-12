@@ -1,21 +1,19 @@
 $(document).ready()
 	{
-	var elementsNotExplored = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
-	var elementsExplored = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
-	var screensExplored = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
+	var elementsToExplore = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
+	var elementsExplored = [[0,0],[0,0],[0,0],[0,0],[0,0]];
+	var screensExplored = [[1, 500], [2, 500], [3, 500], [4, 500], [5, 300]];
 	var updateInterval = 1000;
 	var lastUpdate = 0;
 	var chartGUIElementsExplored, chartGUIElementsToExplore, chartGUIScreensExplored;
-	//var apksExplored, apksYetToExplore, apksFailed
 	}
 
 
 function createChartGUIElementsToExplore(divname) {
-    var d1 = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
     var options =  {
             yaxis: {
                 labelWidth: 30,
-                axisLabel: 'Seen, but unexplored, GUI elements',
+                axisLabel: 'GUI elements to explore',
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 20,
                 axisLabelFontFamily: 'Arial'
@@ -28,8 +26,8 @@ function createChartGUIElementsToExplore(divname) {
                 axisLabelFontFamily: 'Arial'
             }
         };
-    console.log("GUIElements yet to explore " + divname);
-    $.plot(divname, [d1], options);
+    chartGUIElementsToExplore = $.plot(divname, [elementsToExplore], options);
+    setTimeout(updateElementsToExplore, divname, updateInterval);
 };
 
 function createChartGUIScreensExplored(divname) {
@@ -49,8 +47,8 @@ function createChartGUIScreensExplored(divname) {
                 axisLabelFontFamily: 'Arial'
             }
         };
-    console.log("GUIScreens explored " + divname);
-    $.plot(divname, [elementsExplored], options);
+    chartGUIScreensExplored = $.plot(divname, [screensExplored], options);
+    setTimeout(updateScreensExplored, divname, updateInterval);
 };
 
 function createChartGUIElementsExplored(divname) {
@@ -70,25 +68,49 @@ function createChartGUIElementsExplored(divname) {
                 axisLabelFontFamily: 'Arial'
             }
         };
-    console.log("GUIElements " + divname);
-    chartGUIElementsExplored = $.plot(divname, [[0, 0]], options);
-    updateElementsExplored(divname);
+    chartGUIElementsExplored = $.plot(divname, [elementsExplored], options);
+    setTimeout(updateElementsExplored, divname, updateInterval);
 };
 
-function addRandomValue(data)
+function addRandomValue(currentData)
 {
-	data.shift();
+	currentData.shift();
 	var y = Math.random(400) * 400;
 	lastUpdate += updateInterval / 1000;
 	var temp = [lastUpdate, y]; 
-	data.push(temp);
+	currentData.push(temp);
 }
 
 function updateElementsExplored(divname)
 {
-	addRandomValue(elementsExplored);
-	chartGUIElementsExplored.setData([elementsExplored]);
-	chartGUIElementsExplored.draw();
-	setTimeout(updateElementsExplored, divname, updateInterval);
+	chart = chartGUIElementsExplored;
+	data = elementsExplored;
+	addRandomValue(data); 
+	console.log(data);
+	chart.setData([data]);
+	chart.draw();
 	
+	setTimeout(updateElementsExplored, divname, updateInterval);
+}
+
+function updateElementsToExplore(divname)
+{
+	chart = chartGUIElementsToExplore;
+	data = elementsToExplore;
+	addRandomValue(data); 
+	
+	chart.setData([data]);
+	chart.draw();
+	setTimeout(updateElementsToExplore, divname, updateInterval);
+}
+
+function updateScreensExplored(divname)
+{
+	chart = chartGUIScreensExplored;
+	data = screensExplored;
+	addRandomValue(data); 
+	
+	chart.setData([data]);
+	chart.draw();
+	setTimeout(updateScreensExplored, divname, updateInterval);
 }
