@@ -92,7 +92,7 @@
 	//----------------------------------
 	
 	function startDroidMate() {
-		$.ajax({
+		return $.ajax({
 			async: true,
 			url: "/DroidMate/APKExploreHandler",
 			method: "POST",
