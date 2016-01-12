@@ -86,8 +86,10 @@ public class APKExploreHandler extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			response.setContentType("application/json");
 			JSONArray result = new JSONArray();
-			for (APKExplorationInfo apk : logReader.getApksInfo()) {
-				result.put(apk.toJSONObject());
+			if (logReader != null) {
+				for (APKExplorationInfo apk : logReader.getApksInfo()) {
+					result.put(apk.toJSONObject());
+				}
 			}
 
 			out.print(result);
@@ -192,6 +194,60 @@ public class APKExploreHandler extends HttpServlet {
 			e.printStackTrace();
 		}
 		droidmateProcess.destroyForcibly();
+	}
+
+	private void generateReport() {
+		// http://codepen.io/tjoen/pen/LEpeq
+		String css = "@import \"compass/css3\";\r\n" + "\r\n" + "/*\r\n" + "\r\n" + "RESPONSTABLE 2.0 by jordyvanraaij\r\n"
+				+ "  Designed mobile first!\r\n" + "\r\n"
+				+ "If you like this solution, you might also want to check out the 1.0 version:\r\n"
+				+ "  https://gist.github.com/jordyvanraaij/9069194\r\n" + "\r\n" + "*/\r\n" + "\r\n"
+				+ "// Default options for table style\r\n" + "$table-breakpoint: 480px;\r\n"
+				+ "$table-background-color: #FFF;\r\n" + "$table-text-color: #024457;\r\n"
+				+ "$table-outer-border: 1px solid #167F92;\r\n" + "$table-cell-border: 1px solid #D9E4E6;\r\n" + "\r\n"
+				+ "// Extra options for table style (parse these arguments when including your mixin)\r\n"
+				+ "$table-border-radius: 10px;\r\n" + "$table-highlight-color: #EAF3F3;\r\n"
+				+ "$table-header-background-color: #167F92;\r\n" + "$table-header-text-color: #FFF;\r\n"
+				+ "$table-header-border: 1px solid #FFF;\r\n" + "\r\n" + "// The Responstable mixin\r\n" + "\r\n"
+				+ "@mixin responstable(\r\n" + "  $breakpoint: $table-breakpoint,\r\n"
+				+ "  $background-color: $table-background-color,\r\n" + "  $text-color: $table-text-color,\r\n"
+				+ "  $outer-border: $table-outer-border,\r\n" + "  $cell-border: $table-cell-border,\r\n"
+				+ "  $border-radius: none,\r\n" + "  $highlight-color: none,\r\n"
+				+ "  $header-background-color: $table-background-color,\r\n" + "  $header-text-color: $table-text-color,\r\n"
+				+ "  $header-border: $table-cell-border) {\r\n" + "  \r\n" + "  .responstable {\r\n" + "    margin: 1em 0;\r\n"
+				+ "    width: 100%;\r\n" + "    overflow: hidden;  \r\n" + "    background: $background-color;\r\n"
+				+ "    color: $text-color;\r\n" + "    border-radius: $border-radius;\r\n" + "    border: $outer-border;\r\n"
+				+ "  \r\n" + "    tr {\r\n" + "      border: $cell-border; \r\n"
+				+ "      &:nth-child(odd) { // highlight the odd rows with a color\r\n"
+				+ "        background-color: $highlight-color;\r\n" + "      }  \r\n" + "    }\r\n" + "  \r\n" + "    th {\r\n"
+				+ "      display: none; // hide all the table header for mobile\r\n" + "      border: $header-border;\r\n"
+				+ "      background-color: $header-background-color;\r\n" + "      color: $header-text-color;\r\n"
+				+ "      padding: 1em;  \r\n" + "      &:first-child { // show the first table header for mobile\r\n"
+				+ "        display: table-cell;\r\n" + "        text-align: center;\r\n" + "      }\r\n"
+				+ "      &:nth-child(2) { // show the second table header but replace the content with the data-th from the markup for mobile\r\n"
+				+ "        display: table-cell;\r\n" + "        span {display:none;}\r\n"
+				+ "        &:after {content:attr(data-th);}\r\n" + "      }\r\n" + "      @media (min-width: $breakpoint) {\r\n"
+				+ "        &:nth-child(2) { // hide the data-th and show the normal header for tablet and desktop\r\n"
+				+ "          span {display: block;}\r\n" + "          &:after {display: none;}\r\n" + "        }\r\n"
+				+ "      }\r\n" + "    }\r\n" + "  \r\n" + "    td {\r\n"
+				+ "      display: block; // display the table data as one block for mobile\r\n"
+				+ "      word-wrap: break-word;\r\n" + "      max-width: 7em;\r\n" + "      &:first-child { \r\n"
+				+ "        display: table-cell; // display the first one as a table cell (radio button) for mobile\r\n"
+				+ "        text-align: center;\r\n" + "        border-right: $cell-border;\r\n" + "      }\r\n"
+				+ "      @media (min-width: $breakpoint) {\r\n" + "        border: $cell-border;\r\n" + "      }\r\n"
+				+ "    }\r\n" + "  \r\n" + "    th, td {\r\n" + "      text-align: left;\r\n" + "      margin: .5em 1em;  \r\n"
+				+ "      @media (min-width: $breakpoint) {\r\n"
+				+ "        display: table-cell; // show the table as a normal table for tablet and desktop\r\n"
+				+ "        padding: 1em;\r\n" + "      }\r\n" + "    }  \r\n" + "  }    \r\n" + "}\r\n" + "\r\n"
+				+ "// Include the mixin (with extra options as overrides)\r\n" + "\r\n" + "@include responstable(\r\n"
+				+ "  $border-radius: $table-border-radius,\r\n" + "  $highlight-color: $table-highlight-color,\r\n"
+				+ "  $header-background-color: $table-header-background-color,\r\n"
+				+ "  $header-text-color: $table-header-text-color,\r\n" + "  $header-border: $table-header-border);\r\n" + "\r\n"
+				+ "// General styles\r\n" + "\r\n" + "body {\r\n" + "  padding: 0 2em;\r\n"
+				+ "  font-family: Arial, sans-serif;\r\n" + "  color: #024457;\r\n" + "  background: #f2f2f2;\r\n" + "}\r\n"
+				+ "\r\n" + "h1 {\r\n" + "  font-family: Verdana;\r\n" + "  font-weight: normal;\r\n" + "  color: #024457;\r\n"
+				+ "  span {color: #167F92;}\r\n" + "}";
+
 	}
 
 }
