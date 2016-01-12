@@ -141,6 +141,7 @@ public class APKExploreHandler extends HttpServlet {
 		logFile = new File(droidMateRoot.toString(), "/dev1/logs/gui.xml");
 		logFile.delete();
 		logReader = new XMLLogReader(logFile);
+		reportFile = Paths.get(settings.getOutputFolder().toString(), "DroidmateReport-" + System.currentTimeMillis() + ".html").toFile();
 
 		// empty apks directory
 		try {
@@ -182,7 +183,7 @@ public class APKExploreHandler extends HttpServlet {
 			droidmateProcess.waitFor();
 
 			logReader.stopReading();
-			saveReport(settings.getOutputFolder());
+			saveReport();
 			System.out.println("Exit value: " + droidmateProcess.exitValue());
 			droidmateProcess.getInputStream().close();
 			droidmateProcess.getOutputStream().close();
@@ -204,6 +205,7 @@ public class APKExploreHandler extends HttpServlet {
 		System.out.println("Stopping droidmate...");
 
 		logReader.stopReading();
+		saveReport();
 
 		try {
 			droidmateProcess.getInputStream().close();
@@ -223,9 +225,8 @@ public class APKExploreHandler extends HttpServlet {
 		droidmateProcess.destroyForcibly();
 	}
 
-	private void saveReport(Path path) {
-		try {
-			reportFile = Paths.get(path.toString(), "DroidmateReport-" + System.currentTimeMillis() + ".html").toFile();
+	private void saveReport() {
+		try {			
 			reportFile.createNewFile();
 			PrintWriter writer = new PrintWriter(reportFile);
 			writer.println(generateReport());

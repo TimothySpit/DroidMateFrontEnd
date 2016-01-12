@@ -217,7 +217,8 @@ public class XMLLogReader {
 
 			saxParser.parse(inputStream, handler);
 		} catch (Exception e) {
-			if (!e.getMessage().contains("XML-Dokumentstrukturen müssen innerhalb derselben Entität beginnen und enden.")) {
+			if (!e.getMessage().contains("XML-Dokumentstrukturen müssen innerhalb derselben Entität beginnen und enden.") &&
+					!e.getMessage().contains("XML document structures must start and end within the same entity.")) {
 				e.printStackTrace();
 			}
 		}
