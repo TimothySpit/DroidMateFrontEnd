@@ -1,5 +1,7 @@
 $(function() {
 
+	var finished_apks = [];
+	
 	// start updating
 	setTimeout(function() {
 		updateExplorationInfo();
@@ -25,14 +27,15 @@ $(function() {
 					elementsSeenDiv.text(elementsSeen);
 					var statusDiv = $(this.parentElement.parentElement)
 							.find('.state');
-					
-					if(finished) {
+
+					if(finished && $.inArray(name,finished_apks) == -1) {
+						finished_apks.push(name);
 						if(success) {
 							statusDiv.html('<span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>');
-							showReportButton($(this.parentElement.parentElement));
 						} else {
 							statusDiv.html('<span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>');
 						}
+						showReportButton($(this).text(),$(this.parentElement.parentElement));
 					}
 				}
 			});
@@ -43,9 +46,9 @@ $(function() {
 		}, $.droidmate.ajax.UPDATE_EXPLORATION_INFO_INTERVAL);
 	}
 
-	function showReportButton(row) {
+	function showReportButton(apkName, row) {
 		$(row).find("button").prop("disabled",false);
-		$(row).find("button").attr("href",$.droidmate.ajax.get.getReport());
+		$(row).find("button").wrap('<a href="' + $.droidmate.ajax.get.getReport(apkName) + '" target="_blank"></a>');
 	}
 
 	// init update

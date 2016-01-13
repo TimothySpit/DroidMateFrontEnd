@@ -1,11 +1,14 @@
 package com.droidmate.hook;
 
+import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.JSONObject;
+
+import com.droidmate.report.Report;
 
 public class APKExplorationInfo {
 	
@@ -14,6 +17,8 @@ public class APKExplorationInfo {
 	private AtomicInteger elementsSeen = new AtomicInteger(0);
 	private AtomicBoolean finished = new AtomicBoolean(false);
 	private ConcurrentHashMap<Long, Integer> elementsSeenHistory = new ConcurrentHashMap<>();
+	private Report report;
+	private File reportFile;
 	
 	public APKExplorationInfo(String name) {
 		super();
@@ -78,5 +83,21 @@ public class APKExplorationInfo {
 		builder.append(elementsSeen);
 		builder.append("]");
 		return builder.toString();
+	}
+
+	public void setReport(Report report) {
+		this.report = report;
+	}
+	
+	public Report getReport() {
+		return report;
+	}
+
+	public void setReportFile(File reportFile) {
+		this.reportFile = reportFile;
+	}
+	
+	public File getReportFile() {
+		return reportFile;
 	}
 }
