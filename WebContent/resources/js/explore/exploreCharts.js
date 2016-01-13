@@ -3,10 +3,10 @@ $(document).ready()
 	var elementsToExplore = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
 	var elementsExplored = [[0,0],[0,0],[0,0],[0,0],[0,0]];
 	var screensExplored = [[1, 500], [2, 500], [3, 500], [4, 500], [5, 300]];
-	var successfullAPKs, failedAPKs, remainingAPKs;
-	var updateInterval = 1000;
+	var successfulAPKs = 40, failedAPKs = 30, remainingAPKs=10;
+	var updateInterval = 500;
 	var lastUpdate = 0;
-	var chartGUIElementsExplored, chartGUIElementsToExplore, chartGUIScreensExplored, chart;
+	var chartAPKStatus, chartGUIElementsExplored, chartGUIElementsToExplore, chartGUIScreensExplored, chartElementsAndScreens;
 	}
 
 
@@ -29,14 +29,14 @@ function createChartGUIElementsToExplore(divname) {
             }
         };
     chartGUIElementsToExplore = $.plot(divname, [elementsToExplore], options);
-    setTimeout(updateElementsToExplore, divname, updateInterval);
+    //setTimeout(updateElementsToExplore, divname, updateInterval);
 };
 
 function createChartGUIScreensExplored(divname) {
     var options =  {
             yaxis: {
                 labelWidth: 30,
-                axisLabel: 'GUI screens explored',
+                axisLabel: 'Explored',
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 20,
                 axisLabelFontFamily: 'Arial'
@@ -49,9 +49,35 @@ function createChartGUIScreensExplored(divname) {
                 axisLabelFontFamily: 'Arial'
             }
         };
-    chartGUIScreensExplored = $.plot(divname, [screensExplored], options);
+    chartGUIScreensExplored = $.plot(divname, [elementsExplored], options);
     setTimeout(updateScreensExplored, divname, updateInterval);
 };
+
+
+function createChartGUIElementsAndScreens(divname) {
+    var options =  {
+            yaxis: {
+                labelWidth: 30,
+                axisLabel: 'explored',
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 20,
+                axisLabelFontFamily: 'Arial'
+            },
+            xaxis: {
+                labelHeight: 30,
+                axisLabel: 'time (min)',
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 15,
+                axisLabelFontFamily: 'Arial'
+            }
+        };
+    chartElementsAndScreens = $.plot(divname, 
+    	    [{ data: screensExplored, label: "Screens" },
+    		{ data: elementsToExplore, label: "Elements"}],
+    	    options);
+    setTimeout(updateLines, divname, updateInterval);
+};
+
 
 function createChartGUIElementsExplored(divname) {
     var options =  {
@@ -76,10 +102,11 @@ function createChartGUIElementsExplored(divname) {
 
 function createChartAPKStatus(divname)
 {
+	//successfulAPKs, failedAPKs, remainingAPKs;
 	var dataSet = [
-	               {label: "Successful", data: 2, color: "#00A36A"},
-	               { label: "Failed", data: 4, color: "#005CDE"},
-	               { label: "Remaining", data: 8, color: "#7D0096" }    
+	               {label: "Successful", data: successfulAPKs, color: "#00A36A"},
+	               { label: "Failed", data: failedAPKs, color: "#005CDE"},
+	               { label: "Remaining", data: remainingAPKs, color: "#7D0096" }    
 	           ];
 	var options = {
 	        series: {
@@ -100,9 +127,37 @@ function createChartAPKStatus(divname)
 	            show: false
 	        }
 	};
-	$.plot($("#flot-apks-status"), dataSet, options);
+	chartAPKStatus = $.plot($("#flot-apks-status"), dataSet, options);
+	setTimeout(updateChartAPKStatus, divname, updateInterval);
 }
 
+function updateChartAPKStatus(divname)
+{
+	if (remainingAPKs != 0)
+		{
+		if (Math.random() > 0.75)
+			{
+			successfulAPKs = successfulAPKs + 1;
+			remainingAPKs = remainingAPKs - 1;
+			}
+		else
+			{
+			failedAPKs = failedAPKs + 1;
+			remainingAPKs = remainingAPKs - 1;
+			}
+		}
+	else
+		remainingAPKs = 100;
+	
+	var dataSet = [
+	               {label: "Successful", data: successfulAPKs, color: "#00A36A"},
+	               { label: "Failed", data: failedAPKs, color: "#005CDE"},
+	               { label: "Remaining", data: remainingAPKs, color: "#7D0096" }    
+	           ];
+	chartAPKStatus.setData(dataSet);
+	chartAPKStatus.draw();
+	setTimeout(updateChartAPKStatus, divname, updateInterval);
+}
 
 function addRandomValue(currentData)
 {
@@ -111,6 +166,29 @@ function addRandomValue(currentData)
 	lastUpdate += updateInterval / 1000;
 	var temp = [lastUpdate, y]; 
 	currentData.push(temp);
+}
+
+function addRandomY(currentData, newX)
+{
+	currentData.shift();
+	var y = Math.random(400) * 400;
+	var temp = [newX, y]; 
+	currentData.push(temp);
+}
+
+function updateLines(divname)
+{
+	chart = chartElementsAndScreens;
+	lastUpdate += updateInterval / 1000 / 60;
+	addRandomY(elementsExplored, lastUpdate);
+	addRandomY(screensExplored, lastUpdate);
+	data1 = elementsExplored;
+	data2 = screensExplored;//.slice(Math.min(screensExplored.length(), 5));
+	chart.setData([{ data: elementsExplored, label: "Screens" },
+	           	{ data: screensExplored, label: "Elements"}]);
+	chart.draw();
+	setTimeout(updateLines, divname, updateInterval);
+	
 }
 
 function updateElementsExplored(divname)
