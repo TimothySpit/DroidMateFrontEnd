@@ -42,22 +42,11 @@
 	get.getExplorationInfo = getExplorationInfo;
 	//----------------------------------
 	
-	function getReport(apkname) {
-		var result = null;
-		$.ajax({
-	        url:  "/DroidMate/APKExploreHandler",
-	        async: false,
-	        type: 'GET',
-	        data: {explore_get_report: apkname},
-	        success: function(data) {
-	            result = data;
-	            console.log(data);
-	        } 
-	     });
-		console.log(result);
+	function getReportPath(apkname) {
+		var result = "/DroidMate/ReportProvider?get_report=" + apkname;
 		return result;
 	}
-	get.getReport = getReport;
+	get.getReportPath = getReportPath;
 	//----------------------------------
 	
 	

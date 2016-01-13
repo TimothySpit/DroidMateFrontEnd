@@ -48,7 +48,7 @@ $(function() {
 
 	function showReportButton(apkName, row) {
 		$(row).find("button").prop("disabled",false);
-		$(row).find("button").wrap('<a href="' + $.droidmate.ajax.get.getReport(apkName) + '" target="_blank"></a>');
+		$(row).find("button").wrap('<a href="' + $.droidmate.ajax.get.getReportPath(apkName) + '" target="_blank"></a>');
 	}
 
 	// init update

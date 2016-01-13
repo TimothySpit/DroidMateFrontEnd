@@ -13,6 +13,8 @@ public class APKInformation {
 	private APKExplorationStatus status = APKExplorationStatus.NOT_RUNNING;
 	private String packageName, versionCode, versionName;
 
+	private ExplorationReport report;
+	
 	public int getId() {
 		return id;
 	}
@@ -26,6 +28,8 @@ public class APKInformation {
 		this.packageName = packageName;
 		this.versionCode = versionCode;
 		this.versionName = versionName;
+		
+		this.setReport(ExplorationReport.getDefaultReport());
 	}
 
 	public File getFile() {
@@ -77,6 +81,14 @@ public class APKInformation {
 		array.put(getVersionName() + " (#" + getVersionCode() + ")");
 		
 		return array;
+	}
+
+	public synchronized ExplorationReport getReport() {
+		return report;
+	}
+
+	public synchronized void setReport(ExplorationReport report) {
+		this.report = report;
 	}
 
 }

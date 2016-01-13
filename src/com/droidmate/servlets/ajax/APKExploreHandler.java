@@ -114,13 +114,6 @@ public class APKExploreHandler extends HttpServlet {
 			}
 
 			out.print(result);
-		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_REPORT) != null) {
-			String apkName = request.getParameter(AjaxConstants.EXPLORE_GET_REPORT);
-			for (APKExplorationInfo apk : logReader.getApksInfo()) {
-				if (apk.getName().equals(apkName)) {
-					out.print(apk.getReportFile());
-				}
-			}
 		} else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
@@ -144,7 +137,7 @@ public class APKExploreHandler extends HttpServlet {
 		Path inputAPKsPath = Paths.get(droidMateRoot.toString(), "/apks/inlined/");
 		logFile = new File(droidMateRoot.toString(), "/dev1/logs/gui.xml");
 		logFile.delete();
-		logReader = new XMLLogReader(logFile);
+		logReader = new XMLLogReader(logFile, apks);
 
 		// empty apks directory
 		try {

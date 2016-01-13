@@ -85,6 +85,17 @@ public class APKInliner implements Runnable {
 			}
 		}
 
+		
+		//empty apks folder
+		Path apkInlineFolderDroidMate = Paths.get(droidMateRoot.toString(), "/apks/inlined");
+		try {
+			FileUtils.deleteDirectory(apkInlineFolderDroidMate.toFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+			inliningStatus = InliningStatus.ERROR;
+			return;
+		}
+		
 		// create "inlined" folder
 		inlinedFolder.toFile().mkdir();
 

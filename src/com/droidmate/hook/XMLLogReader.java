@@ -21,7 +21,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.droidmate.report.Report;
+import com.droidmate.apk.APKInformation;
+import com.droidmate.apk.ExplorationReport;
 import com.droidmate.servlets.settings.Settings;
 import com.droidmate.settings.GUISettings;
 
@@ -100,8 +101,9 @@ public class XMLLogReader {
 
 	private class LogReaderHandler extends DefaultHandler {
 
-		private Map<String, APKExplorationInfo> apks;
-		private APKExplorationInfo currentApk;
+		private Map<String, APKExplorationInfo> apksMApLogReader;
+		private APKExplorationInfo currentApkExplorationInfo;
+		private APKInformation currentAPK;
 
 		// Flags to determine state
 		boolean readExploration = false;
@@ -112,46 +114,39 @@ public class XMLLogReader {
 		boolean readSuccess = false;
 
 		public LogReaderHandler(Map<String, APKExplorationInfo> apks) {
-			this.apks = apks;
+			this.apksMApLogReader = apks;
 		}
 
 		@Override
 		public void characters(char ch[], int start, int length) throws SAXException {
 			String value = new String(ch, start, length);
 			if (readName) {
-				currentApk = new APKExplorationInfo(value);
-				apks.put(value, currentApk);
+				currentApkExplorationInfo = new APKExplorationInfo(value);
+				apksMApLogReader.put(value, currentApkExplorationInfo);
 
 				readName = false;
+
+				for (APKInformation apk : apks) {
+					String name = String.copyValueOf(ch).substring(start, start+length);
+					if (apk.getFile().getName().equals(name)) {
+						currentAPK = apk;
+						break;
+					}
+				}
+
 			} else if (readElementsSeen) {
-				currentApk.addElementsSeen(Integer.parseInt(value));
+				currentApkExplorationInfo.addElementsSeen(Integer.parseInt(value));
 
 				readElementsSeen = false;
 			} else if (readSuccess) {
-				currentApk.setSuccess(Boolean.parseBoolean(value));
-				currentApk.setFinished(true);
+				currentApkExplorationInfo.setSuccess(Boolean.parseBoolean(value));
+				currentApkExplorationInfo.setFinished(true);
 
 				readSuccess = false;
-				
-				saveReport(currentApk);
-			}
-		}
 
-		private Report saveReport(APKExplorationInfo currentApk) {
-			Report report = new Report(currentApk);
-			try {
-				GUISettings settings = new GUISettings();
-				File reportFile = Paths.get(settings.getOutputFolder().toString(), "DroidmateReport-" + System.currentTimeMillis() + ".html")
-						.toFile();
-				PrintWriter writer = new PrintWriter(reportFile);
-				writer.println(report);
-				currentApk.setReport(report);
-				currentApk.setReportFile(reportFile);
-				writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}	
-			return report;
+				ExplorationReport report = new ExplorationReport(currentApkExplorationInfo.getElementsSeen(), currentApkExplorationInfo.isSuccess());
+				currentAPK.setReport(report);
+			}
 		}
 
 		@Override
@@ -179,29 +174,16 @@ public class XMLLogReader {
 				break;
 			}
 		}
-
-		@Override
-		public void endElement(String uri, String localName, String qName) throws SAXException {
-			// System.out.println("End Element :" + qName);
-		}
-
-		@Override
-		public void startDocument() {
-			// System.out.println("Document starts.");
-		}
-
-		@Override
-		public void endDocument() {
-			// System.out.println("Document ends.");
-		}
 	}
 
 	private final File sourceFile;
-	private final ConcurrentHashMap<String, APKExplorationInfo> apks = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<String, APKExplorationInfo> apksMapReaderHandler = new ConcurrentHashMap<>();
 	private ForeverFileInputStream inputStream;
+	private APKInformation[] apks;
 
-	public XMLLogReader(File source) {
+	public XMLLogReader(File source, APKInformation[] apks) {
 		this.sourceFile = source;
+		this.apks = apks;
 	}
 
 	public void stopReading() {
@@ -232,7 +214,7 @@ public class XMLLogReader {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 
-			DefaultHandler handler = new LogReaderHandler(apks);
+			DefaultHandler handler = new LogReaderHandler(apksMapReaderHandler);
 
 			inputStream = new ForeverFileInputStream(sourceFile);
 			// Necessary for utf-8
@@ -243,8 +225,8 @@ public class XMLLogReader {
 
 			saxParser.parse(inputStream, handler);
 		} catch (Exception e) {
-			if (!e.getMessage().contains("XML-Dokumentstrukturen müssen innerhalb derselben Entität beginnen und enden.") &&
-					!e.getMessage().contains("XML document structures must start and end within the same entity.")) {
+			if (!e.getMessage().contains("XML-Dokumentstrukturen müssen innerhalb derselben Entität beginnen und enden.")
+					&& !e.getMessage().contains("XML document structures must start and end within the same entity.")) {
 				e.printStackTrace();
 			}
 		}
@@ -255,6 +237,6 @@ public class XMLLogReader {
 	}
 
 	public Map<String, APKExplorationInfo> getApksMap() {
-		return apks;
+		return apksMapReaderHandler;
 	}
 }
