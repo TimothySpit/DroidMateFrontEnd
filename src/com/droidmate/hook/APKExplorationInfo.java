@@ -1,10 +1,12 @@
 package com.droidmate.hook;
 
 import java.io.File;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -65,6 +67,15 @@ public class APKExplorationInfo {
 		json.put("success", isSuccess());
 		json.put("elementsSeen", getElementsSeen());
 		json.put("finished", isFinished());
+		
+		JSONArray history = new JSONArray();
+		for(Entry<Long, Integer> entry : getElementsSeenHistory().entrySet()) {
+			JSONObject o = new JSONObject();
+			o.put("time", entry.getKey());
+			o.put("elementsSeen", entry.getValue());
+			history.put(o);
+		}
+		json.put("history", history);
 		
 		return json;
 	}

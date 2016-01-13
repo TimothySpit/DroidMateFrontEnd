@@ -1,21 +1,21 @@
 $(document).ready()
 	{
-	var elementsNotExplored = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
-	var elementsExplored = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
-	var screensExplored = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
-	var updateInterval = 1000;
+	var elementsToExplore = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
+	var elementsExplored = [[0,0],[0,0],[0,0],[0,0],[0,0]];
+	var screensExplored = [[1, 500], [2, 500], [3, 500], [4, 500], [5, 300]];
+	var successfulAPKs = 40, failedAPKs = 30, remainingAPKs=10;
+	var updateInterval = 500;
 	var lastUpdate = 0;
-	var chartGUIElementsExplored, chartGUIElementsToExplore, chartGUIScreensExplored;
-	//var apksExplored, apksYetToExplore, apksFailed
+	var chartAPKStatus, chartGUIElementsExplored, chartGUIElementsToExplore, chartGUIScreensExplored, chartElementsAndScreens;
 	}
 
 
+
 function createChartGUIElementsToExplore(divname) {
-    var d1 = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
     var options =  {
             yaxis: {
                 labelWidth: 30,
-                axisLabel: 'Seen, but unexplored, GUI elements',
+                axisLabel: 'GUI elements to explore',
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 20,
                 axisLabelFontFamily: 'Arial'
@@ -28,15 +28,15 @@ function createChartGUIElementsToExplore(divname) {
                 axisLabelFontFamily: 'Arial'
             }
         };
-    console.log("GUIElements yet to explore " + divname);
-    $.plot(divname, [d1], options);
+    chartGUIElementsToExplore = $.plot(divname, [elementsToExplore], options);
+    //setTimeout(updateElementsToExplore, divname, updateInterval);
 };
 
 function createChartGUIScreensExplored(divname) {
     var options =  {
             yaxis: {
                 labelWidth: 30,
-                axisLabel: 'GUI screens explored',
+                axisLabel: 'Explored',
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 20,
                 axisLabelFontFamily: 'Arial'
@@ -49,9 +49,35 @@ function createChartGUIScreensExplored(divname) {
                 axisLabelFontFamily: 'Arial'
             }
         };
-    console.log("GUIScreens explored " + divname);
-    $.plot(divname, [elementsExplored], options);
+    chartGUIScreensExplored = $.plot(divname, [elementsExplored], options);
+    setTimeout(updateScreensExplored, divname, updateInterval);
 };
+
+
+function createChartGUIElementsAndScreens(divname) {
+    var options =  {
+            yaxis: {
+                labelWidth: 30,
+                axisLabel: 'explored',
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 20,
+                axisLabelFontFamily: 'Arial'
+            },
+            xaxis: {
+                labelHeight: 30,
+                axisLabel: 'time (min)',
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 15,
+                axisLabelFontFamily: 'Arial'
+            }
+        };
+    chartElementsAndScreens = $.plot(divname, 
+    	    [{ data: screensExplored, label: "Screens" },
+    		{ data: elementsToExplore, label: "Elements"}],
+    	    options);
+    setTimeout(updateLines, divname, updateInterval);
+};
+
 
 function createChartGUIElementsExplored(divname) {
     var options =  {
@@ -70,25 +96,130 @@ function createChartGUIElementsExplored(divname) {
                 axisLabelFontFamily: 'Arial'
             }
         };
-    console.log("GUIElements " + divname);
-    chartGUIElementsExplored = $.plot(divname, [[0, 0]], options);
-    updateElementsExplored(divname);
+    chartGUIElementsExplored = $.plot(divname, [elementsExplored], options);
+    setTimeout(updateElementsExplored, divname, updateInterval);
 };
 
-function addRandomValue(data)
+function createChartAPKStatus(divname)
 {
-	data.shift();
+	//successfulAPKs, failedAPKs, remainingAPKs;
+	var dataSet = [
+	               {label: "Successful", data: successfulAPKs, color: "#00A36A"},
+	               { label: "Failed", data: failedAPKs, color: "#005CDE"},
+	               { label: "Remaining", data: remainingAPKs, color: "#7D0096" }    
+	           ];
+	var options = {
+	        series: {
+	            pie: { 
+	                show: true,
+	                radius: 1,
+	                label: {
+	                    show: true,
+	                    radius: 1,
+	                    formatter: function(label, series){
+	                        return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+	                    },
+	                    background: { opacity: 0.8 }
+	                }
+	            }
+	        },
+	        legend: {
+	            show: false
+	        }
+	};
+	chartAPKStatus = $.plot($("#flot-apks-status"), dataSet, options);
+	setTimeout(updateChartAPKStatus, divname, updateInterval);
+}
+
+function updateChartAPKStatus(divname)
+{
+	if (remainingAPKs != 0)
+		{
+		if (Math.random() > 0.75)
+			{
+			successfulAPKs = successfulAPKs + 1;
+			remainingAPKs = remainingAPKs - 1;
+			}
+		else
+			{
+			failedAPKs = failedAPKs + 1;
+			remainingAPKs = remainingAPKs - 1;
+			}
+		}
+	else
+		remainingAPKs = 100;
+	
+	var dataSet = [
+	               {label: "Successful", data: successfulAPKs, color: "#00A36A"},
+	               { label: "Failed", data: failedAPKs, color: "#005CDE"},
+	               { label: "Remaining", data: remainingAPKs, color: "#7D0096" }    
+	           ];
+	chartAPKStatus.setData(dataSet);
+	chartAPKStatus.draw();
+	setTimeout(updateChartAPKStatus, divname, updateInterval);
+}
+
+function addRandomValue(currentData)
+{
+	currentData.shift();
 	var y = Math.random(400) * 400;
 	lastUpdate += updateInterval / 1000;
 	var temp = [lastUpdate, y]; 
-	data.push(temp);
+	currentData.push(temp);
+}
+
+function addRandomY(currentData, newX)
+{
+	currentData.shift();
+	var y = Math.random(400) * 400;
+	var temp = [newX, y]; 
+	currentData.push(temp);
+}
+
+function updateLines(divname)
+{
+	chart = chartElementsAndScreens;
+	lastUpdate += updateInterval / 1000 / 60;
+	addRandomY(elementsExplored, lastUpdate);
+	addRandomY(screensExplored, lastUpdate);
+	data1 = elementsExplored;
+	data2 = screensExplored;//.slice(Math.min(screensExplored.length(), 5));
+	chart.setData([{ data: elementsExplored, label: "Screens" },
+	           	{ data: screensExplored, label: "Elements"}]);
+	chart.draw();
+	setTimeout(updateLines, divname, updateInterval);
+	
 }
 
 function updateElementsExplored(divname)
 {
-	addRandomValue(elementsExplored);
-	chartGUIElementsExplored.setData([elementsExplored]);
-	chartGUIElementsExplored.draw();
-	setTimeout(updateElementsExplored, divname, updateInterval);
+	chart = chartGUIElementsExplored;
+	data = elementsExplored;
+	addRandomValue(data); 
+	chart.setData([data]);
+	chart.draw();
 	
+	setTimeout(updateElementsExplored, divname, updateInterval);
+}
+
+function updateElementsToExplore(divname)
+{
+	chart = chartGUIElementsToExplore;
+	data = elementsToExplore;
+	addRandomValue(data); 
+	
+	chart.setData([data]);
+	chart.draw();
+	setTimeout(updateElementsToExplore, divname, updateInterval);
+}
+
+function updateScreensExplored(divname)
+{
+	chart = chartGUIScreensExplored;
+	data = screensExplored;
+	addRandomValue(data); 
+	
+	chart.setData([data]);
+	chart.draw();
+	setTimeout(updateScreensExplored, divname, updateInterval);
 }
