@@ -5,7 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,6 +20,10 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import com.droidmate.report.Report;
+import com.droidmate.servlets.settings.Settings;
+import com.droidmate.settings.GUISettings;
 
 /**
  * 
@@ -125,7 +132,26 @@ public class XMLLogReader {
 				currentApk.setFinished(true);
 
 				readSuccess = false;
+				
+				saveReport(currentApk);
 			}
+		}
+
+		private Report saveReport(APKExplorationInfo currentApk) {
+			Report report = new Report(currentApk);
+			try {
+				GUISettings settings = new GUISettings();
+				File reportFile = Paths.get(settings.getOutputFolder().toString(), "DroidmateReport-" + System.currentTimeMillis() + ".html")
+						.toFile();
+				PrintWriter writer = new PrintWriter(reportFile);
+				writer.println(report);
+				currentApk.setReport(report);
+				currentApk.setReportFile(reportFile);
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+			return report;
 		}
 
 		@Override
