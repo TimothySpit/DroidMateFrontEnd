@@ -128,6 +128,16 @@ public class APKExploreHandler extends HttpServlet {
 
 				out.print(result);
 			}
+		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_ELEMENTS_SEEN) != null) {
+			if (logReader != null) {
+				int elementsSeen = 0;
+				for (APKExplorationInfo apk : logReader.getApksInfo()) {
+					elementsSeen += apk.getElementsSeen();
+				}
+				out.print(elementsSeen);
+			}else {
+				out.print(0);
+			}
 		} else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
