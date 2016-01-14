@@ -113,6 +113,7 @@ public class XMLLogReader {
 		public LogReaderHandler(Map<String, APKExplorationInfo> apks) {
 			this.apksMApLogReader = apks;
 			startingTime = System.currentTimeMillis();
+			globalElementsSeenHistory.put(0l, 0);
 		}
 
 		@Override
