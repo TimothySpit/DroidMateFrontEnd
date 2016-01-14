@@ -118,7 +118,7 @@ public class APKExploreHandler extends HttpServlet {
 						}
 					}
 					if(!found) {
-						out.print(new JSONObject());
+						out.print(APKExplorationInfo.getDummyObject());
 					}
 				} else {
 					out.print(new JSONObject());

@@ -81,6 +81,14 @@ public class APKExplorationInfo {
 		return finished.get();
 	}
 	
+	public static JSONObject getDummyObject() {
+		JSONObject json = new JSONObject();
+		json.put("history", new JSONArray());
+		json.put("historyScreens", new JSONArray());
+		
+		return json;
+	}
+	
 	public JSONObject toJSONObject() {
 		JSONObject json = new JSONObject();
 		json.put("name", getName());
