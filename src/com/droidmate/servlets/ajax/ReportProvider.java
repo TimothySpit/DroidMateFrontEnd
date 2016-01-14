@@ -50,6 +50,7 @@ public class ReportProvider extends HttpServlet {
 					ExplorationReport report = apk.getReport();
 					request.setAttribute("apk_name", apk.getFile().getName());
 					request.setAttribute("elements_seen", Integer.toString(report.getElementsSeen()));
+					request.setAttribute("screens_seen", Integer.toString(report.getScreensSeen()));
 					request.setAttribute("apk_successful", report.isSuccess());
 					break;
 				}
