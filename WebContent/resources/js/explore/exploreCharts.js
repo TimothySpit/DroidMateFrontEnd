@@ -141,9 +141,9 @@ $(function() {
 		{
 			apk = apkArray[i];
 			console.log(apk);
-			if (apk.finished == "True")
+			if (apk.finished == "true")
 			{
-				if (apk.success == "True")
+				if (apk.success == "true")
 					successfulAPKs++;
 				else
 					failedAPKs++;
