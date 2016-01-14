@@ -141,16 +141,22 @@ public class APKExploreHandler extends HttpServlet {
 		logFile.delete();
 		logReader = new XMLLogReader(logFile, user.getAPKS());
 
-	
+		try {
+			FileUtils.deleteDirectory(inputAPKsPath.toFile());
+			inputAPKsPath.toFile().mkdir();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		
+		
 		boolean restart = true;
-		while (restart = true) {
+		while (restart == true) {
 			restart = false;
 			// for each apk, copy it
 			for (APKInformation apkInfo : user.getAPKS()) {
 				if (apkInfo.isSelected()) {
 					try {
-						FileUtils.deleteDirectory(inputAPKsPath.toFile());
-						inputAPKsPath.toFile().mkdir();
+					
 						
 						Path inlinedAPK = Paths.get(apkInfo.getFile().getParent().toString(), "/inlined",
 								FilenameUtils.removeExtension(apkInfo.getFile().getName()) + "-inlined.apk");
