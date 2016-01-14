@@ -1,6 +1,6 @@
 $(document).ready()
 	{
-	var elementsToExplore = [[1, 300], [2, 600], [3, 550], [4, 400], [5, 300]];
+	var elementsToExplore = [[5, 300], [2, 600], [4, 550], [3, 400], [1, 300]];
 	var elementsExplored = [[0,0],[0,0],[0,0],[0,0],[0,0]];
 	var screensExplored = [[1, 500], [2, 500], [3, 500], [4, 500], [5, 300]];
 	var successfulAPKs = 40, failedAPKs = 30, remainingAPKs=10;
@@ -28,8 +28,9 @@ function createChartGUIElementsToExplore(divname) {
                 axisLabelFontFamily: 'Arial'
             }
         };
-    elementsToExplore = getDataElementsToExplore();
-    elementsToExplore.slice(-5);
+    //elementsToExplore = getDataElementsToExplore();
+    //elementsToExplore.slice(-5);
+    elementsToExplore.sort();
     chartGUIElementsToExplore = $.plot(divname, [elementsToExplore], options);
     setTimeout(updateElementsToExplore, divname, updateInterval);
 };
@@ -103,10 +104,33 @@ function createChartGUIElementsExplored(divname) {
     setTimeout(updateElementsExplored, divname, updateInterval);
 };
 
-function getDataElementsToExplore()
+function updateAPKValues()
 {
 	information = $.droidmate.ajax.get.getExplorationInfo();
+	console.log(information);
+	apkArray = information[history];
+	successfulAPKs = 0;
+	failedAPKs = 0;
+	for(var i = 0; i < apkArray.length; i++)
+	{
+		apk = apkArray[i];
+		console.log(apk);
+		if (apk.finished == "True")
+		{
+			if (apk.success == "True")
+				successfulAPKs++;
+			else
+				failedAPKs++;
+		}
+	}
+}
+
+function getDataElementsToExplore()
+{
+	//information = $.droidmate.ajax.get.getExplorationInfo();
 	data = information[history];
+	
+	
 	
 	return data;
 }
@@ -114,6 +138,7 @@ function getDataElementsToExplore()
 function createChartAPKStatus(divname)
 {
 	//successfulAPKs, failedAPKs, remainingAPKs;
+	updateAPKValues();
 	var dataSet = [
 	               {label: "Successful", data: successfulAPKs, color: "#00A36A"},
 	               { label: "Failed", data: failedAPKs, color: "#005CDE"},
@@ -144,6 +169,7 @@ function createChartAPKStatus(divname)
 
 function updateChartAPKStatus(divname)
 {
+	/*
 	if (remainingAPKs != 0)
 		{
 		if (Math.random() > 0.75)
@@ -158,8 +184,9 @@ function updateChartAPKStatus(divname)
 			}
 		}
 	else
-		remainingAPKs = 100;
+		remainingAPKs = 100;*/
 	
+	updateAPKValues();
 	var dataSet = [
 	               {label: "Successful", data: successfulAPKs, color: "#00A36A"},
 	               { label: "Failed", data: failedAPKs, color: "#005CDE"},
