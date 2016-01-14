@@ -112,9 +112,11 @@ public class XMLLogReader {
 		boolean readEvents = false;
 		boolean readElementsSeen = false;
 		boolean readSuccess = false;
+		long startingTime;
 
 		public LogReaderHandler(Map<String, APKExplorationInfo> apks) {
 			this.apksMApLogReader = apks;
+			startingTime = System.currentTimeMillis();
 		}
 
 		@Override
@@ -135,7 +137,7 @@ public class XMLLogReader {
 				}
 
 			} else if (readElementsSeen) {
-				currentApkExplorationInfo.addElementsSeen(Integer.parseInt(value));
+				currentApkExplorationInfo.addElementsSeen(System.currentTimeMillis() - startingTime, Integer.parseInt(value));
 
 				readElementsSeen = false;
 			} else if (readSuccess) {

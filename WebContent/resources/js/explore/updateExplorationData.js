@@ -64,6 +64,7 @@ $(function() {
 		$(row).find("button").wrap(
 				'<a href="' + $.droidmate.ajax.get.getReportPath(apkName)
 						+ '" target="_blank"></a>');
+		$.droidmate.ajax.get.saveReport(apkName);
 	}
 	;
 

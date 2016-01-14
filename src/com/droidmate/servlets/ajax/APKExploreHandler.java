@@ -108,14 +108,26 @@ public class APKExploreHandler extends HttpServlet {
 
 		if (request.getParameter(AjaxConstants.EXPLORE_GET_INFO) != null) {
 			response.setContentType("application/json");
-			JSONArray result = new JSONArray();
-			if (logReader != null) {
-				for (APKExplorationInfo apk : logReader.getApksInfo()) {
-					result.put(apk.toJSONObject());
+			if (request.getParameter(AjaxConstants.EXPLORE_GET_INFO_APK_NAME) != null) {
+				if (logReader != null) {
+					for (APKExplorationInfo apk : logReader.getApksInfo()) {
+						if (apk.getName().equalsIgnoreCase(request.getParameter(AjaxConstants.EXPLORE_GET_INFO_APK_NAME))) {
+							out.print(apk.toJSONObject());
+						}
+					}
+				} else {
+					out.print("Log reading has not started yet!");
 				}
-			}
+			} else {
+				JSONArray result = new JSONArray();
+				if (logReader != null) {
+					for (APKExplorationInfo apk : logReader.getApksInfo()) {
+						result.put(apk.toJSONObject());
+					}
+				}
 
-			out.print(result);
+				out.print(result);
+			}
 		} else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
@@ -147,8 +159,7 @@ public class APKExploreHandler extends HttpServlet {
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
-		
-		
+
 		boolean restart = true;
 		while (restart == true) {
 			restart = false;
@@ -156,8 +167,7 @@ public class APKExploreHandler extends HttpServlet {
 			for (APKInformation apkInfo : user.getAPKS()) {
 				if (apkInfo.isSelected()) {
 					try {
-					
-						
+
 						Path inlinedAPK = Paths.get(apkInfo.getFile().getParent().toString(), "/inlined",
 								FilenameUtils.removeExtension(apkInfo.getFile().getName()) + "-inlined.apk");
 						Path target = Paths.get(inputAPKsPath.toString(), apkInfo.getFile().getName());
@@ -191,8 +201,8 @@ public class APKExploreHandler extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace", ":projects:core:run", "--project-prop",
-				"timeLimit=" + settings.getExplorationTimeout());
+		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace", ":projects:core:run",
+				"--project-prop", "timeLimit=" + settings.getExplorationTimeout());
 		pb.directory(droidMateRoot.toFile());
 		pb.redirectErrorStream(true);
 

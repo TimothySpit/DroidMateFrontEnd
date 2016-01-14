@@ -49,6 +49,18 @@
 	get.getReportPath = getReportPath;
 	//----------------------------------
 	
+	function saveReport(apkname) {
+		$.ajax({
+	        url:  "/DroidMate/ReportProvider",
+	        async: false,
+	        type: 'GET',
+	        dataType: "json",
+	        data: {save_report: apkname}
+	     });
+		return result;
+	}
+	get.saveReport = saveReport;
+	//----------------------------------
 	
 	//----------------------------------
 	

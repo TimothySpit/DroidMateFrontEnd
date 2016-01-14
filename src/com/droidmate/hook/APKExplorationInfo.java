@@ -22,15 +22,16 @@ public class APKExplorationInfo {
 	public APKExplorationInfo(String name) {
 		super();
 		this.name = name;
+		elementsSeenHistory.put(0l, 0);
 	}
 
 	public int getElementsSeen() {
 		return elementsSeen.get();
 	}
 	
-	public void addElementsSeen(int newElements) {
+	public void addElementsSeen(long time, int newElements) {
 		elementsSeen.addAndGet(newElements);
-		elementsSeenHistory.put(System.currentTimeMillis(), getElementsSeen());
+		elementsSeenHistory.put(time, getElementsSeen());
 	}
 
 	public ConcurrentHashMap<Long, Integer> getElementsSeenHistory() {
@@ -78,19 +79,6 @@ public class APKExplorationInfo {
 		json.put("history", history);
 		
 		return json;
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("APKExplorationInfo [name=");
-		builder.append(name);
-		builder.append(", success=");
-		builder.append(success);
-		builder.append(", elementsSeen=");
-		builder.append(elementsSeen);
-		builder.append("]");
-		return builder.toString();
 	}
 
 	public void setReportFile(File reportFile) {

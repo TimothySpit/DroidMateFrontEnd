@@ -33,6 +33,7 @@ public class AjaxConstants {
 	public final static String EXPLORE_STOP = "explore_stop";
 	public final static String EXPLORE_RESTART = "explore_restart";
 	public final static String EXPLORE_GET_INFO = "explore_get_info";
+	public final static String EXPLORE_GET_INFO_APK_NAME = "explore_get_info_apkname";
 
 	//------------------------------------------------------------------------------
 	public final static String ReportProvider_GET_REPORT = "get_report";
