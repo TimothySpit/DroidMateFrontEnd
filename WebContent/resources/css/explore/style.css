@@ -7,10 +7,10 @@ tr.shown td.details-control {
 }
 
 .apk-info-min-container {
-	float: left;
 }
 
 .apk-chart-min {
+	float: left;
 	height: 200px;
 	width:  200px;
 }
