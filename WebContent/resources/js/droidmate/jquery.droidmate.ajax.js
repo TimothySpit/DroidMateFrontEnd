@@ -25,7 +25,7 @@
 	get.getDroidMateSettings = getDroidMateSettings;
 	//----------------------------------
 	
-	function getExplorationInfo() {
+	function getGlobalElementsSeen() {
 		var result = null;
 		$.ajax({
 	        url:  "/DroidMate/APKExploreHandler",
@@ -38,7 +38,7 @@
 	     });
 		return result;
 	}
-	get.getExplorationInfo = getExplorationInfo;
+	get.getGlobalElementsSeen = getGlobalElementsSeen;
 	//----------------------------------
 	
 	function getExplorationInfo() {
