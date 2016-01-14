@@ -147,9 +147,9 @@ public class APKExploreHandler extends HttpServlet {
 			JSONArray result = new JSONArray();
 			if (logReader != null) {
 				for (Entry<Long, Integer> entry : logReader.getGlobalElementsSeenHistory().entrySet()) {
-					JSONObject o = new JSONObject();
-					o.put("time", entry.getKey());
-					o.put("elementsSeen", entry.getValue());
+					JSONArray o = new JSONArray();
+					o.put(entry.getKey());
+					o.put(entry.getValue());
 					result.put(o);
 				}
 			}
@@ -169,9 +169,9 @@ public class APKExploreHandler extends HttpServlet {
 			JSONArray result = new JSONArray();
 			if (logReader != null) {
 				for (Entry<Long, Integer> entry : logReader.getGlobalScreensSeenHistory().entrySet()) {
-					JSONObject o = new JSONObject();
-					o.put("time", entry.getKey());
-					o.put("screensSeen", entry.getValue());
+					JSONArray o = new JSONArray();
+					o.put(entry.getKey());
+					o.put(entry.getValue());
 					result.put(o);
 				}
 			}
