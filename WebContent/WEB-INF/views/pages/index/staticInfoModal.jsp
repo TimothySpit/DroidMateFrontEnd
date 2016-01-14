@@ -48,7 +48,7 @@
 			},
 			success : function(data) {
 				var dataset = [ {
-					label : "File Sizes",
+					label : "File Sizes (MB)",
 					data : data.data,
 					color : "#5482FF"
 				} ];

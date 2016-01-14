@@ -43,7 +43,7 @@ public class ApkListingStatic extends HttpServlet {
 		for (APKInformation apkInformation : user.getAPKS()) {
 			JSONArray size = new JSONArray();
 			size.put(counter);
-			size.put(apkInformation.getFile().length());
+			size.put(apkInformation.getFile().length() / 1024.0 / 1024.0); //MB
 			sizes.put(size);
 
 			JSONArray tick = new JSONArray();
