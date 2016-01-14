@@ -35,6 +35,7 @@ public class AjaxConstants {
 	public final static String EXPLORE_GET_INFO = "explore_get_info";
 	public final static String EXPLORE_GET_INFO_APK_NAME = "explore_get_info_apkname";
 	public final static String EXPLORE_GET_GLOBAL_ELEMENTS_SEEN = "explore_get_global_elements_seen";
+	public static final String EXPLORE_GET_GLOBAL_ELEMENTS_SEEN_HISTORY = "explore_get_global_elements_seen_history";
 
 	//------------------------------------------------------------------------------
 	public final static String ReportProvider_GET_REPORT = "get_report";

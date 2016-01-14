@@ -12,7 +12,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.droidmate.apk.APKInformation;
 import com.droidmate.hook.APKExplorationInfo;
@@ -135,9 +135,21 @@ public class APKExploreHandler extends HttpServlet {
 					elementsSeen += apk.getElementsSeen();
 				}
 				out.print(elementsSeen);
-			}else {
+			} else {
 				out.print(0);
 			}
+		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_ELEMENTS_SEEN_HISTORY) != null) {
+			JSONArray result = new JSONArray();
+			if (logReader != null) {
+				for (Entry<Long, Integer> entry : logReader.getGlobalElementsSeenHistory().entrySet()) {
+					JSONObject o = new JSONObject();
+					o.put("time", entry.getKey());
+					o.put("elementsSeen", entry.getValue());
+					result.put(o);
+				}
+			}
+
+			out.print(result);
 		} else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {

@@ -5,10 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,8 +20,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.droidmate.apk.APKInformation;
 import com.droidmate.apk.ExplorationReport;
-import com.droidmate.servlets.settings.Settings;
-import com.droidmate.settings.GUISettings;
 
 /**
  * 
@@ -104,6 +99,7 @@ public class XMLLogReader {
 		private Map<String, APKExplorationInfo> apksMApLogReader;
 		private APKExplorationInfo currentApkExplorationInfo;
 		private APKInformation currentAPK;
+		private ConcurrentHashMap<Long, Integer> globalElementsSeenHistory = new ConcurrentHashMap<>();
 
 		// Flags to determine state
 		boolean readExploration = false;
@@ -137,7 +133,10 @@ public class XMLLogReader {
 				}
 
 			} else if (readElementsSeen) {
-				currentApkExplorationInfo.addElementsSeen(System.currentTimeMillis() - startingTime, Integer.parseInt(value));
+				long time = System.currentTimeMillis() - startingTime;
+				int newElementsSeen = Integer.parseInt(value);
+				currentApkExplorationInfo.addElementsSeen(time, newElementsSeen);
+				globalElementsSeenHistory.put(time, newElementsSeen);
 
 				readElementsSeen = false;
 			} else if (readSuccess) {
@@ -176,16 +175,23 @@ public class XMLLogReader {
 				break;
 			}
 		}
+
+		public ConcurrentHashMap<Long, Integer> getGlobalElementsSeenHistory() {
+			return globalElementsSeenHistory;
+		}
 	}
 
 	private final File sourceFile;
 	private final ConcurrentHashMap<String, APKExplorationInfo> apksMapReaderHandler = new ConcurrentHashMap<>();
 	private ForeverFileInputStream inputStream;
 	private APKInformation[] apks;
+	private LogReaderHandler handler;
 
 	public XMLLogReader(File source, APKInformation[] apks) {
 		this.sourceFile = source;
 		this.apks = apks;
+
+		handler = new LogReaderHandler(apksMapReaderHandler);
 	}
 
 	public void stopReading() {
@@ -216,8 +222,6 @@ public class XMLLogReader {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 
-			DefaultHandler handler = new LogReaderHandler(apksMapReaderHandler);
-
 			inputStream = new ForeverFileInputStream(sourceFile);
 			// Necessary for utf-8
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");
@@ -232,6 +236,10 @@ public class XMLLogReader {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public ConcurrentHashMap<Long, Integer> getGlobalElementsSeenHistory() {
+		return handler.getGlobalElementsSeenHistory();
 	}
 
 	public Collection<APKExplorationInfo> getApksInfo() {

@@ -41,6 +41,22 @@
 	get.getGlobalElementsSeen = getGlobalElementsSeen;
 	//----------------------------------
 	
+	function getGlobalElementsSeenHistory() {
+		var result = null;
+		$.ajax({
+	        url:  "/DroidMate/APKExploreHandler",
+	        async: false,
+	        type: 'GET',
+	        data: {explore_get_global_elements_seen_history: true},
+	        success: function(data) {
+	            result = data;
+	        } 
+	     });
+		return result;
+	}
+	get.getGlobalElementsSeenHistory = getGlobalElementsSeenHistory;
+	//----------------------------------
+	
 	function getExplorationInfo() {
 		var result = null;
 		$.ajax({
