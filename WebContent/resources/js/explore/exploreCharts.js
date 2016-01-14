@@ -58,9 +58,7 @@ $(function() {
 	                axisLabelFontFamily: 'Arial'
 	            }
 	        };
-	    getDataElementsSeen();
-	    console.log(elementsSeen);
-	    elementsSeen.slice(-5);
+	    elementsSeen = getDataElementsSeen();
 	    chartGUIElementsSeen = $.plot(divname, [elementsSeen], options);
 	    setTimeout(updateElementsSeen, divname, updateInterval);
 	};
@@ -155,8 +153,9 @@ $(function() {
 
 	function getDataElementsSeen()
 	{
-		var newData = $.droidmate.ajax.get.getGlobalElementsSeen();
-		elementsSeen = newData.slice[-dataVisible];
+		var newData = $.droidmate.ajax.get.getGlobalElementsSeenHistory();
+		var output = newData.slice(-dataVisible);
+		return output;
 	}
 
 
@@ -222,7 +221,6 @@ $(function() {
 	function updateElementsSeen(divname)
 	{
 		elementsSeen = getDataElementsSeen();
-	    elementsSeen.slice(-5);
 		chart = chartGUIElementsSeen;
 
 		chart.setData([elementsSeen]);
