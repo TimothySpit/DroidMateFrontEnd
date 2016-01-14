@@ -104,13 +104,15 @@ $(function() {
 	
 	function updateCharts() {
 		$.each(activeChartDivs,function( index, value ) {
+			if(value != null){
 			var apkData = $.droidmate.ajax.get.getExplorationInfo(index);
-			console.log(apkData.history);
 			
 			var chart = value.chart;
-			var data = apkData.history.slice(-10);
-			chart.setData([[apkData.history]]);
+			var data = apkData.history.sort(function(a,b){return b[0] < a[0];})
+			data = data.slice(-10);
+			chart.setData([data]);
 			chart.draw();
+			}
 		});
 		//console.log(apkData.history.elementsSeen);
 		setTimeout(updateCharts, $.droidmate.explore.UPDATE_EXPLORE_CHARTS_INTERVAL);
@@ -143,6 +145,7 @@ $(function() {
 		var chartDiv = $('[id="apk-chart-min-' + row[1] + '"]');
 		var chart = createChartElementsSeen(chartDiv);
 		activeChartDivs[row[1]] =  {div:chartDiv,chart:chart};
+		updateCharts();
 	}
 	
 	function removeFromWatchDropDownClicked(row) {
