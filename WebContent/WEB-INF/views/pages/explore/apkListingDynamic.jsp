@@ -38,7 +38,7 @@
 		</div>
 		<div class="row">
 			<div class="col-sm-6">
-				<div id="flot-gui-elements-not-seen"
+				<div id="flot-gui-elements-seen"
 					style="width: 450px; height: 300px; margin: 0 auto"></div>
 			</div>
 			<div class="col-sm-6">
@@ -66,41 +66,6 @@
 	</div>
 	</main>
 </body>
-
-<!-- gui elements not yet seen chart -->
-<script type="text/javascript">	
-$(document).ready(function () {
-	window.createChartGUIElementsToExplore("#flot-gui-elements-not-seen");
-});
-</script>
-
-<!-- gui elements explored chart-->
-<script type="text/javascript">	
-$(document).ready(function () {
-	//window.createChartGUIElementsExplored("#flot-gui-elements-explored");
-});
-</script>
-
-<!-- apkstatus chart-->
-<script type="text/javascript">	
-$(document).ready(function () {
-  window.createChartAPKStatus('#flot-apks-status');
-});
-</script>
-
-<!-- gui screens explored chart-->
-<script type="text/javascript">	
-$(document).ready(function () {
-	//window.createChartGUIScreensExplored("#flot-gui-screens-explored");
-});
-</script>
-
-<!-- gui screens superchart-->
-<script type="text/javascript">	
-$(document).ready(function () {
-	//window.createChartGUIElementsAndScreens("#flot-gui-screens-explored");
-});
-</script>
 
 <jsp:include page="../../partials/footer.jsp" />
 
