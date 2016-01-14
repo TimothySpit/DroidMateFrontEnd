@@ -70,7 +70,7 @@
 <!-- gui elements not yet seen chart -->
 <script type="text/javascript">	
 $(document).ready(function () {
-	//window.createChartGUIElementsToExplore("#flot-gui-elements-not-seen");
+	window.createChartGUIElementsToExplore("#flot-gui-elements-not-seen");
 });
 </script>
 
@@ -84,7 +84,7 @@ $(document).ready(function () {
 <!-- apkstatus chart-->
 <script type="text/javascript">	
 $(document).ready(function () {
-   window.createChartAPKStatus('#flot-apks-status');
+  window.createChartAPKStatus('#flot-apks-status');
 });
 </script>
 
@@ -98,7 +98,7 @@ $(document).ready(function () {
 <!-- gui screens superchart-->
 <script type="text/javascript">	
 $(document).ready(function () {
-	window.createChartGUIElementsAndScreens("#flot-gui-screens-explored");
+	//window.createChartGUIElementsAndScreens("#flot-gui-screens-explored");
 });
 </script>
 

@@ -28,8 +28,10 @@ function createChartGUIElementsToExplore(divname) {
                 axisLabelFontFamily: 'Arial'
             }
         };
+    elementsToExplore = getDataElementsToExplore();
+    elementsToExplore.slice(-5);
     chartGUIElementsToExplore = $.plot(divname, [elementsToExplore], options);
-    //setTimeout(updateElementsToExplore, divname, updateInterval);
+    setTimeout(updateElementsToExplore, divname, updateInterval);
 };
 
 function createChartGUIScreensExplored(divname) {
@@ -71,6 +73,7 @@ function createChartGUIElementsAndScreens(divname) {
                 axisLabelFontFamily: 'Arial'
             }
         };
+    chartElementsAndScreens = $.plot(divname, dataArray, options);
     chartElementsAndScreens = $.plot(divname, 
     	    [{ data: screensExplored, label: "Screens" },
     		{ data: elementsToExplore, label: "Elements"}],
@@ -99,6 +102,14 @@ function createChartGUIElementsExplored(divname) {
     chartGUIElementsExplored = $.plot(divname, [elementsExplored], options);
     setTimeout(updateElementsExplored, divname, updateInterval);
 };
+
+function getDataElementsToExplore()
+{
+	information = $.droidmate.ajax.post.toJSONObject();
+	data = information[history];
+	
+	return data;
+}
 
 function createChartAPKStatus(divname)
 {
@@ -179,9 +190,11 @@ function addRandomY(currentData, newX)
 function updateLines(divname)
 {
 	chart = chartElementsAndScreens;
+
 	lastUpdate += updateInterval / 1000 / 60;
 	addRandomY(elementsExplored, lastUpdate);
 	addRandomY(screensExplored, lastUpdate);
+	
 	data1 = elementsExplored;
 	data2 = screensExplored;//.slice(Math.min(screensExplored.length(), 5));
 	chart.setData([{ data: elementsExplored, label: "Screens" },
@@ -204,11 +217,11 @@ function updateElementsExplored(divname)
 
 function updateElementsToExplore(divname)
 {
+	elementsToExplore = getDataElementsToExplore();
+    elementsToExplore.slice(-5);
 	chart = chartGUIElementsToExplore;
-	data = elementsToExplore;
-	addRandomValue(data); 
-	
-	chart.setData([data]);
+
+	chart.setData([elementsToExplore]);
 	chart.draw();
 	setTimeout(updateElementsToExplore, divname, updateInterval);
 }
