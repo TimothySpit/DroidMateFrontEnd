@@ -103,9 +103,16 @@ $(function() {
 	var activeChartDivs = {};
 	
 	function updateCharts() {
-		
-		
-		
+		$.each(activeChartDivs,function( index, value ) {
+			var apkData = $.droidmate.ajax.get.getExplorationInfo(index);
+			console.log(apkData.history);
+			
+			var chart = value.chart;
+			var data = apkData.history.slice(-10);
+			chart.setData([[apkData.history]]);
+			chart.draw();
+		});
+		//console.log(apkData.history.elementsSeen);
 		setTimeout(updateCharts, $.droidmate.explore.UPDATE_EXPLORE_CHARTS_INTERVAL);
 	}
 	updateCharts();
@@ -128,14 +135,14 @@ $(function() {
 	            }
 	        };
 	    var elementsExplored = [[0,0],[0,0],[0,0],[0,0],[0,0]];
-	    $.plot(divname, [elementsExplored], options);
+	    return $.plot(divname, [elementsExplored], options);
 	};
 	
 	//create each chart when element gets opened
 	function watchDropDownClicked(row) {
 		var chartDiv = $('[id="apk-chart-min-' + row[1] + '"]');
-		activeChartDivs[row[1]] =  chartDiv;
-		createChartElementsSeen(chartDiv);
+		var chart = createChartElementsSeen(chartDiv);
+		activeChartDivs[row[1]] =  {div:chartDiv,chart:chart};
 	}
 	
 	function removeFromWatchDropDownClicked(row) {

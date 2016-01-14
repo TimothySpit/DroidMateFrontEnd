@@ -122,7 +122,6 @@
 	        dataType: "json",
 	        data: {save_report: apkname}
 	     });
-		return result;
 	}
 	get.saveReport = saveReport;
 	//----------------------------------
