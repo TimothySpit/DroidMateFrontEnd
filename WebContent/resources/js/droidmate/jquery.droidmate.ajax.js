@@ -72,6 +72,25 @@
 		return result;
 	}
 	get.getExplorationInfo = getExplorationInfo;
+	
+//----------------------------------
+	
+	function getExplorationInfo(apkname) {
+		var result = null;
+		$.ajax({
+	        url:  "/DroidMate/APKExploreHandler",
+	        async: false,
+	        type: 'GET',
+	        dataType: "json",
+	        data: {explore_get_info: true, explore_get_info_apkname: apkname},
+	        success: function(data) {
+	            result = data;
+	        } 
+	     });
+		return result;
+	}
+	get.getExplorationInfo = getExplorationInfo;
+	
 	//----------------------------------
 	
 	function getReportPath(apkname) {
