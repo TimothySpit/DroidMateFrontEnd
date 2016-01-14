@@ -106,9 +106,7 @@ function createChartGUIElementsExplored(divname) {
 
 function updateAPKValues()
 {
-	information = $.droidmate.ajax.get.getExplorationInfo();
-	console.log(information);
-	apkArray = information[history];
+	var apkArray = $.droidmate.ajax.get.getExplorationInfo();
 	successfulAPKs = 0;
 	failedAPKs = 0;
 	for(var i = 0; i < apkArray.length; i++)
