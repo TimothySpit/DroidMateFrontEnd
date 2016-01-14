@@ -99,18 +99,20 @@ public class APKExplorationInfo {
 		
 		JSONArray elementsHistory = new JSONArray();
 		for(Entry<Long, Integer> entry : getElementsSeenHistory().entrySet()) {
-			JSONObject o = new JSONObject();
-			o.put("time", entry.getKey());
-			o.put("elementsSeen", entry.getValue());
+			JSONArray o = new JSONArray();
+			//Seconds
+			o.put(Math.round(Math.round(entry.getKey() / 1000d)));
+			o.put(entry.getValue());
 			elementsHistory.put(o);
 		}
 		json.put("history", elementsHistory);
 		
 		JSONArray screensHistory = new JSONArray();
 		for(Entry<Long, Integer> entry : getScreensSeenHistory().entrySet()) {
-			JSONObject o = new JSONObject();
-			o.put("time", entry.getKey());
-			o.put("screensSeen", entry.getValue());
+			JSONArray o = new JSONArray();
+			//Seconds
+			o.put(Math.round(Math.round(entry.getKey() / 1000d)));
+			o.put(entry.getValue());
 			screensHistory.put(o);
 		}
 		json.put("historyScreens", screensHistory);
