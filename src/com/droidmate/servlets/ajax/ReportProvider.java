@@ -3,6 +3,10 @@ package com.droidmate.servlets.ajax;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -76,13 +80,18 @@ public class ReportProvider extends HttpServlet {
 					request.getRequestDispatcher("/WEB-INF/views/pages/report/report.jsp").include(request, responseWrapper);
 					String content = responseWrapper.toString();
 					GUISettings settings = new GUISettings();
-					PrintWriter writer = new PrintWriter(settings.getOutputFolder() + "/report_" + apk.getFile().getName() + ".html", "UTF-8");
+					PrintWriter writer = new PrintWriter(settings.getOutputFolder() + "/report_"
+							+ (new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date())) + apk.getFile().getName() + ".html", "UTF-8");
 					writer.println(content);
 					writer.close();
 					break;
 				}
 			}
+		}else {
+			System.out.println("Illegal GET request:");
+			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
+				System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
+			}
 		}
 	}
-
 }

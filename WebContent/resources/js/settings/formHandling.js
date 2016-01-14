@@ -5,11 +5,10 @@ $(function() {
 			var infobox = $('#saveinfo-box');
 			if (result.success) {
 				$.droidmate.overlays.alert(
-						infobox,
 						'<span><strong>Success!</strong> All data were saved.</span>',
 						$.droidmate.overlays.alertTypes.SUCCESS, 2000);
 			} else {
-				$.droidmate.overlays.alert(infobox,
+				$.droidmate.overlays.alert(
 						"<span><strong>Error!</strong> "
 								+ result.reason + "</span>",
 								$.droidmate.overlays.alertTypes.DANGER, 2000);
