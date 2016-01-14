@@ -33,6 +33,8 @@
 	src="${pageContext.request.contextPath}/resources/js/explore/updateExplorationData.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/handleExplorationButtons.js"></script>
+	<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/js/explore/backToIndex.js"></script>
 </head>
 <body class="container">
 	<main>
@@ -45,11 +47,9 @@
 		<div class="row">
 			<div class="col-sm-4">
 				<form class="pull-left">
-					<a href="${pageContext.request.contextPath}/Index">
-						<button data-toggle="modal" class="btn btn-default"
+						<button  class="btn btn-default"
 							id="back-to-index" type="button" id="returnStart">Return
 							to start</button>
-					</a>
 				</form>
 			</div>
 			<div class="col-sm-4 text-center">

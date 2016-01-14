@@ -77,6 +77,8 @@ $(function() {
 	}
 	;
 
+	
+	
 	// Add event listener for opening and closing details
 	function addSubTableClick() {
 		$('#exploreFiles tbody').on('click', 'td.details-control', function() {
@@ -86,6 +88,7 @@ $(function() {
 			if (row.child.isShown()) {
 				// This row is already open - close it
 				row.child.hide();
+				removeFromWatchDropDownClicked(row.data());
 				tr.removeClass('shown');
 			} else {
 				// Open this row
@@ -96,6 +99,16 @@ $(function() {
 		});
 	}
 
+	var activeChartDivs = {};
+	
+	function updateCharts() {
+		
+		
+		
+		setTimeout(updateCharts, $.droidmate.explore.UPDATE_EXPLORE_CHARTS_INTERVAL);
+	}
+	updateCharts();
+	
 	function createChartElementsSeen(divname) {
 	    var options =  {
 	            yaxis: {
@@ -119,11 +132,15 @@ $(function() {
 	
 	//create each chart when element gets opened
 	function watchDropDownClicked(row) {
-		console.log(row);
 		var chartDiv = $('[id="apk-chart-min-' + row[1] + '"]');
-		console.log(chartDiv);
+		activeChartDivs[row[1]] =  chartDiv;
 		createChartElementsSeen(chartDiv);
 	}
+	
+	function removeFromWatchDropDownClicked(row) {
+		activeChartDivs[row[1]] = null;
+	}
+	
 	// init update
 	$
 			.getJSON(
