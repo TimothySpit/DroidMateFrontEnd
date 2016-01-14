@@ -110,10 +110,15 @@ public class APKExploreHandler extends HttpServlet {
 			response.setContentType("application/json");
 			if (request.getParameter(AjaxConstants.EXPLORE_GET_INFO_APK_NAME) != null) {
 				if (logReader != null) {
+					boolean found = false;
 					for (APKExplorationInfo apk : logReader.getApksInfo()) {
 						if (apk.getName().equalsIgnoreCase(request.getParameter(AjaxConstants.EXPLORE_GET_INFO_APK_NAME))) {
 							out.print(apk.toJSONObject());
+							found = true;
 						}
+					}
+					if(!found) {
+						out.print(new JSONObject());
 					}
 				} else {
 					out.print(new JSONObject());
