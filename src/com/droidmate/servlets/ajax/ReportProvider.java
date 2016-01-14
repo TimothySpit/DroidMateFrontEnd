@@ -1,5 +1,6 @@
 package com.droidmate.servlets.ajax;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -81,8 +82,10 @@ public class ReportProvider extends HttpServlet {
 					request.getRequestDispatcher("/WEB-INF/views/pages/report/report.jsp").include(request, responseWrapper);
 					String content = responseWrapper.toString();
 					GUISettings settings = new GUISettings();
-					PrintWriter writer = new PrintWriter(settings.getOutputFolder() + "/report_"
-							+ (new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date())) + apk.getFile().getName() + ".html", "UTF-8");
+					File reportFile = new File(settings.getOutputFolder() + "/Report_"
+							+ (new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date())) + "_" + apk.getFile().getName() + ".html");
+					reportFile.createNewFile();
+					PrintWriter writer = new PrintWriter(reportFile, "UTF-8");
 					writer.println(content);
 					writer.close();
 					break;
