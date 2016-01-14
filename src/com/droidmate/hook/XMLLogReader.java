@@ -148,6 +148,7 @@ public class XMLLogReader {
 				}
 
 			} else if(readScreensSeen) {
+				System.out.println("New screens: " + value);
 				int newScreensSeen = Integer.parseInt(value);
 				currentApkExplorationInfo.addScreensSeen(newScreensSeen);
 				globalScreensSeenHistory.put(System.currentTimeMillis() - globalStartingTime, newScreensSeen);
@@ -179,6 +180,7 @@ public class XMLLogReader {
 				readExploration = true;
 				break;
 			case "gui_screens_seen":
+				System.out.println("Found a screen!");
 				readScreensSeen = true;
 				break;
 			case "apk":
