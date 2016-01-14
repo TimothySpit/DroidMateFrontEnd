@@ -70,7 +70,7 @@
 					<tr>
 						<th></th>
 						<th>Name</th>
-						<th>Elements seen</th>
+						<th>Elements seen/Screens seen</th>
 						<th>Status</th>
 					</tr>
 				</thead>

@@ -17,6 +17,7 @@ $(function() {
 						function(index, value) {
 							var name = value.name;
 							var elementsSeen = value.elementsSeen;
+							var screensSeen = value.screensSeen;
 							var success = value.success;
 							var finished = value.finished;
 
@@ -26,10 +27,10 @@ $(function() {
 										// check for name
 										if ($(this).text() == name) {
 											// found apk
-											var elementsSeenDiv = $(
+											var elementsScreensSeenDiv = $(
 													this.parentElement.parentElement)
-													.find('.elements-seen');
-											elementsSeenDiv.text(elementsSeen);
+													.find('.elements-screens-seen');
+											elementsScreensSeenDiv.text(elementsSeen + '/' + screensSeen);
 											var statusDiv = $(
 													this.parentElement.parentElement)
 													.find('.state');
@@ -233,7 +234,7 @@ $(function() {
 															"render" : function(
 																	data, type,
 																	row) {
-																return '<div class="elements-seen">0</div>';
+																return '<div class="elements-screens-seen">0</div>';
 															}
 														},
 														{
