@@ -15,8 +15,10 @@ public class APKExplorationInfo {
 	private final String name;
 	private AtomicBoolean success = new AtomicBoolean(false);
 	private AtomicInteger elementsSeen = new AtomicInteger(0);
+	private AtomicInteger screensSeen = new AtomicInteger(0);
 	private AtomicBoolean finished = new AtomicBoolean(false);
 	private ConcurrentHashMap<Long, Integer> elementsSeenHistory = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Long, Integer> screensSeenHistory = new ConcurrentHashMap<>();
 	private File reportFile;
 	
 	public APKExplorationInfo(String name) {
@@ -28,18 +30,35 @@ public class APKExplorationInfo {
 	public int getElementsSeen() {
 		return elementsSeen.get();
 	}
+
+	public int getScreensSeen() {
+		return screensSeen.get();
+	}
 	
 	public void addElementsSeen(long time, int newElements) {
 		elementsSeen.addAndGet(newElements);
 		elementsSeenHistory.put(time, getElementsSeen());
+	}
+	
+	public void addScreensSeen(long time, int newScreens) {
+		screensSeen.addAndGet(newScreens);
+		screensSeenHistory.put(time, getScreensSeen());
 	}
 
 	public ConcurrentHashMap<Long, Integer> getElementsSeenHistory() {
 		return elementsSeenHistory;
 	}
 
+	public ConcurrentHashMap<Long, Integer> getScreensSeenHistory() {
+		return screensSeenHistory;
+	}
+
 	public void setElementsSeen(int elementsSeen) {
 		this.elementsSeen.set(elementsSeen);
+	}
+
+	public void setScreensSeen(int screensSeen) {
+		this.screensSeen.set(screensSeen);
 	}
 	
 	public boolean isSuccess() {
@@ -67,16 +86,26 @@ public class APKExplorationInfo {
 		json.put("name", getName());
 		json.put("success", isSuccess());
 		json.put("elementsSeen", getElementsSeen());
+		json.put("screensSeen", getScreensSeen());
 		json.put("finished", isFinished());
 		
-		JSONArray history = new JSONArray();
+		JSONArray elementsHistory = new JSONArray();
 		for(Entry<Long, Integer> entry : getElementsSeenHistory().entrySet()) {
 			JSONObject o = new JSONObject();
 			o.put("time", entry.getKey());
 			o.put("elementsSeen", entry.getValue());
-			history.put(o);
+			elementsHistory.put(o);
 		}
-		json.put("history", history);
+		json.put("history", elementsHistory);
+		
+		JSONArray screensHistory = new JSONArray();
+		for(Entry<Long, Integer> entry : getScreensSeenHistory().entrySet()) {
+			JSONObject o = new JSONObject();
+			o.put("time", entry.getKey());
+			o.put("screensSeen", entry.getValue());
+			screensHistory.put(o);
+		}
+		json.put("historyScreens", screensHistory);
 		
 		return json;
 	}

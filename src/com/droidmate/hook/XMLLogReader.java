@@ -100,6 +100,11 @@ public class XMLLogReader {
 		private APKExplorationInfo currentApkExplorationInfo;
 		private APKInformation currentAPK;
 		private ConcurrentHashMap<Long, Integer> globalElementsSeenHistory = new ConcurrentHashMap<>();
+		private ConcurrentHashMap<Long, Integer> globalScreensSeenHistory = new ConcurrentHashMap<>();
+
+		public ConcurrentHashMap<Long, Integer> getGlobalScreensSeenHistory() {
+			return globalScreensSeenHistory;
+		}
 
 		// Flags to determine state
 		boolean readExploration = false;
@@ -107,6 +112,7 @@ public class XMLLogReader {
 		boolean readName = false;
 		boolean readEvents = false;
 		boolean readElementsSeen = false;
+		boolean readScreensSeen = false;
 		boolean readSuccess = false;
 		long startingTime;
 
@@ -114,6 +120,7 @@ public class XMLLogReader {
 			this.apksMApLogReader = apks;
 			startingTime = System.currentTimeMillis();
 			globalElementsSeenHistory.put(0l, 0);
+			globalScreensSeenHistory.put(0l, 0);
 		}
 
 		@Override
@@ -133,7 +140,14 @@ public class XMLLogReader {
 					}
 				}
 
-			} else if (readElementsSeen) {
+			} else if(readScreensSeen) {
+				long time = System.currentTimeMillis() - startingTime;
+				int newScreensSeen = Integer.parseInt(value);
+				currentApkExplorationInfo.addScreensSeen(time, newScreensSeen);
+				globalScreensSeenHistory.put(time, newScreensSeen);
+
+				readScreensSeen = false;
+			}else if (readElementsSeen) {
 				long time = System.currentTimeMillis() - startingTime;
 				int newElementsSeen = Integer.parseInt(value);
 				currentApkExplorationInfo.addElementsSeen(time, newElementsSeen);
@@ -158,6 +172,9 @@ public class XMLLogReader {
 			switch (qName.toLowerCase()) {
 			case "exploration":
 				readExploration = true;
+				break;
+			case "gui_screens_seen":
+				readScreensSeen = true;
 				break;
 			case "apk":
 				readApk = true;
@@ -232,6 +249,7 @@ public class XMLLogReader {
 
 			saxParser.parse(inputStream, handler);
 		} catch (Exception e) {
+			//XML is not properly closed, so DroidMate probably crashed
 			if (!e.getMessage().contains("XML-Dokumentstrukturen müssen innerhalb derselben Entität beginnen und enden.")
 					&& !e.getMessage().contains("XML document structures must start and end within the same entity.")) {
 				e.printStackTrace();
@@ -241,6 +259,10 @@ public class XMLLogReader {
 
 	public ConcurrentHashMap<Long, Integer> getGlobalElementsSeenHistory() {
 		return handler.getGlobalElementsSeenHistory();
+	}
+
+	public ConcurrentHashMap<Long, Integer> getGlobalScreensSeenHistory() {
+		return handler.getGlobalScreensSeenHistory();
 	}
 
 	public Collection<APKExplorationInfo> getApksInfo() {

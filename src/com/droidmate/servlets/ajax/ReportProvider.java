@@ -60,8 +60,8 @@ public class ReportProvider extends HttpServlet {
 		if (request.getParameter(AjaxConstants.ReportProvider_SAVE_REPORT) != null) {
 			String requestedAPK = (String) request.getParameter(AjaxConstants.ReportProvider_SAVE_REPORT);
 			for (APKInformation apk : user.getAPKS()) {
-				System.out.println("Saving report for " + apk.getPackageName() + "...");
 				if (apk.getFile().getName().equals(requestedAPK)) {
+					System.out.println("Saving report for " + apk.getPackageName() + "...");
 					HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(response) {
 						private final StringWriter sw = new StringWriter();
 

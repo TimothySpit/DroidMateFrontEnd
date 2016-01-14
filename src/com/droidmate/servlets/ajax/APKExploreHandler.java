@@ -116,7 +116,7 @@ public class APKExploreHandler extends HttpServlet {
 						}
 					}
 				} else {
-					out.print("Log reading has not started yet!");
+					out.print(new JSONObject());
 				}
 			} else {
 				JSONArray result = new JSONArray();
@@ -150,7 +150,29 @@ public class APKExploreHandler extends HttpServlet {
 			}
 
 			out.print(result);
-		} else {
+		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_SCREENS_SEEN) != null) {
+			if (logReader != null) {
+				int screensSeen = 0;
+				for (APKExplorationInfo apk : logReader.getApksInfo()) {
+					screensSeen += apk.getScreensSeen();
+				}
+				out.print(screensSeen);
+			} else {
+				out.print(0);
+			}
+		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_SCREENS_SEEN_HISTORY) != null) {
+			JSONArray result = new JSONArray();
+			if (logReader != null) {
+				for (Entry<Long, Integer> entry : logReader.getGlobalScreensSeenHistory().entrySet()) {
+					JSONObject o = new JSONObject();
+					o.put("time", entry.getKey());
+					o.put("screensSeen", entry.getValue());
+					result.put(o);
+				}
+			}
+
+			out.print(result);
+		}else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
 				System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
