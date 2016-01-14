@@ -89,24 +89,6 @@
 	get.getGlobalScreensSeenHistory = getGlobalScreensSeenHistory;
 	//----------------------------------
 	
-	function getExplorationInfo() {
-		var result = null;
-		$.ajax({
-	        url:  "/DroidMate/APKExploreHandler",
-	        async: false,
-	        type: 'GET',
-	        dataType: "json",
-	        data: {explore_get_info: true},
-	        success: function(data) {
-	            result = data;
-	        } 
-	     });
-		return result;
-	}
-	get.getExplorationInfo = getExplorationInfo;
-	
-//----------------------------------
-	
 	function getExplorationInfo(apkname) {
 		var result = null;
 		$.ajax({
