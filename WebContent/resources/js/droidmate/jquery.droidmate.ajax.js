@@ -133,14 +133,17 @@
 	post.restartDroidMate = restartDroidMate;
 	//-----------------------------------
 	
-	function stopDroidMate() {
+	function stopDroidMate(success, error, complete) {console.log("here");
 		$.ajax({
 			async: false,
 			url: "/DroidMate/APKExploreHandler",
 			method: "POST",
 			data: {
 				explore_stop : true
-			}
+			},
+			 success: success,
+			 error: error,
+			 complete: complete
 		});
 	}
 	post.stopDroidMate = stopDroidMate;

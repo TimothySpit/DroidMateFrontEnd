@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -62,28 +63,25 @@ public class APKExploreHandler extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 
-		Runnable r;
+		Runnable r = null;
 		if (request.getParameter(AjaxConstants.EXPLORE_START) != null) {
 			r = new Runnable() {
 				@Override
 				public void run() {
 					if (!startDroidmate(user))
 						user.setExplorationStarted(false);
+					else
+						user.setExplorationStarted(true);
 				}
 			};
 		} else if (request.getParameter(AjaxConstants.EXPLORE_STOP) != null) {
-			r = new Runnable() {
-				@Override
-				public void run() {
-					stopDroidmateForcibly();
-					user.setExplorationStarted(false);
-				}
-			};
+			stopDroidmateForcibly();
+			user.setExplorationStarted(false);
 		} else if (request.getParameter(AjaxConstants.EXPLORE_RESTART) != null) {
+			stopDroidmateForcibly();
 			r = new Runnable() {
 				@Override
 				public void run() {
-					stopDroidmateForcibly();
 					if (!startDroidmate(user))
 						user.setExplorationStarted(false);
 				}
@@ -96,7 +94,8 @@ public class APKExploreHandler extends HttpServlet {
 			return;
 		}
 
-		(new Thread(r)).start();
+		if (r != null)
+			(new Thread(r)).start();
 	}
 
 	/**
@@ -142,31 +141,40 @@ public class APKExploreHandler extends HttpServlet {
 		logFile.delete();
 		logReader = new XMLLogReader(logFile, user.getAPKS());
 
-		// empty apks directory
-		try {
-			FileUtils.deleteDirectory(inputAPKsPath.toFile());
-			inputAPKsPath.toFile().mkdir();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-		// for each apk, copy it
-		for (APKInformation apkInfo : user.getAPKS()) {
-			if (apkInfo.isSelected()) {
-				try {
-					Path inlinedAPK = Paths.get(apkInfo.getFile().getParent().toString(), "/inlined",
-							FilenameUtils.removeExtension(apkInfo.getFile().getName()) + "-inlined.apk");
-					Path target = Paths.get(inputAPKsPath.toString(), apkInfo.getFile().getName());
-					target.toFile().mkdirs();
-					Files.copy(inlinedAPK, target, StandardCopyOption.REPLACE_EXISTING);
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
+	
+		boolean restart = true;
+		while (restart = true) {
+			restart = false;
+			// for each apk, copy it
+			for (APKInformation apkInfo : user.getAPKS()) {
+				if (apkInfo.isSelected()) {
+					try {
+						FileUtils.deleteDirectory(inputAPKsPath.toFile());
+						inputAPKsPath.toFile().mkdir();
+						
+						Path inlinedAPK = Paths.get(apkInfo.getFile().getParent().toString(), "/inlined",
+								FilenameUtils.removeExtension(apkInfo.getFile().getName()) + "-inlined.apk");
+						Path target = Paths.get(inputAPKsPath.toString(), apkInfo.getFile().getName());
+						target.toFile().mkdirs();
+						Files.copy(inlinedAPK, target, StandardCopyOption.REPLACE_EXISTING);
+					} catch (AccessDeniedException e) {
+						Runtime rt = Runtime.getRuntime();
+						try {
+							if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1)
+								rt.exec("taskkill /F /IM " + "adb.exe");
+							else
+								rt.exec("kill -9 " + "adb");
+						} catch (IOException ex) {
+							ex.printStackTrace();
+						}
+						restart = true;
+					} catch (IOException e) {
+						e.printStackTrace();
+						return false;
+					}
 				}
 			}
 		}
-
 		Runtime rt = Runtime.getRuntime();
 		try {
 			if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1)
@@ -176,7 +184,7 @@ public class APKExploreHandler extends HttpServlet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace", ":projects:core:run", "--project-prop",
 				"timeLimit=" + settings.getExplorationTimeout());
 		pb.directory(droidMateRoot.toFile());
@@ -221,22 +229,22 @@ public class APKExploreHandler extends HttpServlet {
 
 		try {
 			droidmateProcess.getInputStream().close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		try {
 			droidmateProcess.getOutputStream().close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		try {
 			droidmateProcess.getErrorStream().close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		try {
 			droidmateProcess.destroyForcibly().waitFor();
-		} catch (InterruptedException e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 		Runtime rt = Runtime.getRuntime();
@@ -245,9 +253,10 @@ public class APKExploreHandler extends HttpServlet {
 				rt.exec("taskkill /F /IM " + "adb.exe");
 			else
 				rt.exec("kill -9 " + "adb");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 
 }
