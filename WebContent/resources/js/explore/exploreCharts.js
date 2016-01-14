@@ -105,7 +105,7 @@ function createChartGUIElementsExplored(divname) {
 
 function getDataElementsToExplore()
 {
-	information = $.droidmate.ajax.post.toJSONObject();
+	information = $.droidmate.ajax.get.getExplorationInfo();
 	data = information[history];
 	
 	return data;
