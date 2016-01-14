@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -96,29 +99,33 @@ public class XMLLogReader {
 
 	private class LogReaderHandler extends DefaultHandler {
 
-		private Map<String, APKExplorationInfo> apksMApLogReader;
+		private Map<String, APKExplorationInfo> apksMapLogReader;
 		private APKExplorationInfo currentApkExplorationInfo;
 		private APKInformation currentAPK;
-		private ConcurrentHashMap<Long, Integer> globalElementsSeenHistory = new ConcurrentHashMap<>();
-		private ConcurrentHashMap<Long, Integer> globalScreensSeenHistory = new ConcurrentHashMap<>();
-
-		public ConcurrentHashMap<Long, Integer> getGlobalScreensSeenHistory() {
-			return globalScreensSeenHistory;
-		}
+		private ConcurrentSkipListMap<Long, Integer> globalElementsSeenHistory;
+		private ConcurrentSkipListMap<Long, Integer> globalScreensSeenHistory;
 
 		// Flags to determine state
-		boolean readExploration = false;
-		boolean readApk = false;
-		boolean readName = false;
-		boolean readEvents = false;
-		boolean readElementsSeen = false;
-		boolean readScreensSeen = false;
-		boolean readSuccess = false;
-		long startingTime;
+		private boolean readExploration = false;
+		private boolean readApk = false;
+		private boolean readName = false;
+		private boolean readEvents = false;
+		private boolean readElementsSeen = false;
+		private boolean readScreensSeen = false;
+		private boolean readSuccess = false;
+		private long globalStartingTime;
 
 		public LogReaderHandler(Map<String, APKExplorationInfo> apks) {
-			this.apksMApLogReader = apks;
-			startingTime = System.currentTimeMillis();
+			this.apksMapLogReader = apks;
+			globalStartingTime = System.currentTimeMillis();
+			Comparator<Long> c = new Comparator<Long>() {
+				@Override
+				public int compare(Long arg0, Long arg1) {
+					return arg0.compareTo(arg1);
+				}			
+			};
+			globalElementsSeenHistory = new ConcurrentSkipListMap<>(c);
+			globalScreensSeenHistory = new ConcurrentSkipListMap<>(c);
 			globalElementsSeenHistory.put(0l, 0);
 			globalScreensSeenHistory.put(0l, 0);
 		}
@@ -128,7 +135,7 @@ public class XMLLogReader {
 			String value = new String(ch, start, length);
 			if (readName) {
 				currentApkExplorationInfo = new APKExplorationInfo(value);
-				apksMApLogReader.put(value, currentApkExplorationInfo);
+				apksMapLogReader.put(value, currentApkExplorationInfo);
 
 				readName = false;
 
@@ -141,17 +148,15 @@ public class XMLLogReader {
 				}
 
 			} else if(readScreensSeen) {
-				long time = System.currentTimeMillis() - startingTime;
 				int newScreensSeen = Integer.parseInt(value);
-				currentApkExplorationInfo.addScreensSeen(time, newScreensSeen);
-				globalScreensSeenHistory.put(time, newScreensSeen);
+				currentApkExplorationInfo.addScreensSeen(newScreensSeen);
+				globalScreensSeenHistory.put(System.currentTimeMillis() - globalStartingTime, newScreensSeen);
 
 				readScreensSeen = false;
 			}else if (readElementsSeen) {
-				long time = System.currentTimeMillis() - startingTime;
 				int newElementsSeen = Integer.parseInt(value);
-				currentApkExplorationInfo.addElementsSeen(time, newElementsSeen);
-				globalElementsSeenHistory.put(time, newElementsSeen);
+				currentApkExplorationInfo.addElementsSeen(newElementsSeen);
+				globalElementsSeenHistory.put(System.currentTimeMillis() - globalStartingTime, newElementsSeen);
 
 				readElementsSeen = false;
 			} else if (readSuccess) {
@@ -160,7 +165,7 @@ public class XMLLogReader {
 
 				readSuccess = false;
 
-				ExplorationReport report = new ExplorationReport(currentApkExplorationInfo.getElementsSeen(), currentApkExplorationInfo.isSuccess());
+				ExplorationReport report = new ExplorationReport(currentApkExplorationInfo.getElementsSeen(), currentApkExplorationInfo.getScreensSeen(), currentApkExplorationInfo.isSuccess());
 				currentAPK.setReport(report);
 			}
 		}
@@ -194,8 +199,12 @@ public class XMLLogReader {
 			}
 		}
 
-		public ConcurrentHashMap<Long, Integer> getGlobalElementsSeenHistory() {
+		public ConcurrentSkipListMap<Long, Integer> getGlobalElementsSeenHistory() {
 			return globalElementsSeenHistory;
+		}
+
+		public ConcurrentSkipListMap<Long, Integer> getGlobalScreensSeenHistory() {
+			return globalScreensSeenHistory;
 		}
 	}
 
@@ -257,11 +266,11 @@ public class XMLLogReader {
 		}
 	}
 
-	public ConcurrentHashMap<Long, Integer> getGlobalElementsSeenHistory() {
+	public ConcurrentSkipListMap<Long, Integer> getGlobalElementsSeenHistory() {
 		return handler.getGlobalElementsSeenHistory();
 	}
 
-	public ConcurrentHashMap<Long, Integer> getGlobalScreensSeenHistory() {
+	public ConcurrentSkipListMap<Long, Integer> getGlobalScreensSeenHistory() {
 		return handler.getGlobalScreensSeenHistory();
 	}
 

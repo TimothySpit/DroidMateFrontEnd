@@ -219,6 +219,9 @@ public class APKExploreHandler extends HttpServlet {
 
 						Path inlinedAPK = Paths.get(apkInfo.getFile().getParent().toString(), "/inlined",
 								FilenameUtils.removeExtension(apkInfo.getFile().getName()) + "-inlined.apk");
+						if(!inlinedAPK.toFile().exists()) {
+							return false;
+						}
 						Path target = Paths.get(inputAPKsPath.toString(), apkInfo.getFile().getName());
 						target.toFile().mkdirs();
 						Files.copy(inlinedAPK, target, StandardCopyOption.REPLACE_EXISTING);

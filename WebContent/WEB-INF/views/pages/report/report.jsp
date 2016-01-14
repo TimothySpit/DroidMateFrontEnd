@@ -106,18 +106,22 @@ table tr:hover td {
 		<tr>
 			<th>Name</th>
 			<th>Elements seen</th>
+			<th>Screens seen</th>
 			<th>Success</th>
 		</tr>
 		<%
 			String apkName = request.getAttribute("apk_name") == null ? "NO_NAME" : (String) request.getAttribute("apk_name");
 			String elementsSeen = request.getAttribute("elements_seen") == null ? "0"
 					: (String) request.getAttribute("elements_seen");
+			String screensSeen = request.getAttribute("screens_seen") == null ? "0"
+					: (String) request.getAttribute("screens_seen");
 			Boolean successful = request.getAttribute("apk_successful") == null ? false
 					: (Boolean) request.getAttribute("apk_successful");
 		%>
 		<tr>
 			<td><%=apkName%></td>
 			<td><%=elementsSeen%></td>
+			<td><%=screensSeen%></td>
 			<td>
 				<%
 					if (successful) {

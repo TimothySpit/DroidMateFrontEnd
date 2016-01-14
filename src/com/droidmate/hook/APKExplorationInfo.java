@@ -1,10 +1,12 @@
 package com.droidmate.hook;
 
 import java.io.File;
+import java.util.Comparator;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,14 +19,30 @@ public class APKExplorationInfo {
 	private AtomicInteger elementsSeen = new AtomicInteger(0);
 	private AtomicInteger screensSeen = new AtomicInteger(0);
 	private AtomicBoolean finished = new AtomicBoolean(false);
-	private ConcurrentHashMap<Long, Integer> elementsSeenHistory = new ConcurrentHashMap<>();
-	private ConcurrentHashMap<Long, Integer> screensSeenHistory = new ConcurrentHashMap<>();
+	private AtomicLong startingTime = new AtomicLong();
+	private ConcurrentSkipListMap<Long, Integer> elementsSeenHistory;
+	private ConcurrentSkipListMap<Long, Integer> screensSeenHistory;
 	private File reportFile;
 	
 	public APKExplorationInfo(String name) {
 		super();
 		this.name = name;
+		startingTime.set(System.currentTimeMillis());
+		
+		Comparator<Long> c = new Comparator<Long>() {
+			@Override
+			public int compare(Long arg0, Long arg1) {
+				return arg0.compareTo(arg1);
+			}			
+		};
+		elementsSeenHistory = new ConcurrentSkipListMap<>(c);
+		screensSeenHistory = new ConcurrentSkipListMap<>(c);
 		elementsSeenHistory.put(0l, 0);
+		screensSeenHistory.put(0l, 0);
+	}
+	
+	public long getStartingTime() {
+		return startingTime.get();
 	}
 
 	public int getElementsSeen() {
@@ -35,21 +53,21 @@ public class APKExplorationInfo {
 		return screensSeen.get();
 	}
 	
-	public void addElementsSeen(long time, int newElements) {
+	public void addElementsSeen(int newElements) {
 		elementsSeen.addAndGet(newElements);
-		elementsSeenHistory.put(time, getElementsSeen());
+		elementsSeenHistory.put(System.currentTimeMillis() - getStartingTime(), getElementsSeen());
 	}
 	
-	public void addScreensSeen(long time, int newScreens) {
+	public void addScreensSeen(int newScreens) {
 		screensSeen.addAndGet(newScreens);
-		screensSeenHistory.put(time, getScreensSeen());
+		screensSeenHistory.put(System.currentTimeMillis() - getStartingTime(), getScreensSeen());
 	}
 
-	public ConcurrentHashMap<Long, Integer> getElementsSeenHistory() {
+	public ConcurrentSkipListMap<Long, Integer> getElementsSeenHistory() {
 		return elementsSeenHistory;
 	}
 
-	public ConcurrentHashMap<Long, Integer> getScreensSeenHistory() {
+	public ConcurrentSkipListMap<Long, Integer> getScreensSeenHistory() {
 		return screensSeenHistory;
 	}
 
