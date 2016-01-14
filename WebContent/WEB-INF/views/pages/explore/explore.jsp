@@ -8,6 +8,8 @@
 <html lang="en">
 <head>
 <jsp:include page="../../partials/header.jsp" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/explore/style.css">
 <!-- chart files -->
 <script
 	src="${pageContext.request.contextPath}/resources/js/flot/jquery.flot.js"></script>
@@ -29,9 +31,8 @@
 	src="${pageContext.request.contextPath}/resources/js/explore/exploreCharts.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/updateExplorationData.js"></script>
-	<script type="text/javascript"
+<script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/handleExplorationButtons.js"></script>
-
 </head>
 <body class="container">
 	<main>
@@ -45,8 +46,9 @@
 			<div class="col-sm-4">
 				<form class="pull-left">
 					<a href="${pageContext.request.contextPath}/Index">
-						<button data-toggle="modal" class="btn btn-default" type="button"
-							id="returnStart">Return to start</button>
+						<button data-toggle="modal" class="btn btn-default"
+							id="back-to-index" type="button" id="returnStart">Return
+							to start</button>
 					</a>
 				</form>
 			</div>
@@ -59,7 +61,8 @@
 			</div>
 			<div class="col-sm-4">
 				<form class="pull-right">
-					<button id="stopAllBtn" class="btn btn-default" type="button">Stop All</button>
+					<button id="stopAllBtn" class="btn btn-default" type="button">Stop
+						All</button>
 				</form>
 			</div>
 		</div>
@@ -67,6 +70,7 @@
 			<table id="exploreFiles" class="display">
 				<thead>
 					<tr>
+						<th></th>
 						<th>Name</th>
 						<th>Elements seen</th>
 						<th>Status</th>

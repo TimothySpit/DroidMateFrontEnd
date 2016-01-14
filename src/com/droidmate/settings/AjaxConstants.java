@@ -36,4 +36,5 @@ public class AjaxConstants {
 
 	//------------------------------------------------------------------------------
 	public final static String ReportProvider_GET_REPORT = "get_report";
+	public static final String ReportProvider_SAVE_REPORT = "save_report";
 }

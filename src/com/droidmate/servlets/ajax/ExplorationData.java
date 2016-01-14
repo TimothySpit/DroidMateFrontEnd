@@ -56,6 +56,7 @@ public class ExplorationData extends HttpServlet {
 				if(!apkInformation.isSelected())
 					continue;
 				JSONArray jsonInfo = new JSONArray();
+				jsonInfo.put(""); //open close table text
 				jsonInfo.put(apkInformation.getFile().getName());
 				jsonInfo.put(apkInformation.getProgress());
 				jsonInfo.put(apkInformation.getExplorationStatus());

@@ -1,0 +1,16 @@
+td.details-control {
+    background: url('/DroidMate/resources/css/explore/images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('/DroidMate/resources/css/explore/images/details_close.png') no-repeat center center;
+}
+
+.apk-info-min-container {
+	float: left;
+}
+
+.apk-chart-min {
+	height: 200px;
+	width:  200px;
+}

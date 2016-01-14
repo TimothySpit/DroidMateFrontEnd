@@ -67,7 +67,8 @@ public class APKExploreHandler extends HttpServlet {
 			r = new Runnable() {
 				@Override
 				public void run() {
-					startDroidmate(user.getAPKS());
+					if (!startDroidmate(user))
+						user.setExplorationStarted(false);
 				}
 			};
 		} else if (request.getParameter(AjaxConstants.EXPLORE_STOP) != null) {
@@ -75,6 +76,7 @@ public class APKExploreHandler extends HttpServlet {
 				@Override
 				public void run() {
 					stopDroidmateForcibly();
+					user.setExplorationStarted(false);
 				}
 			};
 		} else if (request.getParameter(AjaxConstants.EXPLORE_RESTART) != null) {
@@ -82,7 +84,8 @@ public class APKExploreHandler extends HttpServlet {
 				@Override
 				public void run() {
 					stopDroidmateForcibly();
-					startDroidmate(user.getAPKS());
+					if (!startDroidmate(user))
+						user.setExplorationStarted(false);
 				}
 			};
 		} else {
@@ -123,7 +126,7 @@ public class APKExploreHandler extends HttpServlet {
 		out.flush();
 	}
 
-	private boolean startDroidmate(APKInformation[] apks) {
+	private boolean startDroidmate(DroidMateUser user) {
 		System.out.println("Starting droidmate...");
 
 		GUISettings settings = new GUISettings();
@@ -137,7 +140,7 @@ public class APKExploreHandler extends HttpServlet {
 		Path inputAPKsPath = Paths.get(droidMateRoot.toString(), "/apks/inlined/");
 		logFile = new File(droidMateRoot.toString(), "/dev1/logs/gui.xml");
 		logFile.delete();
-		logReader = new XMLLogReader(logFile, apks);
+		logReader = new XMLLogReader(logFile, user.getAPKS());
 
 		// empty apks directory
 		try {
@@ -149,7 +152,7 @@ public class APKExploreHandler extends HttpServlet {
 		}
 
 		// for each apk, copy it
-		for (APKInformation apkInfo : apks) {
+		for (APKInformation apkInfo : user.getAPKS()) {
 			if (apkInfo.isSelected()) {
 				try {
 					Path inlinedAPK = Paths.get(apkInfo.getFile().getParent().toString(), "/inlined",
@@ -164,8 +167,18 @@ public class APKExploreHandler extends HttpServlet {
 			}
 		}
 
-		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace", ":projects:core:run",
-				"--project-prop", "timeLimit=" + settings.getExplorationTimeout());
+		Runtime rt = Runtime.getRuntime();
+		try {
+			if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1)
+				rt.exec("taskkill /F /IM " + "adb.exe");
+			else
+				rt.exec("kill -9 " + "adb");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace", ":projects:core:run", "--project-prop",
+				"timeLimit=" + settings.getExplorationTimeout());
 		pb.directory(droidMateRoot.toFile());
 		pb.redirectErrorStream(true);
 
@@ -182,10 +195,12 @@ public class APKExploreHandler extends HttpServlet {
 			while ((s = stdout.readLine()) != null) {
 				System.out.println(s);
 			}
-		} catch (IOException ex) {}
+		} catch (IOException ex) {
+		}
 		try {
 			droidmateProcess.waitFor();
-		} catch (InterruptedException e1) {}
+		} catch (InterruptedException e1) {
+		}
 
 		logReader.stopReading();
 		System.out.println("Exit value: " + droidmateProcess.exitValue());
@@ -219,7 +234,20 @@ public class APKExploreHandler extends HttpServlet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		droidmateProcess.destroyForcibly();
+		try {
+			droidmateProcess.destroyForcibly().waitFor();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		Runtime rt = Runtime.getRuntime();
+		try {
+			if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1)
+				rt.exec("taskkill /F /IM " + "adb.exe");
+			else
+				rt.exec("kill -9 " + "adb");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
