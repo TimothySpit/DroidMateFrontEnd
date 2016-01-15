@@ -8,18 +8,13 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import com.droidmate.apk.APKInformation;
 import com.droidmate.apk.ExplorationReport;
@@ -97,7 +92,7 @@ public class XMLLogReader {
 		}
 	}
 
-	private class LogReaderHandler extends DefaultHandler {
+	private class XMLLogParser {
 
 		private Map<String, APKExplorationInfo> apksMapLogReader;
 		private APKExplorationInfo currentApkExplorationInfo;
@@ -117,14 +112,14 @@ public class XMLLogReader {
 		private int globalElementsSeen;
 		private int globalScreensSeen;
 
-		public LogReaderHandler(Map<String, APKExplorationInfo> apks) {
+		public XMLLogParser(Map<String, APKExplorationInfo> apks) {
 			this.apksMapLogReader = apks;
 			globalStartingTime = System.currentTimeMillis();
 			Comparator<Long> c = new Comparator<Long>() {
 				@Override
 				public int compare(Long arg0, Long arg1) {
 					return arg0.compareTo(arg1);
-				}			
+				}
 			};
 			globalElementsSeenHistory = new ConcurrentSkipListMap<>(c);
 			globalScreensSeenHistory = new ConcurrentSkipListMap<>(c);
@@ -132,51 +127,80 @@ public class XMLLogReader {
 			globalScreensSeenHistory.put(0l, 0);
 		}
 
-		@Override
-		public void characters(char ch[], int start, int length) throws SAXException {
-			String value = new String(ch, start, length);
-			if (readName) {
-				currentApkExplorationInfo = new APKExplorationInfo(value);
-				apksMapLogReader.put(value, currentApkExplorationInfo);
-
-				readName = false;
-
-				for (APKInformation apk : apks) {
-					String name = String.copyValueOf(ch).substring(start, start+length);
-					if (apk.getFile().getName().equals(name)) {
-						currentAPK = apk;
-						break;
-					}
+		public void parse(XmlPullParser xpp) throws XmlPullParserException {
+			int type = xpp.getEventType();
+			while (type != XmlPullParser.END_DOCUMENT) {
+				switch (type) {
+				case XmlPullParser.START_TAG:
+					startElement(xpp.getName());
+					break;
+				case XmlPullParser.END_TAG:
+					break;
+				case XmlPullParser.TEXT:
+					characters(xpp.getText());
+					break;
 				}
-
-			} else if(readScreensSeen) {
-				int newScreensSeen = Integer.parseInt(value);
-				currentApkExplorationInfo.addScreensSeen(newScreensSeen);
-				globalScreensSeenHistory.put(System.currentTimeMillis() - globalStartingTime, addGlobalScreensSeen(newScreensSeen));
-
-				readScreensSeen = false;
-			}else if (readElementsSeen) {
-				int newElementsSeen = Integer.parseInt(value);
-				currentApkExplorationInfo.addElementsSeen(newElementsSeen);
-				globalElementsSeenHistory.put(System.currentTimeMillis() - globalStartingTime, addGlobalElementsSeen(newElementsSeen));
-
-				readElementsSeen = false;
-			} else if (readSuccess) {
-				currentApkExplorationInfo.setSuccess(Boolean.parseBoolean(value));
-				currentApkExplorationInfo.setFinished(true);
-
-				readSuccess = false;
-
-				ExplorationReport report = new ExplorationReport(currentApkExplorationInfo.getElementsSeen(), currentApkExplorationInfo.getScreensSeen(), currentApkExplorationInfo.isSuccess());
-				currentAPK.setReport(report);
+				try {
+					type = xpp.next();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
-		@Override
-		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-			// System.out.println("Start Element :" + qName);
+		private void readName(String name) {
+			currentApkExplorationInfo = new APKExplorationInfo(name);
+			apksMapLogReader.put(name, currentApkExplorationInfo);
+			for (APKInformation apk : apks) {
+				if (apk.getFile().getName().equals(name)) {
+					currentAPK = apk;
+					break;
+				}
+			}
+		}
 
-			switch (qName.toLowerCase()) {
+		private void readElementsSeen(int newElementsSeen) {
+			currentApkExplorationInfo.addElementsSeen(newElementsSeen);
+			globalElementsSeenHistory.put(System.currentTimeMillis() - globalStartingTime,
+					addGlobalElementsSeen(newElementsSeen));
+		}
+
+		private void readScreensSeen(int newScreensSeen) {
+			currentApkExplorationInfo.addScreensSeen(newScreensSeen);
+			globalScreensSeenHistory.put(System.currentTimeMillis() - globalStartingTime, addGlobalScreensSeen(newScreensSeen));
+		}
+
+		private void readSuccess(boolean success) {
+			currentApkExplorationInfo.setSuccess(success);
+			currentApkExplorationInfo.setFinished(true);
+
+			ExplorationReport report = new ExplorationReport(currentApkExplorationInfo.getElementsSeen(),
+					currentApkExplorationInfo.getScreensSeen(), currentApkExplorationInfo.isSuccess());
+			currentAPK.setReport(report);
+		}
+
+		public void characters(String text) {
+			if (readName) {
+				readName(text);
+
+				readName = false;
+			} else if (readScreensSeen) {
+				readScreensSeen(Integer.parseInt(text));
+
+				readScreensSeen = false;
+			} else if (readElementsSeen) {
+				readElementsSeen(Integer.parseInt(text));
+
+				readElementsSeen = false;
+			} else if (readSuccess) {
+				readSuccess(Boolean.parseBoolean(text));
+
+				readSuccess = false;
+			}
+		}
+
+		public void startElement(String name) {
+			switch (name.toLowerCase()) {
 			case "exploration":
 				readExploration = true;
 				break;
@@ -232,13 +256,13 @@ public class XMLLogReader {
 	private final ConcurrentHashMap<String, APKExplorationInfo> apksMapReaderHandler = new ConcurrentHashMap<>();
 	private ForeverFileInputStream inputStream;
 	private APKInformation[] apks;
-	private LogReaderHandler handler;
+	private XMLLogParser parser;
 
 	public XMLLogReader(File source, APKInformation[] apks) {
 		this.sourceFile = source;
 		this.apks = apks;
 
-		handler = new LogReaderHandler(apksMapReaderHandler);
+		parser = new XMLLogParser(apksMapReaderHandler);
 	}
 
 	public void stopReading() {
@@ -266,40 +290,40 @@ public class XMLLogReader {
 	private void read() {
 		System.out.println("Starting log reading...");
 		try {
-			SAXParserFactory factory = SAXParserFactory.newInstance();
-			SAXParser saxParser = factory.newSAXParser();
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			XmlPullParser xpp = factory.newPullParser();
 
 			inputStream = new ForeverFileInputStream(sourceFile);
 			// Necessary for utf-8
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");
+			xpp.setInput(reader);
 
-			InputSource is = new InputSource(reader);
-			is.setEncoding("UTF-8");
-
-			saxParser.parse(inputStream, handler);
-		} catch (Exception e) {
-			//XML is not properly closed, so DroidMate probably crashed
-			if (!e.getMessage().contains("XML-Dokumentstrukturen müssen innerhalb derselben Entität beginnen und enden.")
-					&& !e.getMessage().contains("XML document structures must start and end within the same entity.")) {
+			try {
+				parser.parse(xpp);
+			} catch (XmlPullParserException e) {
+				// Ignore error and continue parsing
+				System.out.println("Invalid xml log found, continue parsing.");
 				e.printStackTrace();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	public ConcurrentSkipListMap<Long, Integer> getGlobalElementsSeenHistory() {
-		return handler.getGlobalElementsSeenHistory();
+		return parser.getGlobalElementsSeenHistory();
 	}
 
 	public ConcurrentSkipListMap<Long, Integer> getGlobalScreensSeenHistory() {
-		return handler.getGlobalScreensSeenHistory();
+		return parser.getGlobalScreensSeenHistory();
 	}
 
 	public int getGlobalElementsSeen() {
-		return handler.getGlobalElementsSeen();
+		return parser.getGlobalElementsSeen();
 	}
 
 	public int getGlobalScreensSeen() {
-		return handler.getGlobalScreensSeen();
+		return parser.getGlobalScreensSeen();
 	}
 
 	public Collection<APKExplorationInfo> getApksInfo() {
