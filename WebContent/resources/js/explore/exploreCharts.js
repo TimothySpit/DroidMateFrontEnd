@@ -140,12 +140,15 @@ $(function() {
 	function updateAPKValues()
 	{
 		var apkArray = $.droidmate.ajax.get.getExplorationInfo();
+		var apkArray2 = $.droidmate.ajax.get.getExplorationInfo();
+		
 		successfulAPKs = 0;
 		failedAPKs = 0;
+		var selected = 0;
 		for(var i = 0; i < apkArray.length; i++)
 		{
 			apk = apkArray[i];
-			console.log(apk + " hat finished : " + apk.finished);
+			
 			if (apk.finished == "true")
 			{
 				if (apk.success == "true")
@@ -183,23 +186,6 @@ $(function() {
 		chartAPKStatus.setData(dataSet);
 		chartAPKStatus.draw();
 		setTimeout(updateChartAPKStatus, divname, updateInterval);
-	}
-
-	function addRandomValue(currentData)
-	{
-		currentData.shift();
-		var y = Math.random(400) * 400;
-		lastUpdate += updateInterval / 1000;
-		var temp = [lastUpdate, y]; 
-		currentData.push(temp);
-	}
-
-	function addRandomY(currentData, newX)
-	{
-		currentData.shift();
-		var y = Math.random(400) * 400;
-		var temp = [newX, y]; 
-		currentData.push(temp);
 	}
 
 	function updateLines(divname)

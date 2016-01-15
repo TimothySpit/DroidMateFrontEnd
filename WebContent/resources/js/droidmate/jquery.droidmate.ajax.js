@@ -109,6 +109,22 @@
 	
 	//----------------------------------
 	
+	function getSelectedAPKS(async) {
+		var result = null;
+		$.ajax({
+			//Wait for the server to finish apk list and request the table data afterwards
+		     async: false,
+		     type: 'GET',
+		     url: "/DroidMate/APKPathHandler?info[]=selApks",
+		     success: function(data) {console.log(data);
+		            result = data;
+		        } 
+		});
+		return result;
+	}
+	get.getSelectedAPKS = getSelectedAPKS;
+	//----------------------------------
+	
 	function getReportPath(apkname) {
 		var result = "/DroidMate/ReportProvider?get_report=" + apkname;
 		return result;

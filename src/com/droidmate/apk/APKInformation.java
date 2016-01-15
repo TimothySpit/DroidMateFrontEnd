@@ -79,6 +79,7 @@ public class APKInformation {
 		array.put(FileUtils.byteCountToDisplaySize(getFile().length()));
 		array.put(getPackageName());
 		array.put(getVersionName() + " (#" + getVersionCode() + ")");
+		array.put(selected);
 		
 		return array;
 	}
