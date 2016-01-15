@@ -148,7 +148,7 @@ public class APKExploreHandler extends HttpServlet {
 			if (logReader != null) {
 				for (Entry<Long, Integer> entry : logReader.getGlobalElementsSeenHistory().entrySet()) {
 					JSONArray o = new JSONArray();
-					o.put(entry.getKey());
+					o.put(Math.round(Math.round(entry.getKey() / 1000d)));
 					o.put(entry.getValue());
 					result.put(o);
 				}
@@ -170,7 +170,7 @@ public class APKExploreHandler extends HttpServlet {
 			if (logReader != null) {
 				for (Entry<Long, Integer> entry : logReader.getGlobalScreensSeenHistory().entrySet()) {
 					JSONArray o = new JSONArray();
-					o.put(entry.getKey());
+					o.put(Math.round(Math.round(entry.getKey() / 1000d)));
 					o.put(entry.getValue());
 					result.put(o);
 				}
