@@ -114,6 +114,8 @@ public class XMLLogReader {
 		private boolean readScreensSeen = false;
 		private boolean readSuccess = false;
 		private long globalStartingTime;
+		private int globalElementsSeen;
+		private int globalScreensSeen;
 
 		public LogReaderHandler(Map<String, APKExplorationInfo> apks) {
 			this.apksMapLogReader = apks;
@@ -148,16 +150,15 @@ public class XMLLogReader {
 				}
 
 			} else if(readScreensSeen) {
-				System.out.println("New screens: " + value);
 				int newScreensSeen = Integer.parseInt(value);
 				currentApkExplorationInfo.addScreensSeen(newScreensSeen);
-				globalScreensSeenHistory.put(System.currentTimeMillis() - globalStartingTime, newScreensSeen);
+				globalScreensSeenHistory.put(System.currentTimeMillis() - globalStartingTime, addGlobalScreensSeen(newScreensSeen));
 
 				readScreensSeen = false;
 			}else if (readElementsSeen) {
 				int newElementsSeen = Integer.parseInt(value);
 				currentApkExplorationInfo.addElementsSeen(newElementsSeen);
-				globalElementsSeenHistory.put(System.currentTimeMillis() - globalStartingTime, newElementsSeen);
+				globalElementsSeenHistory.put(System.currentTimeMillis() - globalStartingTime, addGlobalElementsSeen(newElementsSeen));
 
 				readElementsSeen = false;
 			} else if (readSuccess) {
@@ -180,7 +181,6 @@ public class XMLLogReader {
 				readExploration = true;
 				break;
 			case "gui_screens_seen":
-				System.out.println("Found a screen!");
 				readScreensSeen = true;
 				break;
 			case "apk":
@@ -199,6 +199,24 @@ public class XMLLogReader {
 				readSuccess = true;
 				break;
 			}
+		}
+
+		private int addGlobalElementsSeen(int newGlobalElementsSeen) {
+			this.globalElementsSeen += newGlobalElementsSeen;
+			return globalElementsSeen;
+		}
+
+		private int addGlobalScreensSeen(int newGlobalScreensSeen) {
+			this.globalScreensSeen += newGlobalScreensSeen;
+			return globalScreensSeen;
+		}
+
+		public int getGlobalElementsSeen() {
+			return globalElementsSeen;
+		}
+
+		public int getGlobalScreensSeen() {
+			return globalScreensSeen;
 		}
 
 		public ConcurrentSkipListMap<Long, Integer> getGlobalElementsSeenHistory() {
@@ -274,6 +292,14 @@ public class XMLLogReader {
 
 	public ConcurrentSkipListMap<Long, Integer> getGlobalScreensSeenHistory() {
 		return handler.getGlobalScreensSeenHistory();
+	}
+
+	public int getGlobalElementsSeen() {
+		return handler.globalElementsSeen;
+	}
+
+	public int getGlobalScreensSeen() {
+		return handler.globalScreensSeen;
 	}
 
 	public Collection<APKExplorationInfo> getApksInfo() {

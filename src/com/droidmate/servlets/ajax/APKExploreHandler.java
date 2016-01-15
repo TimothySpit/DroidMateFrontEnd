@@ -135,11 +135,7 @@ public class APKExploreHandler extends HttpServlet {
 			}
 		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_ELEMENTS_SEEN) != null) {
 			if (logReader != null) {
-				int elementsSeen = 0;
-				for (APKExplorationInfo apk : logReader.getApksInfo()) {
-					elementsSeen += apk.getElementsSeen();
-				}
-				out.print(elementsSeen);
+				out.print(logReader.getGlobalElementsSeen());
 			} else {
 				out.print(0);
 			}
@@ -157,11 +153,7 @@ public class APKExploreHandler extends HttpServlet {
 			out.print(result);
 		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_SCREENS_SEEN) != null) {
 			if (logReader != null) {
-				int screensSeen = 0;
-				for (APKExplorationInfo apk : logReader.getApksInfo()) {
-					screensSeen += apk.getScreensSeen();
-				}
-				out.print(screensSeen);
+				out.print(logReader.getGlobalScreensSeen());
 			} else {
 				out.print(0);
 			}
