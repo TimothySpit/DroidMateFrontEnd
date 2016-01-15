@@ -145,7 +145,7 @@ $(function() {
 		for(var i = 0; i < apkArray.length; i++)
 		{
 			apk = apkArray[i];
-			console.log(apk);
+			console.log(apk + " hat finished : " + apk.finished);
 			if (apk.finished == "true")
 			{
 				if (apk.success == "true")
@@ -244,7 +244,6 @@ $(function() {
 	{
 		chart = chartGUIScreensExplored;
 		screensExplored = getDataScreensExplored();
-		console.log(screensExplored);
 		chart.setData([screensExplored]);
 		chart.draw();
 		setTimeout(updateScreensExplored, divname, updateInterval);
