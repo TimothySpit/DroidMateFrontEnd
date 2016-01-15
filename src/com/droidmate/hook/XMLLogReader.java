@@ -1,5 +1,6 @@
 package com.droidmate.hook;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -127,24 +128,38 @@ public class XMLLogReader {
 			globalScreensSeenHistory.put(0l, 0);
 		}
 
-		public void parse(XmlPullParser xpp) throws XmlPullParserException {
-			int type = xpp.getEventType();
-			while (type != XmlPullParser.END_DOCUMENT) {
-				switch (type) {
-				case XmlPullParser.START_TAG:
-					startElement(xpp.getName());
-					break;
-				case XmlPullParser.END_TAG:
-					break;
-				case XmlPullParser.TEXT:
-					characters(xpp.getText());
-					break;
+		public void parse(XmlPullParser xpp) {
+			try {
+				int type = xpp.getEventType();
+				while (type != XmlPullParser.END_DOCUMENT) {
+					switch (type) {
+					case XmlPullParser.START_TAG:
+						startElement(xpp.getName());
+						break;
+					case XmlPullParser.END_TAG:
+						if(xpp.getName().equalsIgnoreCase("exploration")) {
+							//End of log file
+							return;
+						}
+						break;
+					case XmlPullParser.TEXT:
+						characters(xpp.getText());
+						break;
+					}
+					try {
+						type = xpp.next();
+					} catch (EOFException e) {
+						System.out.println("Parser reached end of file!");
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
-				try {
-					type = xpp.next();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			} catch (XmlPullParserException e) {
+				parse(xpp);
+				// Ignore error and continue parsing
+				System.out.println("Invalid xml log found, continue parsing.");
+				e.printStackTrace();
 			}
 		}
 
@@ -251,6 +266,16 @@ public class XMLLogReader {
 			return globalScreensSeenHistory;
 		}
 	}
+	
+	/**public static void main(String[] args) {
+		APKInformation[] apks = new APKInformation[] {
+				new APKInformation(0, new File("D:\\apks\\com.antivirus.apk"), "com.antivirus.apk", "1", "1"),
+				new APKInformation(0, new File("D:\\apks\\com.adobe.reader.apk"), "com.adobe.reader.apk", null, null),
+				new APKInformation(0, new File("D:\\apks\\at.markushi.expensemanager.apk"), "at.markushi.expensemanager.apk", null, null)
+		};
+		(new XMLLogReader(new File("C:\\Informatik\\Java\\Eclipse-Projekte\\Uni\\web-front-end-for-android-gui-test-generator\\droidmate\\dev\\droidmate\\dev1\\logs\\gui.xml"),
+				apks)).read();
+	}*/
 
 	private final File sourceFile;
 	private final ConcurrentHashMap<String, APKExplorationInfo> apksMapReaderHandler = new ConcurrentHashMap<>();
@@ -298,13 +323,7 @@ public class XMLLogReader {
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");
 			xpp.setInput(reader);
 
-			try {
-				parser.parse(xpp);
-			} catch (XmlPullParserException e) {
-				// Ignore error and continue parsing
-				System.out.println("Invalid xml log found, continue parsing.");
-				e.printStackTrace();
-			}
+			parser.parse(xpp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
