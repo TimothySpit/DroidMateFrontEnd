@@ -4,7 +4,7 @@ $(function() {
 	var elementsExplored = [[0,0],[0,0],[0,0],[0,0],[0,0]];
 	var screensExplored = [[1, 500], [2, 500], [3, 500], [4, 500], [5, 300]];
 	var successfulAPKs = 40, failedAPKs = 30, remainingAPKs=10;
-	var updateInterval = 500;
+	var updateInterval = 1000;
 	var dataVisible = 5;
 	var lastUpdate = 0;
 	var chartAPKStatus, chartGUIElementsExplored, chartGUIElementsSeen, chartGUIScreensExplored, chartElementsAndScreens;
@@ -146,9 +146,9 @@ $(function() {
 		{
 			apk = apkArray[i];
 			console.log(apk);
-			if (apk.finished == "true")
+			if (apk[finished] == "true")
 			{
-				if (apk.success == "true")
+				if (apk[success] == "true")
 					successfulAPKs++;
 				else
 					failedAPKs++;
@@ -244,8 +244,8 @@ $(function() {
 	{
 		chart = chartGUIScreensExplored;
 		screensExplored = getDataScreensExplored();
-		
-		chart.setData([screensExpored]);
+		console.log(screensExplored);
+		chart.setData([screensExplored]);
 		chart.draw();
 		setTimeout(updateScreensExplored, divname, updateInterval);
 	}
