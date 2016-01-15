@@ -42,17 +42,13 @@
 					style="width: 450px; height: 300px; margin: 0 auto"></div>
 			</div>
 			<div class="col-sm-6">
-				<div id="flot-gui-elements-explored"
+				<div id="flot-gui-screens-explored"
 					style="width: 450px; height: 300px; margin: 0 auto"></div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-sm-6">
 				<div id="flot-apks-status"
-					style="width: 450px; height: 300px; margin: 0 auto"></div>
-			</div>
-			<div class="col-sm-6">
-				<div id="flot-gui-screens-explored"
 					style="width: 450px; height: 300px; margin: 0 auto"></div>
 			</div>
 		</div>

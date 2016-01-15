@@ -18,12 +18,16 @@ $(function() {
 		               { label: "Failed", data: failedAPKs, color: "#005CDE"},
 		               { label: "Remaining", data: remainingAPKs, color: "#7D0096" }    
 		           ];
-		var options = {
-		        series: {
-		            pie: { 
+		var options = 
+		{
+		        series: 
+		        {
+		            pie: 
+		            { 
 		                show: true,
 		                radius: 1,
-		                label: {
+		                label: 
+		                {
 		                    show: true,
 		                    radius: 1,
 		                    formatter: function(label, series){
@@ -52,7 +56,7 @@ $(function() {
 	            },
 	            xaxis: {
 	                labelHeight: 30,
-	                axisLabel: 'time (min)',
+	                axisLabel: 'time (sec)',
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 15,
 	                axisLabelFontFamily: 'Arial'
@@ -67,20 +71,21 @@ $(function() {
 	    var options =  {
 	            yaxis: {
 	                labelWidth: 30,
-	                axisLabel: 'Explored',
+	                axisLabel: 'screens explored',
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 20,
 	                axisLabelFontFamily: 'Arial'
 	            },
 	            xaxis: {
 	                labelHeight: 30,
-	                axisLabel: 'time (min)',
+	                axisLabel: 'time (sec)',
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 15,
 	                axisLabelFontFamily: 'Arial'
 	            }
 	        };
-	    chartGUIScreensExplored = $.plot(divname, [elementsExplored], options);
+	    screensExplored = getDataScreensExplored();
+	    chartGUIScreensExplored = $.plot(divname, [screensExplored], options);
 	    setTimeout(updateScreensExplored, divname, updateInterval);
 	};
 
@@ -96,7 +101,7 @@ $(function() {
 	            },
 	            xaxis: {
 	                labelHeight: 30,
-	                axisLabel: 'time (min)',
+	                axisLabel: 'time (sec)',
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 15,
 	                axisLabelFontFamily: 'Arial'
@@ -122,7 +127,7 @@ $(function() {
 	            },
 	            xaxis: {
 	                labelHeight: 30,
-	                axisLabel: 'time (min)',
+	                axisLabel: 'time (sec)',
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 15,
 	                axisLabelFontFamily: 'Arial'
@@ -154,6 +159,13 @@ $(function() {
 	function getDataElementsSeen()
 	{
 		var newData = $.droidmate.ajax.get.getGlobalElementsSeenHistory();
+		var output = newData.slice(-dataVisible);
+		return output;
+	}
+	
+	function getDataScreensExplored()
+	{
+		var newData = $.droidmate.ajax.get.getGlobalScreensSeenHistory();
 		var output = newData.slice(-dataVisible);
 		return output;
 	}
@@ -231,10 +243,9 @@ $(function() {
 	function updateScreensExplored(divname)
 	{
 		chart = chartGUIScreensExplored;
-		data = screensExplored;
-		addRandomValue(data); 
+		screensExplored = getDataScreensExplored();
 		
-		chart.setData([data]);
+		chart.setData([screensExpored]);
 		chart.draw();
 		setTimeout(updateScreensExplored, divname, updateInterval);
 	}
@@ -243,7 +254,7 @@ $(function() {
 	createChartAPKStatus('#flot-apks-status');
 	createChartGUIElementsSeen('#flot-gui-elements-seen');
 	
-	//createChartGUIScreensExplored("#flot-gui-screens-explored");
+	createChartGUIScreensExplored("#flot-gui-screens-explored");
 	//createChartGUIElementsAndScreens("#flot-gui-screens-explored");
 	
 	
