@@ -116,7 +116,7 @@
 		     async: false,
 		     type: 'GET',
 		     url: "/DroidMate/APKPathHandler?info[]=selApks",
-		     success: function(data) {console.log(data);
+		     success: function(data) {
 		            result = data;
 		        } 
 		});

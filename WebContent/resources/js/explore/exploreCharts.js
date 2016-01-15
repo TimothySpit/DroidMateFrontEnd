@@ -140,23 +140,23 @@ $(function() {
 	function updateAPKValues()
 	{
 		var apkArray = $.droidmate.ajax.get.getExplorationInfo();
-		var apkArray2 = $.droidmate.ajax.get.getExplorationInfo();
-		
+		var selAPKSSize = $.droidmate.ajax.get.getSelectedAPKS()["info[]"].selApks.data.length;
+
 		successfulAPKs = 0;
 		failedAPKs = 0;
-		var selected = 0;
 		for(var i = 0; i < apkArray.length; i++)
 		{
 			apk = apkArray[i];
 			
-			if (apk.finished == "true")
+			if (apk.finished)
 			{
-				if (apk.success == "true")
+				if (apk.success)
 					successfulAPKs++;
 				else
 					failedAPKs++;
 			}
 		}
+		remainingAPKs = selAPKSSize - successfulAPKs - failedAPKs;
 	}
 
 	function getDataElementsSeen()
@@ -193,8 +193,6 @@ $(function() {
 		chart = chartElementsAndScreens;
 
 		lastUpdate += updateInterval / 1000 / 60;
-		addRandomY(elementsExplored, lastUpdate);
-		addRandomY(screensExplored, lastUpdate);
 		
 		data1 = elementsExplored;
 		data2 = screensExplored;//.slice(Math.min(screensExplored.length(), 5));
@@ -209,7 +207,6 @@ $(function() {
 	{
 		chart = chartGUIElementsExplored;
 		data = elementsExplored;
-		addRandomValue(data); 
 		chart.setData([data]);
 		chart.draw();
 		
