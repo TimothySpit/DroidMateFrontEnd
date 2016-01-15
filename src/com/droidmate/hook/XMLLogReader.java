@@ -156,8 +156,8 @@ public class XMLLogReader {
 					}
 				}
 			} catch (XmlPullParserException e) {
-				parse(xpp);
 				// Ignore error and continue parsing
+				parse(xpp);
 				System.out.println("Invalid xml log found, continue parsing.");
 				e.printStackTrace();
 			}
