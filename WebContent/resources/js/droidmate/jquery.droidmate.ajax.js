@@ -80,6 +80,7 @@
 	        url:  "/DroidMate/APKExploreHandler",
 	        async: false,
 	        type: 'GET',
+	        dataType: "json",
 	        data: {explore_get_global_screens_seen_history: true},
 	        success: function(data) {
 	            result = data;
