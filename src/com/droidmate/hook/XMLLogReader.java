@@ -295,11 +295,11 @@ public class XMLLogReader {
 	}
 
 	public int getGlobalElementsSeen() {
-		return handler.globalElementsSeen;
+		return handler.getGlobalElementsSeen();
 	}
 
 	public int getGlobalScreensSeen() {
-		return handler.globalScreensSeen;
+		return handler.getGlobalScreensSeen();
 	}
 
 	public Collection<APKExplorationInfo> getApksInfo() {
