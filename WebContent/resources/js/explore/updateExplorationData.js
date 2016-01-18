@@ -225,7 +225,7 @@ $(function() {
 
 		var chartDivElementsExplored = $('[id="apk-chart-min-elements-explored-'
 				+ row[1] + '"]');
-		var chartElementsExplored = createChartElementsExplored(chartDivScreensSeen);
+		var chartElementsExplored = createChartElementsExplored(chartDivElementsExplored);
 
 		activeChartDivs[row[1]] = {
 			chartDivElementsSeen : chartDivElementsSeen,
