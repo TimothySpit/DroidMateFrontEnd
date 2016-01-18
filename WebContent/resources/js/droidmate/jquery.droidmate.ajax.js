@@ -78,6 +78,39 @@
 	get.getGlobalElementsSeenHistory = getGlobalElementsSeenHistory;
 	//----------------------------------
 	
+	function getGlobalWidgetsExplored() {
+		var result = null;
+		$.ajax({
+	        url:  "/DroidMate/APKExploreHandler",
+	        async: false,
+	        type: 'GET',
+	        data: {explore_get_global_widgets_explored: true},
+	        success: function(data) {
+	            result = data;
+	        } 
+	     });
+		return result;
+	}
+	get.getGlobalWidgetsExplored = getGlobalWidgetsExplored;
+	//----------------------------------
+	
+	function getGlobalWidgetsExploredHistory() {
+		var result = null;
+		$.ajax({
+	        url:  "/DroidMate/APKExploreHandler",
+	        async: false,
+	        type: 'GET',
+	        dataType: "json",
+	        data: {explore_get_global_widgets_explored_history: true},
+	        success: function(data) {
+	            result = data;
+	        } 
+	     });
+		return result;
+	}
+	get.getGlobalWidgetsExploredHistory = getGlobalWidgetsExploredHistory;
+	//----------------------------------
+	
 	function getGlobalScreensSeen() {
 		var result = null;
 		$.ajax({

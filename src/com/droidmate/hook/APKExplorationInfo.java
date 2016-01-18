@@ -18,10 +18,12 @@ public class APKExplorationInfo {
 	private AtomicBoolean success = new AtomicBoolean(false);
 	private AtomicInteger elementsSeen = new AtomicInteger(0);
 	private AtomicInteger screensSeen = new AtomicInteger(0);
+	private AtomicInteger widgetsExplored = new AtomicInteger(0);
 	private AtomicBoolean finished = new AtomicBoolean(false);
 	private AtomicLong startingTime = new AtomicLong();
 	private ConcurrentSkipListMap<Long, Integer> elementsSeenHistory;
 	private ConcurrentSkipListMap<Long, Integer> screensSeenHistory;
+	private ConcurrentSkipListMap<Long, Integer> widgetsExploredHistory;
 	private File reportFile;
 	
 	public APKExplorationInfo(String name) {
@@ -37,8 +39,10 @@ public class APKExplorationInfo {
 		};
 		elementsSeenHistory = new ConcurrentSkipListMap<>(c);
 		screensSeenHistory = new ConcurrentSkipListMap<>(c);
+		widgetsExploredHistory = new ConcurrentSkipListMap<>(c);
 		elementsSeenHistory.put(0l, 0);
 		screensSeenHistory.put(0l, 0);
+		widgetsExploredHistory.put(0l, 0);
 	}
 	
 	public long getStartingTime() {
@@ -51,6 +55,15 @@ public class APKExplorationInfo {
 
 	public int getScreensSeen() {
 		return screensSeen.get();
+	}
+	
+	public int getWidgetsExplored() {
+		return widgetsExplored.get();
+	}
+	
+	public void addWidgetsExplored(int newExplored) {
+		widgetsExplored.addAndGet(newExplored);
+		widgetsExploredHistory.put(System.currentTimeMillis() - getStartingTime(), getWidgetsExplored());
 	}
 	
 	public void addElementsSeen(int newElements) {
@@ -69,14 +82,6 @@ public class APKExplorationInfo {
 
 	public ConcurrentSkipListMap<Long, Integer> getScreensSeenHistory() {
 		return screensSeenHistory;
-	}
-
-	public void setElementsSeen(int elementsSeen) {
-		this.elementsSeen.set(elementsSeen);
-	}
-
-	public void setScreensSeen(int screensSeen) {
-		this.screensSeen.set(screensSeen);
 	}
 	
 	public boolean isSuccess() {
@@ -103,6 +108,7 @@ public class APKExplorationInfo {
 		JSONObject json = new JSONObject();
 		json.put("history", new JSONArray());
 		json.put("historyScreens", new JSONArray());
+		json.put("historyWidgets", new JSONArray());
 		
 		return json;
 	}
@@ -113,6 +119,7 @@ public class APKExplorationInfo {
 		json.put("success", isSuccess());
 		json.put("elementsSeen", getElementsSeen());
 		json.put("screensSeen", getScreensSeen());
+		json.put("widgets_explored", getWidgetsExplored());
 		json.put("finished", isFinished());
 		
 		JSONArray elementsHistory = new JSONArray();
@@ -123,6 +130,7 @@ public class APKExplorationInfo {
 			o.put(entry.getValue());
 			elementsHistory.put(o);
 		}
+		//For compatibility just 'history'
 		json.put("history", elementsHistory);
 		
 		JSONArray screensHistory = new JSONArray();
@@ -135,7 +143,21 @@ public class APKExplorationInfo {
 		}
 		json.put("historyScreens", screensHistory);
 		
+		JSONArray widgetsHistory = new JSONArray();
+		for(Entry<Long, Integer> entry : getWidgetsExploredHistory().entrySet()) {
+			JSONArray o = new JSONArray();
+			//Seconds
+			o.put(Math.round(Math.round(entry.getKey() / 1000d)));
+			o.put(entry.getValue());
+			widgetsHistory.put(o);
+		}
+		json.put("widgetsHistory", widgetsHistory);
+		
 		return json;
+	}
+
+	public ConcurrentSkipListMap<Long, Integer> getWidgetsExploredHistory() {
+		return widgetsExploredHistory;
 	}
 
 	public void setReportFile(File reportFile) {

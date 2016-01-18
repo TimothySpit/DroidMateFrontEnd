@@ -173,7 +173,25 @@ public class APKExploreHandler extends HttpServlet {
 			}
 
 			out.print(result);
-		} else {
+		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_WIDGETS_EXPLORED) != null) {
+			if (logReader != null) {
+				out.print(logReader.getGlobalWidgetsExplored());
+			} else {
+				out.print(0);
+			}
+		}else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_WIDGETS_EXPLORED_HISTORY) != null) {
+			JSONArray result = new JSONArray();
+			if (logReader != null) {
+				for (Entry<Long, Integer> entry : logReader.getGlobalWidgetsExploredHistory().entrySet()) {
+					JSONArray o = new JSONArray();
+					o.put(Math.round(Math.round(entry.getKey() / 1000d)));
+					o.put(entry.getValue());
+					result.put(o);
+				}
+			}
+
+			out.print(result);
+		}else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
 				System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));

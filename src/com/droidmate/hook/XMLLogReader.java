@@ -100,6 +100,7 @@ public class XMLLogReader {
 		private APKInformation currentAPK;
 		private ConcurrentSkipListMap<Long, Integer> globalElementsSeenHistory;
 		private ConcurrentSkipListMap<Long, Integer> globalScreensSeenHistory;
+		private ConcurrentSkipListMap<Long, Integer> globalWidgetsExploredHistory;
 
 		// Flags to determine state
 		private boolean readExploration = false;
@@ -109,9 +110,11 @@ public class XMLLogReader {
 		private boolean readElementsSeen = false;
 		private boolean readScreensSeen = false;
 		private boolean readSuccess = false;
+		private boolean readWidgetExplored = false;
 		private long globalStartingTime;
 		private int globalElementsSeen;
 		private int globalScreensSeen;
+		private int globalWidgetsExplored;
 
 		public XMLLogParser(Map<String, APKExplorationInfo> apks) {
 			this.apksMapLogReader = apks;
@@ -124,8 +127,10 @@ public class XMLLogReader {
 			};
 			globalElementsSeenHistory = new ConcurrentSkipListMap<>(c);
 			globalScreensSeenHistory = new ConcurrentSkipListMap<>(c);
+			globalWidgetsExploredHistory = new ConcurrentSkipListMap<>(c);
 			globalElementsSeenHistory.put(0l, 0);
 			globalScreensSeenHistory.put(0l, 0);
+			globalWidgetsExploredHistory.put(0l, 0);
 		}
 
 		public void parse(XmlPullParser xpp) {
@@ -193,6 +198,11 @@ public class XMLLogReader {
 					currentApkExplorationInfo.getScreensSeen(), currentApkExplorationInfo.isSuccess());
 			currentAPK.setReport(report);
 		}
+		
+		private void readWidgetExplored() {
+			currentApkExplorationInfo.addWidgetsExplored(1);
+			globalWidgetsExploredHistory.put(System.currentTimeMillis() - globalStartingTime, addGlobalWidgetsExplored(1));
+		}
 
 		public void characters(String text) {
 			if (readName) {
@@ -211,6 +221,9 @@ public class XMLLogReader {
 				readSuccess(Boolean.parseBoolean(text));
 
 				readSuccess = false;
+			} else if(readWidgetExplored) {
+				
+				readWidgetExplored = false;
 			}
 		}
 
@@ -237,6 +250,9 @@ public class XMLLogReader {
 			case "success":
 				readSuccess = true;
 				break;
+			case "widget_explored":
+				readWidgetExplored = true;
+				break;
 			}
 		}
 
@@ -249,6 +265,11 @@ public class XMLLogReader {
 			this.globalScreensSeen += newGlobalScreensSeen;
 			return globalScreensSeen;
 		}
+		
+		private int addGlobalWidgetsExplored(int newWidgetsExplored) {
+			this.globalWidgetsExplored += newWidgetsExplored;
+			return globalWidgetsExplored;
+		}
 
 		public int getGlobalElementsSeen() {
 			return globalElementsSeen;
@@ -258,12 +279,20 @@ public class XMLLogReader {
 			return globalScreensSeen;
 		}
 
+		public int getGlobalWidgetsExplored() {
+			return globalWidgetsExplored;
+		}
+
 		public ConcurrentSkipListMap<Long, Integer> getGlobalElementsSeenHistory() {
 			return globalElementsSeenHistory;
 		}
 
 		public ConcurrentSkipListMap<Long, Integer> getGlobalScreensSeenHistory() {
 			return globalScreensSeenHistory;
+		}
+
+		public ConcurrentSkipListMap<Long, Integer> getGlobalWidgetsExploredHistory() {
+			return globalWidgetsExploredHistory;
 		}
 	}
 	
@@ -337,12 +366,20 @@ public class XMLLogReader {
 		return parser.getGlobalScreensSeenHistory();
 	}
 
+	public ConcurrentSkipListMap<Long, Integer> getGlobalWidgetsExploredHistory() {
+		return parser.getGlobalWidgetsExploredHistory();
+	}
+
 	public int getGlobalElementsSeen() {
 		return parser.getGlobalElementsSeen();
 	}
 
 	public int getGlobalScreensSeen() {
 		return parser.getGlobalScreensSeen();
+	}
+
+	public int getGlobalWidgetsExplored() {
+		return parser.getGlobalWidgetsExplored();
 	}
 
 	public Collection<APKExplorationInfo> getApksInfo() {
