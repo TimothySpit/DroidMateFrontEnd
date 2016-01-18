@@ -91,7 +91,7 @@
 				<div class="col-sm-12">
 					<div class="panel panel-default">
 						<div class="panel-heading">Console output</div>
-						<div style="max-height: 500px;overflow-y: scroll;" class="panel-body" id="consoleOutput"></div>
+						<div style="width: 100%; max-height: 500px;overflow: scroll;" class="panel-body" id="consoleOutput"></div>
 					</div>
 				</div>
 			</div>

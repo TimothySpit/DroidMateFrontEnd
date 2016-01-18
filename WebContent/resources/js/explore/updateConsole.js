@@ -8,7 +8,9 @@ $(function() {
 		
 		var conoleOutput = $.droidmate.ajax.get.getConsoleOutput(currentLine);
 		var consoleDiv = $('#consoleOutput');
-		consoleDiv.text(consoleDiv.text() + conoleOutput.text);
+		var text = conoleOutput.text;
+		text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
+		consoleDiv.append(text);
 		currentLine += parseInt(conoleOutput.lines);
 		
 		setTimeout(updateConsole, 1000);
