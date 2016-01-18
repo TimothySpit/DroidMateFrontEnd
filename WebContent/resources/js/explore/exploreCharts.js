@@ -1,7 +1,6 @@
 $(function() {
 	
 	var elementsSeen = [[5, 300], [2, 600], [4, 550], [3, 400], [1, 300]];
-	var elementsExplored = [[0,0],[0,0],[0,0],[0,0],[0,0]];
 	var screensExplored = [[1, 500], [2, 500], [3, 500], [4, 500], [5, 300]];
 	var testData = [[1, 700], [2, 10], [3, 0], [4, 50], [5, 100], [6, 230], [7, 400], [8, 100], [9, 520], [10, 301]];
 	var successfulAPKs = 40, failedAPKs = 30, remainingAPKs=10;
@@ -131,34 +130,6 @@ $(function() {
 	    setTimeout(updateLines, divname, updateInterval);
 	};
 
-
-	function createChartGUIElementsExplored(divname) {
-		
-		var options =  {
-	            yaxis: {
-	                labelWidth: 30,
-	                axisLabel: 'GUI elements explored',
-	                axisLabelUseCanvas: true,
-	                axisLabelFontSizePixels: 20,
-	                axisLabelFontFamily: 'Arial',
-	                panRange: false
-	            },
-	            xaxis: {
-	                labelHeight: 30,
-	                axisLabel: 'time (sec)',
-	                axisLabelUseCanvas: true,
-	                axisLabelFontSizePixels: 15,
-	                axisLabelFontFamily: 'Arial',
-	                panRange: [0, null],
-	            },
-	            pan: {
-	    			interactive: true
-	    		}
-	        };
-	    chartGUIElementsExplored = $.plot(divname, [elementsExplored], options);
-	    setTimeout(updateElementsExplored, divname, updateInterval);
-	};
-
 	function updateAPKValues()
 	{
 		var apkArray = $.droidmate.ajax.get.getExplorationInfo();
@@ -184,6 +155,13 @@ $(function() {
 	function getDataElementsSeen()
 	{
 		var newData = $.droidmate.ajax.get.getGlobalElementsSeenHistory();
+		//var output = newData.slice(-dataVisible);
+		return newData;
+	}
+	
+	function getDataUpdateLines()
+	{
+		var newData = $.droidmate.ajax.get.getGlobalWidgetsExploredHistory();
 		//var output = newData.slice(-dataVisible);
 		return newData;
 	}
@@ -214,25 +192,12 @@ $(function() {
 	{
 		chart = chartElementsAndScreens;
 
-		lastUpdate += updateInterval / 1000 / 60;
+		data = getDataUpdateLines();
+		chart.setData([data]);
 		
-		chart.setData([testData]);
-		//data1 = elementsExplored;
-		//data2 = screensExplored;//.slice(Math.min(screensExplored.length(), 5));
-		//chart.setData([{ data: elementsExplored, label: "Screens" } { data: screensExplored, label: "Elements"}]);
 		chart.draw();
 		setTimeout(updateLines, divname, updateInterval);
 		
-	}
-
-	function updateElementsExplored(divname)
-	{
-		chart = chartGUIElementsExplored;
-		data = elementsExplored;
-		chart.setData([data]);
-		chart.draw();
-		
-		setTimeout(updateElementsExplored, divname, updateInterval);
 	}
 
 	function updateElementsSeen(divname)
