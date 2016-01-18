@@ -144,6 +144,7 @@ public class APKExploreHandler extends HttpServlet {
 				out.print(0);
 			}
 		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_ELEMENTS_SEEN_HISTORY) != null) {
+			response.setContentType("application/json");
 			JSONArray result = new JSONArray();
 			if (logReader != null) {
 				for (Entry<Long, Integer> entry : logReader.getGlobalElementsSeenHistory().entrySet()) {
@@ -162,6 +163,7 @@ public class APKExploreHandler extends HttpServlet {
 				out.print(0);
 			}
 		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_SCREENS_SEEN_HISTORY) != null) {
+			response.setContentType("application/json");
 			JSONArray result = new JSONArray();
 			if (logReader != null) {
 				for (Entry<Long, Integer> entry : logReader.getGlobalScreensSeenHistory().entrySet()) {
@@ -180,6 +182,7 @@ public class APKExploreHandler extends HttpServlet {
 				out.print(0);
 			}
 		}else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_WIDGETS_EXPLORED_HISTORY) != null) {
+			response.setContentType("application/json");
 			JSONArray result = new JSONArray();
 			if (logReader != null) {
 				for (Entry<Long, Integer> entry : logReader.getGlobalWidgetsExploredHistory().entrySet()) {

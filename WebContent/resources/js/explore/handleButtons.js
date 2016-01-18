@@ -3,7 +3,6 @@ $(document)
 				function() {
 					// Set output path label
 					var settings = $.droidmate.ajax.get.getDroidMateSettings();
-					console.log($.droidmate.ajax.get.getDroidMateSettings());
 					$("#outputPathLabel").html(settings["outputPath"]);
 				});
 
