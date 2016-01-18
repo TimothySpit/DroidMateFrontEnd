@@ -142,8 +142,8 @@ public class XMLLogReader {
 						startElement(xpp.getName());
 						break;
 					case XmlPullParser.END_TAG:
-						if(xpp.getName().equalsIgnoreCase("exploration")) {
-							//End of log file
+						if (xpp.getName().equalsIgnoreCase("exploration")) {
+							// End of log file
 							return;
 						}
 						break;
@@ -198,7 +198,7 @@ public class XMLLogReader {
 					currentApkExplorationInfo.getScreensSeen(), currentApkExplorationInfo.isSuccess());
 			currentAPK.setReport(report);
 		}
-		
+
 		private void readWidgetExplored() {
 			currentApkExplorationInfo.addWidgetsExplored(1);
 			globalWidgetsExploredHistory.put(System.currentTimeMillis() - globalStartingTime, addGlobalWidgetsExplored(1));
@@ -221,7 +221,7 @@ public class XMLLogReader {
 				readSuccess(Boolean.parseBoolean(text));
 
 				readSuccess = false;
-			} else if(readWidgetExplored) {
+			} else if (readWidgetExplored) {
 				readWidgetExplored();
 				readWidgetExplored = false;
 			}
@@ -265,7 +265,7 @@ public class XMLLogReader {
 			this.globalScreensSeen += newGlobalScreensSeen;
 			return globalScreensSeen;
 		}
-		
+
 		private int addGlobalWidgetsExplored(int newWidgetsExplored) {
 			this.globalWidgetsExplored += newWidgetsExplored;
 			return globalWidgetsExplored;
@@ -295,16 +295,19 @@ public class XMLLogReader {
 			return globalWidgetsExploredHistory;
 		}
 	}
-	
-	/**public static void main(String[] args) {
-		APKInformation[] apks = new APKInformation[] {
-				new APKInformation(0, new File("D:\\apks\\com.antivirus.apk"), "com.antivirus.apk", "1", "1"),
-				new APKInformation(0, new File("D:\\apks\\com.adobe.reader.apk"), "com.adobe.reader.apk", null, null),
-				new APKInformation(0, new File("D:\\apks\\at.markushi.expensemanager.apk"), "at.markushi.expensemanager.apk", null, null)
-		};
-		(new XMLLogReader(new File("C:\\Informatik\\Java\\Eclipse-Projekte\\Uni\\web-front-end-for-android-gui-test-generator\\droidmate\\dev\\droidmate\\dev1\\logs\\gui.xml"),
-				apks)).read();
-	}*/
+
+	/**
+	 * public static void main(String[] args) { APKInformation[] apks = new
+	 * APKInformation[] { new APKInformation(0, new
+	 * File("D:\\apks\\com.antivirus.apk"), "com.antivirus.apk", "1", "1"), new
+	 * APKInformation(0, new File("D:\\apks\\com.adobe.reader.apk"),
+	 * "com.adobe.reader.apk", null, null), new APKInformation(0, new
+	 * File("D:\\apks\\at.markushi.expensemanager.apk"),
+	 * "at.markushi.expensemanager.apk", null, null) }; (new XMLLogReader(new
+	 * File(
+	 * "C:\\Informatik\\Java\\Eclipse-Projekte\\Uni\\web-front-end-for-android-gui-test-generator\\droidmate\\dev\\droidmate\\dev1\\logs\\gui.xml"
+	 * ), apks)).read(); }
+	 */
 
 	private final File sourceFile;
 	private final ConcurrentHashMap<String, APKExplorationInfo> apksMapReaderHandler = new ConcurrentHashMap<>();
@@ -323,6 +326,7 @@ public class XMLLogReader {
 		if (inputStream != null) {
 			inputStream.stop();
 		}
+		System.out.println("Stopped log reading.");
 	}
 
 	public void startConcurrentReading() {
