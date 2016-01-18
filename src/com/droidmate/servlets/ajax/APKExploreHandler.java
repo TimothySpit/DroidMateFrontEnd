@@ -274,6 +274,10 @@ public class APKExploreHandler extends HttpServlet {
 		
 		List<String> consoleOutput =  (List<String>) getServletContext().getAttribute("consoleOutput");
 
+		synchronized (consoleOutput) {
+			consoleOutput.clear();
+		}
+		
 		try {
 			BufferedReader stdout = new BufferedReader(new InputStreamReader(droidmateProcess.getInputStream()));
 			while ((s = stdout.readLine()) != null) {
