@@ -40,12 +40,6 @@ public class Settings extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 
-		if (user.isExplorationStarted()) {
-			//no access to this page, redirect to exploration
-			request.getRequestDispatcher("/WEB-INF/views/pages/explore/explore.jsp").forward(request, response);
-			return;
-		}
-		
 		PrintWriter out = response.getWriter();
 		response.setContentType("application/json");
 		JSONObject result = new JSONObject();
@@ -81,7 +75,8 @@ public class Settings extends HttpServlet {
 
 		// save
 		if (request.getParameter("save") != null && request.getParameter("save").equals("true")) {
-			if (request.getParameter("outputPath") == null || request.getParameter("time") == null || request.getParameter("droidmatePath") == null) {
+			if (request.getParameter("outputPath") == null || request.getParameter("time") == null
+					|| request.getParameter("droidmatePath") == null) {
 				return;
 			}
 
@@ -124,13 +119,20 @@ public class Settings extends HttpServlet {
 			out.flush();
 		}
 
-		if (request.getParameterMap().size() == 0)
-			request.getRequestDispatcher("/WEB-INF/views/pages/settings/settings.jsp").forward(request, response);
+		if (request.getParameterMap().size() == 0) {
+			if (user.isExplorationStarted()) {
+				// no access to this page, redirect to exploration
+				request.getRequestDispatcher("/WEB-INF/views/pages/explore/explore.jsp").forward(request, response);
+				return;
+			} else {
+				request.getRequestDispatcher("/WEB-INF/views/pages/settings/settings.jsp").forward(request, response);
+			}
+		}
 
 	}
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-	
+
 }

@@ -123,6 +123,7 @@
 		return result;
 	}
 	get.getSelectedAPKS = getSelectedAPKS;
+	
 	//----------------------------------
 	
 	function getReportPath(apkname) {
@@ -176,6 +177,19 @@
 	     complete: complete
 	});}
 	post.setAPKRoot = setAPKRoot;
+	//----------------------------------
+	
+	function openReportFolder(async, success, error, complete) {
+	$.ajax({
+	     type: 'POST',
+	     url: "/DroidMate/APKExploreHandler",
+		 async: async,
+	     data: { explore_open_report_folder : true },
+	     success: success,
+	     error: error,
+	     complete: complete
+	});}
+	post.openReportFolder = openReportFolder;
 	//----------------------------------
 	
 	function saveDroidMateSettings(outputPath, dmPath, explorationTimeout, async, success, error, complete) {

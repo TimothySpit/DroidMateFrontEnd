@@ -30,9 +30,7 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/updateExplorationData.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/js/explore/handleExplorationButtons.js"></script>
-	<script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/js/explore/backToIndex.js"></script>
+	src="${pageContext.request.contextPath}/resources/js/explore/handleButtons.js"></script>
 </head>
 <body class="container">
 	<main>
@@ -77,9 +75,10 @@
 			</table>
 
 			<div class="row">
-				<div class="col-sm-4">
-					<button class="btn btn-default pull-left" type="button">Open
-						output folder</button>
+				<div class="col-sm-4"><h3>
+					<button id="openFolderBtn" class="btn btn-default pull-left" type="button">Open
+						output folder</button>&nbsp; &nbsp; 
+					<span class="label label-default" onClick="this.select();" id="outputPathLabel">Empty</span></h3>
 				</div>
 				<div class="col-sm-4"></div>
 				<div class="col-sm-4"></div>

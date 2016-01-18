@@ -40,6 +40,7 @@ public class APKExploreHandler extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
+	private GUISettings settings = new GUISettings();
 	private Process droidmateProcess;
 	private File logFile;
 	private XMLLogReader logReader;
@@ -86,7 +87,9 @@ public class APKExploreHandler extends HttpServlet {
 						user.setExplorationStarted(false);
 				}
 			};
-		} else {
+		} else if (request.getParameter(AjaxConstants.EXPLORE_OPEN_REPORT_FOLDER) != null) {
+			openExplorerWindow(settings.getOutputFolder());
+		}else {
 			System.out.println("Illegal POST request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
 				System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
@@ -177,11 +180,20 @@ public class APKExploreHandler extends HttpServlet {
 		}
 		out.flush();
 	}
+	
+	private boolean openExplorerWindow(Path path) {
+		try {
+			Runtime.getRuntime().exec("explorer.exe " + path);
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	private boolean startDroidmate(DroidMateUser user) {
 		System.out.println("Starting droidmate...");
 
-		GUISettings settings = new GUISettings();
 		Path droidMateRoot = settings.getDroidMatePath();
 		String gradlewName = "/gradlew.bat";
 		if (System.getProperty("os.name").toLowerCase().contains("linux")) {
