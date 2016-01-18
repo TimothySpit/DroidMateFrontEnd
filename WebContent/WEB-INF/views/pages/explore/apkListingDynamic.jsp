@@ -24,6 +24,8 @@
 	src="${pageContext.request.contextPath}/resources/js/flot/jquery.flot.pie.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/flot-axislabels/jquery.flot.axislabels.js"></script>
+<script 
+    src="${pageContext.request.contextPath}/resources/js/flot/jquery.flot.navigate.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/exploreCharts.js"></script>
 </head>
@@ -49,6 +51,10 @@
 		<div class="row">
 			<div class="col-sm-6">
 				<div id="flot-apks-status"
+					style="width: 450px; height: 300px; margin: 0 auto"></div>
+			</div>
+			<div class="col-sm-6">
+				<div id="flot-gui-elements-explored"
 					style="width: 450px; height: 300px; margin: 0 auto"></div>
 			</div>
 		</div>

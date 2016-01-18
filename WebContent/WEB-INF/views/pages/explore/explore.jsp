@@ -31,6 +31,8 @@
 	src="${pageContext.request.contextPath}/resources/js/explore/updateExplorationData.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/handleButtons.js"></script>
+	<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/js/explore/updateConsole.js"></script>
 </head>
 <body class="container">
 	<main>
@@ -79,12 +81,22 @@
 						<button id="openFolderBtn" class="btn btn-default pull-left"
 							type="button">Open output folder</button>
 						&nbsp; &nbsp; <span class="label label-default"
-							id="outputPathLabel">Empty</span>
+							id="outputPathLabel">Loading directory...</span>
 					</h3>
 				</div>
 				<div class="col-sm-4"></div>
 				<div class="col-sm-4"></div>
 			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">Console output</div>
+						<div style="max-height: 500px;overflow-y: scroll;" class="panel-body" id="consoleOutput"></div>
+					</div>
+				</div>
+			</div>
+
 		</div>
 		<div class="row">
 			<div class="panel panel-default">

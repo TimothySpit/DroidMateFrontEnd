@@ -25,6 +25,26 @@
 	get.getDroidMateSettings = getDroidMateSettings;
 	//----------------------------------
 	
+	function getConsoleOutput(line) {
+		var result = null;
+		if(line == null)
+			line = 0;
+		console.log(line);
+		$.ajax({
+	        url:  "/DroidMate/ConsoleOutput",
+	        async: false,
+	        dataType: "json",
+	        type: 'GET',
+	        data: {get:line.toString()},
+	        success: function(data) {
+	            result = data;
+	        } 
+	     });
+		return result;
+	}
+	get.getConsoleOutput = getConsoleOutput;
+	//----------------------------------
+	
 	function getGlobalElementsSeen() {
 		var result = null;
 		$.ajax({

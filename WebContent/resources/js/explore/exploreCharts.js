@@ -3,6 +3,7 @@ $(function() {
 	var elementsSeen = [[5, 300], [2, 600], [4, 550], [3, 400], [1, 300]];
 	var elementsExplored = [[0,0],[0,0],[0,0],[0,0],[0,0]];
 	var screensExplored = [[1, 500], [2, 500], [3, 500], [4, 500], [5, 300]];
+	var testData = [[1, 700], [2, 10], [3, 0], [4, 50], [5, 100], [6, 230], [7, 400], [8, 100], [9, 520], [10, 301]];
 	var successfulAPKs = 40, failedAPKs = 30, remainingAPKs=10;
 	var updateInterval = 1000;
 	var dataVisible = 5;
@@ -46,21 +47,26 @@ $(function() {
 	}
 
 	function createChartGUIElementsSeen(divname) {
-	    var options =  {
+		var options =  {
 	            yaxis: {
 	                labelWidth: 30,
 	                axisLabel: 'GUI elements seen',
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 20,
-	                axisLabelFontFamily: 'Arial'
+	                axisLabelFontFamily: 'Arial',
+	                panRange: false
 	            },
 	            xaxis: {
 	                labelHeight: 30,
 	                axisLabel: 'time (sec)',
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 15,
-	                axisLabelFontFamily: 'Arial'
-	            }
+	                axisLabelFontFamily: 'Arial',
+	                panRange: [0, null],
+	            },
+	            pan: {
+	    			interactive: true
+	    		}
 	        };
 	    elementsSeen = getDataElementsSeen();
 	    chartGUIElementsSeen = $.plot(divname, [elementsSeen], options);
@@ -68,21 +74,26 @@ $(function() {
 	};
 
 	function createChartGUIScreensExplored(divname) {
-	    var options =  {
+		var options =  {
 	            yaxis: {
 	                labelWidth: 30,
 	                axisLabel: 'screens explored',
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 20,
-	                axisLabelFontFamily: 'Arial'
+	                axisLabelFontFamily: 'Arial',
+	                panRange: false
 	            },
 	            xaxis: {
 	                labelHeight: 30,
 	                axisLabel: 'time (sec)',
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 15,
-	                axisLabelFontFamily: 'Arial'
-	            }
+	                axisLabelFontFamily: 'Arial',
+	                panRange: [0, null],
+	            },
+	            pan: {
+	    			interactive: true
+	    		}
 	        };
 	    screensExplored = getDataScreensExplored();
 	    chartGUIScreensExplored = $.plot(divname, [screensExplored], options);
@@ -97,41 +108,52 @@ $(function() {
 	                axisLabel: 'explored',
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 20,
-	                axisLabelFontFamily: 'Arial'
+	                axisLabelFontFamily: 'Arial',
+	                panRange: false
 	            },
 	            xaxis: {
 	                labelHeight: 30,
 	                axisLabel: 'time (sec)',
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 15,
-	                axisLabelFontFamily: 'Arial'
-	            }
+	                axisLabelFontFamily: 'Arial',
+	                panRange: [0, null],
+	            },
+	            pan: {
+	    			interactive: true
+	    		}
 	        };
-	    chartElementsAndScreens = $.plot(divname, dataArray, options);
-	    chartElementsAndScreens = $.plot(divname, 
+	    chartElementsAndScreens = $.plot(divname, testData, options);
+	    /*chartElementsAndScreens = $.plot(divname, 
 	    	    [{ data: screensExplored, label: "Screens" },
 	    		{ data: elementsSeen, label: "Elements"}],
-	    	    options);
+	    	    options);*/
 	    setTimeout(updateLines, divname, updateInterval);
 	};
 
 
 	function createChartGUIElementsExplored(divname) {
-	    var options =  {
+		
+		var options =  {
 	            yaxis: {
 	                labelWidth: 30,
 	                axisLabel: 'GUI elements explored',
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 20,
-	                axisLabelFontFamily: 'Arial'
+	                axisLabelFontFamily: 'Arial',
+	                panRange: false
 	            },
 	            xaxis: {
 	                labelHeight: 30,
 	                axisLabel: 'time (sec)',
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 15,
-	                axisLabelFontFamily: 'Arial'
-	            }
+	                axisLabelFontFamily: 'Arial',
+	                panRange: [0, null],
+	            },
+	            pan: {
+	    			interactive: true
+	    		}
 	        };
 	    chartGUIElementsExplored = $.plot(divname, [elementsExplored], options);
 	    setTimeout(updateElementsExplored, divname, updateInterval);
@@ -162,15 +184,15 @@ $(function() {
 	function getDataElementsSeen()
 	{
 		var newData = $.droidmate.ajax.get.getGlobalElementsSeenHistory();
-		var output = newData.slice(-dataVisible);
-		return output;
+		//var output = newData.slice(-dataVisible);
+		return newData;
 	}
 	
 	function getDataScreensExplored()
 	{
 		var newData = $.droidmate.ajax.get.getGlobalScreensSeenHistory();
-		var output = newData.slice(-dataVisible);
-		return output;
+		//var output = newData.slice(-dataVisible);
+		return newData;
 	}
 
 
@@ -194,10 +216,10 @@ $(function() {
 
 		lastUpdate += updateInterval / 1000 / 60;
 		
-		data1 = elementsExplored;
-		data2 = screensExplored;//.slice(Math.min(screensExplored.length(), 5));
-		chart.setData([{ data: elementsExplored, label: "Screens" },
-		           	{ data: screensExplored, label: "Elements"}]);
+		chart.setData([testData]);
+		//data1 = elementsExplored;
+		//data2 = screensExplored;//.slice(Math.min(screensExplored.length(), 5));
+		//chart.setData([{ data: elementsExplored, label: "Screens" } { data: screensExplored, label: "Elements"}]);
 		chart.draw();
 		setTimeout(updateLines, divname, updateInterval);
 		
@@ -237,7 +259,7 @@ $(function() {
 	createChartGUIElementsSeen('#flot-gui-elements-seen');
 	
 	createChartGUIScreensExplored("#flot-gui-screens-explored");
-	//createChartGUIElementsAndScreens("#flot-gui-screens-explored");
+	createChartGUIElementsAndScreens("#flot-gui-elements-explored");
 	
 	
 	});
