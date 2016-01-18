@@ -12,7 +12,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Map.Entry;
+import java.util.concurrent.LinkedBlockingQueue;
 
+import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,7 +37,7 @@ import com.droidmate.user.DroidMateUser;
 /**
  * Servlet implementation class APKExploreHandler
  */
-@WebServlet("/APKExploreHandler")
+@WebServlet(urlPatterns={"/APKExploreHandler"}, asyncSupported=true)
 public class APKExploreHandler extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -44,6 +46,7 @@ public class APKExploreHandler extends HttpServlet {
 	private Process droidmateProcess;
 	private File logFile;
 	private XMLLogReader logReader;
+	private LinkedBlockingQueue<String> droidmateOutputQueue = new LinkedBlockingQueue<>();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -89,7 +92,7 @@ public class APKExploreHandler extends HttpServlet {
 			};
 		} else if (request.getParameter(AjaxConstants.EXPLORE_OPEN_REPORT_FOLDER) != null) {
 			openExplorerWindow(settings.getOutputFolder());
-		}else {
+		} else {
 			System.out.println("Illegal POST request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
 				System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
@@ -120,7 +123,7 @@ public class APKExploreHandler extends HttpServlet {
 							found = true;
 						}
 					}
-					if(!found) {
+					if (!found) {
 						out.print(APKExplorationInfo.getDummyObject());
 					}
 				} else {
@@ -172,7 +175,13 @@ public class APKExploreHandler extends HttpServlet {
 			}
 
 			out.print(result);
-		}else {
+		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_DROIDMATE_OUTPUT) != null) {
+			final AsyncContext ac = request.startAsync();
+			response.setContentType("text/event-stream");
+			response.setHeader("Cache-Control", "no-cache");
+			forwardDroidmateOutput(out);
+			ac.complete();
+		} else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
 				System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
@@ -180,7 +189,31 @@ public class APKExploreHandler extends HttpServlet {
 		}
 		out.flush();
 	}
-	
+
+	private void forwardDroidmateOutput(PrintWriter out) {
+		while(droidmateProcess == null) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+			}
+		}
+		while (droidmateProcess.isAlive()) {
+			String line = droidmateOutputQueue.poll();
+			if (line != null) {
+				out.println("data: " + line);
+				out.flush();
+			} else {
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+				}
+			}
+		}
+		System.out.println("Droidmate process has termianted, closing SSE");
+		out.println();
+		out.println();
+	}
+
 	private boolean openExplorerWindow(Path path) {
 		try {
 			Runtime.getRuntime().exec("explorer.exe " + path);
@@ -223,7 +256,7 @@ public class APKExploreHandler extends HttpServlet {
 
 						Path inlinedAPK = Paths.get(apkInfo.getFile().getParent().toString(), "/inlined",
 								FilenameUtils.removeExtension(apkInfo.getFile().getName()) + "-inlined.apk");
-						if(!inlinedAPK.toFile().exists()) {
+						if (!inlinedAPK.toFile().exists()) {
 							return false;
 						}
 						Path target = Paths.get(inputAPKsPath.toString(), apkInfo.getFile().getName());
@@ -274,6 +307,11 @@ public class APKExploreHandler extends HttpServlet {
 			BufferedReader stdout = new BufferedReader(new InputStreamReader(droidmateProcess.getInputStream()));
 			while ((s = stdout.readLine()) != null) {
 				System.out.println(s);
+
+				try {
+					droidmateOutputQueue.put(s);
+				} catch (InterruptedException e) {
+				}
 			}
 		} catch (IOException ex) {
 		}
