@@ -39,7 +39,6 @@ public class AjaxConstants {
 	public final static String EXPLORE_GET_GLOBAL_SCREENS_SEEN = "explore_get_global_screens_seen";
 	public static final String EXPLORE_GET_GLOBAL_SCREENS_SEEN_HISTORY = "explore_get_global_screens_seen_history";
 	public static final String EXPLORE_OPEN_REPORT_FOLDER = "explore_open_report_folder";
-	public static final String EXPLORE_GET_DROIDMATE_OUTPUT = "explore_get_droidmate_output";
 
 	//------------------------------------------------------------------------------
 	public final static String ReportProvider_GET_REPORT = "get_report";
