@@ -119,7 +119,7 @@ public class APKExplorationInfo {
 		json.put("success", isSuccess());
 		json.put("elementsSeen", getElementsSeen());
 		json.put("screensSeen", getScreensSeen());
-		json.put("widgets_explored", getWidgetsExplored());
+		json.put("widgetsExplored", getWidgetsExplored());
 		json.put("finished", isFinished());
 		
 		JSONArray elementsHistory = new JSONArray();
