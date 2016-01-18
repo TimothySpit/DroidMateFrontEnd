@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
@@ -270,10 +271,16 @@ public class APKExploreHandler extends HttpServlet {
 		}
 		logReader.startConcurrentReading();
 		String s;
+		
+		List<String> consoleOutput =  (List<String>) getServletContext().getAttribute("consoleOutput");
+
 		try {
 			BufferedReader stdout = new BufferedReader(new InputStreamReader(droidmateProcess.getInputStream()));
 			while ((s = stdout.readLine()) != null) {
 				System.out.println(s);
+				synchronized (consoleOutput) {
+					consoleOutput.add(s);
+				}
 			}
 		} catch (IOException ex) {
 		}

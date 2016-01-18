@@ -1,6 +1,7 @@
 package com.droidmate.servlets.index;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,6 +33,7 @@ public class Index extends HttpServlet {
 		// create new DroidMate-user for the whole server run
 		DroidMateUser globalUser = new DroidMateUser();
 		getServletContext().setAttribute(ServletContextConstants.DROIDMATE_USER, globalUser);
+		getServletContext().setAttribute("consoleOutput", new LinkedList<String>());
 	}
 
 	/**

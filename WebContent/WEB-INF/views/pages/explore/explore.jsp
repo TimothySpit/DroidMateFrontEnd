@@ -31,6 +31,8 @@
 	src="${pageContext.request.contextPath}/resources/js/explore/updateExplorationData.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/handleButtons.js"></script>
+	<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/js/explore/updateConsole.js"></script>
 </head>
 <body class="container">
 	<main>
@@ -43,9 +45,8 @@
 		<div class="row">
 			<div class="col-sm-4">
 				<form class="pull-left">
-						<button  class="btn btn-default"
-							id="back-to-index" type="button" id="returnStart">Return
-							to start</button>
+					<button class="btn btn-default" id="back-to-index" type="button"
+						id="returnStart">Return to start</button>
 				</form>
 			</div>
 			<div class="col-sm-4 text-center">
@@ -75,14 +76,26 @@
 			</table>
 
 			<div class="row">
-				<div class="col-sm-4"><h3>
-					<button id="openFolderBtn" class="btn btn-default pull-left" type="button">Open
-						output folder</button>&nbsp; &nbsp; 
-					<span class="label label-default" onClick="this.select();" id="outputPathLabel">Empty</span></h3>
+				<div class="col-sm-4">
+					<button id="openFolderBtn" class="btn btn-default pull-left"
+						type="button">Open output folder</button>
+					&nbsp; &nbsp; <span class="label label-default"
+						onClick="this.select();" id="outputPathLabel">Empty</span>
+					</h3>
 				</div>
 				<div class="col-sm-4"></div>
 				<div class="col-sm-4"></div>
 			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">Console output</div>
+						<div style="max-height: 500px;overflow-y: scroll;" class="panel-body" id="consoleOutput"></div>
+					</div>
+				</div>
+			</div>
+
 		</div>
 	</div>
 	</main>
