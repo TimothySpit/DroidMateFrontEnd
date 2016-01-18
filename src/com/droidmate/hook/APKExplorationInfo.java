@@ -151,7 +151,7 @@ public class APKExplorationInfo {
 			o.put(entry.getValue());
 			widgetsHistory.put(o);
 		}
-		json.put("widgetsHistory", widgetsHistory);
+		json.put("historyWidgets", widgetsHistory);
 		
 		return json;
 	}
