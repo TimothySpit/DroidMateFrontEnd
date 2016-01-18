@@ -96,14 +96,6 @@
 					</div>
 				</div>
 			</div>
-
-		</div>
-		<div class="row">
-			<div class="panel panel-default">
-				<div class="panel-heading">Droidmate output</div>
-				<div class="panel-body" id="droidmateOutputPanel"></div>
-			</div>
-
 		</div>
 	</div>
 	</main>
