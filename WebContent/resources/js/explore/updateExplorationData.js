@@ -29,8 +29,11 @@ $(function() {
 											// found apk
 											var elementsScreensSeenDiv = $(
 													this.parentElement.parentElement)
-													.find('.elements-screens-seen');
-											elementsScreensSeenDiv.text(elementsSeen + '/' + screensSeen);
+													.find(
+															'.elements-screens-seen');
+											elementsScreensSeenDiv
+													.text(elementsSeen + '/'
+															+ screensSeen);
 											var statusDiv = $(
 													this.parentElement.parentElement)
 													.find('.state');
@@ -73,14 +76,17 @@ $(function() {
 	function format(d) {
 		// `d` is the original data object for the row
 		return '<div class="apk-info-min-container">'
-				+ '<div class="apk-chart-min apk-chart-min-elements-seen" id="apk-chart-min-elements-seen-' + d[1] + '"></div>'
-				+ '<div class="apk-chart-min apk-chart-min-screens-seen" id="apk-chart-min-screens-seen-' + d[1] + '"></div>'
-				+ '</div>';
+				+ '<div class="apk-chart-min apk-chart-min-elements-seen" id="apk-chart-min-elements-seen-'
+				+ d[1]
+				+ '"></div>'
+				+ '<div class="apk-chart-min apk-chart-min-screens-seen" id="apk-chart-min-screens-seen-'
+				+ d[1]
+				+ '"></div>'
+				+ '<div class="apk-chart-min apk-chart-min-elements-explored" id="apk-chart-min-elements-explored-'
+				+ d[1] + '"></div>' + '</div>';
 	}
 	;
 
-	
-	
 	// Add event listener for opening and closing details
 	function addSubTableClick() {
 		$('#exploreFiles tbody').on('click', 'td.details-control', function() {
@@ -102,87 +108,141 @@ $(function() {
 	}
 
 	var activeChartDivs = {};
-	
+
 	function updateCharts() {
-		$.each(activeChartDivs,function( index, value ) {
-			if(value != null){
-			var apkData = $.droidmate.ajax.get.getExplorationInfo(index);
-			
-			var chart = value.chartElementsSeen;
-			var data = apkData.history.slice(0).sort(function(a,b){return b[0] - a[0];});
-			data = data.slice(-10);
-			chart.setData([data]);
-			chart.draw();
-			
-			var chart2 = value.chartScreensSeen;
-			var data2 = apkData.historyScreens.slice(0).sort(function(a,b){return b[0] - a[0];});
-			chart2.setData([data2]);
-			chart2.draw();
+		$.each(activeChartDivs, function(index, value) {
+			if (value != null) {
+				var apkData = $.droidmate.ajax.get.getExplorationInfo(index);
+
+				var chart = value.chartElementsSeen;
+				var data = apkData.history.slice(0).sort(function(a, b) {
+					return b[0] - a[0];
+				});
+				data = data.slice(-10);
+				chart.setData([ data ]);
+				chart.draw();
+
+				var chart2 = value.chartScreensSeen;
+				var data2 = apkData.historyScreens.slice(0).sort(
+						function(a, b) {
+							return b[0] - a[0];
+						});
+				chart2.setData([ data2 ]);
+				chart2.draw();
+
+				var chart3 = value.chartElementsExplored;
+				var data3 = apkData.historyWidgets.slice(0).sort(
+						function(a, b) {
+							return b[0] - a[0];
+						});
+				chart3.setData([ data2 ]);
+				chart3.draw();
 			}
 		});
-		//console.log(apkData.history.elementsSeen);
-		setTimeout(updateCharts, $.droidmate.explore.UPDATE_EXPLORE_CHARTS_INTERVAL);
+		// console.log(apkData.history.elementsSeen);
+		setTimeout(updateCharts,
+				$.droidmate.explore.UPDATE_EXPLORE_CHARTS_INTERVAL);
 	}
 	updateCharts();
-	
+
 	function createChartElementsSeen(divname) {
-	    var options =  {
-	            yaxis: {
-	                labelWidth: 30,
-	                axisLabel: 'Elements seen',
-	                axisLabelUseCanvas: true,
-	                axisLabelFontSizePixels: 20,
-	                axisLabelFontFamily: 'Arial'
-	            },
-	            xaxis: {
-	                labelHeight: 30,
-	                axisLabel: 'time (s)',
-	                axisLabelUseCanvas: true,
-	                axisLabelFontSizePixels: 15,
-	                axisLabelFontFamily: 'Arial'
-	            }
-	        };
-	    var elementsExplored = [[0,0],[0,0],[0,0],[0,0],[0,0]];
-	    return $.plot(divname, [elementsExplored], options);
-	};
-	
+		var options = {
+			yaxis : {
+				labelWidth : 30,
+				axisLabel : 'Elements seen',
+				axisLabelUseCanvas : true,
+				axisLabelFontSizePixels : 20,
+				axisLabelFontFamily : 'Arial'
+			},
+			xaxis : {
+				labelHeight : 30,
+				axisLabel : 'time (s)',
+				axisLabelUseCanvas : true,
+				axisLabelFontSizePixels : 15,
+				axisLabelFontFamily : 'Arial'
+			}
+		};
+		var elementsExplored = [ [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], [ 0, 0 ],
+				[ 0, 0 ] ];
+		return $.plot(divname, [ elementsExplored ], options);
+	}
+	;
+
 	function createChartGUIScreensSeen(divname) {
-	    var options =  {
-	            yaxis: {
-	                labelWidth: 30,
-	                axisLabel: 'Screens seen',
-	                axisLabelUseCanvas: true,
-	                axisLabelFontSizePixels: 20,
-	                axisLabelFontFamily: 'Arial'
-	            },
-	            xaxis: {
-	                labelHeight: 30,
-	                axisLabel: 'time (s)',
-	                axisLabelUseCanvas: true,
-	                axisLabelFontSizePixels: 15,
-	                axisLabelFontFamily: 'Arial'
-	            }
-	        };
-	    var elementsExplored = [[0,0],[0,0],[0,0],[0,0],[0,0]];
-	    return $.plot(divname, [elementsExplored], options);
-	};
+		var options = {
+			yaxis : {
+				labelWidth : 30,
+				axisLabel : 'Screens seen',
+				axisLabelUseCanvas : true,
+				axisLabelFontSizePixels : 20,
+				axisLabelFontFamily : 'Arial'
+			},
+			xaxis : {
+				labelHeight : 30,
+				axisLabel : 'time (s)',
+				axisLabelUseCanvas : true,
+				axisLabelFontSizePixels : 15,
+				axisLabelFontFamily : 'Arial'
+			}
+		};
+		var elementsExplored = [ [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], [ 0, 0 ],
+				[ 0, 0 ] ];
+		return $.plot(divname, [ elementsExplored ], options);
+	}
+	;
+
+	function createChartElementsExplored(divname) {
+		var options = {
+			yaxis : {
+				labelWidth : 30,
+				axisLabel : 'Elements explored',
+				axisLabelUseCanvas : true,
+				axisLabelFontSizePixels : 20,
+				axisLabelFontFamily : 'Arial'
+			},
+			xaxis : {
+				labelHeight : 30,
+				axisLabel : 'time (s)',
+				axisLabelUseCanvas : true,
+				axisLabelFontSizePixels : 15,
+				axisLabelFontFamily : 'Arial'
+			}
+		};
+		var elementsExplored = [ [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], [ 0, 0 ],
+				[ 0, 0 ] ];
+		return $.plot(divname, [ elementsExplored ], options);
+	}
+	;
 	
-	//create each chart when element gets opened
+	// create each chart when element gets opened
 	function watchDropDownClicked(row) {
-		var chartDivElementsSeen = $('[id="apk-chart-min-elements-seen-' + row[1] + '"]');
+		var chartDivElementsSeen = $('[id="apk-chart-min-elements-seen-'
+				+ row[1] + '"]');
 		var chartElementsSeen = createChartElementsSeen(chartDivElementsSeen);
-		
-		var chartDivScreensSeen = $('[id="apk-chart-min-screens-seen-' + row[1] + '"]');
+
+		var chartDivScreensSeen = $('[id="apk-chart-min-screens-seen-' + row[1]
+				+ '"]');
 		var chartScreensSeen = createChartGUIScreensSeen(chartDivScreensSeen);
-		
-		activeChartDivs[row[1]] =  {chartDivElementsSeen:chartDivElementsSeen,chartDivScreensSeen:chartDivScreensSeen,chartElementsSeen:chartElementsSeen, chartScreensSeen : chartScreensSeen};
+
+		var chartDivElementsExplored = $('[id="apk-chart-min-elements-explored-'
+				+ row[1] + '"]');
+		var chartElementsExplored = createChartElementsExplored(chartDivScreensSeen);
+
+		activeChartDivs[row[1]] = {
+			chartDivElementsSeen : chartDivElementsSeen,
+			chartDivScreensSeen : chartDivScreensSeen,
+			chartDivElementsExplored : chartDivElementsExplored,
+			chartElementsSeen : chartElementsSeen,
+			chartScreensSeen : chartScreensSeen,
+			chartElementsExplored : chartElementsExplored
+		};
 		updateCharts();
 	}
-	
+
 	function removeFromWatchDropDownClicked(row) {
 		activeChartDivs[row[1]] = null;
 	}
-	
+
 	// init update
 	$
 			.getJSON(
