@@ -116,7 +116,7 @@ $(function() {
 
 				var chart = value.chartElementsSeen;
 				var data = apkData.history.slice(0).sort(function(a, b) {
-					return b[0] - a[0];
+					return a[0] - b[0];
 				});
 				data = data.slice(-10);
 				chart.setData([ data ]);
@@ -125,7 +125,7 @@ $(function() {
 				var chart2 = value.chartScreensSeen;
 				var data2 = apkData.historyScreens.slice(0).sort(
 						function(a, b) {
-							return b[0] - a[0];
+							return a[0] - b[0];
 						});
 				chart2.setData([ data2 ]);
 				chart2.draw();
@@ -133,7 +133,7 @@ $(function() {
 				var chart3 = value.chartElementsExplored;
 				var data3 = apkData.historyWidgets.slice(0).sort(
 						function(a, b) {
-							return b[0] - a[0];
+							return a[0] - b[0];
 						});
 				chart3.setData([ data3 ]);
 				chart3.draw();
