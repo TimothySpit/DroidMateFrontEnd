@@ -1,13 +1,6 @@
 $(document)
 		.ready(
 				function() {
-					// Start reading droidmate output
-					var source = new EventSource(
-							'/DroidMate/APKExploreHandler?explore_get_droidmate_output=true');
-					source.addEventListener('message', function(e) {
-						$("#droidmateOutputPanel").html(e.data);
-					}, false);
-
 					// Set output path label
 					var settings = $.droidmate.ajax.get.getDroidMateSettings();
 					console.log($.droidmate.ajax.get.getDroidMateSettings());
