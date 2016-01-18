@@ -36,7 +36,7 @@ import com.droidmate.user.DroidMateUser;
 /**
  * Servlet implementation class APKExploreHandler
  */
-@WebServlet("/APKExploreHandler")
+@WebServlet(urlPatterns={"/APKExploreHandler"}, asyncSupported=true)
 public class APKExploreHandler extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -90,7 +90,7 @@ public class APKExploreHandler extends HttpServlet {
 			};
 		} else if (request.getParameter(AjaxConstants.EXPLORE_OPEN_REPORT_FOLDER) != null) {
 			openExplorerWindow(settings.getOutputFolder());
-		}else {
+		} else {
 			System.out.println("Illegal POST request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
 				System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
@@ -121,7 +121,7 @@ public class APKExploreHandler extends HttpServlet {
 							found = true;
 						}
 					}
-					if(!found) {
+					if (!found) {
 						out.print(APKExplorationInfo.getDummyObject());
 					}
 				} else {
@@ -173,7 +173,7 @@ public class APKExploreHandler extends HttpServlet {
 			}
 
 			out.print(result);
-		}else {
+		} else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
 				System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
@@ -181,7 +181,7 @@ public class APKExploreHandler extends HttpServlet {
 		}
 		out.flush();
 	}
-	
+
 	private boolean openExplorerWindow(Path path) {
 		try {
 			Runtime.getRuntime().exec("explorer.exe " + path);
@@ -224,7 +224,7 @@ public class APKExploreHandler extends HttpServlet {
 
 						Path inlinedAPK = Paths.get(apkInfo.getFile().getParent().toString(), "/inlined",
 								FilenameUtils.removeExtension(apkInfo.getFile().getName()) + "-inlined.apk");
-						if(!inlinedAPK.toFile().exists()) {
+						if (!inlinedAPK.toFile().exists()) {
 							return false;
 						}
 						Path target = Paths.get(inputAPKsPath.toString(), apkInfo.getFile().getName());
