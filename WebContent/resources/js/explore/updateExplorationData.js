@@ -135,7 +135,7 @@ $(function() {
 						function(a, b) {
 							return b[0] - a[0];
 						});
-				chart3.setData([ data2 ]);
+				chart3.setData([ data3 ]);
 				chart3.draw();
 			}
 		});
