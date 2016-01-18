@@ -139,7 +139,6 @@ $(function() {
 				chart3.draw();
 			}
 		});
-		// console.log(apkData.history.elementsSeen);
 		setTimeout(updateCharts,
 				$.droidmate.explore.UPDATE_EXPLORE_CHARTS_INTERVAL);
 	}

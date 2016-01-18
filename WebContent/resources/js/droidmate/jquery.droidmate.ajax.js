@@ -29,7 +29,6 @@
 		var result = null;
 		if(line == null)
 			line = 0;
-		console.log(line);
 		$.ajax({
 	        url:  "/DroidMate/ConsoleOutput",
 	        async: false,
@@ -294,7 +293,7 @@
 	post.restartDroidMate = restartDroidMate;
 	//-----------------------------------
 	
-	function stopDroidMate(success, error, complete) {console.log("here");
+	function stopDroidMate(success, error, complete) {
 		$.ajax({
 			async: false,
 			url: "/DroidMate/APKExploreHandler",
