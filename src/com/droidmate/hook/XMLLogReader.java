@@ -222,7 +222,7 @@ public class XMLLogReader {
 
 				readSuccess = false;
 			} else if(readWidgetExplored) {
-				
+				readWidgetExplored();
 				readWidgetExplored = false;
 			}
 		}
