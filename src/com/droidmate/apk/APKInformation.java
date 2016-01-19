@@ -1,17 +1,20 @@
 package com.droidmate.apk;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.json.JSONArray;
 
 public class APKInformation {
 
 	private final int id;
 	private final File file;
-	private int progress = 0;
 	private APKExplorationStatus status = APKExplorationStatus.NOT_RUNNING;
 	private String packageName, versionCode, versionName;
+	private boolean inlined = false;
 
 	private ExplorationReport report;
 	
@@ -31,6 +34,25 @@ public class APKInformation {
 		
 		this.setReport(ExplorationReport.getDefaultReport());
 	}
+	
+	public Path getInlinedPath() {
+		return Paths.get(getFile().getParent().toString(), "/inlined",
+				FilenameUtils.removeExtension(getFile().getName()) + "-inlined.apk");
+	}
+	
+	public boolean updateInlinedStatus() {
+		 inlined = getInlinedPath().toFile().exists();
+		 
+		 return inlined;
+	}
+
+	public boolean isInlined() {
+		return inlined;
+	}
+
+	public APKExplorationStatus getStatus() {
+		return status;
+	}
 
 	public File getFile() {
 		return file;
@@ -42,14 +64,6 @@ public class APKInformation {
 
 	public void setExplorationStatus(APKExplorationStatus status) {
 		this.status = status;
-	}
-
-	public int getProgress() {
-		return progress;
-	}
-
-	public void setProgress(int progress) {
-		this.progress = progress;
 	}
 
 	public boolean isSelected() {
