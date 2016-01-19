@@ -53,7 +53,8 @@ $(function() {
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 20,
 	                axisLabelFontFamily: 'Arial',
-	                panRange: false
+	                panRange: false,
+	                minTickSize: 1
 	            },
 	            xaxis: {
 	                labelHeight: 30,
@@ -62,6 +63,8 @@ $(function() {
 	                axisLabelFontSizePixels: 15,
 	                axisLabelFontFamily: 'Arial',
 	                panRange: [0, null],
+	                min : 0,
+					minTickSize: 1
 	            },
 	            pan: {
 	    			interactive: true
@@ -80,7 +83,8 @@ $(function() {
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 20,
 	                axisLabelFontFamily: 'Arial',
-	                panRange: false
+	                panRange: false,
+	                minTickSize: 1
 	            },
 	            xaxis: {
 	                labelHeight: 30,
@@ -89,6 +93,8 @@ $(function() {
 	                axisLabelFontSizePixels: 15,
 	                axisLabelFontFamily: 'Arial',
 	                panRange: [0, null],
+	                min : 0,
+					minTickSize: 1
 	            },
 	            pan: {
 	    			interactive: true
@@ -108,7 +114,8 @@ $(function() {
 	                axisLabelUseCanvas: true,
 	                axisLabelFontSizePixels: 20,
 	                axisLabelFontFamily: 'Arial',
-	                panRange: false
+	                panRange: false,
+	                minTickSize: 1
 	            },
 	            xaxis: {
 	                labelHeight: 30,
@@ -117,6 +124,8 @@ $(function() {
 	                axisLabelFontSizePixels: 15,
 	                axisLabelFontFamily: 'Arial',
 	                panRange: [0, null],
+	                min : 0,
+					minTickSize: 1
 	            },
 	            pan: {
 	    			interactive: true
