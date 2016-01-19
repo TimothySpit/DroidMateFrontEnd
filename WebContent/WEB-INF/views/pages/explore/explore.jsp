@@ -31,7 +31,7 @@
 	src="${pageContext.request.contextPath}/resources/js/explore/updateExplorationData.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/handleButtons.js"></script>
-	<script type="text/javascript"
+<script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/updateConsole.js"></script>
 </head>
 <body class="container">
@@ -76,23 +76,29 @@
 			</table>
 
 			<div class="row">
-				<div class="col-sm-4">
+				<div class="col-sm-12">
 					<h3>
-						<button id="openFolderBtn" class="btn btn-default pull-left"
-							type="button">Open output folder</button>
-						&nbsp; &nbsp; <span class="label label-default"
-							id="outputPathLabel">Loading directory...</span>
+						<button style="margin-right: 20px;" id="openFolderBtn"
+							class="btn btn-default pull-left" type="button">Open
+							output folder</button>
+						<span class="label label-default" id="outputPathLabel">Loading
+							directory...</span>
 					</h3>
 				</div>
-				<div class="col-sm-4"></div>
-				<div class="col-sm-4"></div>
 			</div>
 
 			<div class="row">
 				<div class="col-sm-12">
-					<div class="panel panel-default">
-						<div class="panel-heading">Console output</div>
-						<div style="width: 100%; max-height: 500px;overflow: scroll;" class="panel-body" id="consoleOutput"></div>
+					<div class="panel panel-default" id="console-output">
+						<div class="panel-heading">
+							Console output
+							<div class="checkbox" id="console-output-scroll" style="display: inline">
+								<label> <input type="checkbox" style="float: inherit;" />Auto-scroll
+								</label>
+							</div>
+						</div>
+						<div style="width: 100%; max-height: 500px; overflow: scroll;"
+							class="panel-body" id="consoleOutput"></div>
 					</div>
 				</div>
 			</div>

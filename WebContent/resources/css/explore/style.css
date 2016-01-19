@@ -11,6 +11,20 @@ tr.shown td.details-control {
 
 .apk-chart-min {
 	float: left;
-	height: 200px;
-	width:  200px;
+	height: 250px;
+	width:  33%;
+}
+
+#console-output {
+	margin-top: 50px;
+}
+
+#console-output .panel-heading {
+	overflow: auto;
+}
+
+#console-output-scroll {
+	float:right;
+	margin-top:0; 
+	margin-bottom:0; 
 }

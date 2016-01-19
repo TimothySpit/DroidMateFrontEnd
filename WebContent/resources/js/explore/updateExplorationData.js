@@ -114,29 +114,25 @@ $(function() {
 			if (value != null) {
 				var apkData = $.droidmate.ajax.get.getExplorationInfo(index);
 
-				var chart = value.chartElementsSeen;
-				var data = apkData.history.slice(0).sort(function(a, b) {
+				var sortFunction = function(a, b) {
 					return a[0] - b[0];
-				});
+					};
+				
+				var chartElementsSeen = value.chartElementsSeen;
+				var data = apkData.history.sort(sortFunction);
 				data = data.slice(-10);
-				chart.setData([ data ]);
-				chart.draw();
+				chartElementsSeen.setData([ data ]);
+				chartElementsSeen.draw();
 
-				var chart2 = value.chartScreensSeen;
-				var data2 = apkData.historyScreens.slice(0).sort(
-						function(a, b) {
-							return a[0] - b[0];
-						});
-				chart2.setData([ data2 ]);
-				chart2.draw();
+				var chartScreensSeen = value.chartScreensSeen;
+				var data2 = apkData.historyScreens.slice(0).sort(sortFunction);
+				chartScreensSeen.setData([ data2 ]);
+				chartScreensSeen.draw();
 
-				var chart3 = value.chartElementsExplored;
-				var data3 = apkData.historyWidgets.slice(0).sort(
-						function(a, b) {
-							return a[0] - b[0];
-						});
-				chart3.setData([ data3 ]);
-				chart3.draw();
+				var chartElementsExplored = value.chartElementsExplored;
+				var data3 = apkData.historyWidgets.slice(0).sort(sortFunction);
+				chartElementsExplored.setData([ data3 ]);
+				chartElementsExplored.draw();
 			}
 		});
 		setTimeout(updateCharts,
@@ -144,88 +140,46 @@ $(function() {
 	}
 	updateCharts();
 
-	function createChartElementsSeen(divname) {
+	function createChart(divname, axisLabelx, axisLabelY) {
 		var options = {
 			yaxis : {
 				labelWidth : 30,
-				axisLabel : 'Elements seen',
+				axisLabel : axisLabelY,
 				axisLabelUseCanvas : true,
 				axisLabelFontSizePixels : 20,
-				axisLabelFontFamily : 'Arial'
+				axisLabelFontFamily : 'Arial',
+				minTickSize: 1
 			},
 			xaxis : {
 				labelHeight : 30,
-				axisLabel : 'time (s)',
+				axisLabel : axisLabelx,
 				axisLabelUseCanvas : true,
-				axisLabelFontSizePixels : 15,
-				axisLabelFontFamily : 'Arial'
+				axisLabelFontSizePixels : 20,
+				axisLabelFontFamily : 'Arial',
+				min : 0,
+				minTickSize: 1
 			}
 		};
-		var elementsExplored = [ [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], [ 0, 0 ],
-				[ 0, 0 ] ];
+		var elementsExplored = [ [ 0, 0 ]];
 		return $.plot(divname, [ elementsExplored ], options);
-	}
-	;
+	};
 
-	function createChartGUIScreensSeen(divname) {
-		var options = {
-			yaxis : {
-				labelWidth : 30,
-				axisLabel : 'Screens seen',
-				axisLabelUseCanvas : true,
-				axisLabelFontSizePixels : 20,
-				axisLabelFontFamily : 'Arial'
-			},
-			xaxis : {
-				labelHeight : 30,
-				axisLabel : 'time (s)',
-				axisLabelUseCanvas : true,
-				axisLabelFontSizePixels : 15,
-				axisLabelFontFamily : 'Arial'
-			}
-		};
-		var elementsExplored = [ [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], [ 0, 0 ],
-				[ 0, 0 ] ];
-		return $.plot(divname, [ elementsExplored ], options);
-	}
-	;
-
-	function createChartElementsExplored(divname) {
-		var options = {
-			yaxis : {
-				labelWidth : 30,
-				axisLabel : 'Elements explored',
-				axisLabelUseCanvas : true,
-				axisLabelFontSizePixels : 20,
-				axisLabelFontFamily : 'Arial'
-			},
-			xaxis : {
-				labelHeight : 30,
-				axisLabel : 'time (s)',
-				axisLabelUseCanvas : true,
-				axisLabelFontSizePixels : 15,
-				axisLabelFontFamily : 'Arial'
-			}
-		};
-		var elementsExplored = [ [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], [ 0, 0 ],
-				[ 0, 0 ] ];
-		return $.plot(divname, [ elementsExplored ], options);
-	}
-	;
-	
 	// create each chart when element gets opened
 	function watchDropDownClicked(row) {
 		var chartDivElementsSeen = $('[id="apk-chart-min-elements-seen-'
 				+ row[1] + '"]');
-		var chartElementsSeen = createChartElementsSeen(chartDivElementsSeen);
+		var chartElementsSeen = createChart(chartDivElementsSeen, 'time (s)',
+				'Elements seen');
 
 		var chartDivScreensSeen = $('[id="apk-chart-min-screens-seen-' + row[1]
 				+ '"]');
-		var chartScreensSeen = createChartGUIScreensSeen(chartDivScreensSeen);
+		var chartScreensSeen = createChart(chartDivScreensSeen, 'time (s)',
+				'Screens seen');
 
 		var chartDivElementsExplored = $('[id="apk-chart-min-elements-explored-'
 				+ row[1] + '"]');
-		var chartElementsExplored = createChartElementsExplored(chartDivElementsExplored);
+		var chartElementsExplored = createChart(chartDivElementsExplored,
+				'time (s)', 'Elements explored');
 
 		activeChartDivs[row[1]] = {
 			chartDivElementsSeen : chartDivElementsSeen,
