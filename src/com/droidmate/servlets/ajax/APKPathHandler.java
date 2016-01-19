@@ -95,7 +95,7 @@ public class APKPathHandler extends HttpServlet {
 				for (APKInformation apk : user.getAPKS()) {
 					if (!apk.isSelected())
 						continue;
-					selectedAPKInfo.put(apk.toJSONArray());
+					selectedAPKInfo.put(apk.toJSONObject());
 				}
 				JSONObject res = new JSONObject();
 				res.put("data", selectedAPKInfo);
@@ -113,7 +113,7 @@ public class APKPathHandler extends HttpServlet {
 				// returns the apks in the folder
 				JSONArray selectedAPKInfo = new JSONArray();
 				for (APKInformation apk : user.getAPKS()) {
-					selectedAPKInfo.put(apk.toJSONArray());
+					selectedAPKInfo.put(apk.toJSONObject());
 				}
 				JSONObject res = new JSONObject();
 				res.put("data", selectedAPKInfo);

@@ -57,7 +57,16 @@ $(function() {
 								'render' : function(data, type, full, meta) {
 									return '<input type="checkbox">';
 								}
-							} ],
+							}, {
+								'targets' : 5,
+								'searchable' : false,
+								'orderable' : false,
+								'className' : 'dt-body-center',
+								'render' : function(data, type, full, meta) {
+									console.log(data[3]);
+									return data;
+								}
+							}],
 							'searching' : false,
 							'paging' : false,
 							'order' : [ [ 1, 'asc' ] ],

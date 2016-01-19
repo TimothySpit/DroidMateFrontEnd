@@ -242,7 +242,7 @@ public class APKExploreHandler extends HttpServlet {
 			for (APKInformation apkInfo : user.getAPKS()) {
 				if (apkInfo.isSelected()) {
 					try {
-						if (!apkInfo.updateInlinedStatus()) {
+						if (!apkInfo.isInlined()) {
 							return false;
 						}
 						Path target = Paths.get(inputAPKsPath.toString(), apkInfo.getFile().getName());

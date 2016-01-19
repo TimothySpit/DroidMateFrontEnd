@@ -99,6 +99,7 @@
 								<th>Size</th>
 								<th>Package</th>
 								<th>Version</th>
+								<th>Inlined</th>
 							</tr>
 						</thead>
 					</table>

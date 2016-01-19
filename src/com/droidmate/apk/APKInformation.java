@@ -6,11 +6,10 @@ import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class APKInformation {
 
-	private final int id;
 	private final File file;
 	private APKExplorationStatus status = APKExplorationStatus.NOT_RUNNING;
 	private String packageName, versionCode, versionName;
@@ -18,15 +17,10 @@ public class APKInformation {
 
 	private ExplorationReport report;
 	
-	public int getId() {
-		return id;
-	}
-
 	private boolean selected = false;
 
 	public APKInformation(int id, File file, String packageName, String versionCode, String versionName) {
 		super();
-		this.id = id;
 		this.file = file;
 		this.packageName = packageName;
 		this.versionCode = versionCode;
@@ -39,15 +33,11 @@ public class APKInformation {
 		return Paths.get(getFile().getParent().toString(), "/inlined",
 				FilenameUtils.removeExtension(getFile().getName()) + "-inlined.apk");
 	}
-	
-	public boolean updateInlinedStatus() {
-		 inlined = getInlinedPath().toFile().exists();
-		 
-		 return inlined;
-	}
 
 	public boolean isInlined() {
-		return inlined;
+		inlined = getInlinedPath().toFile().exists();
+		 
+		 return inlined;
 	}
 
 	public APKExplorationStatus getStatus() {
@@ -86,16 +76,16 @@ public class APKInformation {
 		return versionName;
 	}
 
-	public JSONArray toJSONArray() {
-		JSONArray array = new JSONArray();
-		array.put(getId());
-		array.put(getFile().getName());
-		array.put(FileUtils.byteCountToDisplaySize(getFile().length()));
-		array.put(getPackageName());
-		array.put(getVersionName() + " (#" + getVersionCode() + ")");
-		array.put(selected);
+	public JSONObject toJSONObject() {
+		JSONObject object = new JSONObject();
+		object.put("name", getFile().getName());
+		object.put("size", FileUtils.byteCountToDisplaySize(getFile().length()));
+		object.put("package", getPackageName());
+		object.put("version", getVersionName() + " (#" + getVersionCode() + ")");
+		object.put("selected", selected);
+		object.put("inlined", isInlined());
 		
-		return array;
+		return object;
 	}
 
 	public synchronized ExplorationReport getReport() {
