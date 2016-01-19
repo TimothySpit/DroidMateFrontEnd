@@ -46,27 +46,55 @@ $(function() {
 										$("#btns-field").removeClass("hide");
 										$("#show-static").removeClass("hide");
 									}
-									return json["info[]"].apks.data;
+									var unformattedData = json["info[]"].apks.data;
+									var tableData = [];
+									var indexCounter = 0;
+									for (var i = 0; i < unformattedData.length; i++) {
+										var object = unformattedData[i];
+										var row = [
+										// checkbox
+										"", object.name, object.size,
+												object.package, object.version,
+												object.inlined ];
+										tableData[indexCounter] = row;
+										indexCounter++;
+									}
+
+									return tableData;
 								}
 							},
-							'columnDefs' : [ {
-								'targets' : 0,
-								'searchable' : false,
-								'orderable' : false,
-								'className' : 'dt-body-center',
-								'render' : function(data, type, full, meta) {
-									return '<input type="checkbox">';
-								}
-							}, {
-								'targets' : 5,
-								'searchable' : false,
-								'orderable' : false,
-								'className' : 'dt-body-center',
-								'render' : function(data, type, full, meta) {
-									console.log(data[3]);
-									return data;
-								}
-							}],
+							'columnDefs' : [
+									{
+										'targets' : 0,
+										'searchable' : false,
+										'orderable' : false,
+										'className' : 'dt-body-center',
+										'render' : function(data, type, full,
+												meta) {
+											return '<input type="checkbox">';
+										}
+									},
+									{
+										'targets' : 5,
+										'searchable' : false,
+										'orderable' : false,
+										'className' : 'dt-body-center',
+										'render' : function(data, type, full, meta) {
+											if (data) {
+												return "<span class=\"label label-success\">Inlined</span>";
+											} else {
+												var status = $.droidmate.inlining.getInliningStatus();
+												switch (status) {
+												case $.droidmate.inlining.inliningStatus.NOT_STARTED:
+													return "<span class=\"label label-warning\">Not inlined</span>";
+												case $.droidmate.inlining.inliningStatus.INLINING:
+													return "<span class=\"label label-info\">Inlining...</span>";
+												case $.droidmate.inlining.inliningStatus.ERROR:
+													return "<span class=\"label label-danger\">Error</span>";
+												}
+											}
+										}
+									} ],
 							'searching' : false,
 							'paging' : false,
 							'order' : [ [ 1, 'asc' ] ],
@@ -190,9 +218,9 @@ $(function() {
 					// Update state of "Select all" control
 					updateDataTableSelectAllCtrl(table);
 
-					//update selected apks
+					// update selected apks
 					$.droidmate.ajax.post.setSelectedAPKS(rows_selected);
-					
+
 					// Prevent click event from propagating to parent
 					e.stopPropagation();
 				});

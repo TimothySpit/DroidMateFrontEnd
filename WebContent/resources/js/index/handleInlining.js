@@ -32,6 +32,9 @@ $(function() {
 					});
 
 	function watchInliner() {
+		//Update table
+		$('#selectiontable').DataTable().ajax.reload();
+		
 		var status = $.droidmate.inlining.getInliningStatus();
 		if(status == $.droidmate.inlining.inliningStatus.FINISHED) {
 			//finished
