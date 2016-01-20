@@ -11,7 +11,7 @@ import org.json.JSONObject;
 public class APKInformation {
 
 	private final File file;
-	private File inlineTempFile;
+	private final File inlineTempFile;
 	private APKExplorationStatus status = APKExplorationStatus.NOT_RUNNING;
 	private String packageName, versionCode, versionName;
 	private boolean inlined = false;
@@ -21,13 +21,14 @@ public class APKInformation {
 	
 	private boolean selected = false;
 
-	public APKInformation(int id, File file, String packageName, String versionCode, String versionName) {
+	public APKInformation(int id, File file, Path tempInlinePath, String packageName, String versionCode, String versionName) {
 		super();
 		this.id=id;
 		this.file = file;
 		this.packageName = packageName;
 		this.versionCode = versionCode;
 		this.versionName = versionName;
+		inlineTempFile = tempInlinePath.resolve(file.getName()).toFile();
 		
 		this.setReport(ExplorationReport.getDefaultReport());
 	}
@@ -41,10 +42,6 @@ public class APKInformation {
 		inlined = getInlinedPath().toFile().exists() || (inlineTempFile != null && inlineTempFile.exists());
 		 
 		 return inlined;
-	}
-
-	public void setInlineTempPath(Path path) {
-		inlineTempFile = Paths.get(path.toString(), getFile().getPath()).toFile();
 	}
 
 	public JSONObject toJSONObject() {
