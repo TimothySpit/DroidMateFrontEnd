@@ -1,32 +1,9 @@
-$(document)
-		.ready(
-				function() {
-					// Set output path label
-					var settings = $.droidmate.ajax.get.getDroidMateSettings();
-					$("#outputPathLabel").html(settings["outputPath"]);
-				});
+$(function() {
 
-$(function() {
-	//
-	$('#stopAllBtn').click(function(e) {
-		$.droidmate.ajax.post.stopDroidMate();
-	});
-});
-$(function() {
-	// exploration button handler
-	$('#back-to-index').click(function(e) {
-		$(this).prop("disabled", true);
-		$.droidmate.ajax.post.stopDroidMate(function(e) {
-			window.location = "/DroidMate/Index";
-		});
-	});
-});
-$(function() {
-	$('#openFolderBtn').click(function(e) {
-		$.droidmate.ajax.post.openReportFolder();
-	});
-});
-$(function() {
+	// Set output path label
+	var settings = $.droidmate.ajax.get.getDroidMateSettings();
+	$("#outputPathLabel").html(settings["outputPath"]);
+	
 	$('#outputPathLabel').click(function(e) {
 		var text = $(this).text();
 		var $this = $(this);
@@ -41,4 +18,26 @@ $(function() {
 			$input.remove();
 		});
 	});
+	// --------------------------------------
+
+	// handle StopAllButton
+	$('#stopAllBtn').click(function(e) {
+		$.droidmate.ajax.post.stopDroidMate();
+	});
+
+	// exploration button handler
+	$('#back-to-index').click(function(e) {
+		$(this).prop("disabled", true);
+		$.droidmate.ajax.post.stopDroidMate(function(e) {
+			window.location = "/DroidMate/Index";
+		});
+	});
+	// --------------------------------------
+
+	//handle openFolderButton
+	$('#openFolderBtn').click(function(e) {
+		$.droidmate.ajax.post.openReportFolder();
+	});
+	// --------------------------------------
+
 });

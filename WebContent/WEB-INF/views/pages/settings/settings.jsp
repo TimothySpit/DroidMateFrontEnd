@@ -47,7 +47,7 @@
 			</div>
 		</div>
 		<!-- file dialog -->
-		<jsp:include page="fileSavingDialog.jsp" />
+		<jsp:include page="modals/reportOutputPathSelection.jsp" />
 		<!-- file dialog -->
 
 
@@ -70,7 +70,7 @@
 		</div>
 			
 		<!-- file dialog -->
-		<jsp:include page="droidmateDialog.jsp" />
+		<jsp:include page="modals/droidMatePathSelection.jsp" />
 		<!-- file dialog -->
 
 		<div class="row input-row">

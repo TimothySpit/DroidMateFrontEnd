@@ -4,9 +4,9 @@
 
 <!-- CSS start -->
 <link rel="stylesheet"
-	href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	href="${pageContext.request.contextPath}/resources/libraries/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet"
-	href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
+	href="${pageContext.request.contextPath}/resources/libraries/datatables/media/css/jquery.dataTables.min.css">
 
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/style.css">
@@ -15,9 +15,9 @@
 <!-- CSS end -->
 
 <!-- JS start -->
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/libraries/jquery/jquery-1.12.0.min.js"></script>
 <script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	src="${pageContext.request.contextPath}/resources/libraries/bootstrap/js/bootstrap.min.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/droidmate/jquery.droidmate.ajax.js"></script>
 <script
@@ -27,5 +27,5 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/droidmate/jquery.droidmate.explore.js"></script>
 <script
-	src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+	src="${pageContext.request.contextPath}/resources/libraries/datatables/media/js/jquery.dataTables.min.js"></script>
 <!-- JS end -->
