@@ -12,27 +12,23 @@
 	href="${pageContext.request.contextPath}/resources/css/explore/style.css">
 <!-- chart files -->
 <script
-	src="${pageContext.request.contextPath}/resources/js/flot/jquery.flot.js"></script>
+	src="${pageContext.request.contextPath}/resources/libraries/flot/jquery.flot.js"></script>
 <script
-	src="${pageContext.request.contextPath}/resources/js/flot/jquery.flot.time.js"></script>
+	src="${pageContext.request.contextPath}/resources/libraries/flot/jquery.flot.canvas.js"></script>
 <script
-	src="${pageContext.request.contextPath}/resources/js/flot/jquery.flot.canvas.js"></script>
+	src="${pageContext.request.contextPath}/resources/libraries/flot/jquery.flot.symbol.js"></script>
 <script
-	src="${pageContext.request.contextPath}/resources/js/flot/jquery.flot.symbol.js"></script>
+	src="${pageContext.request.contextPath}/resources/libraries/flot/excanvas.min.js"></script>
 <script
-	src="${pageContext.request.contextPath}/resources/js/flot/excanvas.min.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/flot-tickrotor/jquery.flot.tickrotor.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/flot/jquery.flot.pie.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/flot-axislabels/jquery.flot.axislabels.js"></script>
+	src="${pageContext.request.contextPath}/resources/libraries/flot/flot-axislabels/jquery.flot.axislabels.js"></script>
+<!-- end chart files -->
+
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/js/explore/updateExplorationData.js"></script>
+	src="${pageContext.request.contextPath}/resources/js/explore/handleExplorationConsole.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/handleButtons.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/js/explore/updateConsole.js"></script>
+	src="${pageContext.request.contextPath}/resources/js/explore/handleExplorationUpdate.js"></script>
 </head>
 <body class="container">
 	<main>
@@ -51,7 +47,7 @@
 			</div>
 			<div class="col-sm-4 text-center">
 				<form>
-					<a href="${pageContext.request.contextPath}/ApkListingDynamic"><button
+					<a href="${pageContext.request.contextPath}/ExplorationCharts"><button
 							class="btn btn-default" type="button" id="apkInfoBtn">Show
 							details for .apks</button></a>
 				</form>

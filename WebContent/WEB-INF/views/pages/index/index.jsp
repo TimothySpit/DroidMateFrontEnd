@@ -7,19 +7,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <jsp:include page="../../partials/header.jsp" />
+
 <!-- file tree start-->
 <link rel="stylesheet"
-	href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/themes/default/style.min.css" />
+	href="${pageContext.request.contextPath}/resources/libraries/jstree/themes/default/style.min.css" />
 <script
-	src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/jstree.min.js"></script>
+	src="${pageContext.request.contextPath}/resources/libraries/jstree/jstree.min.js"></script>
+<!-- file tree end -->
+
 <script
 	src="${pageContext.request.contextPath}/resources/js/index/directoryTree.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/index/handleInlining.js"></script>
-	<script
+<script
 	src="${pageContext.request.contextPath}/resources/js/index/handleExploration.js"></script>
-<!-- file tree end -->
+
 </head>
 <body class="container">
 	<main>
@@ -53,7 +57,7 @@
 			<div class="col-sm-4"></div>
 			<div class="col-sm-4">
 				<!-- js tree -->
-				<jsp:include page="directoryTreeDialog.jsp" />
+				<jsp:include page="modals/apkFolderSelection.jsp" />
 				<!-- js tree -->
 				<div class="col-sm-4"></div>
 			</div>
@@ -78,7 +82,7 @@
 							<span class="glyphicon glyphicon-list-alt"></span> Show details
 						</button>
 						<!-- js tree -->
-						<jsp:include page="staticInfoModal.jsp" />
+						<jsp:include page="modals/fileSizeInformation.jsp" />
 						<!-- js tree -->
 					</div>
 				</div>
