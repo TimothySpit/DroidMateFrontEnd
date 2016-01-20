@@ -53,7 +53,7 @@ $(function() {
 										var object = unformattedData[i];
 										var row = [
 										// checkbox
-										"", object.name, object.size,
+										object.id, object.name, object.size,
 												object.package, object.version,
 												object.inlined ];
 										tableData[indexCounter] = row;
@@ -83,7 +83,8 @@ $(function() {
 											if (data) {
 												return "<span class=\"label label-success\">Inlined</span>";
 											} else {
-												var status = $.droidmate.inlining.getInliningStatus();
+												//var status = $.droidmate.inlining.getInliningStatus();
+												var status = $.droidmate.inlining.inliningStatus.NOT_STARTED;
 												switch (status) {
 												case $.droidmate.inlining.inliningStatus.NOT_STARTED:
 													return "<span class=\"label label-warning\">Not inlined</span>";

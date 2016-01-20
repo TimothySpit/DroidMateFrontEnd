@@ -14,6 +14,7 @@ public class APKInformation {
 	private APKExplorationStatus status = APKExplorationStatus.NOT_RUNNING;
 	private String packageName, versionCode, versionName;
 	private boolean inlined = false;
+	private int id;
 
 	private ExplorationReport report;
 	
@@ -21,6 +22,7 @@ public class APKInformation {
 
 	public APKInformation(int id, File file, String packageName, String versionCode, String versionName) {
 		super();
+		this.id=id;
 		this.file = file;
 		this.packageName = packageName;
 		this.versionCode = versionCode;
@@ -76,8 +78,13 @@ public class APKInformation {
 		return versionName;
 	}
 
+	public int getId() {
+		return id;
+	}
+
 	public JSONObject toJSONObject() {
 		JSONObject object = new JSONObject();
+		object.put("id", getId());
 		object.put("name", getFile().getName());
 		object.put("size", FileUtils.byteCountToDisplaySize(getFile().length()));
 		object.put("package", getPackageName());
