@@ -5,6 +5,7 @@
 	
 	//constants
 	ajax.UPDATE_EXPLORATION_INFO_INTERVAL = 1000;
+	ajax.UPDATE_CONSOLE_OUTPUT_INTERVAL = 1000;
 	//--------------------------------------
 	
 	//create ajax get functions
