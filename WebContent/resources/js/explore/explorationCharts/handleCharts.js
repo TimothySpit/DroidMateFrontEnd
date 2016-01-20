@@ -1,4 +1,4 @@
-$(function() {
+define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas', 'jquery.flot.navigate', 'jquery.flot.symbol','jquery.flot.pie', 'jquery.droidmate.ajax'], function(require) {
 
 	function createPieChart(divname) {
 		var dataSet = [ {

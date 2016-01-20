@@ -12,12 +12,9 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/explore/style.css">
 
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/js/explore/handleExplorationConsole.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/js/explore/handleButtons.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/js/explore/handleExplorationUpdate.js"></script>
+<!-- requirejs -->
+<script data-main="${pageContext.request.contextPath}/resources/js/explore/explore.js"
+	src="${pageContext.request.contextPath}/resources/libraries/requirejs/require.js"></script>
 	
 </head>
 <body class="container">

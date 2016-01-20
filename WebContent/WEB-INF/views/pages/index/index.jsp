@@ -10,15 +10,10 @@
 
 <jsp:include page="../../partials/header.jsp" />
 
-<script
-	src="${pageContext.request.contextPath}/resources/js/index/directoryTree.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/index/handleInlining.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/index/handleExploration.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/index/handleModals.js"></script>
-
+<!-- requirejs -->
+<script data-main="${pageContext.request.contextPath}/resources/js/index/index.js"
+	src="${pageContext.request.contextPath}/resources/libraries/requirejs/require.js"></script>
+	
 </head>
 <body class="container">
 	<main>

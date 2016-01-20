@@ -1,4 +1,4 @@
-$(function() {
+define([ 'jquery', 'jquery.droidmate.overlays', 'jquery.droidmate.ajax'], function(require) {
 
 	function saveSettings(outputPath, dmPath, explorationTime) {
 		$.droidmate.ajax.post.saveDroidMateSettings(outputPath,dmPath, explorationTime, true, function(result) {

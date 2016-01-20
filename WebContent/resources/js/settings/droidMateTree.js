@@ -1,4 +1,5 @@
-$(function() {
+define([ 'jquery', 'jstree'], function(require) {
+
 	$('#fileTreeDroidMate').jstree({
 		'core' : {
 			'data' : {
@@ -16,9 +17,7 @@ $(function() {
 			}
 		}
 	});
-});
 
-$(function() {
 	$('#droidmateDialog .modal-footer button').on('click', function(e) {
 		var selectedItems = $('#fileTreeDroidMate').jstree(true).get_selected(true);
 		if (selectedItems.length > 0) {

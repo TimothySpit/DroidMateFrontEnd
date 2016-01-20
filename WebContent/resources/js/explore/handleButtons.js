@@ -1,4 +1,4 @@
-$(function() {
+define([ 'jquery', 'jquery.droidmate.ajax'], function(require) {
 
 	// Set output path label
 	var settings = $.droidmate.ajax.get.getDroidMateSettings();

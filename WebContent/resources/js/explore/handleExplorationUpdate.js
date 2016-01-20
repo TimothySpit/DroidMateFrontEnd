@@ -1,4 +1,4 @@
-$(function() {
+define([ 'jquery', 'DataTables', 'jquery.flot.symbol', 'jquery.flot.canvas', 'jquery.flot.axislabels', 'jquery.flot.navigate', 'jquery.flot', 'jquery.droidmate.ajax', 'jquery.droidmate.explore'], function(require) {
 
 	var finished_apks = [];
 

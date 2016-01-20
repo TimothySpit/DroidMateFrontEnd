@@ -6,8 +6,9 @@
 
 <jsp:include page="../../../partials/header.jsp" />
 
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/js/explore/explorationCharts/handleCharts.js"></script>
+<!-- requirejs -->
+<script data-main="${pageContext.request.contextPath}/resources/js/explore/explorationCharts/explorationCharts.js"
+	src="${pageContext.request.contextPath}/resources/libraries/requirejs/require.js"></script>
 
 </head>
 <body class="container">

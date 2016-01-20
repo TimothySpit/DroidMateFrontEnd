@@ -1,4 +1,4 @@
-(function($) {
+define([ 'jquery'], function(require) {
 	//ajax object
 	var droidmate = $.droidmate || {};
 	var ajax = {};
@@ -24,6 +24,24 @@
 		return result;
 	}
 	get.getDroidMateSettings = getDroidMateSettings;
+	//----------------------------------
+	
+	function getSelectedAPKRoot() {
+		var result = null;
+		$.ajax({
+	        url:  "/DroidMate/APKPathHandler",
+	        async: false,
+	        type: 'GET',
+	        data: {info : [ "apkRoot" ]},
+	        success: function(data) {
+	        	if (data && data["info[]"] && data["info[]"].apkRoot) {
+	        		result = data["info[]"].apkRoot;
+	        	}
+	        } 
+	     });
+		return result;
+	}
+	get.getSelectedAPKRoot = getSelectedAPKRoot;
 	//----------------------------------
 	
 	function getConsoleOutput(line) {
@@ -315,4 +333,4 @@
 	droidmate.ajax = ajax;
 	$.droidmate = droidmate;
 	
-})(jQuery);
+});

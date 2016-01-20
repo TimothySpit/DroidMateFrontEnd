@@ -1,4 +1,4 @@
-$(function() {
+define([ 'jquery', 'jstree', 'jquery.droidmate.inlining', 'jquery.droidmate.overlays'], function(require) {
 	// inline button handler
 	$('#inline_files')
 			.click(

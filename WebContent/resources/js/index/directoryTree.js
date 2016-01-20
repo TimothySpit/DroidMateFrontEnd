@@ -1,196 +1,150 @@
-$(function() {
-	$('#folderTree').jstree({
-		'core' : {
-			'data' : {
-				"url" : "/DroidMate/FileSystem?type=directory",
-				"data" : function(node) {
-					if (node.text)
-						return {
-							"path" : node.text
-						};
-					else
-						return {
-							"path" : "root"
-						};
-				}
-			}
-		}
-	});
-});
+define(
+		[ 'jquery', 'jstree', 'jquery.flot', 'jquery.flot.tooltip','jquery.droidmate.ajax',
+				'jquery.droidmate.inlining', 'DataTables' ],
+		function(require) {
+			var rows_selected = [];
 
-$(function() {
-	var rows_selected = [];
-	function createTable() {
+			function createTable() {
+				$('#selectiontable').DataTable().destroy();
+				var table = $('#selectiontable')
+						.DataTable(
+								{
+									"ajax" : {
+										'url' : '/DroidMate/APKPathHandler?info[]=apks',
+										"dataSrc" : function(json) {
+											if (json["info[]"].apks.data.length <= 0) {
+												$(".apk-data").addClass("hide");
+												$('#load-result-indikator')
+														.html(
+																'<span class="label label-danger text-center">no apks loaded.</span>');
+												$("#btns-field").addClass(
+														"hide");
+												$("#show-static").addClass(
+														"hide");
+											} else {
+												$(".apk-data").removeClass(
+														"hide");
+												$('#load-result-indikator')
+														.html(
+																'<span class="label label-success text-center">'
+																		+ json["info[]"].apks.data.length
+																		+ ' apks loaded.</span>');
+												$("#btns-field").removeClass(
+														"hide");
+												$("#show-static").removeClass(
+														"hide");
+											}
+											var unformattedData = json["info[]"].apks.data;
+											var tableData = [];
+											var indexCounter = 0;
+											for (var i = 0; i < unformattedData.length; i++) {
+												var object = unformattedData[i];
+												var row = [ object.id,
+														object.name,
+														object.size,
+														object.package,
+														object.version, object ];
+												tableData[indexCounter] = row;
+												indexCounter++;
+											}
 
-		$('#selectiontable').DataTable().destroy();
-		var table = $('#selectiontable')
-				.DataTable(
-						{
-							"ajax" : {
-								'url' : '/DroidMate/APKPathHandler?info[]=apks',
-								"dataSrc" : function(json) {
-									if (json["info[]"].apks.data.length <= 0) {
-										$(".apk-data").addClass("hide");
-										$('#load-result-indikator')
-												.html(
-														'<span class="label label-danger text-center">no apks loaded.</span>');
-										$("#btns-field").addClass("hide");
-										$("#show-static").addClass("hide");
-									} else {
-										$(".apk-data").removeClass("hide");
-										$('#load-result-indikator')
-												.html(
-														'<span class="label label-success text-center">'
-																+ json["info[]"].apks.data.length
-																+ ' apks loaded.</span>');
-										$("#btns-field").removeClass("hide");
-										$("#show-static").removeClass("hide");
-									}
-									var unformattedData = json["info[]"].apks.data;
-									var tableData = [];
-									var indexCounter = 0;
-									for (var i = 0; i < unformattedData.length; i++) {
-										var object = unformattedData[i];
-										var row = [ object.id, object.name,
-												object.size, object.package,
-												object.version, object ];
-										tableData[indexCounter] = row;
-										indexCounter++;
-									}
-
-									return tableData;
-								}
-							},
-							'columnDefs' : [
-									{
-										'targets' : 0,
-										'searchable' : false,
-										'orderable' : false,
-										'className' : 'dt-body-center',
-										'render' : function(data, type, full,
-												meta) {
-											return '<input type="checkbox">';
+											return tableData;
 										}
 									},
-									{
-										'targets' : 5,
-										'searchable' : false,
-										'orderable' : false,
-										'className' : 'dt-body-center',
-										'render' : function(data, type, full,
-												meta) {
-											var cellData = data;
-											if (cellData.inlined) {
-												return "<span class=\"label label-success\">Inlined</span>";
-											} else {
-												// var status =
-												// $.droidmate.inlining.getInliningStatus();
-												var status = $.droidmate.inlining.inliningStatus.NOT_STARTED;
-												switch (cellData.inliningStatus) {
-												case $.droidmate.inlining.inliningStatus.NOT_STARTED:
-													return "<span class=\"label label-warning\">Not inlined</span>";
-												case $.droidmate.inlining.inliningStatus.INLINING:
-													return "<span class=\"label label-info\">Inlining...</span>";
-												case $.droidmate.inlining.inliningStatus.ERROR:
-													// File isn't inlined, but
-													// the process has finished
-												case $.droidmate.inlining.inliningStatus.FINISHED:
-													return "<span class=\"label label-danger\">Error</span>";
+									'columnDefs' : [
+											{
+												'targets' : 0,
+												'searchable' : false,
+												'orderable' : false,
+												'className' : 'dt-body-center',
+												'render' : function(data, type,
+														full, meta) {
+													return '<input type="checkbox">';
 												}
-											}
+											},
+											{
+												'targets' : 5,
+												'searchable' : false,
+												'orderable' : false,
+												'className' : 'dt-body-center',
+												'render' : function(data, type,
+														full, meta) {
+													var cellData = data;
+													if (cellData.inlined) {
+														return "<span class=\"label label-success\">Inlined</span>";
+													} else {
+														// var status =
+														// $.droidmate.inlining.getInliningStatus();
+														var status = $.droidmate.inlining.inliningStatus.NOT_STARTED;
+														switch (cellData.inliningStatus) {
+														case $.droidmate.inlining.inliningStatus.NOT_STARTED:
+															return "<span class=\"label label-warning\">Not inlined</span>";
+														case $.droidmate.inlining.inliningStatus.INLINING:
+															return "<span class=\"label label-info\">Inlining...</span>";
+														case $.droidmate.inlining.inliningStatus.ERROR:
+															// File isn't
+															// inlined, but
+															// the process has
+															// finished
+														case $.droidmate.inlining.inliningStatus.FINISHED:
+															return "<span class=\"label label-danger\">Error</span>";
+														}
+													}
+												}
+											} ],
+									'searching' : false,
+									'paging' : false,
+									'order' : [ [ 1, 'asc' ] ],
+									'rowCallback' : function(row, data,
+											dataIndex) {
+										// Get row ID
+										var rowId = data[0];
+
+										// If row ID is in the list of selected
+										// row IDs
+										if ($.inArray(rowId, rows_selected) !== -1) {
+											$(row).find(
+													'input[type="checkbox"]')
+													.prop('checked', true);
+											$(row).addClass('selected');
 										}
-									} ],
-							'searching' : false,
-							'paging' : false,
-							'order' : [ [ 1, 'asc' ] ],
-							'rowCallback' : function(row, data, dataIndex) {
-								// Get row ID
-								var rowId = data[0];
+									}
+								});
 
-								// If row ID is in the list of selected row IDs
-								if ($.inArray(rowId, rows_selected) !== -1) {
-									$(row).find('input[type="checkbox"]').prop(
-											'checked', true);
-									$(row).addClass('selected');
-								}
-							}
-						});
+				function updateDataTableSelectAllCtrl(table) {
+					var $table = table.table().node();
+					var $chkbox_all = $('tbody input[type="checkbox"]', $table);
+					var $chkbox_checked = $(
+							'tbody input[type="checkbox"]:checked', $table);
+					var chkbox_select_all = $('thead input[name="select_all"]',
+							$table).get(0);
 
-		function updateDataTableSelectAllCtrl(table) {
-			var $table = table.table().node();
-			var $chkbox_all = $('tbody input[type="checkbox"]', $table);
-			var $chkbox_checked = $('tbody input[type="checkbox"]:checked',
-					$table);
-			var chkbox_select_all = $('thead input[name="select_all"]', $table)
-					.get(0);
+					// If none of the checkboxes are checked
+					if ($chkbox_checked.length === 0) {
+						chkbox_select_all.checked = false;
+						if ('indeterminate' in chkbox_select_all) {
+							chkbox_select_all.indeterminate = false;
+						}
+						$("#startexploration").addClass("disabled");
 
-			// If none of the checkboxes are checked
-			if ($chkbox_checked.length === 0) {
-				chkbox_select_all.checked = false;
-				if ('indeterminate' in chkbox_select_all) {
-					chkbox_select_all.indeterminate = false;
+						// If all of the checkboxes are checked
+					} else if ($chkbox_checked.length === $chkbox_all.length) {
+						chkbox_select_all.checked = true;
+						if ('indeterminate' in chkbox_select_all) {
+							chkbox_select_all.indeterminate = false;
+						}
+						$("#startexploration").removeClass("disabled");
+						// If some of the checkboxes are checked
+					} else {
+						chkbox_select_all.checked = true;
+						if ('indeterminate' in chkbox_select_all) {
+							chkbox_select_all.indeterminate = true;
+						}
+						$("#startexploration").removeClass("disabled");
+					}
 				}
-				$("#startexploration").addClass("disabled");
 
-				// If all of the checkboxes are checked
-			} else if ($chkbox_checked.length === $chkbox_all.length) {
-				chkbox_select_all.checked = true;
-				if ('indeterminate' in chkbox_select_all) {
-					chkbox_select_all.indeterminate = false;
-				}
-				$("#startexploration").removeClass("disabled");
-				// If some of the checkboxes are checked
-			} else {
-				chkbox_select_all.checked = true;
-				if ('indeterminate' in chkbox_select_all) {
-					chkbox_select_all.indeterminate = true;
-				}
-				$("#startexploration").removeClass("disabled");
-			}
-		}
-
-		function selectAll(e) {
-			var $row = $(this).closest('tr');
-
-			// Get row data
-			var data = table.row($row).data();
-
-			// Get row ID
-			var rowId = data[0];
-
-			// Determine whether row ID is in the list of selected row
-			// IDs
-			var index = $.inArray(rowId, rows_selected);
-
-			// If checkbox is checked and row ID is not in list of
-			// selected row IDs
-			if (this.checked && index === -1) {
-				rows_selected.push(rowId);
-
-				// Otherwise, if checkbox is not checked and row ID is
-				// in list of selected row IDs
-			} else if (!this.checked && index !== -1) {
-				rows_selected.splice(index, 1);
-			}
-
-			if (this.checked) {
-				$row.addClass('selected');
-			} else {
-				$row.removeClass('selected');
-			}
-
-			// Update state of "Select all" control
-			updateDataTableSelectAllCtrl(table);
-
-			// Prevent click event from propagating to parent
-			e.stopPropagation();
-		}
-		;
-
-		// set up checkbox handlers
-		$('#selectiontable tbody').off('click', 'input[type="checkbox"]');
-		$('#selectiontable tbody').on('click', 'input[type="checkbox"]',
-				function(e) {
+				function selectAll(e) {
 					var $row = $(this).closest('tr');
 
 					// Get row data
@@ -223,81 +177,136 @@ $(function() {
 					// Update state of "Select all" control
 					updateDataTableSelectAllCtrl(table);
 
-					// update selected apks
-					$.droidmate.ajax.post.setSelectedAPKS(rows_selected);
-
 					// Prevent click event from propagating to parent
 					e.stopPropagation();
-				});
+				}
+				;
 
-		// Handle click on table cells with checkboxes
-		$('#selectiontable').off('click', 'tbody td, thead tr:first-child');
-		$('#selectiontable').on(
-				'click',
-				'tbody td, thead tr:first-child',
-				function(e) {
-					$(this).parent().find('input[type="checkbox"]').trigger(
-							'click');
-				});
-
-		// Handle click on "Select all" control
-		$('#selectiontable thead input[name="select_all"]').off('click');
-		$('#selectiontable thead input[name="select_all"]')
-				.on(
+				// set up checkbox handlers
+				$('#selectiontable tbody').off('click',
+						'input[type="checkbox"]');
+				$('#selectiontable tbody').on(
 						'click',
+						'input[type="checkbox"]',
 						function(e) {
-							if (this.checked) {
-								$(
-										'#selectiontable tbody input[type="checkbox"]:not(:checked)')
-										.trigger('click');
-							} else {
-								$(
-										'#selectiontable tbody input[type="checkbox"]:checked')
-										.trigger('click');
+							var $row = $(this).closest('tr');
+
+							// Get row data
+							var data = table.row($row).data();
+
+							// Get row ID
+							var rowId = data[0];
+
+							// Determine whether row ID is in the list of
+							// selected row
+							// IDs
+							var index = $.inArray(rowId, rows_selected);
+
+							// If checkbox is checked and row ID is not in list
+							// of
+							// selected row IDs
+							if (this.checked && index === -1) {
+								rows_selected.push(rowId);
+
+								// Otherwise, if checkbox is not checked and row
+								// ID is
+								// in list of selected row IDs
+							} else if (!this.checked && index !== -1) {
+								rows_selected.splice(index, 1);
 							}
+
+							if (this.checked) {
+								$row.addClass('selected');
+							} else {
+								$row.removeClass('selected');
+							}
+
+							// Update state of "Select all" control
+							updateDataTableSelectAllCtrl(table);
+
+							// update selected apks
+							$.droidmate.ajax.post
+									.setSelectedAPKS(rows_selected);
 
 							// Prevent click event from propagating to parent
 							e.stopPropagation();
 						});
 
-		// Handle table draw event
-		table.on('draw', function() {
-			$('#selectiontable tbody input[type="checkbox"]:not(:checked)')
-					.trigger('click');
-			// Update state of "Select all" control
-			updateDataTableSelectAllCtrl(table);
-		});
+				// Handle click on table cells with checkboxes
+				$('#selectiontable').off('click',
+						'tbody td, thead tr:first-child');
+				$('#selectiontable').on(
+						'click',
+						'tbody td, thead tr:first-child',
+						function(e) {
+							$(this).parent().find('input[type="checkbox"]')
+									.trigger('click');
+						});
 
-		return table;
-	}
+				// Handle click on "Select all" control
+				$('#selectiontable thead input[name="select_all"]')
+						.off('click');
+				$('#selectiontable thead input[name="select_all"]')
+						.on(
+								'click',
+								function(e) {
+									if (this.checked) {
+										$(
+												'#selectiontable tbody input[type="checkbox"]:not(:checked)')
+												.trigger('click');
+									} else {
+										$(
+												'#selectiontable tbody input[type="checkbox"]:checked')
+												.trigger('click');
+									}
 
-	$.get("/DroidMate/APKPathHandler", {
-		info : [ "apkRoot" ]
-	}, function(data) {
-		if (data && data["info[]"] && data["info[]"].apkRoot) {
-			$('#folder_name').val(data["info[]"].apkRoot);
-			createTable();
-		}
-	});
+									// Prevent click event from propagating to
+									// parent
+									e.stopPropagation();
+								});
 
-	$('#folderSelectModal .modal-footer button').on(
-			'click',
-			function(e) {
+				// Handle table draw event
+				table
+						.on(
+								'draw',
+								function() {
+									$(
+											'#selectiontable tbody input[type="checkbox"]:not(:checked)')
+											.trigger('click');
+									// Update state of "Select all" control
+									updateDataTableSelectAllCtrl(table);
+								});
 
-				var selectedItems = $('#folderTree').jstree(true).get_selected(
-						true);
-				if (selectedItems.length > 0) {
-					$('#folder_name').val(selectedItems[0].text);
+				return table;
+			}
 
-					var path = encodeURIComponent(selectedItems[0].text);
+			$('#folderSelectModal .modal-footer button')
+					.on(
+							'click',
+							function(e) {
 
-					$.droidmate.ajax.post.setAPKRoot(selectedItems[0].text,
-							false, function(data) {
-								if (data.success) {
-									createTable();
+								var selectedItems = $('#folderTree').jstree(
+										true).get_selected(true);
+								if (selectedItems.length > 0) {
+									$('#folder_name')
+											.val(selectedItems[0].text);
+
+									var path = encodeURIComponent(selectedItems[0].text);
+
+									$.droidmate.ajax.post.setAPKRoot(
+											selectedItems[0].text, false,
+											function(data) {
+												if (data.success) {
+													createTable();
+												}
+											});
 								}
 							});
-				}
-			});
 
-});
+			var root = $.droidmate.ajax.get.getSelectedAPKRoot();
+			if (root) {
+				$('#folder_name').val(root);
+				createTable();
+			}
+
+		});

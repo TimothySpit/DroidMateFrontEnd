@@ -1,4 +1,5 @@
-$(function() {
+define([ 'jquery', 'jstree' ], function(require) {
+
 	$('#fileTree').jstree({
 		'core' : {
 			'data' : {
@@ -16,9 +17,7 @@ $(function() {
 			}
 		}
 	});
-});
 
-$(function() {
 	$('#fileSavingDialog .modal-footer button').on('click', function(e) {
 		var selectedItems = $('#fileTree').jstree(true).get_selected(true);
 		if (selectedItems.length > 0) {

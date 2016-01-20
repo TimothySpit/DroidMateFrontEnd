@@ -1,4 +1,5 @@
-$(function() {
+define([ 'jquery', 'jstree'], function(require) {
+
 	// fileSizeInformation Modal dialog
 	$('#show-static').on('click', function(e) {
 		$.ajax({
@@ -50,4 +51,26 @@ $(function() {
 		});
 	});
 	// ------------------------------------------
-})
+
+	// Folder select modal
+	$(function() {
+		$('#folderTree').jstree({
+			'core' : {
+				'data' : {
+					"url" : "/DroidMate/FileSystem?type=directory",
+					"data" : function(node) {
+						if (node.text)
+							return {
+								"path" : node.text
+							};
+						else
+							return {
+								"path" : "root"
+							};
+					}
+				}
+			}
+		});
+	});
+
+});

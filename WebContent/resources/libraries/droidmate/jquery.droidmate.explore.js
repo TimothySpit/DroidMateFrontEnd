@@ -1,4 +1,4 @@
-(function($) {
+define([ 'jquery'], function(require) {
 	//ajax object
 	var droidmate = $.droidmate || {};
 	var explore = {};
@@ -11,4 +11,4 @@
 	droidmate.explore = explore;
 	$.droidmate = droidmate;
 	
-})(jQuery);
+});

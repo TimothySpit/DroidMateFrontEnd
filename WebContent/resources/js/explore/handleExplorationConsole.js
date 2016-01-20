@@ -1,4 +1,4 @@
-$(function() {
+define([ 'jquery', 'jquery.droidmate.ajax'], function(require) {
 
 	var currentLine = 0;
 

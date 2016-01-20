@@ -10,12 +10,9 @@
 <head>
 <jsp:include page="../../partials/header.jsp" />
 
-<script
-	src="${pageContext.request.contextPath}/resources/js/settings/formHandling.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/settings/outputFolderTree.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/settings/droidMateTree.js"></script>
+<!-- requirejs -->
+<script data-main="${pageContext.request.contextPath}/resources/js/settings/settings.js"
+	src="${pageContext.request.contextPath}/resources/libraries/requirejs/require.js"></script>
 
 </head>
 <body class="container">
