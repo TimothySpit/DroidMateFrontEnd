@@ -143,12 +143,7 @@ public class APKPathHandler extends HttpServlet {
 
 	private boolean handleSaveAPKRoot(String saveAPKRoot) {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
-		
 		Path newAPKRoot = Paths.get(saveAPKRoot);
-		Path inlineTempPath = (new GUISettings()).getDroidMatePath().resolve("apks/inlined");
-		for(APKInformation apkInfo : user.getAPKS()) {
-			apkInfo.setInlineTempPath(inlineTempPath);
-		}
 		
 		return user.setAPKPath(newAPKRoot);
 	}

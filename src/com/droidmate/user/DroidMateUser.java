@@ -5,8 +5,10 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.droidmate.apk.APKInformation;
+import com.droidmate.settings.GUISettings;
 
 public class DroidMateUser {
 	
@@ -53,7 +55,9 @@ public class DroidMateUser {
 		String packageVersionCode = getValueFromAaptOutput(output, "versionCode");
 		String packageVersionName = getValueFromAaptOutput(output, "versionName");
 		
-		return new APKInformation(id, apk, packageName, packageVersionCode, packageVersionName);
+		Path inlineTempPath = Paths.get((new GUISettings()).getDroidMatePath().toString(), "/projects/apk-inliner/output-apks/");
+		
+		return new APKInformation(id, apk, inlineTempPath, packageName, packageVersionCode, packageVersionName);
 	}
 	
 	/**
