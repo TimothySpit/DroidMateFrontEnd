@@ -16,7 +16,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.droidmate.apk.APKInformation;
+import com.droidmate.apk.inlining.APKInliner;
+import com.droidmate.apk.inlining.InliningStatus;
 import com.droidmate.settings.AjaxConstants;
+import com.droidmate.settings.GUISettings;
 import com.droidmate.settings.ServletContextConstants;
 import com.droidmate.user.DroidMateUser;
 
@@ -80,7 +83,7 @@ public class APKPathHandler extends HttpServlet {
 					apks[index].setSelected(true);
 				}
 			}
-		}		
+		}
 	}
 
 	private JSONObject handleInformationGetRequest(String[] get_info) {
@@ -110,10 +113,20 @@ public class APKPathHandler extends HttpServlet {
 				break;
 			}
 			case AjaxConstants.APKPathHandeler_GET_INFORMATION_APKS: {
+				APKInliner inliner = (APKInliner) getServletContext().getAttribute(ServletContextConstants.APK_INLINER);
+				InliningStatus status;
+				if (inliner != null) {
+					status = inliner.getInliningStatus();
+				} else {
+					status = InliningStatus.NOT_STARTED;
+				}
+				
 				// returns the apks in the folder
 				JSONArray selectedAPKInfo = new JSONArray();
 				for (APKInformation apk : user.getAPKS()) {
-					selectedAPKInfo.put(apk.toJSONObject());
+					JSONObject apkObject = apk.toJSONObject();
+					apkObject.put("inliningStatus", status);
+					selectedAPKInfo.put(apkObject);
 				}
 				JSONObject res = new JSONObject();
 				res.put("data", selectedAPKInfo);
@@ -132,8 +145,12 @@ public class APKPathHandler extends HttpServlet {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 		
 		Path newAPKRoot = Paths.get(saveAPKRoot);
-		return user.setAPKPath(newAPKRoot);
+		Path inlineTempPath = (new GUISettings()).getDroidMatePath().resolve("apks/inlined");
+		for(APKInformation apkInfo : user.getAPKS()) {
+			apkInfo.setInlineTempPath(inlineTempPath);
+		}
 		
+		return user.setAPKPath(newAPKRoot);
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

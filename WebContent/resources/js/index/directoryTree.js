@@ -51,11 +51,9 @@ $(function() {
 									var indexCounter = 0;
 									for (var i = 0; i < unformattedData.length; i++) {
 										var object = unformattedData[i];
-										var row = [
-										// checkbox
-										object.id, object.name, object.size,
-												object.package, object.version,
-												object.inlined ];
+										var row = [ object.id, object.name,
+												object.size, object.package,
+												object.version, object ];
 										tableData[indexCounter] = row;
 										indexCounter++;
 									}
@@ -79,18 +77,24 @@ $(function() {
 										'searchable' : false,
 										'orderable' : false,
 										'className' : 'dt-body-center',
-										'render' : function(data, type, full, meta) {
-											if (data) {
+										'render' : function(data, type, full,
+												meta) {
+											var cellData = data;
+											if (cellData.inlined) {
 												return "<span class=\"label label-success\">Inlined</span>";
 											} else {
-												//var status = $.droidmate.inlining.getInliningStatus();
+												// var status =
+												// $.droidmate.inlining.getInliningStatus();
 												var status = $.droidmate.inlining.inliningStatus.NOT_STARTED;
-												switch (status) {
+												switch (cellData.inliningStatus) {
 												case $.droidmate.inlining.inliningStatus.NOT_STARTED:
 													return "<span class=\"label label-warning\">Not inlined</span>";
 												case $.droidmate.inlining.inliningStatus.INLINING:
 													return "<span class=\"label label-info\">Inlining...</span>";
 												case $.droidmate.inlining.inliningStatus.ERROR:
+													// File isn't inlined, but
+													// the process has finished
+												case $.droidmate.inlining.inliningStatus.FINISHED:
 													return "<span class=\"label label-danger\">Error</span>";
 												}
 											}

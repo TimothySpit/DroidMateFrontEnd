@@ -11,6 +11,7 @@ import org.json.JSONObject;
 public class APKInformation {
 
 	private final File file;
+	private File inlineTempFile;
 	private APKExplorationStatus status = APKExplorationStatus.NOT_RUNNING;
 	private String packageName, versionCode, versionName;
 	private boolean inlined = false;
@@ -37,9 +38,34 @@ public class APKInformation {
 	}
 
 	public boolean isInlined() {
-		inlined = getInlinedPath().toFile().exists();
+		inlined = getInlinedPath().toFile().exists() || (inlineTempFile != null && inlineTempFile.exists());
 		 
 		 return inlined;
+	}
+
+	public void setInlineTempPath(Path path) {
+		inlineTempFile = Paths.get(path.toString(), getFile().getPath()).toFile();
+	}
+
+	public JSONObject toJSONObject() {
+		JSONObject object = new JSONObject();
+		object.put("id", getId());
+		object.put("name", getFile().getName());
+		object.put("size", FileUtils.byteCountToDisplaySize(getFile().length()));
+		object.put("package", getPackageName());
+		object.put("version", getVersionName() + " (#" + getVersionCode() + ")");
+		object.put("selected", selected);
+		object.put("inlined", isInlined());
+		
+		return object;
+	}
+
+	public synchronized ExplorationReport getReport() {
+		return report;
+	}
+
+	public synchronized void setReport(ExplorationReport report) {
+		this.report = report;
 	}
 
 	public APKExplorationStatus getStatus() {
@@ -82,25 +108,8 @@ public class APKInformation {
 		return id;
 	}
 
-	public JSONObject toJSONObject() {
-		JSONObject object = new JSONObject();
-		object.put("id", getId());
-		object.put("name", getFile().getName());
-		object.put("size", FileUtils.byteCountToDisplaySize(getFile().length()));
-		object.put("package", getPackageName());
-		object.put("version", getVersionName() + " (#" + getVersionCode() + ")");
-		object.put("selected", selected);
-		object.put("inlined", isInlined());
-		
-		return object;
-	}
-
-	public synchronized ExplorationReport getReport() {
-		return report;
-	}
-
-	public synchronized void setReport(ExplorationReport report) {
-		this.report = report;
+	public File getInlineTempFile() {
+		return inlineTempFile;
 	}
 
 }
