@@ -1,243 +1,171 @@
 $(function() {
-	
-	var elementsSeen = [[5, 300], [2, 600], [4, 550], [3, 400], [1, 300]];
-	var screensExplored = [[1, 500], [2, 500], [3, 500], [4, 500], [5, 300]];
-	var testData = [[1, 700], [2, 10], [3, 0], [4, 50], [5, 100], [6, 230], [7, 400], [8, 100], [9, 520], [10, 301]];
-	var successfulAPKs = 40, failedAPKs = 30, remainingAPKs=10;
-	var updateInterval = 1000;
-	var dataVisible = 5;
-	var lastUpdate = 0;
-	var chartAPKStatus, chartGUIElementsExplored, chartGUIElementsSeen, chartGUIScreensExplored, chartElementsAndScreens;
-	
-	function createChartAPKStatus(divname)
-	{
-		//successfulAPKs, failedAPKs, remainingAPKs;
-		updateAPKValues();
-		var dataSet = [
-		               {label: "Successful", data: successfulAPKs, color: "#00A36A"},
-		               { label: "Failed", data: failedAPKs, color: "#005CDE"},
-		               { label: "Remaining", data: remainingAPKs, color: "#7D0096" }    
-		           ];
-		var options = 
-		{
-		        series: 
-		        {
-		            pie: 
-		            { 
-		                show: true,
-		                radius: 1,
-		                label: 
-		                {
-		                    show: true,
-		                    radius: 1,
-		                    formatter: function(label, series){
-		                        return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-		                    },
-		                    background: { opacity: 0.8 }
-		                }
-		            }
-		        },
-		        legend: {
-		            show: false
-		        }
+
+	function createPieChart(divname) {
+		var dataSet = [ {
+			label : "Successful",
+			data : 0,
+			color : "#00A36A"
+		}, {
+			label : "Failed",
+			data : 0,
+			color : "#005CDE"
+		}, {
+			label : "Remaining",
+			data : 1,
+			color : "#7D0096"
+		} ];
+		var options = {
+			series : {
+				pie : {
+					show : true,
+					radius : 1,
+					label : {
+						show : true,
+						radius : 1,
+						formatter : function(label, series) {
+							return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'
+									+ label
+									+ '<br/>'
+									+ Math.round(series.percent) + '%</div>';
+						},
+						background : {
+							opacity : 0.8
+						}
+					}
+				}
+			},
+			legend : {
+				show : false
+			}
 		};
-		chartAPKStatus = $.plot($(divname), dataSet, options);
-		setTimeout(updateChartAPKStatus, divname, updateInterval);
+		return $.plot($(divname), dataSet, options);
 	}
 
-	function createChartGUIElementsSeen(divname) {
-		var options =  {
-	            yaxis: {
-	                labelWidth: 30,
-	                axisLabel: 'GUI elements seen',
-	                axisLabelUseCanvas: true,
-	                axisLabelFontSizePixels: 20,
-	                axisLabelFontFamily: 'Arial',
-	                panRange: false,
-	                minTickSize: 1,
-	                min : 0,
-	            },
-	            xaxis: {
-	                labelHeight: 30,
-	                axisLabel: 'time (sec)',
-	                axisLabelUseCanvas: true,
-	                axisLabelFontSizePixels: 15,
-	                axisLabelFontFamily: 'Arial',
-	                panRange: [0, null],
-	                min : 0,
-					minTickSize: 1
-	            },
-	            pan: {
-	    			interactive: true
-	    		}
-	        };
-	    elementsSeen = getDataElementsSeen();
-	    chartGUIElementsSeen = $.plot(divname, [elementsSeen], options);
-	    setTimeout(updateElementsSeen, divname, updateInterval);
-	};
+	function createGraphChart(divname, xAxisLabel, yAxisLabel) {
+		var options = {
+			yaxis : {
+				labelWidth : 30,
+				axisLabel : yAxisLabel,
+				axisLabelUseCanvas : true,
+				axisLabelFontSizePixels : 20,
+				axisLabelFontFamily : 'Arial',
+				panRange : false,
+				minTickSize : 1,
+				min : 0,
+			},
+			xaxis : {
+				labelHeight : 30,
+				axisLabel : xAxisLabel,
+				axisLabelUseCanvas : true,
+				axisLabelFontSizePixels : 15,
+				axisLabelFontFamily : 'Arial',
+				panRange : [ 0, null ],
+				min : 0,
+				minTickSize : 1
+			},
+			pan : {
+				interactive : true
+			}
+		};
+		return $.plot(divname, [ 0, 0 ], options);
+	}
 
-	function createChartGUIScreensExplored(divname) {
-		var options =  {
-	            yaxis: {
-	                labelWidth: 30,
-	                axisLabel: 'screens explored',
-	                axisLabelUseCanvas: true,
-	                axisLabelFontSizePixels: 20,
-	                axisLabelFontFamily: 'Arial',
-	                panRange: false,
-	                minTickSize: 1,
-	                min : 0,
-	            },
-	            xaxis: {
-	                labelHeight: 30,
-	                axisLabel: 'time (sec)',
-	                axisLabelUseCanvas: true,
-	                axisLabelFontSizePixels: 15,
-	                axisLabelFontFamily: 'Arial',
-	                panRange: [0, null],
-	                min : 0,
-					minTickSize: 1
-	            },
-	            pan: {
-	    			interactive: true
-	    		}
-	        };
-	    screensExplored = getDataScreensExplored();
-	    chartGUIScreensExplored = $.plot(divname, [screensExplored], options);
-	    setTimeout(updateScreensExplored, divname, updateInterval);
-	};
-
-
-	function createChartGUIElementsAndScreens(divname) {
-	    var options =  {
-	            yaxis: {
-	                labelWidth: 30,
-	                axisLabel: 'explored',
-	                axisLabelUseCanvas: true,
-	                axisLabelFontSizePixels: 20,
-	                axisLabelFontFamily: 'Arial',
-	                panRange: false,
-	                minTickSize: 1,
-	                min : 0,
-	            },
-	            xaxis: {
-	                labelHeight: 30,
-	                axisLabel: 'time (sec)',
-	                axisLabelUseCanvas: true,
-	                axisLabelFontSizePixels: 15,
-	                axisLabelFontFamily: 'Arial',
-	                panRange: [0, null],
-	                min : 0,
-					minTickSize: 1
-	            },
-	            pan: {
-	    			interactive: true
-	    		}
-	        };
-	    chartElementsAndScreens = $.plot(divname, testData, options);
-	    /*chartElementsAndScreens = $.plot(divname, 
-	    	    [{ data: screensExplored, label: "Screens" },
-	    		{ data: elementsSeen, label: "Elements"}],
-	    	    options);*/
-	    setTimeout(updateLines, divname, updateInterval);
-	};
-
-	function updateAPKValues()
-	{
+	function getAPKStatusInformation() {
 		var apkArray = $.droidmate.ajax.get.getExplorationInfo();
 		var selAPKSSize = $.droidmate.ajax.get.getSelectedAPKS()["info[]"].selApks.data.length;
 
-		successfulAPKs = 0;
-		failedAPKs = 0;
-		for(var i = 0; i < apkArray.length; i++)
-		{
+		var successfulAPKs = 0;
+		var failedAPKs = 0;
+		for (var i = 0; i < apkArray.length; i++) {
 			apk = apkArray[i];
-			
-			if (apk.finished)
-			{
+
+			if (apk.finished) {
 				if (apk.success)
 					successfulAPKs++;
 				else
 					failedAPKs++;
 			}
 		}
-		remainingAPKs = selAPKSSize - successfulAPKs - failedAPKs;
+		var remainingAPKs = selAPKSSize - successfulAPKs - failedAPKs;
+		return {
+			successfull : successfulAPKs,
+			failed : failedAPKs,
+			remaining : remainingAPKs
+		};
 	}
 
-	function getDataElementsSeen()
-	{
-		var newData = $.droidmate.ajax.get.getGlobalElementsSeenHistory();
-		//var output = newData.slice(-dataVisible);
-		return newData;
-	}
-	
-	function getDataUpdateLines()
-	{
-		var newData = $.droidmate.ajax.get.getGlobalWidgetsExploredHistory();
-		//var output = newData.slice(-dataVisible);
-		return newData;
-	}
-	
-	function getDataScreensExplored()
-	{
-		var newData = $.droidmate.ajax.get.getGlobalScreensSeenHistory();
-		//var output = newData.slice(-dataVisible);
-		return newData;
+	function getData() {
+		var elementsSeenHistory = $.droidmate.ajax.get
+				.getGlobalElementsSeenHistory();
+		var widgetsExploredHistory = $.droidmate.ajax.get
+				.getGlobalWidgetsExploredHistory();
+		var screensSeenHistory = $.droidmate.ajax.get
+				.getGlobalScreensSeenHistory();
+		var apkStatus = getAPKStatusInformation();
+
+		return {
+			elementsSeenHistory : elementsSeenHistory,
+			widgetsExploredHistory : widgetsExploredHistory,
+			screensSeenHistory : screensSeenHistory,
+			apkStatus : apkStatus
+		};
 	}
 
+	function updateCharts(charts) {
 
+		var data = getData();
 
-	function updateChartAPKStatus(divname)
-	{
-		updateAPKValues();
-		var dataSet = [
-		               {label: "Successful", data: successfulAPKs, color: "#00A36A"},
-		               { label: "Failed", data: failedAPKs, color: "#005CDE"},
-		               { label: "Remaining", data: remainingAPKs, color: "#7D0096" }    
-		           ];
-		chartAPKStatus.setData(dataSet);
-		chartAPKStatus.draw();
-		setTimeout(updateChartAPKStatus, divname, updateInterval);
-	}
-
-	function updateLines(divname)
-	{
-		chart = chartElementsAndScreens;
-
-		data = getDataUpdateLines();
-		chart.setData([data]);
-		
+		// update elements seen
+		var chart = charts.elementsSeenChart;
+		chart.setData([ data.elementsSeenHistory ]);
 		chart.draw();
-		setTimeout(updateLines, divname, updateInterval);
-		
-	}
 
-	function updateElementsSeen(divname)
-	{
-		elementsSeen = getDataElementsSeen();
-		chart = chartGUIElementsSeen;
-
-		chart.setData([elementsSeen]);
+		// update screens explored
+		chart = charts.screensExploredChart;
+		chart.setData([ data.screensSeenHistory ]);
 		chart.draw();
-		setTimeout(updateElementsSeen, divname, updateInterval);
+
+		// Elements explored
+		chart = charts.elementsExploredChart;
+		chart.setData([ data.widgetsExploredHistory ]);
+		chart.draw();
+
+		// apk status
+		chart = charts.apkStatusChart;
+		var dataSet = [ {
+			label : "Successful",
+			data : data.apkStatus.successful,
+			color : "#00A36A"
+		}, {
+			label : "Failed",
+			data : data.apkStatus.failed,
+			color : "#005CDE"
+		}, {
+			label : "Remaining",
+			data : data.apkStatus.remaining,
+			color : "#7D0096"
+		} ];
+		chart.setData(dataSet);
+		chart.draw();
+
+		setTimeout(function() {updateCharts(charts);},
+				$.droidmate.ajax.UPDATE_EXPLORATION_INFO_INTERVAL);
 	}
 
-	function updateScreensExplored(divname)
-	{
-		chart = chartGUIScreensExplored;
-		screensExplored = getDataScreensExplored();
-		chart.setData([screensExplored]);
-		chart.draw();
-		setTimeout(updateScreensExplored, divname, updateInterval);
-	}
-	
-	//createChartGUIElementsToExplore("#flot-gui-elements-not-seen");
-	createChartAPKStatus('#flot-apks-status');
-	createChartGUIElementsSeen('#flot-gui-elements-seen');
-	
-	createChartGUIScreensExplored("#flot-gui-screens-explored");
-	createChartGUIElementsAndScreens("#flot-gui-elements-explored");
-	
-	
+	// create all charts
+	var apkStatusChart = createPieChart('#flot-apks-status');
+	var elementsSeenChart = createGraphChart('#flot-gui-elements-seen',
+			'time (s),', 'Elements seen');
+	var screensExploredChart = createGraphChart("#flot-gui-screens-explored",
+			"time (s)", 'Screens explored');
+	var elementsExploredChart = createGraphChart("#flot-gui-elements-explored",
+			"time (s)", 'Elements explored');
+
+	// start updating charts
+	updateCharts({
+		apkStatusChart : apkStatusChart,
+		elementsSeenChart : elementsSeenChart,
+		screensExploredChart : screensExploredChart,
+		elementsExploredChart : elementsExploredChart
 	});
-
+});

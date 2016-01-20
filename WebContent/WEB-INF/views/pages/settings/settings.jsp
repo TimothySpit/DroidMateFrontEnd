@@ -9,18 +9,14 @@
 <html lang="en">
 <head>
 <jsp:include page="../../partials/header.jsp" />
-<!-- file tree start-->
-<link rel="stylesheet"
-	href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/themes/default/style.min.css" />
-<script
-	src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/jstree.min.js"></script>
-<!-- file tree end -->
+
 <script
 	src="${pageContext.request.contextPath}/resources/js/settings/formHandling.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/settings/outputFolderTree.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/settings/droidMateTree.js"></script>
+
 </head>
 <body class="container">
 	<main>
@@ -36,8 +32,7 @@
 			</div>
 			<div class="col-sm-4">
 				<input class="form-control" id="output-folder-name"
-					name="filebrowser" type="text" placeholder="Select folder"
-					  />
+					name="filebrowser" type="text" placeholder="Select folder" />
 			</div>
 			<div class="col-sm-4">
 				<button type="button" class="btn btn-default btn-default"
@@ -46,10 +41,6 @@
 				</button>
 			</div>
 		</div>
-		<!-- file dialog -->
-		<jsp:include page="modals/reportOutputPathSelection.jsp" />
-		<!-- file dialog -->
-
 
 		<div class="row input-row">
 			<div class="col-sm-4">
@@ -58,8 +49,7 @@
 			</div>
 			<div class="col-sm-4">
 				<input class="form-control" id="dm-output-folder-name"
-					name="droidMatePath" type="text" placeholder="DroidMate Path"
-					  />
+					name="droidMatePath" type="text" placeholder="DroidMate Path" />
 			</div>
 			<div class="col-sm-4">
 				<button type="button" class="btn btn-default btn-default"
@@ -68,10 +58,6 @@
 				</button>
 			</div>
 		</div>
-			
-		<!-- file dialog -->
-		<jsp:include page="modals/droidMatePathSelection.jsp" />
-		<!-- file dialog -->
 
 		<div class="row input-row">
 			<div class="col-sm-4">
@@ -105,6 +91,11 @@
 
 	</div>
 	</main>
+	<!-- modal dialogs -->
+	<div>
+		<jsp:include page="modals/reportOutputPathSelection.jsp" />
+		<jsp:include page="modals/droidMatePathSelection.jsp" />
+	</div>
 </body>
 
 <jsp:include page="../../partials/footer.jsp" />

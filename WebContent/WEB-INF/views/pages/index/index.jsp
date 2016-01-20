@@ -10,19 +10,14 @@
 
 <jsp:include page="../../partials/header.jsp" />
 
-<!-- file tree start-->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/libraries/jstree/themes/default/style.min.css" />
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/jstree/jstree.min.js"></script>
-<!-- file tree end -->
-
 <script
 	src="${pageContext.request.contextPath}/resources/js/index/directoryTree.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/index/handleInlining.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/index/handleExploration.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/index/handleModals.js"></script>
 
 </head>
 <body class="container">
@@ -53,65 +48,57 @@
 				<div id="load-result-indikator"></div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-sm-4"></div>
-			<div class="col-sm-4">
-				<!-- js tree -->
-				<jsp:include page="modals/apkFolderSelection.jsp" />
-				<!-- js tree -->
+
+		<div class="row main_start">
+			<div class="col-sm-12 text-center hide" id="btns-field">
+				<button type="submit" class="btn btn-default" id="startexploration">Start
+					exploration</button>
+				<button type="submit" class="btn btn-default" id="inline_files">Inline
+					files</button>
+			</div>
+		</div>
+
+		<div id="appstuff">
+			<div class="row">
 				<div class="col-sm-4"></div>
-			</div>
-
-			<div class="row main_start">
-				<div class="col-sm-12 text-center hide" id="btns-field">
-					<button type="submit" class="btn btn-default" id="startexploration">Start
-						exploration</button>
-					<button type="submit" class="btn btn-default" id="inline_files">Inline
-						files</button>
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4">
+					<button class="btn btn-default pull-right hide" data-toggle="modal"
+						data-target="#staticinfomodal" id="show-static" type="button">
+						<span class="glyphicon glyphicon-list-alt"></span> Show details
+					</button>
 				</div>
 			</div>
-
-			<div id="appstuff">
-				<div class="row">
-					<div class="col-sm-4"></div>
-					<div class="col-sm-4"></div>
-					<div class="col-sm-4">
-						<button class="btn btn-default pull-right hide"
-							data-toggle="modal" data-target="#staticinfomodal"
-							id="show-static" type="button">
-							<span class="glyphicon glyphicon-list-alt"></span> Show details
-						</button>
-						<!-- js tree -->
-						<jsp:include page="modals/fileSizeInformation.jsp" />
-						<!-- js tree -->
-					</div>
+			<div class="row">
+				<div class="col-sm-12 text-center">
+					<a href="${pageContext.request.contextPath}/apkListingStatic"><button
+							type="submit" class="btn btn-default pull-right hide"
+							type="button" id="selectfolder">Show details for
+							selected .apks</button></a>
 				</div>
-				<div class="row">
-					<div class="col-sm-12 text-center">
-						<a href="${pageContext.request.contextPath}/apkListingStatic"><button
-								type="submit" class="btn btn-default pull-right hide"
-								type="button" id="selectfolder">Show details for
-								selected .apks</button></a>
-					</div>
-				</div>
-				<div class="row apk-data hide">
-					<table id="selectiontable">
-						<thead>
-							<tr>
-								<th><input name="select_all" value="1" type="checkbox"></th>
-								<th>Name</th>
-								<th>Size</th>
-								<th>Package</th>
-								<th>Version</th>
-								<th>Inlined</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
+			</div>
+			<div class="row apk-data hide">
+				<table id="selectiontable">
+					<thead>
+						<tr>
+							<th><input name="select_all" value="1" type="checkbox"></th>
+							<th>Name</th>
+							<th>Size</th>
+							<th>Package</th>
+							<th>Version</th>
+							<th>Inlined</th>
+						</tr>
+					</thead>
+				</table>
 			</div>
 		</div>
 	</div>
 	</main>
+	<!-- modal dialogs -->
+	<div>
+		<jsp:include page="modals/apkFolderSelection.jsp" />
+		<jsp:include page="modals/fileSizeInformation.jsp" />
+	</div>
 </body>
 
 <jsp:include page="../../partials/footer.jsp" />

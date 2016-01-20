@@ -6,22 +6,6 @@
 
 <jsp:include page="../../../partials/header.jsp" />
 
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/flot/jquery.flot.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/flot/jquery.flot.time.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/flot/jquery.flot.canvas.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/flot/jquery.flot.symbol.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/flot/excanvas.min.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/flot/jquery.flot.pie.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/flot/flot-axislabels/jquery.flot.axislabels.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/flot/jquery.flot.navigate.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/explorationCharts/handleCharts.js"></script>
 

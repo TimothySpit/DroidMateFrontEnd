@@ -9,16 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ApkListingDynamic
+ * Servlet implementation class ExplorationCharts
  */
-@WebServlet("/ApkListingDynamic")
-public class ApkListingDynamic extends HttpServlet {
+@WebServlet("/ExplorationCharts")
+public class ExplorationCharts extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ApkListingDynamic() {
+	public ExplorationCharts() {
 		super();
 	}
 
@@ -27,7 +27,7 @@ public class ApkListingDynamic extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/views/pages/explore/apkListingDynamic.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/pages/explore/explorationCharts/explorationCharts.jsp").forward(request, response);
 	}
 
 }

@@ -8,20 +8,9 @@
 <html lang="en">
 <head>
 <jsp:include page="../../partials/header.jsp" />
+
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/explore/style.css">
-<!-- chart files -->
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/flot/jquery.flot.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/flot/jquery.flot.canvas.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/flot/jquery.flot.symbol.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/flot/excanvas.min.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/libraries/flot/flot-axislabels/jquery.flot.axislabels.js"></script>
-<!-- end chart files -->
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/handleExplorationConsole.js"></script>
@@ -29,6 +18,7 @@
 	src="${pageContext.request.contextPath}/resources/js/explore/handleButtons.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/explore/handleExplorationUpdate.js"></script>
+	
 </head>
 <body class="container">
 	<main>
