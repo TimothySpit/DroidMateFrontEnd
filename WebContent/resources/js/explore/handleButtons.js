@@ -1,7 +1,6 @@
 define(
-		[ 'jquery', 'jquery.droidmate.ajax' ],
-		function(require) {
-
+		[ 'require', 'jquery', 'bootbox', 'jquery.droidmate.ajax' ],
+		function(require, jquery, bootbox) {
 			// Set output path label
 			var settings = $.droidmate.ajax.get.getDroidMateSettings();
 			$("#outputPathLabel").html(settings["outputPath"]);
@@ -28,21 +27,35 @@ define(
 			});
 
 			// exploration button handler
-			$('#back-to-index').click(
-					function(e) {
-						bootbox.confirm(
-							"If you go back to the index page, droidmate will be stopped and all exploration results are deleted!",
-							"Cancel",
-							"Back to index",
-							function(result) {
-								// Gray out the button
-								$(this).prop("disabled", true);
-								$.droidmate.ajax.post.stopDroidMate(function(e) {
-									window.location = "/DroidMate/Index";
-								});
-							});
+			$('#back-to-index')
+					.click(
+							function(e) {
+								bootbox
+										.confirm({
+											title : "Return to start?",
+											message : "If you go back to the index page, droidmate will be stopped and all exploration results are deleted!",
+											buttons : {
+												cancel : {
+													label : "Back to index",
+													className : "btn-danger pull-left"
+												},
+												confirm : {
+													label : "Cancel",
+													className : "btn-default pull-right"
+												}
+											},
+											callback : function(result) {
+												// Gray out the button
+												$(this).prop("disabled", true);
+												$.droidmate.ajax.post
+														.stopDroidMate(function(
+																e) {
+															window.location = "/DroidMate/Index";
+														});
+											}
+										});
 
-			});
+							});
 			// --------------------------------------
 
 			// handle openFolderButton
