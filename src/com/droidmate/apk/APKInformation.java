@@ -14,16 +14,13 @@ public class APKInformation {
 	private final File inlineTempFile;
 	private APKExplorationStatus status = APKExplorationStatus.NOT_RUNNING;
 	private String packageName, versionCode, versionName;
-	private boolean inlined = false;
-	private int id;
 
 	private ExplorationReport report;
 	
 	private boolean selected = false;
 
-	public APKInformation(int id, File file, Path tempInlinePath, String packageName, String versionCode, String versionName) {
+	public APKInformation(File file, Path tempInlinePath, String packageName, String versionCode, String versionName) {
 		super();
-		this.id=id;
 		this.file = file;
 		this.packageName = packageName;
 		this.versionCode = versionCode;
@@ -37,22 +34,30 @@ public class APKInformation {
 		return Paths.get(getFile().getParent().toString(), "/inlined",
 				FilenameUtils.removeExtension(getFile().getName()) + "-inlined.apk");
 	}
+	
+	/**
+	 * Determines the inline state based on the droidmate inlining output folder
+	 * @return True, if the inlined file in the droidmate inlining output folder exists
+	 */
+	public boolean isTempInlined() {
+		return inlineTempFile.exists();
+	}
 
+	/**
+	 * Determines the inline state based on the user chosen apk folder
+	 * @return True, if the inlined file in the user chosen apk folder exists
+	 */
 	public boolean isInlined() {
-		inlined = getInlinedPath().toFile().exists() || inlineTempFile.exists();
-		 
-		 return inlined;
+		return getInlinedPath().toFile().exists();
 	}
 
 	public JSONObject toJSONObject() {
 		JSONObject object = new JSONObject();
-		object.put("id", getId());
 		object.put("name", getFile().getName());
 		object.put("size", FileUtils.byteCountToDisplaySize(getFile().length()));
 		object.put("package", getPackageName());
 		object.put("version", getVersionName() + " (#" + getVersionCode() + ")");
 		object.put("selected", selected);
-		object.put("inlined", isInlined());
 		
 		return object;
 	}
@@ -99,10 +104,6 @@ public class APKInformation {
 
 	public String getVersionName() {
 		return versionName;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public File getInlineTempFile() {

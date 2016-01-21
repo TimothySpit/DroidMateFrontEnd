@@ -29,23 +29,8 @@ define(
 
 				$.each(data["info[]"].apks.data, function(index, value) {
 					var inlinedStatus = table.inlinedStatus.INLINED;
-					if (value.inlined) {
-						inlinedStatus = table.inlinedStatus.INLINED;
-					} else {
-						switch (value.inliningStatus) {
-						case $.droidmate.inlining.inliningStatus.NOT_STARTED:
-							inlinedStatus = table.inlinedStatus.NOT_INLINED;
-							break;
-						case $.droidmate.inlining.inliningStatus.INLINING:
-							inlinedStatus = table.inlinedStatus.INLINING;
-							break;
-						case $.droidmate.inlining.inliningStatus.ERROR:
-							inlinedStatus = table.inlinedStatus.ERROR;
-							break;
-						case $.droidmate.inlining.inliningStatus.FINISHED:
-							inlinedStatus = table.inlinedStatus.ERROR;
-							break;
-						}
+					if (!value.inlined) {
+						inlinedStatus = table.inlinedStatus.NOT_INLINED;
 					}
 					table.addAPKData(value.name, value.size, value.package,
 							value.version, inlinedStatus);
@@ -84,11 +69,11 @@ define(
 									updateTable(table);
 								}
 							});
-			//--------------------------------------------------------------
-			
+			// --------------------------------------------------------------
+
 			var path = $.droidmate.ajax.get.getSelectedAPKRoot();
 			$('#folder_name').val(path);
 
-			if(path !== "")
+			if (path !== "")
 				updateTable(table);
 		});

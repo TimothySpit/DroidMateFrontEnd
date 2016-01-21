@@ -49,7 +49,7 @@ public class DroidMateUser {
 	 * @param id The id
 	 * @return APKInformation
 	 */
-	private APKInformation loadAPKInformation(File apk, int id) {
+	private APKInformation loadAPKInformation(File apk) {
 		String output = getAaptOutput(apk);
 		String packageName = getValueFromAaptOutput(output, "name");
 		String packageVersionCode = getValueFromAaptOutput(output, "versionCode");
@@ -57,7 +57,7 @@ public class DroidMateUser {
 		
 		Path inlineTempPath = Paths.get((new GUISettings()).getDroidMatePath().toString(), "/projects/apk-inliner/output-apks/");
 		
-		return new APKInformation(id, apk, inlineTempPath, packageName, packageVersionCode, packageVersionName);
+		return new APKInformation(apk, inlineTempPath, packageName, packageVersionCode, packageVersionName);
 	}
 	
 	/**
@@ -75,7 +75,7 @@ public class DroidMateUser {
 			threads[counter] = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					newApks[id] = loadAPKInformation(apk, id);
+					newApks[id] = loadAPKInformation(apk);
 				}				
 			});
 			threads[counter].start();
@@ -102,7 +102,7 @@ public class DroidMateUser {
 		int counter = 0;
 		
 		for(File apk : apkFiles) {
-			newApks[counter] = loadAPKInformation(apk, counter);
+			newApks[counter] = loadAPKInformation(apk);
 			counter++;
 		}
 		
