@@ -46,15 +46,13 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable', 'jquery.dro
 			} else {
 				switch (value.inliningStatus) {
 				case $.droidmate.inlining.inliningStatus.NOT_STARTED:
+				case $.droidmate.inlining.inliningStatus.FINISHED:
 					inlinedStatus = table.inlinedStatus.NOT_INLINED;
 					break;
 				case $.droidmate.inlining.inliningStatus.INLINING:
 					inlinedStatus = table.inlinedStatus.INLINING;
 					break;
 				case $.droidmate.inlining.inliningStatus.ERROR:
-					inlinedStatus = table.inlinedStatus.ERROR;
-					break;
-				case $.droidmate.inlining.inliningStatus.FINISHED:
 					inlinedStatus = table.inlinedStatus.ERROR;
 					break;
 				}

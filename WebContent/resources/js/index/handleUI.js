@@ -29,7 +29,7 @@ define(
 
 				$.each(data["info[]"].apks.data, function(index, value) {
 					var inlinedStatus = table.inlinedStatus.INLINED;
-					if (!value.inlined) {
+					if (value.inlined == false) {
 						inlinedStatus = table.inlinedStatus.NOT_INLINED;
 					}
 					table.addAPKData(value.name, value.size, value.package,

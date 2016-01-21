@@ -1,6 +1,8 @@
 package com.droidmate.apk.inlining;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -96,18 +98,15 @@ public class APKInliner implements Runnable {
 			return;
 		}
 		
+		//Empty output folder
+		Path outputAPKsPath = Paths.get(droidMateRoot.toString(), "/projects/apk-inliner/output-apks/");
+		deleteApkFiles(outputAPKsPath);
+		
 		// create "inlined" folder
 		inlinedFolder.toFile().mkdir();
 
 		// empty inlining directory
-		try {
-			FileUtils.deleteDirectory(inputAPKsPath.toFile());
-			inputAPKsPath.toFile().mkdir();
-		} catch (IOException e) {
-			e.printStackTrace();
-			inliningStatus = InliningStatus.ERROR;
-			return;
-		}
+		deleteApkFiles(inputAPKsPath);
 
 		// for each apk, inline it
 		for (APKInformation apkInfo : user.getAPKS()) {
@@ -118,8 +117,6 @@ public class APKInliner implements Runnable {
 				inliningStatus = InliningStatus.ERROR;
 				return;
 			}
-
-			// apkInfo.setStatus(InliningStatus.INLINING);
 		}
 		if (!startDroidMateInliner(droidMateRoot, droidMateExecutable)) {
 			inliningStatus = InliningStatus.ERROR;
@@ -127,7 +124,6 @@ public class APKInliner implements Runnable {
 		}
 
 		// copy inlined apks to "inlined" folder
-		Path outputAPKsPath = Paths.get(droidMateRoot.toString(), "/projects/apk-inliner/output-apks/");
 		for (APKInformation apkInfo : user.getAPKS()) {
 			try {
 				Path src = Paths.get(outputAPKsPath.toString(), FilenameUtils.removeExtension(apkInfo.getFile().getName()) + "-inlined.apk");
@@ -143,7 +139,8 @@ public class APKInliner implements Runnable {
 	}
 
 	private boolean startDroidMateInliner(Path droidMateRoot, Path droidMateExecutable) {
-		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace", ":projects:core:prepareInlinedApks");
+		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace",
+				":projects:core:prepareInlinedApks");
 		pb.directory(droidMateRoot.toFile());
 		pb.redirectErrorStream(true);
 		try {
@@ -167,6 +164,22 @@ public class APKInliner implements Runnable {
 			return false;
 		}
 		return true;
+	}
+	
+	
+	/**
+	 * Deletes all .apk files in the given path
+	 * @param path
+	 */
+	private void deleteApkFiles(Path path) {
+		File[] apkFiles = path.toFile().listFiles(new FilenameFilter() {
+		    public boolean accept(File dir, String name) {
+		        return name.toLowerCase().endsWith(".apk");
+		    }
+		});
+		for(File f : apkFiles) {
+			f.delete();
+		}
 	}
 
 	public synchronized InliningStatus getInliningStatus() {

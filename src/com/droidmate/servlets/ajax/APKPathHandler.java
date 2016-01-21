@@ -125,6 +125,7 @@ public class APKPathHandler extends HttpServlet {
 				for (APKInformation apk : user.getAPKS()) {
 					JSONObject apkObject = apk.toJSONObject();
 					apkObject.put("inlined", status == InliningStatus.INLINING ? apk.isTempInlined() : apk.isInlined());
+					apkObject.put("inliningStatus", status);
 					selectedAPKInfo.put(apkObject);
 				}
 				JSONObject res = new JSONObject();
