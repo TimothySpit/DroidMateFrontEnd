@@ -61,6 +61,8 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable', 'jquery.dro
 			}
 			table.addAPKData(value.name, value.size, value.package,
 					value.version, inlinedStatus);
+			
+			table.redraw();
 		});
 		
 		var status = $.droidmate.inlining.getInliningStatus();
