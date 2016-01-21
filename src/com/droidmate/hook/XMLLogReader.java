@@ -154,7 +154,7 @@ public class XMLLogReader {
 					try {
 						type = xpp.next();
 					} catch (EOFException e) {
-						System.out.println("Parser reached end of file!");
+						System.out.println("Parser reached end of file (This should not happen!)");
 						stopReading();
 						e.printStackTrace();
 					} catch (IOException e) {
@@ -163,9 +163,9 @@ public class XMLLogReader {
 				}
 			} catch (XmlPullParserException e) {
 				// Ignore error and continue parsing
-				parse(xpp);
 				System.out.println("Invalid xml log found, continue parsing.");
 				e.printStackTrace();
+				parse(xpp);
 			}
 		}
 
@@ -296,19 +296,6 @@ public class XMLLogReader {
 			return globalWidgetsExploredHistory;
 		}
 	}
-
-	/**
-	 * public static void main(String[] args) { APKInformation[] apks = new
-	 * APKInformation[] { new APKInformation(0, new
-	 * File("D:\\apks\\com.antivirus.apk"), "com.antivirus.apk", "1", "1"), new
-	 * APKInformation(0, new File("D:\\apks\\com.adobe.reader.apk"),
-	 * "com.adobe.reader.apk", null, null), new APKInformation(0, new
-	 * File("D:\\apks\\at.markushi.expensemanager.apk"),
-	 * "at.markushi.expensemanager.apk", null, null) }; (new XMLLogReader(new
-	 * File(
-	 * "C:\\Informatik\\Java\\Eclipse-Projekte\\Uni\\web-front-end-for-android-gui-test-generator\\droidmate\\dev\\droidmate\\dev1\\logs\\gui.xml"
-	 * ), apks)).read(); }
-	 */
 
 	private final File sourceFile;
 	private final ConcurrentHashMap<String, APKExplorationInfo> apksMapReaderHandler = new ConcurrentHashMap<>();
