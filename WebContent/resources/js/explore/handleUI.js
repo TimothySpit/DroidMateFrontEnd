@@ -4,7 +4,4 @@ define([ 'require', 'jquery', 'jstree', '../explore/apkExplorationTable',
 
 	var tableCreator = require('../explore/apkExplorationTable');
 	var table = tableCreator.initModul($('#exploreFiles'));
-
-	
-	
 });
