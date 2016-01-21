@@ -64,4 +64,31 @@ define(
 			});
 			// --------------------------------------
 
+			$(document).ready( function() {
+
+				var startingTimestamp = null;
+				function updateClock() {
+					console.log("ready!");
+					if (startingTimestamp == null) {
+						startingTimestamp = $.droidmate.ajax.get.getGlobalStartingTime();
+						console.log(startingTimestamp);
+					} else {
+						var passedSeconds = Math
+								.floor((Date.now() - startingTimestamp) / 1000);
+						var seconds = 0, minutes = 0;
+						if (passedSeconds >= 60) {
+							seconds = passedSeconds % 60;
+							minutes = (passedSeconds - seconds) / 60;
+						} else {
+							seconds = passedSeconds;
+						}
+						$("#timeLabel").text(
+								(minutes < 10 ? "0" : "") + minutes + ":"
+										+ (seconds < 10 ? "0" : "") + seconds);
+					}
+				}
+				;
+				var clockInterval = setInterval(updateClock, 1000);
+			});
+
 		});

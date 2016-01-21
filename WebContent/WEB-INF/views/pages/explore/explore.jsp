@@ -32,7 +32,10 @@
 						id="returnStart">Return to start</button>
 				</form>
 			</div>
-			<div class="col-sm-4 text-center">
+			<div class="col-sm-2 text-center">
+				Exploration time: <span class="label label-default" id="timeLabel">Not started</span>
+			</div>
+			<div class="col-sm-2 text-center">
 				<form>
 					<a href="${pageContext.request.contextPath}/ExplorationCharts"><button
 							class="btn btn-default" type="button" id="apkInfoBtn">Show
