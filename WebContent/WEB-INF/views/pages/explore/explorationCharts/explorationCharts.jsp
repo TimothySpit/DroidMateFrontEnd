@@ -7,12 +7,12 @@
 <jsp:include page="../../../partials/header.jsp" />
 
 <!-- requirejs -->
-<script data-main="${pageContext.request.contextPath}/resources/js/explore/explorationCharts/explorationCharts.js"
+<script
+	data-main="${pageContext.request.contextPath}/resources/js/explore/explorationCharts/explorationCharts.js"
 	src="${pageContext.request.contextPath}/resources/libraries/requirejs/require.js"></script>
 
 </head>
 <body class="container">
-	<main>
 	<div>
 		<div class="row">
 			<div class="col-md-12 main-heading">
@@ -47,7 +47,6 @@
 			</div>
 		</div>
 	</div>
-	</main>
 </body>
 
 <jsp:include page="../../../partials/footer.jsp" />

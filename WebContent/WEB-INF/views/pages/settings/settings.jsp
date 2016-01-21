@@ -16,7 +16,6 @@
 
 </head>
 <body class="container">
-	<main>
 	<div>
 		<div class="row">
 			<div class="col-md-12 main-heading">
@@ -87,7 +86,6 @@
 		</div>
 
 	</div>
-	</main>
 	<!-- modal dialogs -->
 	<div>
 		<jsp:include page="modals/reportOutputPathSelection.jsp" />

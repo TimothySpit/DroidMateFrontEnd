@@ -23,7 +23,7 @@ tr.shown td.details-control {
 	overflow: auto;
 }
 
-#console-output-scroll {
+#console-output input[type=checkbox] {
 	float:right;
 	margin-top:0; 
 	margin-bottom:0; 

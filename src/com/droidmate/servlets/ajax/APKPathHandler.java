@@ -58,12 +58,12 @@ public class APKPathHandler extends HttpServlet {
 			result.put("success", handleSaveAPKRoot(apkSaveRoot));
 		}
 
-		//handle save selected apk indices
+		// handle save selected apk indices
 		String[] save_selectedAPKS = request.getParameterValues(AjaxConstants.APKPathHandler_SAVE_SELECTED_APKS);
 		if (save_selectedAPKS != null) {
 			handleSaveSelectedAPKS(save_selectedAPKS);
 		}
-		
+
 		out.print(result);
 		out.flush();
 	}
@@ -74,13 +74,12 @@ public class APKPathHandler extends HttpServlet {
 		for (APKInformation apk : user.getAPKS()) {
 			apk.setSelected(false);
 		}
-		
-		for (String id : save_selectedAPKS) {
-			if (NumberUtils.isDigits(id) && NumberUtils.isNumber(id)) {
-				int index = Integer.parseInt(id);
-				APKInformation[] apks = user.getAPKS();
-				if (index < apks.length) {
-					apks[index].setSelected(true);
+
+		APKInformation[] apks = user.getAPKS();
+		for (String name : save_selectedAPKS) {
+			for (APKInformation apk : apks) {
+				if(apk.getFile().getName().equals(name)){
+					apk.setSelected(true);
 				}
 			}
 		}
@@ -120,7 +119,7 @@ public class APKPathHandler extends HttpServlet {
 				} else {
 					status = InliningStatus.NOT_STARTED;
 				}
-				
+
 				// returns the apks in the folder
 				JSONArray selectedAPKInfo = new JSONArray();
 				for (APKInformation apk : user.getAPKS()) {
@@ -144,10 +143,10 @@ public class APKPathHandler extends HttpServlet {
 	private boolean handleSaveAPKRoot(String saveAPKRoot) {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 		Path newAPKRoot = Paths.get(saveAPKRoot);
-		
+
 		return user.setAPKPath(newAPKRoot);
 	}
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

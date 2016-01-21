@@ -1,7 +1,7 @@
 define([ 'jquery', 'jstree'], function(require) {
 
 	// fileSizeInformation Modal dialog
-	$('#show-static').on('click', function(e) {
+	$('#show-static').click(function(e) {
 		$.ajax({
 			type : "GET",
 			contentType : 'application/json; charset=utf-8',

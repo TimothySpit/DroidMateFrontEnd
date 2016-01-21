@@ -13,12 +13,12 @@
 	href="${pageContext.request.contextPath}/resources/css/explore/style.css">
 
 <!-- requirejs -->
-<script data-main="${pageContext.request.contextPath}/resources/js/explore/explore.js"
+<script
+	data-main="${pageContext.request.contextPath}/resources/js/explore/explore.js"
 	src="${pageContext.request.contextPath}/resources/libraries/requirejs/require.js"></script>
-	
+
 </head>
 <body class="container">
-	<main>
 	<div>
 		<div class="row">
 			<div class="col-md-12 main-heading">
@@ -73,21 +73,11 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="panel panel-default" id="console-output">
-						<div class="panel-heading">
-							Console output
-							<div class="checkbox" id="console-output-scroll" style="display: inline">
-								<label> <input type="checkbox" style="float: inherit;" />Auto-scroll
-								</label>
-							</div>
-						</div>
-						<div style="width: 100%; max-height: 500px; overflow: scroll;"
-							class="panel-body" id="consoleOutput"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	</main>
 </body>
 
 <jsp:include page="../../partials/footer.jsp" />

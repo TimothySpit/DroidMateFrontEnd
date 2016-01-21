@@ -1,4 +1,8 @@
-define([ 'jquery', 'jstree', 'jquery.droidmate.inlining', 'jquery.droidmate.overlays'], function(require) {
+define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable', 'jquery.droidmate.inlining', 'jquery.droidmate.overlays'], function(require) {
+	
+	var tableCreator = require('../index/apkFileInfoTable');
+	var table = tableCreator.initModul($('#selectiontable'));
+	
 	// inline button handler
 	$('#inline_files')
 			.click(
@@ -33,7 +37,31 @@ define([ 'jquery', 'jstree', 'jquery.droidmate.inlining', 'jquery.droidmate.over
 
 	function watchInliner() {
 		//Update table
-		$('#selectiontable').DataTable().ajax.reload();
+		table.clear();
+		var data = $.droidmate.ajax.get.getAllAPKS();
+		$.each(data["info[]"].apks.data, function(index, value) {
+			var inlinedStatus = table.inlinedStatus.INLINED;
+			if (value.inlined) {
+				inlinedStatus = table.inlinedStatus.INLINED;
+			} else {
+				switch (value.inliningStatus) {
+				case $.droidmate.inlining.inliningStatus.NOT_STARTED:
+					inlinedStatus = table.inlinedStatus.NOT_INLINED;
+					break;
+				case $.droidmate.inlining.inliningStatus.INLINING:
+					inlinedStatus = table.inlinedStatus.INLINING;
+					break;
+				case $.droidmate.inlining.inliningStatus.ERROR:
+					inlinedStatus = table.inlinedStatus.ERROR;
+					break;
+				case $.droidmate.inlining.inliningStatus.FINISHED:
+					inlinedStatus = table.inlinedStatus.ERROR;
+					break;
+				}
+			}
+			table.addAPKData(value.name, value.size, value.package,
+					value.version, inlinedStatus);
+		});
 		
 		var status = $.droidmate.inlining.getInliningStatus();
 		if(status == $.droidmate.inlining.inliningStatus.FINISHED) {

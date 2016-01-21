@@ -3,5 +3,5 @@ requirejs([ "./../common" ], function(util) {
 	requirejs([ '../js/index/handleModals' ]);
 	requirejs([ '../js/index/handleInlining' ]);
 	requirejs([ '../js/index/handleExploration' ]);
-	requirejs([ '../js/index/directoryTree' ]);
+	requirejs([ '../js/index/handleUI' ]);
 });

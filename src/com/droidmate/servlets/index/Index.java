@@ -41,14 +41,18 @@ public class Index extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
+		if (request.getRequestURI().equals(request.getContextPath())) {
+			response.sendRedirect("Index");
+			return;
+		}
 
+		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 		if (user.isExplorationStarted()) {
-			//no access to this page, redirect to exploration
+			// no access to this page, redirect to exploration
 			request.getRequestDispatcher("/WEB-INF/views/pages/explore/explore.jsp").forward(request, response);
 			return;
 		}
-		
+
 		// standard request
 		request.getRequestDispatcher("/WEB-INF/views/pages/index/index.jsp").forward(request, response);
 	}

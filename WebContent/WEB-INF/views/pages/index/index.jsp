@@ -16,7 +16,6 @@
 	
 </head>
 <body class="container">
-	<main>
 	<div>
 		<div class="settings-button">
 			<form action="${pageContext.request.contextPath}/Settings">
@@ -45,7 +44,7 @@
 		</div>
 
 		<div class="row main_start">
-			<div class="col-sm-12 text-center hide" id="btns-field">
+			<div class="col-sm-12 text-center" id="btns-field" style="display: none;">
 				<button type="submit" class="btn btn-default" id="startexploration">Start
 					exploration</button>
 				<button type="submit" class="btn btn-default" id="inline_files">Inline
@@ -72,23 +71,12 @@
 							selected .apks</button></a>
 				</div>
 			</div>
-			<div class="row apk-data hide">
+			<div class="row apk-data" style="display: none;">
 				<table id="selectiontable">
-					<thead>
-						<tr>
-							<th><input name="select_all" value="1" type="checkbox"></th>
-							<th>Name</th>
-							<th>Size</th>
-							<th>Package</th>
-							<th>Version</th>
-							<th>Inlined</th>
-						</tr>
-					</thead>
 				</table>
 			</div>
 		</div>
 	</div>
-	</main>
 	<!-- modal dialogs -->
 	<div>
 		<jsp:include page="modals/apkFolderSelection.jsp" />

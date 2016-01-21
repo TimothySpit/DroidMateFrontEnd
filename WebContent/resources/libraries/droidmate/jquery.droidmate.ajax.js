@@ -27,7 +27,7 @@ define([ 'jquery'], function(require) {
 	//----------------------------------
 	
 	function getSelectedAPKRoot() {
-		var result = null;
+		var result = "";
 		$.ajax({
 	        url:  "/DroidMate/APKPathHandler",
 	        async: false,
@@ -45,7 +45,7 @@ define([ 'jquery'], function(require) {
 	//----------------------------------
 	
 	function getConsoleOutput(line) {
-		var result = null;
+		var result = "";
 		if(line == null)
 			line = 0;
 		$.ajax({
@@ -64,7 +64,7 @@ define([ 'jquery'], function(require) {
 	//----------------------------------
 	
 	function getGlobalElementsSeen() {
-		var result = null;
+		var result = [];
 		$.ajax({
 	        url:  "/DroidMate/APKExploreHandler",
 	        async: false,
@@ -80,7 +80,7 @@ define([ 'jquery'], function(require) {
 	//----------------------------------
 	
 	function getGlobalElementsSeenHistory() {
-		var result = null;
+		var result = [];
 		$.ajax({
 	        url:  "/DroidMate/APKExploreHandler",
 	        async: false,
@@ -97,7 +97,7 @@ define([ 'jquery'], function(require) {
 	//----------------------------------
 	
 	function getGlobalWidgetsExplored() {
-		var result = null;
+		var result = [];
 		$.ajax({
 	        url:  "/DroidMate/APKExploreHandler",
 	        async: false,
@@ -194,7 +194,22 @@ define([ 'jquery'], function(require) {
 		return result;
 	}
 	get.getSelectedAPKS = getSelectedAPKS;
-	
+	//----------------------------------
+
+	function getAllAPKS(async) {
+		var result = null;
+		$.ajax({
+			//Wait for the server to finish apk list and request the table data afterwards
+		     async: false,
+		     type: 'GET',
+		     url: "/DroidMate/APKPathHandler?info[]=apks",
+		     success: function(data) {
+		            result = data;
+		        } 
+		});
+		return result;
+	}
+	get.getAllAPKS = getAllAPKS;
 	//----------------------------------
 	
 	function getReportPath(apkname) {
