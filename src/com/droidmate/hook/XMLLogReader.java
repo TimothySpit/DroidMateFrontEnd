@@ -295,6 +295,10 @@ public class XMLLogReader {
 		public ConcurrentSkipListMap<Long, Integer> getGlobalWidgetsExploredHistory() {
 			return globalWidgetsExploredHistory;
 		}
+
+		public long getGlobalStartingTime() {
+			return globalStartingTime;
+		}
 	}
 
 	private final File sourceFile;
@@ -372,6 +376,10 @@ public class XMLLogReader {
 
 	public int getGlobalWidgetsExplored() {
 		return parser.getGlobalWidgetsExplored();
+	}
+
+	public long getGlobalStartingTime() {
+		return parser.getGlobalStartingTime();
 	}
 
 	public Collection<APKExplorationInfo> getApksInfo() {
