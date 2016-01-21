@@ -88,7 +88,7 @@ define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas'
 		}
 		var remainingAPKs = selAPKSSize - successfulAPKs - failedAPKs;
 		return {
-			successfull : successfulAPKs,
+			successful : successfulAPKs,
 			failed : failedAPKs,
 			remaining : remainingAPKs
 		};
