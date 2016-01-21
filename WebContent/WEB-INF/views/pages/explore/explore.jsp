@@ -48,14 +48,7 @@
 		</div>
 		<div class="row apk-data hide">
 			<table id="exploreFiles" class="display">
-				<thead>
-					<tr>
-						<th></th>
-						<th>Name</th>
-						<th>Elements seen/Screens seen</th>
-						<th>Status</th>
-					</tr>
-				</thead>
+			
 			</table>
 
 			<div class="row">

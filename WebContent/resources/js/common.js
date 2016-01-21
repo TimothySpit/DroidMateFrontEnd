@@ -32,6 +32,9 @@ requirejs
 				'bootstrap' : {
 					deps : [ 'jquery' ]
 				},
+				'bootboxjs' : {
+					deps : [ 'jquery', 'bootstrap' ]
+				},
 				'jstree' : {
 					deps : [ 'jquery' ],
 					exports : '$.jstree'
@@ -70,6 +73,7 @@ requirejs
 				'jquery.flot.axislabels' : 'flot/flot-axislabels/jquery.flot.axislabels',
 				'jquery.flot.navigate' : 'flot/jquery.flot.navigate.min',
 				'bootstrap' : 'bootstrap/js/bootstrap.min',
+				'bootboxjs' : 'bootboxjs/bootbox.min',
 				'jstree' : 'jstree/jstree.min',
 				'jquery.droidmate.ajax' : 'droidmate/jquery.droidmate.ajax',
 				'jquery.droidmate.explore' : 'droidmate/jquery.droidmate.explore',

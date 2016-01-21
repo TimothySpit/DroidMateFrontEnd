@@ -67,8 +67,6 @@ define([ 'require', 'jquery', 'jquery.droidmate.ajax' ], function(require) {
 	function removeStadardEvents(divs) {
 		divs.heading.cb.off('scroll');
 		divs.heading.cb.off('change');
-
-		clearTimeout(scrollUpdater);
 	}
 
 	function scrollDown(content) {

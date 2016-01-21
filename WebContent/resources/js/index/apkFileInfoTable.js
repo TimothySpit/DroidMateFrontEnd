@@ -209,7 +209,7 @@ define(
 			function addStandardEvents(table) {
 
 				// add event listener to table
-				$('#selectiontable tbody').on('click',
+				tableID.find('tbody').on('click',
 						'input[type="checkbox"]', function(e) {
 							var $row = $(this).closest('tr');
 
@@ -255,7 +255,7 @@ define(
 						});
 
 				// Handle click on table cells with checkboxes
-				$('#selectiontable').on(
+				tableID.on(
 						'click',
 						'tbody td, thead tr:first-child',
 						function(e) {
@@ -264,7 +264,7 @@ define(
 						});
 
 				// Handle click on "Select all" control
-				$('#selectiontable thead input[name="select_all"]')
+				tableID.find('thead input[name="select_all"]')
 						.on(
 								'click',
 								function(e) {
@@ -427,7 +427,7 @@ define(
 					return row(resultingRow, modul);
 				}
 				
-				modul.redraw = function() {console.log("asd");
+				modul.redraw = function() {
 					table.draw();
 				}
 			}
