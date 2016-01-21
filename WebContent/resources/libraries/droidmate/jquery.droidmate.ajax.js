@@ -44,6 +44,27 @@ define([ 'jquery'], function(require) {
 	get.getSelectedAPKRoot = getSelectedAPKRoot;
 	//----------------------------------
 	
+	function getGlobalStartingTime() {
+		var result = [];
+		$.ajax({
+	        url:  "/DroidMate/APKExploreHandler",
+	        async: false,
+	        type: 'GET',
+	        data: {explore_get_global_starting_time: true},
+	        success: function(data) {
+	        	if(data.status == "ok") {
+	        		result = data.timestamp;
+	        	}else {
+	        		result = null;
+	        	}
+	        } 
+	     });
+		return result;
+	}
+	get.getGlobalStartingTime = getGlobalStartingTime;
+	
+	//----------------------------------
+	
 	function getConsoleOutput(line) {
 		var result = "";
 		if(line == null)

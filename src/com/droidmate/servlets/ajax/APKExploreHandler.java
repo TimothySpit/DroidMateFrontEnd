@@ -194,6 +194,17 @@ public class APKExploreHandler extends HttpServlet {
 			}
 
 			out.print(result);
+		} else if(request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_STARTING_TIME) != null) {
+			response.setContentType("application/json");
+			JSONObject result = new JSONObject();
+			if(logReader != null) {
+				result.put("status", "ok");
+				result.put("timestamp", logReader.getGlobalStartingTime());
+			}else {
+				result.put("status", "not_started");
+				result.put("timestamp", "");
+			}
+			out.print(result);
 		}else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {

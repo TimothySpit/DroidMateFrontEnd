@@ -40,6 +40,7 @@ public class AjaxConstants {
 	public static final String EXPLORE_GET_GLOBAL_SCREENS_SEEN_HISTORY = "explore_get_global_screens_seen_history";
 	public static final String EXPLORE_GET_GLOBAL_WIDGETS_EXPLORED = "explore_get_global_widgets_explored";
 	public static final String EXPLORE_GET_GLOBAL_WIDGETS_EXPLORED_HISTORY = "explore_get_global_widgets_explored_history";
+	public static final String EXPLORE_GET_GLOBAL_STARTING_TIME = "explore_get_global_starting_time";
 	public static final String EXPLORE_OPEN_REPORT_FOLDER = "explore_open_report_folder";
 
 	//------------------------------------------------------------------------------
