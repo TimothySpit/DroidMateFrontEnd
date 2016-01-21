@@ -50,6 +50,8 @@ define(
 					table.addAPKData(value.name, value.size, value.package,
 							value.version, inlinedStatus);
 				});
+				
+				table.redraw();
 			}
 
 			// set up event handler

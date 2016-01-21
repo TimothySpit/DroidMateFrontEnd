@@ -362,7 +362,7 @@ define(
 						inlinedStatus) {
 					var row = table.row.add(
 							[ "", name, size, packageInfo, version, "" ])
-							.draw().node();
+							.node();
 					var labelContainer = $(row).find(
 							'.dt-body-center .inline-label').parent();
 
@@ -400,7 +400,6 @@ define(
 						}
 					});
 					rowToRemove.remove();
-					table.draw();
 				}
 
 				// Remove apk row by row
@@ -411,7 +410,6 @@ define(
 				// clear table
 				modul.clear = function() {
 					table.clear();
-					table.draw();
 				}
 
 				// get custom row by name
@@ -427,6 +425,10 @@ define(
 						return resultingRow;
 
 					return row(resultingRow, modul);
+				}
+				
+				modul.redraw = function() {console.log("asd");
+					table.draw();
 				}
 			}
 
