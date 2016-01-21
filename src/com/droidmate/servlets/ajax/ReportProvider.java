@@ -47,12 +47,12 @@ public class ReportProvider extends HttpServlet {
 			String requestedAPK = (String) request.getParameter(AjaxConstants.ReportProvider_GET_REPORT);
 			for (APKInformation apk : user.getAPKS()) {
 				if (apk.getFile().getName().equals(requestedAPK)) {
-					ExplorationReport report = apk.getReport();
-					request.setAttribute("apk_name", apk.getFile().getName());
-					request.setAttribute("elements_seen", Integer.toString(report.getElementsSeen()));
-					request.setAttribute("screens_seen", Integer.toString(report.getScreensSeen()));
-					request.setAttribute("apk_successful", report.isSuccess());
-					break;
+//					ExplorationReport report = apk.getReport();
+//					request.setAttribute("apk_name", apk.getFile().getName());
+//					request.setAttribute("elements_seen", Integer.toString(report.getElementsSeen()));
+//					request.setAttribute("screens_seen", Integer.toString(report.getScreensSeen()));
+//					request.setAttribute("apk_successful", report.isSuccess());
+//					break;
 				}
 			}
 
@@ -76,21 +76,21 @@ public class ReportProvider extends HttpServlet {
 							return sw.toString();
 						}
 					};
-					ExplorationReport report = apk.getReport();
-					request.setAttribute("apk_name", apk.getFile().getName());
-					request.setAttribute("elements_seen", Integer.toString(report.getElementsSeen()));
-					request.setAttribute("screens_seen", Integer.toString(report.getScreensSeen()));
-					request.setAttribute("apk_successful", report.isSuccess());
-					request.getRequestDispatcher("/WEB-INF/views/pages/report/report.jsp").include(request, responseWrapper);
-					String content = responseWrapper.toString();
-					GUISettings settings = new GUISettings();
-					File reportFile = new File(settings.getOutputFolder() + "/Report_"
-							+ (new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date())) + "_" + apk.getFile().getName() + ".html");
-					reportFile.createNewFile();
-					PrintWriter writer = new PrintWriter(reportFile, "UTF-8");
-					writer.println(content);
-					writer.close();
-					break;
+//					ExplorationReport report = apk.getReport();
+//					request.setAttribute("apk_name", apk.getFile().getName());
+//					request.setAttribute("elements_seen", Integer.toString(report.getElementsSeen()));
+//					request.setAttribute("screens_seen", Integer.toString(report.getScreensSeen()));
+//					request.setAttribute("apk_successful", report.isSuccess());
+//					request.getRequestDispatcher("/WEB-INF/views/pages/report/report.jsp").include(request, responseWrapper);
+//					String content = responseWrapper.toString();
+//					GUISettings settings = new GUISettings();
+//					File reportFile = new File(settings.getOutputFolder() + "/Report_"
+//							+ (new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date())) + "_" + apk.getFile().getName() + ".html");
+//					reportFile.createNewFile();
+//					PrintWriter writer = new PrintWriter(reportFile, "UTF-8");
+//					writer.println(content);
+//					writer.close();
+//					break;
 				}
 			}
 		}else {

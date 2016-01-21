@@ -12,12 +12,15 @@ public class APKInformation {
 
 	private final File file;
 	private final File inlineTempFile;
-	private APKExplorationStatus status = APKExplorationStatus.NOT_RUNNING;
+	
+	private APKStatus status = APKStatus.UNKNOWN;
+	private APKInliningStatus inliningStatus = APKInliningStatus.UNKNOWN;
+	
 	private String packageName, versionCode, versionName;
 
-	private ExplorationReport report;
-	
 	private boolean selected = false;
+	
+	private ExplorationInformation explorationInfo = new ExplorationInformation();
 
 	public APKInformation(File file, Path tempInlinePath, String packageName, String versionCode, String versionName) {
 		super();
@@ -26,8 +29,6 @@ public class APKInformation {
 		this.versionCode = versionCode;
 		this.versionName = versionName;
 		inlineTempFile = tempInlinePath.resolve(FilenameUtils.removeExtension(file.getName()) + "-inlined.apk").toFile();
-		
-		this.setReport(ExplorationReport.getDefaultReport());
 	}
 	
 	public Path getInlinedPath() {
@@ -62,28 +63,8 @@ public class APKInformation {
 		return object;
 	}
 
-	public synchronized ExplorationReport getReport() {
-		return report;
-	}
-
-	public synchronized void setReport(ExplorationReport report) {
-		this.report = report;
-	}
-
-	public APKExplorationStatus getStatus() {
-		return status;
-	}
-
 	public File getFile() {
 		return file;
-	}
-
-	public APKExplorationStatus getExplorationStatus() {
-		return status;
-	}
-
-	public void setExplorationStatus(APKExplorationStatus status) {
-		this.status = status;
 	}
 
 	public boolean isSelected() {
@@ -110,4 +91,28 @@ public class APKInformation {
 		return inlineTempFile;
 	}
 
+	//Status 
+	public APKStatus getStatus() {
+		return status;
+	}
+	
+	public void setStatus(APKStatus status) {
+		this.status = status;
+	}
+
+	public APKInliningStatus getInliningStatus() {
+		return inliningStatus;
+	}
+
+	public void setInliningStatus(APKInliningStatus inliningStatus) {
+		this.inliningStatus = inliningStatus;
+	}
+
+	public ExplorationInformation getExplorationInfo() {
+		return explorationInfo;
+	}
+
+	public void setExplorationInfo(ExplorationInformation explorationInfo) {
+		this.explorationInfo = explorationInfo;
+	}
 }

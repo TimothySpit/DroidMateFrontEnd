@@ -49,7 +49,7 @@
 				</form>
 			</div>
 		</div>
-		<div class="row apk-data hide">
+		<div class="row apk-data">
 			<table id="exploreFiles" class="display">
 				<thead>
 					<tr>

@@ -6,6 +6,8 @@ import java.io.FilenameFilter;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.droidmate.apk.APKInformation;
 import com.droidmate.settings.GUISettings;
@@ -15,6 +17,8 @@ public class DroidMateUser {
 	private Path apkPath = null;	
 	private APKInformation[] apks = new APKInformation[0];	
 	private boolean explorationStarted = false;
+	
+	private List<String> droidMateOutput = new LinkedList<>();
 	
 	public synchronized boolean setAPKPath(Path apkPathToAnalyse) {
 		if (apkPathToAnalyse == null) {
@@ -172,6 +176,14 @@ public class DroidMateUser {
 
 	public void setExplorationStarted(boolean explorationStarted) {
 		this.explorationStarted = explorationStarted;
+	}
+
+	public List<String> getDroidMateOutput() {
+		return droidMateOutput;
+	}
+
+	public void setDroidMateOutput(List<String> droidMateOutput) {
+		this.droidMateOutput = droidMateOutput;
 	}
 	
 }

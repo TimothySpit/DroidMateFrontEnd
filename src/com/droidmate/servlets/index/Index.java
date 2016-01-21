@@ -33,7 +33,6 @@ public class Index extends HttpServlet {
 		// create new DroidMate-user for the whole server run
 		DroidMateUser globalUser = new DroidMateUser();
 		getServletContext().setAttribute(ServletContextConstants.DROIDMATE_USER, globalUser);
-		getServletContext().setAttribute("consoleOutput", new LinkedList<String>());
 	}
 
 	/**

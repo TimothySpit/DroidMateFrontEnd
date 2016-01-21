@@ -91,19 +91,15 @@ define(
 					},
 					updateName : function(name) {
 						rowNode.data()[1] = name;
-						rowNode.draw();
 					},
 					updateSize : function(size) {
 						rowNode.data()[2] = size;
-						rowNode.draw();
 					},
 					updatePackage : function(packageInfo) {
 						rowNode.data()[3] = packageInfo;
-						rowNode.draw();
 					},
 					updateVersion : function(version) {
 						rowNode.data()[4] = version;
-						rowNode.draw();
 					},
 					updateInlinedStatus : function(status) {
 						labelContainer.removeClass(function(index, css) {
@@ -124,7 +120,6 @@ define(
 							labelContainer.addClass('label-danger');
 							labelContainer.text("ERROR");
 						}
-						rowNode.draw();
 					},
 				}
 			}
@@ -360,10 +355,10 @@ define(
 				// add new apk to table
 				modul.addAPKData = function(name, size, packageInfo, version,
 						inlinedStatus) {
-					var row = table.row.add(
+					var rowAdded = table.row.add(
 							[ "", name, size, packageInfo, version, "" ])
-							.node();
-					var labelContainer = $(row).find(
+							;
+					var labelContainer = $(rowAdded.node()).find(
 							'.dt-body-center .inline-label').parent();
 
 					switch (inlinedStatus) {
@@ -388,6 +383,7 @@ define(
 								.html('<span class="inline-label label label-danger">ERROR</span>');
 						break;
 					}
+					return row(rowAdded,modul);
 				}
 
 				// Remove apk row by name

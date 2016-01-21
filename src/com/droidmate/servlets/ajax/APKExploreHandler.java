@@ -301,7 +301,7 @@ public class APKExploreHandler extends HttpServlet {
 		logReader.startConcurrentReading();
 		String s;
 		
-		List<String> consoleOutput =  (List<String>) getServletContext().getAttribute("consoleOutput");
+		List<String> consoleOutput =  user.getDroidMateOutput();
 
 		synchronized (consoleOutput) {
 			consoleOutput.clear();
