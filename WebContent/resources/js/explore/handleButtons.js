@@ -36,22 +36,25 @@ define(
 											message : "If you go back to the index page, droidmate will be stopped and all exploration results are deleted!",
 											buttons : {
 												cancel : {
-													label : "Back to index",
-													className : "btn-danger pull-left"
+													label : "Cancel",
+													className : "btn-default pull-left"
 												},
 												confirm : {
-													label : "Cancel",
-													className : "btn-default pull-right"
+													label : "Back to index",
+													className : "btn-danger pull-right"
 												}
 											},
 											callback : function(result) {
-												// Gray out the button
-												$(this).prop("disabled", true);
-												$.droidmate.ajax.post
-														.stopDroidMate(function(
-																e) {
-															window.location = "/DroidMate/Index";
-														});
+												if (result) {
+													// Gray out the button
+													$('back-to-index').prop(
+															"disabled", true);
+													$.droidmate.ajax.post
+															.stopDroidMate(function(
+																	e) {
+																window.location = "/DroidMate/Index";
+															});
+												}
 											}
 										});
 

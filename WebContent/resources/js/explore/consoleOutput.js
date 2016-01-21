@@ -70,7 +70,6 @@ define([ 'require', 'jquery', 'jquery.droidmate.ajax' ], function(require) {
 	}
 
 	function scrollDown(content) {
-		console.log(content.get(0).scrollHeight);
 		content.animate({
 			scrollTop : content.get(0).scrollHeight
 		}, 200);
@@ -90,7 +89,7 @@ define([ 'require', 'jquery', 'jquery.droidmate.ajax' ], function(require) {
 		// initially checked
 		divs.heading.cb.prop('checked', true);
 
-		divs.content.bind('wheel', function(evt) {
+		divs.content.bind('wheel mousedown mousewheel keyup', function(evt) {
 			divs.heading.cb.prop('checked', false);
 		});
 		divs.heading.cb.change(function() {

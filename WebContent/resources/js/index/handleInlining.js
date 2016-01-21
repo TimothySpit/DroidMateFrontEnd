@@ -28,8 +28,9 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable', 'jquery.dro
 							.alert(
 									"<strong>Inliner started. This could take a while.</strong>",
 									$.droidmate.overlays.alertTypes.INFO);
-							//disable inline button
+							//disable buttons button
 							$('#inline_files').prop('disabled',true);
+							$('#startexploration').prop('disabled',true);
 							watchInliner();
 						}, $.droidmate.inlining.WATCH_INLINER_INTERVAL);
 
@@ -72,6 +73,7 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable', 'jquery.dro
 					"<strong>All files are inlined!</strong>",
 					$.droidmate.overlays.alertTypes.SUCCESS, 4000);
 			$('#inline_files').prop('disabled',false);
+			$('#startexploration').prop('disabled',false);
 		} else if (status == $.droidmate.inlining.inliningStatus.INLINING || status == $.droidmate.inlining.inliningStatus.NOT_STARTED) {
 			//inlining
 			setTimeout(function() {
