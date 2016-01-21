@@ -28,7 +28,7 @@ public class APKInformation {
 		this.packageName = packageName;
 		this.versionCode = versionCode;
 		this.versionName = versionName;
-		inlineTempFile = tempInlinePath.resolve(file.getName()).toFile();
+		inlineTempFile = tempInlinePath.resolve(FilenameUtils.removeExtension(file.getName()) + "-inlined.apk").toFile();
 		
 		this.setReport(ExplorationReport.getDefaultReport());
 	}
@@ -39,7 +39,7 @@ public class APKInformation {
 	}
 
 	public boolean isInlined() {
-		inlined = getInlinedPath().toFile().exists() || (inlineTempFile != null && inlineTempFile.exists());
+		inlined = getInlinedPath().toFile().exists() || inlineTempFile.exists();
 		 
 		 return inlined;
 	}
