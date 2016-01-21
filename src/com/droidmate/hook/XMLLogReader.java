@@ -155,6 +155,7 @@ public class XMLLogReader {
 						type = xpp.next();
 					} catch (EOFException e) {
 						System.out.println("Parser reached end of file!");
+						stopReading();
 						e.printStackTrace();
 					} catch (IOException e) {
 						e.printStackTrace();
