@@ -15,7 +15,9 @@ define([ 'require', 'jquery', 'jquery.droidmate.ajax' ], function(require) {
 
 			var cb = $('<input type="checkbox" />');
 			heading.append(cb);
-			cb.addClass('console.cb');
+			cb.wrap('<label></label>');
+			cb.parent().addClass('console-cb');
+			cb.parent().append('<span>'+ cbText +'</span>');
 			var content = $('<div>');
 			content.css('overflow', 'scroll');
 			content.css('height', '500px');
