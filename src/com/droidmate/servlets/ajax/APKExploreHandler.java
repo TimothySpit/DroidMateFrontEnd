@@ -356,6 +356,7 @@ public class APKExploreHandler extends HttpServlet {
 		}
 		try {
 			droidmateProcess.destroyForcibly().waitFor();
+			System.out.println("Droidmate process has been killed.");
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
