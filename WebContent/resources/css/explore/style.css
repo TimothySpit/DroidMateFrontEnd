@@ -29,3 +29,12 @@ tr.shown td.details-control {
 	margin-bottom:0;
 	 font-weight: normal !important; 
 }
+
+#console-output .console-cb .scroll-text {
+	margin: 10px;
+}
+
+#console-output .console-cb input[type=checkbox] {
+	vertical-align: middle;
+	margin-top: 0; !important
+}

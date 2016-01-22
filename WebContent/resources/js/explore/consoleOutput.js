@@ -17,7 +17,7 @@ define([ 'require', 'jquery', 'jquery.droidmate.ajax' ], function(require) {
 			heading.append(cb);
 			cb.wrap('<label></label>');
 			cb.parent().addClass('console-cb');
-			cb.parent().append('<span>'+ cbText +'</span>');
+			cb.parent().prepend('<span class="scroll-text">'+ cbText +'</span>');
 			var content = $('<div>');
 			content.css('overflow', 'scroll');
 			content.css('height', '500px');
