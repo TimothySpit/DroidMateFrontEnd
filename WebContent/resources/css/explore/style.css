@@ -23,8 +23,9 @@ tr.shown td.details-control {
 	overflow: auto;
 }
 
-#console-output input[type=checkbox] {
+#console-output .console-cb {
 	float:right;
 	margin-top:0; 
-	margin-bottom:0; 
+	margin-bottom:0;
+	 font-weight: normal !important; 
 }

@@ -194,10 +194,6 @@ public class XMLLogReader {
 		private void readSuccess(boolean success) {
 			currentApkExplorationInfo.setSuccess(success);
 			currentApkExplorationInfo.setFinished(true);
-
-			ExplorationReport report = new ExplorationReport(currentApkExplorationInfo.getElementsSeen(),
-					currentApkExplorationInfo.getScreensSeen(), currentApkExplorationInfo.isSuccess());
-			currentAPK.setReport(report);
 		}
 
 		private void readWidgetExplored() {

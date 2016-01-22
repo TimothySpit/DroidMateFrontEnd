@@ -35,8 +35,10 @@ public class ConsoleOutput extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
+
 		response.setContentType("application/json");
-		List<String> consoleOutput =  (List<String>) getServletContext().getAttribute("consoleOutput");
+		List<String> consoleOutput =  user.getDroidMateOutput();
 		PrintWriter out = response.getWriter();
 
 		JSONObject result = new JSONObject();
