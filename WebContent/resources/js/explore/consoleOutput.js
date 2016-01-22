@@ -93,6 +93,7 @@ define([ 'require', 'jquery', 'jquery.droidmate.ajax' ], function(require) {
 
 		divs.content.bind('wheel mousedown mousewheel keyup', function(evt) {
 			divs.heading.cb.prop('checked', false);
+			divs.content.stop(true,true);
 		});
 		divs.heading.cb.change(function() {
 			if ($(this).is(":checked")) {

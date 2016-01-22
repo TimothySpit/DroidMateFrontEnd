@@ -42,8 +42,8 @@ input#folder_name {
 
 .settings-button button {
 	position: absolute;
-	top: 0em;
-	right: 0em;
+	top: 2em;
+	right: 2em;
 	z-index: 2;
 }
 
