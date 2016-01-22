@@ -72,6 +72,7 @@ define([ 'require', 'jquery', 'jquery.droidmate.ajax' ], function(require) {
 	}
 
 	function scrollDown(content) {
+		content.stop(true,true);
 		content.animate({
 			scrollTop : content.get(0).scrollHeight
 		}, 200);
@@ -113,6 +114,9 @@ define([ 'require', 'jquery', 'jquery.droidmate.ajax' ], function(require) {
 
 			newText = newText.replace(/(?:\r\n|\r|\n)/g, '<br />');
 			divs.content.append(newText);
+			if (divs.heading.cb.prop('checked')) {
+				scrollDown(divs.content);
+			}
 		}
 
 		modul.clear = function() {
