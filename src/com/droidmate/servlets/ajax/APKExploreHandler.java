@@ -323,7 +323,7 @@ public class APKExploreHandler extends HttpServlet {
 		}
 
 		logReader.stopReading();
-		System.out.println("Exit value: " + droidmateProcess.exitValue());
+		System.out.println("Droidmate exit value: " + droidmateProcess.exitValue());
 		try {
 			droidmateProcess.getInputStream().close();
 			droidmateProcess.getOutputStream().close();
@@ -336,8 +336,6 @@ public class APKExploreHandler extends HttpServlet {
 
 	private void stopDroidmateForcibly() {
 		System.out.println("Stopping droidmate...");
-
-		logReader.stopReading();
 
 		try {
 			droidmateProcess.getInputStream().close();
