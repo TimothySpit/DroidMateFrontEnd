@@ -71,10 +71,8 @@ define(
 
 				var startingTimestamp = null;
 				function updateClock() {
-					console.log("ready!");
 					if (startingTimestamp == null) {
 						startingTimestamp = $.droidmate.ajax.get.getGlobalStartingTime();
-						console.log(startingTimestamp);
 					} else {
 						var passedSeconds = Math
 								.floor((Date.now() - startingTimestamp) / 1000);

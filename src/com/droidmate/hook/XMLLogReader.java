@@ -45,16 +45,20 @@ public class XMLLogReader {
 
 		@Override
 		public int read() throws IOException {
-			int value = super.read();
-			if (value == -1 && !stop) {
-				try {
-					Thread.sleep(REFRESH_INTERVAL);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				return this.read();
+			if (stop) {
+				return -1;
 			} else {
-				return value;
+				int value = super.read();
+				if (value == -1) {
+					try {
+						Thread.sleep(REFRESH_INTERVAL);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					return this.read();
+				} else {
+					return value;
+				}
 			}
 		}
 
@@ -157,6 +161,7 @@ public class XMLLogReader {
 						System.out.println("Parser reached end of file (This should not happen!)");
 						stopReading();
 						e.printStackTrace();
+						return;
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -347,6 +352,8 @@ public class XMLLogReader {
 			parser.parse(xpp);
 		} catch (Exception e) {
 			e.printStackTrace();
+			stopReading();
+			return;
 		}
 	}
 
