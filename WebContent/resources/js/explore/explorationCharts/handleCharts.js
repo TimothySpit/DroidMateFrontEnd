@@ -94,15 +94,30 @@ define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas'
 		};
 	}
 
-	function getData() {
-		var elementsSeenHistory = $.droidmate.ajax.get
+	function getData(choiceContainer) {
+		var elementsSeenHistory = [];
+		var widgetsExploredHistory = [];
+		var screensSeenHistory = [];
+		//if (choiceContainer[0].checked) //check if the "total" checkbox is checked
+			{
+			elementsSeenHistory = $.droidmate.ajax.get
 				.getGlobalElementsSeenHistory();
-		var widgetsExploredHistory = $.droidmate.ajax.get
+			widgetsExploredHistory = $.droidmate.ajax.get
 				.getGlobalWidgetsExploredHistory();
-		var screensSeenHistory = $.droidmate.ajax.get
+			screensSeenHistory = $.droidmate.ajax.get
 				.getGlobalScreensSeenHistory();
+			}
 		var apkStatus = getAPKStatusInformation();
-
+		
+		//var individualData = getIndividualData(choiceContainer);
+		//elementsSeenHistory = individualData.elementsSeenIndividual.concat(elementsSeenHistory);
+		//widgetsExploredHistory = individualData.widgetsExploredIndividual.push(widgetsExploredHistory);
+		//screensSeenHistory = individualData.screensSeenIndividual.push(screensSeenHistory);
+		
+		
+		//var elementsSeenAll = individualData.elementsSeenIndividual.push(elementsSeenHistory); //add total line to individual lines
+		//elementsSeenHistory = individualData.elementsSeenIndividual;
+		//console.log(individualData.elementsSeenIndividual);
 		return {
 			elementsSeenHistory : elementsSeenHistory,
 			widgetsExploredHistory : widgetsExploredHistory,
@@ -110,24 +125,58 @@ define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas'
 			apkStatus : apkStatus
 		};
 	}
+	
+	function getIndividualData(choiceContainer) {
+		var apkArray = $.droidmate.ajax.get.getExplorationInfo();
+		var elementsSeenIndividual = [];
+		var widgetsExploredIndividual = [];
+		var screensSeenIndividual = [];
+		
+		
+		choiceContainer.find("input:checked").each(function () {
+			//if ($(this).id > 0) //individual data does not care about the -1 "total" checkbox
+				{
+				var key = $(this).attr("name");
+				for (var i = 0; i < apkArray.length; i++)
+					{
+					apk = apkArray[i];
+					if (apkArray[i].name == key) //this checkbox refers to this apk
+						{
+						elementsSeenIndividual.push(apk.history);
+						widgetsExploredIndividual.push(apk.historyWidgets);
+						screensSeenIndividual.push(apk.historyScreens);
+						}
+					}
+				}
+		});
 
-	function updateCharts(charts) {
+		return {
+			elementsSeenIndividual : elementsSeenIndividual,
+			widgetsExploredIndividual : widgetsExploredIndividual,
+			screensSeenIndividual : screensSeenIndividual,
+		};
+	}
 
-		var data = getData();
+	function updateCharts(charts, choiceContainer, repeat) {
 
+		var data = getData(choiceContainer);
+		var individualData = getIndividualData(choiceContainer);
 		// update elements seen
 		var chart = charts.elementsSeenChart;
-		chart.setData([ data.elementsSeenHistory ]);
+		
+		var elementsSeenAll = individualData.elementsSeenIndividual.push(data.elementsSeenHistory); //add total line to individual lines
+		chart.setData(elementsSeenAll);
 		chart.draw();
+		
 
 		// update screens explored
 		chart = charts.screensExploredChart;
-		chart.setData([ data.screensSeenHistory ]);
+		chart.setData([data.screensSeenHistory]);
 		chart.draw();
 
 		// Elements explored
 		chart = charts.elementsExploredChart;
-		chart.setData([ data.widgetsExploredHistory ]);
+		chart.setData([data.widgetsExploredHistory]);
 		chart.draw();
 
 		// apk status
@@ -148,8 +197,12 @@ define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas'
 		chart.setData(dataSet);
 		chart.draw();
 
-		setTimeout(function() {updateCharts(charts);},
-				$.droidmate.ajax.UPDATE_EXPLORATION_INFO_INTERVAL);
+		if (repeat)
+			{
+			setTimeout(function() {updateCharts(charts, choiceContainer, true);},
+					$.droidmate.ajax.UPDATE_EXPLORATION_INFO_INTERVAL);
+			}
+		
 	}
 
 	// create all charts
@@ -160,12 +213,33 @@ define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas'
 			"time (s)", 'Screens explored');
 	var elementsExploredChart = createGraphChart("#flot-gui-elements-explored",
 			"time (s)", 'Elements explored');
-
+	
+	var charts = {
+			apkStatusChart : apkStatusChart,
+			elementsSeenChart : elementsSeenChart,
+			screensExploredChart : screensExploredChart,
+			elementsExploredChart : elementsExploredChart
+		};
+	// insert checkboxes 
+	var checkboxes;
+    var choiceContainer = $("#choices");
+    choiceContainer.append('<br/><input type="checkbox" name="' + "total" +
+            '" checked="checked" id="id' + 0 + '">' +
+            '<label for="id' + 0 + '">'
+             + label + '</label>'); //draw "total", or not?
+    var apks = $.droidmate.ajax.get.getSelectedAPKS()["info[]"].selApks.data;
+    for (var i = 0; i < apks.length; i++)
+    {
+    	var key = i+1;
+    	var label = apks[i].name;
+        choiceContainer.append('<br/><input type="checkbox" name="' + label +
+                               '" checked="checked" id="id' + key + '">' +
+                               '<label for="id' + key + '">'
+                                + label + '</label>');
+    }
+    choiceContainer.find("input").click(function() {updateCharts(charts, choiceContainer, false);}); //update on click
+    
 	// start updating charts
-	updateCharts({
-		apkStatusChart : apkStatusChart,
-		elementsSeenChart : elementsSeenChart,
-		screensExploredChart : screensExploredChart,
-		elementsExploredChart : elementsExploredChart
-	});
+	updateCharts(charts, choiceContainer, true);
+	
 });
