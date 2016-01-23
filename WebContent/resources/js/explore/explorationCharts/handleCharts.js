@@ -135,7 +135,7 @@ define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas'
 		var screensSeenIndividual = [];
 		
 		
-		choiceContainer.find("input:checked").each(function () {
+		choiceContainer.find("input").each(function () {
 			if ($(this).attr("id") != "id0") //individual data does not care about the "total" checkbox
 				{
 				var key = $(this).attr("name");
@@ -145,9 +145,16 @@ define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas'
 					apk = apkArray[i];
 					if (apkArray[i].name == key) //this checkbox refers to this apk
 						{
-						elementsSeenIndividual.push(apk.history);
-						widgetsExploredIndividual.push(apk.historyWidgets);
-						screensSeenIndividual.push(apk.historyScreens);
+						if($(this).prop('checked')) {
+							elementsSeenIndividual.push(apk.history);
+							widgetsExploredIndividual.push(apk.historyWidgets);
+							screensSeenIndividual.push(apk.historyScreens);
+						} else {
+							elementsSeenIndividual.push([]);
+							widgetsExploredIndividual.push([]);
+							screensSeenIndividual.push([]);
+						}
+						
 						}
 					}
 				}
