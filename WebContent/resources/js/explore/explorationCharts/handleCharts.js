@@ -98,7 +98,13 @@ define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas'
 		var elementsSeenHistory = [];
 		var widgetsExploredHistory = [];
 		var screensSeenHistory = [];
-		//if (choiceContainer[0].checked) //check if the "total" checkbox is checked
+		var getTotal = false;
+		choiceContainer.find("input:checked").each(function () {
+			if ($(this).attr("id") == "id0")
+				getTotal = true;
+		});
+		
+		if (getTotal) //check if the "total" checkbox is checked
 			{
 			elementsSeenHistory = $.droidmate.ajax.get
 				.getGlobalElementsSeenHistory();
@@ -109,15 +115,11 @@ define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas'
 			}
 		var apkStatus = getAPKStatusInformation();
 		
-		//var individualData = getIndividualData(choiceContainer);
-		//elementsSeenHistory = individualData.elementsSeenIndividual.concat(elementsSeenHistory);
-		//widgetsExploredHistory = individualData.widgetsExploredIndividual.push(widgetsExploredHistory);
-		//screensSeenHistory = individualData.screensSeenIndividual.push(screensSeenHistory);
+		var individualData = getIndividualData(choiceContainer);
+		elementsSeenHistory = individualData.elementsSeenIndividual.concat([elementsSeenHistory]);
+		widgetsExploredHistory = individualData.widgetsExploredIndividual.concat([widgetsExploredHistory]);
+		screensSeenHistory = individualData.screensSeenIndividual.concat([screensSeenHistory]);
 		
-		
-		//var elementsSeenAll = individualData.elementsSeenIndividual.push(elementsSeenHistory); //add total line to individual lines
-		//elementsSeenHistory = individualData.elementsSeenIndividual;
-		//console.log(individualData.elementsSeenIndividual);
 		return {
 			elementsSeenHistory : elementsSeenHistory,
 			widgetsExploredHistory : widgetsExploredHistory,
@@ -134,9 +136,10 @@ define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas'
 		
 		
 		choiceContainer.find("input:checked").each(function () {
-			//if ($(this).id > 0) //individual data does not care about the -1 "total" checkbox
+			if ($(this).attr("id") != "id0") //individual data does not care about the "total" checkbox
 				{
 				var key = $(this).attr("name");
+				
 				for (var i = 0; i < apkArray.length; i++)
 					{
 					apk = apkArray[i];
@@ -160,23 +163,27 @@ define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas'
 	function updateCharts(charts, choiceContainer, repeat) {
 
 		var data = getData(choiceContainer);
-		var individualData = getIndividualData(choiceContainer);
+		
 		// update elements seen
 		var chart = charts.elementsSeenChart;
 		
-		var elementsSeenAll = individualData.elementsSeenIndividual.push(data.elementsSeenHistory); //add total line to individual lines
-		chart.setData(elementsSeenAll);
+		//var elementsSeenAll = individualData.elementsSeenIndividual.push(data.elementsSeenHistory);
+		//var elementsSeenAll = individualData.elementsSeenIndividual.concat([data.elementsSeenHistory]); //add total line to individual lines
+		//console.log(elementsSeenAll);
+		//chart.setData(elementsSeenAll);
+		
+		chart.setData(data.elementsSeenHistory);
 		chart.draw();
 		
 
 		// update screens explored
 		chart = charts.screensExploredChart;
-		chart.setData([data.screensSeenHistory]);
+		chart.setData(data.screensSeenHistory);
 		chart.draw();
 
 		// Elements explored
 		chart = charts.elementsExploredChart;
-		chart.setData([data.widgetsExploredHistory]);
+		chart.setData(data.widgetsExploredHistory);
 		chart.draw();
 
 		// apk status
@@ -223,9 +230,11 @@ define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas'
 	// insert checkboxes 
 	var checkboxes;
     var choiceContainer = $("#choices");
-    choiceContainer.append('<br/><input type="checkbox" name="' + "total" +
-            '" checked="checked" id="id' + 0 + '">' +
-            '<label for="id' + 0 + '">'
+    var key = 0;
+    var label = "total";
+    choiceContainer.append('<br/><input type="checkbox" name="' + label +
+            '" checked="checked" id="id' + key + '">' +
+            '<label for="id' + key + '">'
              + label + '</label>'); //draw "total", or not?
     var apks = $.droidmate.ajax.get.getSelectedAPKS()["info[]"].selApks.data;
     for (var i = 0; i < apks.length; i++)
