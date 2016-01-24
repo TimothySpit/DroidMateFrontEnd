@@ -6,6 +6,9 @@
 
 <jsp:include page="../../../partials/header.jsp" />
 
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/explore/style.css">
+
 <!-- requirejs -->
 <script
 	data-main="${pageContext.request.contextPath}/resources/js/explore/explorationCharts/explorationCharts.js"
@@ -28,9 +31,6 @@
 				<div id="flot-gui-screens-explored"
 					style="width: 450px; height: 300px; margin: 0 auto"></div>
 			</div>
-			<div class="col-sm-6">
-				<div id="choices"
-					style="width: 450px; height: 300px; margin: 0 auto"></div>
 		</div>
 		<div class="row">
 			<div class="col-sm-6">
@@ -40,6 +40,14 @@
 			<div class="col-sm-6">
 				<div id="flot-gui-elements-explored"
 					style="width: 450px; height: 300px; margin: 0 auto"></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<fieldset id="legend">
+					<legend>APK chart selection</legend>
+					<div id="apks-charts-legend"></div>
+				</fieldset>
 			</div>
 		</div>
 		<div class="row">

@@ -236,21 +236,19 @@ define([ 'jquery', 'jquery.flot', 'jquery.flot.axislabels', 'jquery.flot.canvas'
 		};
 	// insert checkboxes 
 	var checkboxes;
-    var choiceContainer = $("#choices");
+    var choiceContainer = $("#apks-charts-legend");
     var key = 0;
     var label = "total";
-    choiceContainer.append('<br/><input type="checkbox" name="' + label +
-            '" checked="checked" id="id' + key + '">' +
-            '<label for="id' + key + '">'
+    choiceContainer.append('<label><input type="checkbox" name="' + label +
+            '" checked="checked" id="id' + key + '">' 
              + label + '</label>'); //draw "total", or not?
     var apks = $.droidmate.ajax.get.getSelectedAPKS()["info[]"].selApks.data;
     for (var i = 0; i < apks.length; i++)
     {
     	var key = i+1;
     	var label = apks[i].name;
-        choiceContainer.append('<br/><input type="checkbox" name="' + label +
-                               '" checked="checked" id="id' + key + '">' +
-                               '<label for="id' + key + '">'
+        choiceContainer.append('<label><input type="checkbox" name="' + label +
+                               '" checked="checked" id="id' + key + '">'
                                 + label + '</label>');
     }
     choiceContainer.find("input").click(function() {updateCharts(charts, choiceContainer, false);}); //update on click
