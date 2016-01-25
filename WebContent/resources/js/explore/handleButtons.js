@@ -1,5 +1,5 @@
 define(
-		[ 'require', 'jquery', 'bootbox', 'jquery.droidmate.ajax' ],
+		[ 'require', 'jquery', 'bootbox', 'jquery.droidmate.ajax', 'jquery.droidmate.overlays' ],
 		function(require, jquery, bootbox) {
 			// Set output path label
 			var settings = $.droidmate.ajax.get.getDroidMateSettings();
@@ -63,7 +63,11 @@ define(
 
 			// handle openFolderButton
 			$('#openFolderBtn').click(function(e) {
-				$.droidmate.ajax.post.openReportFolder();
+				if($.droidmate.ajax.post.openReportFolder(false)) {
+					$.droidmate.overlays.alert("Explorer process has been started.", $.droidmate.overlays.alertTypes.SUCCESS, 4000);
+				}else {
+					$.droidmate.overlays.alert("Explorer process could not be started!", $.droidmate.overlays.alertTypes.DANGER, 6000);
+				}
 			});
 			// --------------------------------------
 

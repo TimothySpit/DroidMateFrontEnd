@@ -36,7 +36,7 @@ import com.droidmate.user.DroidMateUser;
 /**
  * Servlet implementation class APKExploreHandler
  */
-@WebServlet(urlPatterns={"/APKExploreHandler"}, asyncSupported=true)
+@WebServlet(urlPatterns = { "/APKExploreHandler" }, asyncSupported = true)
 public class APKExploreHandler extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -89,7 +89,15 @@ public class APKExploreHandler extends HttpServlet {
 				}
 			};
 		} else if (request.getParameter(AjaxConstants.EXPLORE_OPEN_REPORT_FOLDER) != null) {
-			openExplorerWindow(settings.getOutputFolder());
+			JSONObject o = new JSONObject();
+			if(openExplorerWindow(settings.getOutputFolder())) {
+				o.put("status", "success");
+			}else {
+				o.put("status", "error");
+			}
+			response.setContentType("application/json");
+			response.getWriter().print(o);
+			response.getWriter().flush();
 		} else {
 			System.out.println("Illegal POST request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
@@ -181,7 +189,7 @@ public class APKExploreHandler extends HttpServlet {
 			} else {
 				out.print(0);
 			}
-		}else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_WIDGETS_EXPLORED_HISTORY) != null) {
+		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_WIDGETS_EXPLORED_HISTORY) != null) {
 			response.setContentType("application/json");
 			JSONArray result = new JSONArray();
 			if (logReader != null) {
@@ -194,18 +202,18 @@ public class APKExploreHandler extends HttpServlet {
 			}
 
 			out.print(result);
-		} else if(request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_STARTING_TIME) != null) {
+		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_STARTING_TIME) != null) {
 			response.setContentType("application/json");
 			JSONObject result = new JSONObject();
-			if(logReader != null) {
+			if (logReader != null) {
 				result.put("status", "ok");
 				result.put("timestamp", logReader.getGlobalStartingTime());
-			}else {
+			} else {
 				result.put("status", "not_started");
 				result.put("timestamp", "");
 			}
 			out.print(result);
-		}else {
+		} else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
 				System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
@@ -216,9 +224,10 @@ public class APKExploreHandler extends HttpServlet {
 
 	private boolean openExplorerWindow(Path path) {
 		try {
-			Runtime.getRuntime().exec("explorer.exe " + path);
-			return true;
-		} catch (IOException e) {
+			int exitCode = Runtime.getRuntime().exec("explorer.exe " + path).waitFor();
+			System.out.println("Exit code: " + exitCode);
+			return exitCode == 0 || exitCode == 1;
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -236,7 +245,7 @@ public class APKExploreHandler extends HttpServlet {
 
 		Path inputAPKsPath = Paths.get(droidMateRoot.toString(), "/apks/inlined/");
 		logFile = new File(droidMateRoot.toString(), "/dev1/logs/gui.xml");
-		if(!logFile.delete()) {
+		if (!logFile.delete()) {
 			System.out.println("Log file deletion failed!");
 		}
 		logReader = new XMLLogReader(logFile, user.getAPKS());
@@ -302,13 +311,13 @@ public class APKExploreHandler extends HttpServlet {
 		}
 		logReader.startConcurrentReading();
 		String s;
-		
-		List<String> consoleOutput =  user.getDroidMateOutput();
+
+		List<String> consoleOutput = user.getDroidMateOutput();
 
 		synchronized (consoleOutput) {
 			consoleOutput.clear();
 		}
-		
+
 		try {
 			BufferedReader stdout = new BufferedReader(new InputStreamReader(droidmateProcess.getInputStream()));
 			while ((s = stdout.readLine()) != null) {
