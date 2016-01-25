@@ -70,8 +70,8 @@ public class DroidMateUser {
 		return explorationStatus.equals(APKExplorationStatus.STARTED);
 	}
 
-	public void setExplorationStarted(boolean explorationStarted) {
-		this.explorationStatus = APKExplorationStatus.STARTED;
+	public void setStatus(APKExplorationStatus newStatus) {
+		this.explorationStatus = newStatus;
 	}
 
 	public List<String> getDroidMateOutput() {

@@ -38,7 +38,6 @@ public class Explore extends HttpServlet {
 			return;
 		}
 
-		user.setExplorationStarted(true);
 		request.getRequestDispatcher("/WEB-INF/views/pages/explore/explore.jsp").forward(request, response);
 	}
 
