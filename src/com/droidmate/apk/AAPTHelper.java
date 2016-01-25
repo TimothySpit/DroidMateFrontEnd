@@ -49,9 +49,7 @@ public class AAPTHelper {
 	private List<AAPTInformation> loadAPKInformationForPath() {
 		File[] apkFiles = apkPath.toFile().listFiles(new FilenameFilter() {
 			@Override
-			public boolean accept(File current, String name) {
-				if (current.isDirectory())
-					return false;
+			public boolean accept(File dir, String name) {
 				return FilenameUtils.getExtension(name).toLowerCase().equals("apk");
 			}
 		});
