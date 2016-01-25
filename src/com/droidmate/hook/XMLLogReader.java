@@ -158,9 +158,7 @@ public class XMLLogReader {
 					try {
 						type = xpp.next();
 					} catch (EOFException e) {
-						System.out.println("Parser reached end of file (This should not happen!)");
-						stopReading();
-						e.printStackTrace();
+						//ForeverFileInputStream has been stopped, so just stop parsing
 						return;
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -356,6 +354,12 @@ public class XMLLogReader {
 			e.printStackTrace();
 			stopReading();
 			return;
+		} finally {
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

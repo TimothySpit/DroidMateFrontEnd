@@ -93,7 +93,15 @@ public class APKExploreHandler extends HttpServlet {
 				}
 			};
 		} else if (request.getParameter(AjaxConstants.EXPLORE_OPEN_REPORT_FOLDER) != null) {
-			openExplorerWindow(settings.getOutputFolder());
+			JSONObject o = new JSONObject();
+			if(openExplorerWindow(settings.getOutputFolder())) {
+				o.put("status", "success");
+			}else {
+				o.put("status", "error");
+			}
+			response.setContentType("application/json");
+			response.getWriter().print(o);
+			response.getWriter().flush();
 		} else {
 			System.out.println("Illegal POST request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
@@ -220,9 +228,9 @@ public class APKExploreHandler extends HttpServlet {
 
 	private boolean openExplorerWindow(Path path) {
 		try {
-			Runtime.getRuntime().exec("explorer.exe " + path);
-			return true;
-		} catch (IOException e) {
+			int exitCode = Runtime.getRuntime().exec("explorer.exe " + path).waitFor();
+			return exitCode == 0 || exitCode == 1;
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -240,7 +248,15 @@ public class APKExploreHandler extends HttpServlet {
 
 		Path inputAPKsPath = Paths.get(droidMateRoot.toString(), "/apks/inlined/");
 		logFile = new File(droidMateRoot.toString(), "/dev1/logs/gui.xml");
-		logFile.delete();
+		while (!logFile.delete()) {
+			System.out.println("Log file deletion failed, trying again in 500ms...");
+			try {
+				killAdb();
+				Thread.sleep(500);
+			}catch(InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		logReader = new XMLLogReader(logFile, user.getAPKS());
 
 		try {
@@ -264,15 +280,7 @@ public class APKExploreHandler extends HttpServlet {
 						target.toFile().mkdirs();
 						Files.copy(apkInfo.getInlinedPath(), target, StandardCopyOption.REPLACE_EXISTING);
 					} catch (AccessDeniedException e) {
-						Runtime rt = Runtime.getRuntime();
-						try {
-							if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1)
-								rt.exec("taskkill /F /IM " + "adb.exe");
-							else
-								rt.exec("kill -9 " + "adb");
-						} catch (IOException ex) {
-							ex.printStackTrace();
-						}
+						killAdb();
 						restart = true;
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -281,15 +289,7 @@ public class APKExploreHandler extends HttpServlet {
 				}
 			}
 		}
-		Runtime rt = Runtime.getRuntime();
-		try {
-			if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1)
-				rt.exec("taskkill /F /IM " + "adb.exe");
-			else
-				rt.exec("kill -9 " + "adb");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		killAdb();
 
 		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace", ":projects:core:run", "--project-prop",
 				"timeLimit=" + settings.getExplorationTimeout());
@@ -337,6 +337,19 @@ public class APKExploreHandler extends HttpServlet {
 
 		return droidmateProcess.exitValue() == 0;
 	}
+	
+	private void killAdb() {
+		System.out.println("Killing adb process...");
+		Runtime rt = Runtime.getRuntime();
+		try {
+			if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1)
+				rt.exec("taskkill /F /IM " + "adb.exe");
+			else
+				rt.exec("kill -9 " + "adb");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void stopDroidmateForcibly() {
 		System.out.println("Stopping droidmate...");
@@ -362,15 +375,7 @@ public class APKExploreHandler extends HttpServlet {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		Runtime rt = Runtime.getRuntime();
-		try {
-			if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1)
-				rt.exec("taskkill /F /IM " + "adb.exe");
-			else
-				rt.exec("kill -9 " + "adb");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		killAdb();
 
 	}
 
