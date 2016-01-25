@@ -236,7 +236,9 @@ public class APKExploreHandler extends HttpServlet {
 
 		Path inputAPKsPath = Paths.get(droidMateRoot.toString(), "/apks/inlined/");
 		logFile = new File(droidMateRoot.toString(), "/dev1/logs/gui.xml");
-		logFile.delete();
+		if(!logFile.delete()) {
+			System.out.println("Log file deletion failed!");
+		}
 		logReader = new XMLLogReader(logFile, user.getAPKS());
 
 		try {
