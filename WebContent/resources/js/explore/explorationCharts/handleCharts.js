@@ -79,7 +79,7 @@ define(
 			function getAPKStatusInformation() {
 				var apkArray = $.droidmate.ajax.get.getExplorationInfo();
 				var selAPKSSize = $.droidmate.ajax.get.getSelectedAPKS()["info[]"].selApks.data.length;
-			
+
 				var successfulAPKs = 0;
 				var failedAPKs = 0;
 				for (var i = 0; i < apkArray.length; i++) {
@@ -106,7 +106,7 @@ define(
 				var screensSeenHistory = [];
 				var getTotal = false;
 				choiceContainer.find("input:checked").each(function() {
-					if ($(this).attr("id") == "id0")
+					if ($(this).attr("id") == "cb-total")
 						getTotal = true;
 				});
 
@@ -122,12 +122,12 @@ define(
 				var apkStatus = getAPKStatusInformation();
 
 				var individualData = getIndividualData(choiceContainer);
-				elementsSeenHistory = individualData.elementsSeenIndividual
-						.concat([ elementsSeenHistory ]);
-				widgetsExploredHistory = individualData.widgetsExploredIndividual
-						.concat([ widgetsExploredHistory ]);
-				screensSeenHistory = individualData.screensSeenIndividual
-						.concat([ screensSeenHistory ]);
+				elementsSeenHistory = [ elementsSeenHistory ]
+						.concat([ individualData.elementsSeenIndividual ]);
+				widgetsExploredHistory = [ widgetsExploredHistory ]
+						.concat(individualData.widgetsExploredIndividual);
+				screensSeenHistory = [ screensSeenHistory ]
+						.concat(individualData.screensSeenIndividual);
 
 				return {
 					elementsSeenHistory : elementsSeenHistory,
@@ -140,29 +140,30 @@ define(
 			function getIndividualData(choiceContainer) {
 				var apkArray = $.droidmate.ajax.get.getExplorationInfo();
 				apkArray.sort(function(a, b) {
-					   return a.name.toUpperCase().localeCompare(b.name.toUpperCase())});
-				
+					return a.name.toUpperCase().localeCompare(
+							b.name.toUpperCase())
+				});
+
 				var elementsSeenIndividual = [];
 				var widgetsExploredIndividual = [];
 				var screensSeenIndividual = [];
 
 				var checkBoxes = choiceContainer.find("input");
 				for (var i = 0; i < apkArray.length; i++) {
-					var cb = checkBoxes.find('[id="cb-' + apkArray[i] + '"]');
+					var cb = checkBoxes.filter('[id="cb-' + apkArray[i].name
+							+ '"]');
 					if ($(cb).prop('checked')) {
-						elementsSeenIndividual
-								.push(apk.history);
+						elementsSeenIndividual.push(apkArray[i].history);
 						widgetsExploredIndividual
-								.push(apk.historyWidgets);
-						screensSeenIndividual
-								.push(apk.historyScreens);
+								.push(apkArray[i].historyWidgets);
+						screensSeenIndividual.push(apkArray[i].historyScreens);
 					} else {
-						elementsSeenIndividual.push([[0,0]]);
-						widgetsExploredIndividual.push([[0,0]]);
-						screensSeenIndividual.push([[0,0]]);
+						elementsSeenIndividual.push([ [ 0, 0 ] ]);
+						widgetsExploredIndividual.push([ [ 0, 0 ] ]);
+						screensSeenIndividual.push([ [ 0, 0 ] ]);
 					}
 				}
-				
+
 				return {
 					elementsSeenIndividual : elementsSeenIndividual,
 					widgetsExploredIndividual : widgetsExploredIndividual,
@@ -237,14 +238,16 @@ define(
 			// insert checkboxes
 			var checkboxes;
 			var choiceContainer = $("#apks-charts-legend");
-			var label = "total";
-			choiceContainer.append('<label><input type="checkbox" name="'
-					+ label + '" checked="checked" id="cb-' + label + '">' + label
-					+ '</label>'); // draw "total", or not?
+			choiceContainer
+					.append('<label><input type="checkbox" name="Show all" checked="checked" id="cb-total">Show all</label>'); // draw
+			// "total",
+			// or
+			// not?
 			var apks = $.droidmate.ajax.get.getSelectedAPKS()["info[]"].selApks.data;
 			apks.sort(function(a, b) {
-				   return a.name.toUpperCase().localeCompare(b.name.toUpperCase())});
-				   
+				return a.name.toUpperCase().localeCompare(b.name.toUpperCase())
+			});
+
 			for (var i = 0; i < apks.length; i++) {
 				var label = apks[i].name;
 				choiceContainer.append('<label><input type="checkbox" name="'
@@ -261,11 +264,15 @@ define(
 			$.each(charts, function(index, value) {
 				var plot = value;
 				var series = plot.getData();
-				choiceContainer.find('[id="cb-' + total +'"]').parent().css('background-color', series[0].color); 
-				for (var i = 1; i < series.length; ++i) { //no total checkbox
-					choiceContainer.find('[id="cb-' + apks[i].name+'"]').parent().css('background-color', series[i].color); 
+				choiceContainer.find('[id="cb-total"]').parent().css(
+						'background-color', series[0].color);
+				for (var i = 1; i < series.length; ++i) { // no total checkbox
+					var name = apks[i - 1].name;
+					if (name)
+						choiceContainer.find('[id="cb-' + name + '"]').parent()
+								.css('background-color', series[i].color);
 				}
-				});
+			});
 
 			// start updating charts
 			updateCharts(charts, choiceContainer, true);
