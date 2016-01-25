@@ -44,6 +44,5 @@ public class AjaxConstants {
 	public static final String EXPLORE_OPEN_REPORT_FOLDER = "explore_open_report_folder";
 
 	// ------------------------------------------------------------------------------
-	public final static String ReportProvider_GET_REPORT = "get_report";
-	public static final String ReportProvider_SAVE_REPORT = "save_report";
+	public static final String ReportProvider_SAVE_REPORT_HTML = "save_report_html";
 }

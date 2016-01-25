@@ -258,26 +258,19 @@ define([ 'jquery' ], function(require) {
 	get.getAllAPKS = getAllAPKS;
 	// ----------------------------------
 
-	function getReportPath(apkname) {
-		var result = "/DroidMate/ReportProvider?get_report=" + apkname;
-		return result;
-	}
-	get.getReportPath = getReportPath;
-	// ----------------------------------
-
-	function saveReport(apkname) {
+	function saveReport() {
+		var reportHtml = new XMLSerializer().serializeToString(document);
 		$.ajax({
 			url : "/DroidMate/ReportProvider",
 			async : false,
-			type : 'GET',
+			type : 'POST',
 			dataType : "json",
 			data : {
-				save_report : apkname
+				save_report_html : reportHtml
 			}
 		});
 	}
-	get.saveReport = saveReport;
-	// ----------------------------------
+	post.saveReport = saveReport;
 
 	// ----------------------------------
 
