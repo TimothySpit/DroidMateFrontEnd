@@ -1,10 +1,7 @@
 package com.droidmate.apk;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Period;
-import java.util.Date;
 
 public class ExplorationInformation {
 
@@ -77,7 +74,7 @@ public class ExplorationInformation {
 		switch (explorationStatus) {
 		case STARTED:
 			startTime = LocalTime.now();
-			endTime   = LocalTime.now();
+			endTime = LocalTime.now();
 			break;
 		case FINISHED:
 		case ABORTED:
@@ -87,7 +84,7 @@ public class ExplorationInformation {
 		default:
 			break;
 		}
-		
+
 		this.explorationStatus = explorationStatus;
 	}
 }

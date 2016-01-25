@@ -69,7 +69,7 @@ public class APKInliningHandler extends HttpServlet {
 			} else {
 				result.put(AjaxConstants.APKInlineHandler_GET_INLINE_STATUS, InliningStatus.NOT_STARTED);
 			}
-		}		
+		}
 		out.print(result);
 		out.flush();
 	}

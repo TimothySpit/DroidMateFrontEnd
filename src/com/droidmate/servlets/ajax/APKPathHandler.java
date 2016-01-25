@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,7 +18,6 @@ import com.droidmate.apk.APKInformation;
 import com.droidmate.apk.inlining.APKInliner;
 import com.droidmate.apk.inlining.InliningStatus;
 import com.droidmate.settings.AjaxConstants;
-import com.droidmate.settings.GUISettings;
 import com.droidmate.settings.ServletContextConstants;
 import com.droidmate.user.DroidMateUser;
 
@@ -75,10 +73,9 @@ public class APKPathHandler extends HttpServlet {
 			apk.setSelected(false);
 		}
 
-		APKInformation[] apks = user.getAPKS();
 		for (String name : save_selectedAPKS) {
-			for (APKInformation apk : apks) {
-				if(apk.getFile().getName().equals(name)){
+			for (APKInformation apk : user.getAPKS()) {
+				if (apk.getFile().getName().equals(name)) {
 					apk.setSelected(true);
 				}
 			}

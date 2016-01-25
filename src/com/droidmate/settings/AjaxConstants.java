@@ -25,9 +25,9 @@ public class AjaxConstants {
 	// get requests
 	public final static String FileSystem_GET_FILETYPE = "type";
 	public final static String FileSystem_GET_PATH = "path";
-	
+
 	// -----------------------------------------------------------------------------
-	
+
 	// explore requests
 	public final static String EXPLORE_START = "explore_start";
 	public final static String EXPLORE_STOP = "explore_stop";
@@ -43,7 +43,7 @@ public class AjaxConstants {
 	public static final String EXPLORE_GET_GLOBAL_STARTING_TIME = "explore_get_global_starting_time";
 	public static final String EXPLORE_OPEN_REPORT_FOLDER = "explore_open_report_folder";
 
-	//------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------
 	public final static String ReportProvider_GET_REPORT = "get_report";
 	public static final String ReportProvider_SAVE_REPORT = "save_report";
 }

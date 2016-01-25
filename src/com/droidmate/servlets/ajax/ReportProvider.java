@@ -1,12 +1,9 @@
 package com.droidmate.servlets.ajax;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
@@ -17,9 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 import com.droidmate.apk.APKInformation;
-import com.droidmate.apk.ExplorationReport;
 import com.droidmate.settings.AjaxConstants;
-import com.droidmate.settings.GUISettings;
 import com.droidmate.settings.ServletContextConstants;
 import com.droidmate.user.DroidMateUser;
 
@@ -47,18 +42,21 @@ public class ReportProvider extends HttpServlet {
 			String requestedAPK = (String) request.getParameter(AjaxConstants.ReportProvider_GET_REPORT);
 			for (APKInformation apk : user.getAPKS()) {
 				if (apk.getFile().getName().equals(requestedAPK)) {
-//					ExplorationReport report = apk.getReport();
-//					request.setAttribute("apk_name", apk.getFile().getName());
-//					request.setAttribute("elements_seen", Integer.toString(report.getElementsSeen()));
-//					request.setAttribute("screens_seen", Integer.toString(report.getScreensSeen()));
-//					request.setAttribute("apk_successful", report.isSuccess());
-//					break;
+					// ExplorationReport report = apk.getReport();
+					// request.setAttribute("apk_name",
+					// apk.getFile().getName());
+					// request.setAttribute("elements_seen",
+					// Integer.toString(report.getElementsSeen()));
+					// request.setAttribute("screens_seen",
+					// Integer.toString(report.getScreensSeen()));
+					// request.setAttribute("apk_successful",
+					// report.isSuccess());
+					// break;
 				}
 			}
 
 			request.getRequestDispatcher("/WEB-INF/views/pages/report/report.jsp").forward(request, response);
-		}else
-		if (request.getParameter(AjaxConstants.ReportProvider_SAVE_REPORT) != null) {
+		} else if (request.getParameter(AjaxConstants.ReportProvider_SAVE_REPORT) != null) {
 			String requestedAPK = (String) request.getParameter(AjaxConstants.ReportProvider_SAVE_REPORT);
 			for (APKInformation apk : user.getAPKS()) {
 				if (apk.getFile().getName().equals(requestedAPK)) {
@@ -76,24 +74,32 @@ public class ReportProvider extends HttpServlet {
 							return sw.toString();
 						}
 					};
-//					ExplorationReport report = apk.getReport();
-//					request.setAttribute("apk_name", apk.getFile().getName());
-//					request.setAttribute("elements_seen", Integer.toString(report.getElementsSeen()));
-//					request.setAttribute("screens_seen", Integer.toString(report.getScreensSeen()));
-//					request.setAttribute("apk_successful", report.isSuccess());
-//					request.getRequestDispatcher("/WEB-INF/views/pages/report/report.jsp").include(request, responseWrapper);
-//					String content = responseWrapper.toString();
-//					GUISettings settings = new GUISettings();
-//					File reportFile = new File(settings.getOutputFolder() + "/Report_"
-//							+ (new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date())) + "_" + apk.getFile().getName() + ".html");
-//					reportFile.createNewFile();
-//					PrintWriter writer = new PrintWriter(reportFile, "UTF-8");
-//					writer.println(content);
-//					writer.close();
-//					break;
+					// ExplorationReport report = apk.getReport();
+					// request.setAttribute("apk_name",
+					// apk.getFile().getName());
+					// request.setAttribute("elements_seen",
+					// Integer.toString(report.getElementsSeen()));
+					// request.setAttribute("screens_seen",
+					// Integer.toString(report.getScreensSeen()));
+					// request.setAttribute("apk_successful",
+					// report.isSuccess());
+					// request.getRequestDispatcher("/WEB-INF/views/pages/report/report.jsp").include(request,
+					// responseWrapper);
+					// String content = responseWrapper.toString();
+					// GUISettings settings = new GUISettings();
+					// File reportFile = new File(settings.getOutputFolder() +
+					// "/Report_"
+					// + (new SimpleDateFormat("yyyyMMdd-HHmmss").format(new
+					// Date())) + "_" + apk.getFile().getName() + ".html");
+					// reportFile.createNewFile();
+					// PrintWriter writer = new PrintWriter(reportFile,
+					// "UTF-8");
+					// writer.println(content);
+					// writer.close();
+					// break;
 				}
 			}
-		}else {
+		} else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
 				System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));

@@ -17,7 +17,7 @@ public enum FileType {
 		}
 		return FileType.UNKNOWN;
 	}
-	
+
 	public boolean equalsName(String otherName) {
 		return (otherName == null) ? false : name.equals(otherName);
 	}

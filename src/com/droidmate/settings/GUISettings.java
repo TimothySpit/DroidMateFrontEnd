@@ -12,7 +12,7 @@ public class GUISettings {
 
 	private Path outputFolder;
 	private Path droidMatePath;
-	
+
 	private int explorationTimeout;
 
 	public GUISettings() {
@@ -23,7 +23,7 @@ public class GUISettings {
 			String pathString = prefs.get("OutputFolderPath", currentDirFile.getAbsolutePath());
 			String dmPath = prefs.get("DroidMatePath", currentDirFile.getAbsolutePath());
 			String aSDKPath = prefs.get("AndroidSDKPath", currentDirFile.getAbsolutePath());
-			
+
 			try {
 				outputFolder = (Paths.get(pathString));
 			} catch (InvalidPathException e) {
@@ -37,7 +37,7 @@ public class GUISettings {
 				droidMatePath = (Paths.get(currentDirFile.getAbsolutePath()));
 				prefs.put("DroidMatePath", currentDirFile.getAbsolutePath());
 			}
-			
+
 			explorationTimeout = prefs.getInt("ExplorationTimeout", 10);
 			if (explorationTimeout <= 0) {
 				explorationTimeout = 10;
@@ -95,5 +95,5 @@ public class GUISettings {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

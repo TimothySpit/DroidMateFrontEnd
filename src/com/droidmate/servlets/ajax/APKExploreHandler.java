@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -36,7 +35,7 @@ import com.droidmate.user.DroidMateUser;
 /**
  * Servlet implementation class APKExploreHandler
  */
-@WebServlet(urlPatterns={"/APKExploreHandler"}, asyncSupported=true)
+@WebServlet(urlPatterns = { "/APKExploreHandler" }, asyncSupported = true)
 public class APKExploreHandler extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -70,22 +69,27 @@ public class APKExploreHandler extends HttpServlet {
 			r = new Runnable() {
 				@Override
 				public void run() {
-					if (!startDroidmate(user))
+					if (!startDroidmate(user)) {
 						user.setExplorationStarted(false);
-					else
+						user.clear();
+					} else {
 						user.setExplorationStarted(true);
+					}
 				}
 			};
 		} else if (request.getParameter(AjaxConstants.EXPLORE_STOP) != null) {
 			stopDroidmateForcibly();
 			user.setExplorationStarted(false);
+			user.clear();
 		} else if (request.getParameter(AjaxConstants.EXPLORE_RESTART) != null) {
 			stopDroidmateForcibly();
 			r = new Runnable() {
 				@Override
 				public void run() {
-					if (!startDroidmate(user))
+					if (!startDroidmate(user)) {
 						user.setExplorationStarted(false);
+						user.clear();
+					}
 				}
 			};
 		} else if (request.getParameter(AjaxConstants.EXPLORE_OPEN_REPORT_FOLDER) != null) {
@@ -181,7 +185,7 @@ public class APKExploreHandler extends HttpServlet {
 			} else {
 				out.print(0);
 			}
-		}else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_WIDGETS_EXPLORED_HISTORY) != null) {
+		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_WIDGETS_EXPLORED_HISTORY) != null) {
 			response.setContentType("application/json");
 			JSONArray result = new JSONArray();
 			if (logReader != null) {
@@ -194,18 +198,18 @@ public class APKExploreHandler extends HttpServlet {
 			}
 
 			out.print(result);
-		} else if(request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_STARTING_TIME) != null) {
+		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_STARTING_TIME) != null) {
 			response.setContentType("application/json");
 			JSONObject result = new JSONObject();
-			if(logReader != null) {
+			if (logReader != null) {
 				result.put("status", "ok");
 				result.put("timestamp", logReader.getGlobalStartingTime());
-			}else {
+			} else {
 				result.put("status", "not_started");
 				result.put("timestamp", "");
 			}
 			out.print(result);
-		}else {
+		} else {
 			System.out.println("Illegal GET request:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
 				System.out.println(s.getKey() + " -> " + Arrays.toString(s.getValue()));
@@ -287,8 +291,8 @@ public class APKExploreHandler extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace", ":projects:core:run",
-				"--project-prop", "timeLimit=" + settings.getExplorationTimeout());
+		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace", ":projects:core:run", "--project-prop",
+				"timeLimit=" + settings.getExplorationTimeout());
 		pb.directory(droidMateRoot.toFile());
 		pb.redirectErrorStream(true);
 
@@ -300,13 +304,13 @@ public class APKExploreHandler extends HttpServlet {
 		}
 		logReader.startConcurrentReading();
 		String s;
-		
-		List<String> consoleOutput =  user.getDroidMateOutput();
+
+		List<String> consoleOutput = user.getDroidMateOutput();
 
 		synchronized (consoleOutput) {
 			consoleOutput.clear();
 		}
-		
+
 		try {
 			BufferedReader stdout = new BufferedReader(new InputStreamReader(droidmateProcess.getInputStream()));
 			while ((s = stdout.readLine()) != null) {

@@ -11,9 +11,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-
 public class APKExplorationInfo {
-	
+
 	private final String name;
 	private AtomicBoolean success = new AtomicBoolean(false);
 	private AtomicInteger elementsSeen = new AtomicInteger(0);
@@ -25,17 +24,17 @@ public class APKExplorationInfo {
 	private ConcurrentSkipListMap<Long, Integer> screensSeenHistory;
 	private ConcurrentSkipListMap<Long, Integer> widgetsExploredHistory;
 	private File reportFile;
-	
+
 	public APKExplorationInfo(String name) {
 		super();
 		this.name = name;
 		startingTime.set(System.currentTimeMillis());
-		
+
 		Comparator<Long> c = new Comparator<Long>() {
 			@Override
 			public int compare(Long arg0, Long arg1) {
 				return arg0.compareTo(arg1);
-			}			
+			}
 		};
 		elementsSeenHistory = new ConcurrentSkipListMap<>(c);
 		screensSeenHistory = new ConcurrentSkipListMap<>(c);
@@ -44,7 +43,7 @@ public class APKExplorationInfo {
 		screensSeenHistory.put(0l, 0);
 		widgetsExploredHistory.put(0l, 0);
 	}
-	
+
 	public long getStartingTime() {
 		return startingTime.get();
 	}
@@ -56,21 +55,21 @@ public class APKExplorationInfo {
 	public int getScreensSeen() {
 		return screensSeen.get();
 	}
-	
+
 	public int getWidgetsExplored() {
 		return widgetsExplored.get();
 	}
-	
+
 	public void addWidgetsExplored(int newExplored) {
 		widgetsExplored.addAndGet(newExplored);
 		widgetsExploredHistory.put(System.currentTimeMillis() - getStartingTime(), getWidgetsExplored());
 	}
-	
+
 	public void addElementsSeen(int newElements) {
 		elementsSeen.addAndGet(newElements);
 		elementsSeenHistory.put(System.currentTimeMillis() - getStartingTime(), getElementsSeen());
 	}
-	
+
 	public void addScreensSeen(int newScreens) {
 		screensSeen.addAndGet(newScreens);
 		screensSeenHistory.put(System.currentTimeMillis() - getStartingTime(), getScreensSeen());
@@ -83,7 +82,7 @@ public class APKExplorationInfo {
 	public ConcurrentSkipListMap<Long, Integer> getScreensSeenHistory() {
 		return screensSeenHistory;
 	}
-	
+
 	public boolean isSuccess() {
 		return success.get();
 	}
@@ -95,24 +94,24 @@ public class APKExplorationInfo {
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setFinished(boolean finished) {
 		this.finished.set(finished);
 	}
-	
+
 	public boolean isFinished() {
 		return finished.get();
 	}
-	
+
 	public static JSONObject getDummyObject() {
 		JSONObject json = new JSONObject();
 		json.put("history", new JSONArray());
 		json.put("historyScreens", new JSONArray());
 		json.put("historyWidgets", new JSONArray());
-		
+
 		return json;
 	}
-	
+
 	public JSONObject toJSONObject() {
 		JSONObject json = new JSONObject();
 		json.put("name", getName());
@@ -121,38 +120,38 @@ public class APKExplorationInfo {
 		json.put("screensSeen", getScreensSeen());
 		json.put("widgetsExplored", getWidgetsExplored());
 		json.put("finished", isFinished());
-		
+
 		JSONArray elementsHistory = new JSONArray();
-		for(Entry<Long, Integer> entry : getElementsSeenHistory().entrySet()) {
+		for (Entry<Long, Integer> entry : getElementsSeenHistory().entrySet()) {
 			JSONArray o = new JSONArray();
-			//Seconds
+			// Seconds
 			o.put(Math.round(Math.round(entry.getKey() / 1000d)));
 			o.put(entry.getValue());
 			elementsHistory.put(o);
 		}
-		//For compatibility just 'history'
+		// For compatibility just 'history'
 		json.put("history", elementsHistory);
-		
+
 		JSONArray screensHistory = new JSONArray();
-		for(Entry<Long, Integer> entry : getScreensSeenHistory().entrySet()) {
+		for (Entry<Long, Integer> entry : getScreensSeenHistory().entrySet()) {
 			JSONArray o = new JSONArray();
-			//Seconds
+			// Seconds
 			o.put(Math.round(Math.round(entry.getKey() / 1000d)));
 			o.put(entry.getValue());
 			screensHistory.put(o);
 		}
 		json.put("historyScreens", screensHistory);
-		
+
 		JSONArray widgetsHistory = new JSONArray();
-		for(Entry<Long, Integer> entry : getWidgetsExploredHistory().entrySet()) {
+		for (Entry<Long, Integer> entry : getWidgetsExploredHistory().entrySet()) {
 			JSONArray o = new JSONArray();
-			//Seconds
+			// Seconds
 			o.put(Math.round(Math.round(entry.getKey() / 1000d)));
 			o.put(entry.getValue());
 			widgetsHistory.put(o);
 		}
 		json.put("historyWidgets", widgetsHistory);
-		
+
 		return json;
 	}
 
@@ -163,7 +162,7 @@ public class APKExplorationInfo {
 	public void setReportFile(File reportFile) {
 		this.reportFile = reportFile;
 	}
-	
+
 	public File getReportFile() {
 		return reportFile;
 	}

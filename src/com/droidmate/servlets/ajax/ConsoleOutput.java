@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.json.JSONObject;
 
-import com.droidmate.settings.AjaxConstants;
 import com.droidmate.settings.ServletContextConstants;
 import com.droidmate.user.DroidMateUser;
 
@@ -23,35 +22,36 @@ import com.droidmate.user.DroidMateUser;
 @WebServlet("/ConsoleOutput")
 public class ConsoleOutput extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ConsoleOutput() {
-        super();
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public ConsoleOutput() {
+		super();
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 
 		response.setContentType("application/json");
-		List<String> consoleOutput =  user.getDroidMateOutput();
+		List<String> consoleOutput = user.getDroidMateOutput();
 		PrintWriter out = response.getWriter();
 
 		JSONObject result = new JSONObject();
 		result.put("lines", 0);
 		result.put("text", "");
-		
+
 		String getOutput = request.getParameter("get");
 		if (getOutput != null) {
 			if (NumberUtils.isDigits(getOutput) && NumberUtils.isParsable(getOutput)) {
 				int lines = Integer.parseInt(getOutput);
 				synchronized (consoleOutput) {
 					if (lines < consoleOutput.size()) {
-						result.put("lines", consoleOutput.size()-lines);
+						result.put("lines", consoleOutput.size() - lines);
 						String res = "";
 						for (int i = lines; i < consoleOutput.size(); i++) {
 							res += consoleOutput.get(i) + System.lineSeparator();
@@ -61,7 +61,7 @@ public class ConsoleOutput extends HttpServlet {
 				}
 			}
 		}
-		
+
 		out.print(result);
 		out.flush();
 	}

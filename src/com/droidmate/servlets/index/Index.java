@@ -1,7 +1,6 @@
 package com.droidmate.servlets.index;
 
 import java.io.IOException;
-import java.util.LinkedList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

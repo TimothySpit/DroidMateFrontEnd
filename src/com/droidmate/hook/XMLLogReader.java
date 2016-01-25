@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -18,7 +19,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import com.droidmate.apk.APKInformation;
-import com.droidmate.apk.ExplorationReport;
 
 /**
  * 
@@ -187,8 +187,7 @@ public class XMLLogReader {
 
 		private void readElementsSeen(int newElementsSeen) {
 			currentApkExplorationInfo.addElementsSeen(newElementsSeen);
-			globalElementsSeenHistory.put(System.currentTimeMillis() - globalStartingTime,
-					addGlobalElementsSeen(newElementsSeen));
+			globalElementsSeenHistory.put(System.currentTimeMillis() - globalStartingTime, addGlobalElementsSeen(newElementsSeen));
 		}
 
 		private void readScreensSeen(int newScreensSeen) {
@@ -305,12 +304,15 @@ public class XMLLogReader {
 	private final File sourceFile;
 	private final ConcurrentHashMap<String, APKExplorationInfo> apksMapReaderHandler = new ConcurrentHashMap<>();
 	private ForeverFileInputStream inputStream;
-	private APKInformation[] apks;
+	private List<APKInformation> apks;
 	private XMLLogParser parser;
 
-	public XMLLogReader(File source, APKInformation[] apks) {
+	public XMLLogReader(File source, List<APKInformation> apks) {
 		this.sourceFile = source;
 		this.apks = apks;
+
+		// TODO: neuer log parser erstellen, wenn neue exploration gestartet
+		// wird!!!!
 
 		parser = new XMLLogParser(apksMapReaderHandler);
 	}

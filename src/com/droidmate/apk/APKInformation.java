@@ -10,35 +10,33 @@ import org.json.JSONObject;
 
 public class APKInformation {
 
-	private final File file;
 	private final File inlineTempFile;
-	
+
 	private APKStatus status = APKStatus.UNKNOWN;
 	private APKInliningStatus inliningStatus = APKInliningStatus.UNKNOWN;
-	
-	private String packageName, versionCode, versionName;
+
+	AAPTInformation aaptInfo;
 
 	private boolean selected = false;
-	
+
 	private ExplorationInformation explorationInfo = new ExplorationInformation();
 
-	public APKInformation(File file, Path tempInlinePath, String packageName, String versionCode, String versionName) {
+	public APKInformation(AAPTInformation aaptInfo, Path tempInlinePath) {
 		super();
-		this.file = file;
-		this.packageName = packageName;
-		this.versionCode = versionCode;
-		this.versionName = versionName;
-		inlineTempFile = tempInlinePath.resolve(FilenameUtils.removeExtension(file.getName()) + "-inlined.apk").toFile();
+
+		this.aaptInfo = aaptInfo;
+		inlineTempFile = tempInlinePath.resolve(FilenameUtils.removeExtension(aaptInfo.getFile().getName()) + "-inlined.apk").toFile();
 	}
-	
+
 	public Path getInlinedPath() {
-		return Paths.get(getFile().getParent().toString(), "/inlined",
-				FilenameUtils.removeExtension(getFile().getName()) + "-inlined.apk");
+		return Paths.get(getFile().getParent().toString(), "/inlined", FilenameUtils.removeExtension(getFile().getName()) + "-inlined.apk");
 	}
-	
+
 	/**
 	 * Determines the inline state based on the droidmate inlining output folder
-	 * @return True, if the inlined file in the droidmate inlining output folder exists
+	 * 
+	 * @return True, if the inlined file in the droidmate inlining output folder
+	 *         exists
 	 */
 	public boolean isTempInlined() {
 		return inlineTempFile.exists();
@@ -46,6 +44,7 @@ public class APKInformation {
 
 	/**
 	 * Determines the inline state based on the user chosen apk folder
+	 * 
 	 * @return True, if the inlined file in the user chosen apk folder exists
 	 */
 	public boolean isInlined() {
@@ -54,17 +53,19 @@ public class APKInformation {
 
 	public JSONObject toJSONObject() {
 		JSONObject object = new JSONObject();
+		object.put("status", status.getName());
+		object.put("inliningStatus", inliningStatus.getName());
 		object.put("name", getFile().getName());
 		object.put("size", FileUtils.byteCountToDisplaySize(getFile().length()));
 		object.put("package", getPackageName());
 		object.put("version", getVersionName() + " (#" + getVersionCode() + ")");
 		object.put("selected", selected);
-		
+
 		return object;
 	}
 
 	public File getFile() {
-		return file;
+		return aaptInfo.getFile();
 	}
 
 	public boolean isSelected() {
@@ -76,26 +77,26 @@ public class APKInformation {
 	}
 
 	public String getPackageName() {
-		return packageName;
+		return aaptInfo.getPackageName();
 	}
 
 	public String getVersionCode() {
-		return versionCode;
+		return aaptInfo.getPackageVersionCode();
 	}
 
 	public String getVersionName() {
-		return versionName;
+		return aaptInfo.getPackageVersionName();
 	}
 
 	public File getInlineTempFile() {
 		return inlineTempFile;
 	}
 
-	//Status 
+	// Status
 	public APKStatus getStatus() {
 		return status;
 	}
-	
+
 	public void setStatus(APKStatus status) {
 		this.status = status;
 	}

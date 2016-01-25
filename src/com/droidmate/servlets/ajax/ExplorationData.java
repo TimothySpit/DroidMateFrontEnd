@@ -37,13 +37,13 @@ public class ExplorationData extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 		response.setContentType("application/json");
-		
+
 		if (request.getParameter("filesCount") != null) {
 			PrintWriter out = response.getWriter();
 			JSONObject sizeObject = new JSONObject();
 			int count = 0;
 			for (APKInformation apkInformation : user.getAPKS()) {
-				if(apkInformation.isSelected()) {
+				if (apkInformation.isSelected()) {
 					count++;
 				}
 			}
@@ -53,10 +53,10 @@ public class ExplorationData extends HttpServlet {
 		} else if (request.getParameter("apkTableData") != null) {
 			JSONArray apkData = new JSONArray();
 			for (APKInformation apkInformation : user.getAPKS()) {
-				if(!apkInformation.isSelected())
+				if (!apkInformation.isSelected())
 					continue;
 				JSONArray jsonInfo = new JSONArray();
-				jsonInfo.put(""); //open close table text
+				jsonInfo.put(""); // open close table text
 				jsonInfo.put(apkInformation.getFile().getName());
 				jsonInfo.put(apkInformation.getExplorationInfo().getExplorationStatus());
 				apkData.put(jsonInfo);
@@ -68,7 +68,7 @@ public class ExplorationData extends HttpServlet {
 			out.flush();
 		} else if (request.getParameter("update") != null) {
 			String file = request.getParameter("update");
-			
+
 			for (APKInformation apkInformation : user.getAPKS()) {
 				if (apkInformation.getFile().getName().equals(file)) {
 					JSONObject data = new JSONObject();

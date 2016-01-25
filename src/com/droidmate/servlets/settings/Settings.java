@@ -75,8 +75,7 @@ public class Settings extends HttpServlet {
 
 		// save
 		if (request.getParameter("save") != null && request.getParameter("save").equals("true")) {
-			if (request.getParameter("outputPath") == null || request.getParameter("time") == null
-					|| request.getParameter("droidmatePath") == null) {
+			if (request.getParameter("outputPath") == null || request.getParameter("time") == null || request.getParameter("droidmatePath") == null) {
 				return;
 			}
 

@@ -1,5 +1,15 @@
 package com.droidmate.apk;
 
 public enum APKExplorationStatus {
-	UNKNOWN, NOT_STARTED, STARTED, PROGRESSING, ABORTED, ERROR, FINISHED
+	UNKNOWN("UNKNOWN"), NOT_STARTED("NOT_STARTED"), STARTED("STARTED"), PROGRESSING("PROGRESSING"), ABORTED("ABORTED"), ERROR("ERROR"), FINISHED("FINISHED");
+
+	private final String name;
+
+	APKExplorationStatus(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
 }
