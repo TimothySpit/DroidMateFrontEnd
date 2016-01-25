@@ -24,7 +24,9 @@ import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.droidmate.apk.APKExplorationStatus;
 import com.droidmate.apk.APKInformation;
+import com.droidmate.apk.APKInliningStatus;
 import com.droidmate.hook.APKExplorationInfo;
 import com.droidmate.hook.XMLLogReader;
 import com.droidmate.settings.AjaxConstants;
@@ -70,16 +72,16 @@ public class APKExploreHandler extends HttpServlet {
 				@Override
 				public void run() {
 					if (!startDroidmate(user)) {
-						user.setExplorationStarted(false);
+						user.setStatus(APKExplorationStatus.ERROR);
 						user.clear();
 					} else {
-						user.setExplorationStarted(true);
+						user.setStatus(APKExplorationStatus.STARTED);
 					}
 				}
 			};
 		} else if (request.getParameter(AjaxConstants.EXPLORE_STOP) != null) {
 			stopDroidmateForcibly();
-			user.setExplorationStarted(false);
+			user.setStatus(APKExplorationStatus.ABORTED);
 			user.clear();
 		} else if (request.getParameter(AjaxConstants.EXPLORE_RESTART) != null) {
 			stopDroidmateForcibly();
@@ -87,8 +89,10 @@ public class APKExploreHandler extends HttpServlet {
 				@Override
 				public void run() {
 					if (!startDroidmate(user)) {
-						user.setExplorationStarted(false);
+						user.setStatus(APKExplorationStatus.ERROR);
 						user.clear();
+					} else {
+						user.setStatus(APKExplorationStatus.STARTED);
 					}
 				}
 			};
