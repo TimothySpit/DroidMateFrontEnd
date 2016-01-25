@@ -47,7 +47,7 @@ public class ReportProvider extends HttpServlet {
 
 		String html = request.getParameter(AjaxConstants.ReportProvider_SAVE_REPORT_HTML);
 		if (html != null) {
-
+			saveReport(html);
 		} else {
 			System.out.println("Illegal POST request in ReportProvider:");
 			for (Entry<String, String[]> s : request.getParameterMap().entrySet()) {
