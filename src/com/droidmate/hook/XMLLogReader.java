@@ -173,8 +173,8 @@ public class XMLLogReader {
 		}
 
 		private void readName(String name) {
-			currentApkExplorationInfo = new APKExplorationInfo(name);
-			apksMapLogReader.put(name, currentApkExplorationInfo);
+			currentApkExplorationInfo = apksMapLogReader.get(name);
+			
 			for (APKInformation apk : apks) {
 				if (apk.getFile().getName().equals(name)) {
 					currentAPK = apk;
@@ -309,8 +309,9 @@ public class XMLLogReader {
 		this.sourceFile = source;
 		this.apks = apks;
 
-		// TODO: neuer log parser erstellen, wenn neue exploration gestartet
-		// wird!!!!
+		for (APKInformation apkInformation : apks) {
+			apksMapReaderHandler.put(apkInformation.getFile().getName(), new APKExplorationInfo(apkInformation.getFile().getName()));
+		}
 
 		parser = new XMLLogParser(apksMapReaderHandler);
 	}

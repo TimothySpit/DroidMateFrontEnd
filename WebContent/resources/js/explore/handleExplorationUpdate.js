@@ -70,7 +70,7 @@ define([ 'jquery', 'DataTables', 'jquery.flot.symbol', 'jquery.flot.canvas', 'jq
 						+ '" target="_blank"></a>');
 		$.droidmate.ajax.get.saveReport(apkName);
 	}
-	;
+	
 
 	/* Formatting function for row details - modify as you need */
 	function format(d) {

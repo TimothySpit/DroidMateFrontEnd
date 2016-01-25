@@ -258,6 +258,9 @@ define([ 'jquery' ], function(require) {
 	get.getAllAPKS = getAllAPKS;
 	// ----------------------------------
 
+	// create ajax post functions
+	var post = {};
+
 	function saveReport() {
 		var reportHtml = new XMLSerializer().serializeToString(document);
 		$.ajax({
@@ -271,12 +274,8 @@ define([ 'jquery' ], function(require) {
 		});
 	}
 	post.saveReport = saveReport;
-
 	// ----------------------------------
-
-	// create ajax post functions
-	var post = {};
-
+	
 	function setSelectedAPKS(ids, async, success, error, complete) {
 		$.ajax({
 			// Wait for the server to finish apk list and request the table data
