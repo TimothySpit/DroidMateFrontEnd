@@ -35,13 +35,12 @@ public class AAPTHelper {
 	 */
 	public List<AAPTInformation> loadAPKInformation() {
 
-		List<AAPTInformation> apkInformation = null;
+		List<AAPTInformation> apkInformation = new LinkedList<>();
 
 		try {
 			apkInformation = loadAPKInformationForPath();
 		} catch (Exception e) {
 			e.printStackTrace();
-
 		}
 		return apkInformation;
 	}

@@ -122,11 +122,11 @@ define(
 				var apkStatus = getAPKStatusInformation();
 
 				var individualData = getIndividualData(choiceContainer);
-				elementsSeenHistory = [ elementsSeenHistory ]
+				elementsSeenHistory = [[ elementsSeenHistory ]]
 						.concat([ individualData.elementsSeenIndividual ]);
-				widgetsExploredHistory = [ widgetsExploredHistory ]
+				widgetsExploredHistory = [[ widgetsExploredHistory ]]
 						.concat(individualData.widgetsExploredIndividual);
-				screensSeenHistory = [ screensSeenHistory ]
+				screensSeenHistory = [[ screensSeenHistory ]]
 						.concat(individualData.screensSeenIndividual);
 
 				return {

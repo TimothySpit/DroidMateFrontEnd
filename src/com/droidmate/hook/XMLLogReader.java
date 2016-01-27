@@ -158,7 +158,8 @@ public class XMLLogReader {
 					try {
 						type = xpp.next();
 					} catch (EOFException e) {
-						//ForeverFileInputStream has been stopped, so just stop parsing
+						// ForeverFileInputStream has been stopped, so just stop
+						// parsing
 						return;
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -174,7 +175,7 @@ public class XMLLogReader {
 
 		private void readName(String name) {
 			currentApkExplorationInfo = apksMapLogReader.get(name);
-			
+
 			for (APKInformation apk : apks) {
 				if (apk.getFile().getName().equals(name)) {
 					currentAPK = apk;
@@ -185,7 +186,8 @@ public class XMLLogReader {
 
 		private void readElementsSeen(int newElementsSeen) {
 			currentApkExplorationInfo.addElementsSeen(newElementsSeen);
-			globalElementsSeenHistory.put(System.currentTimeMillis() - globalStartingTime, addGlobalElementsSeen(newElementsSeen));
+			globalElementsSeenHistory.put(System.currentTimeMillis() - globalStartingTime,
+					addGlobalElementsSeen(newElementsSeen));
 		}
 
 		private void readScreensSeen(int newScreensSeen) {
@@ -310,7 +312,10 @@ public class XMLLogReader {
 		this.apks = apks;
 
 		for (APKInformation apkInformation : apks) {
-			apksMapReaderHandler.put(apkInformation.getFile().getName(), new APKExplorationInfo(apkInformation.getFile().getName()));
+			if (apkInformation.isSelected()) {
+				apksMapReaderHandler.put(apkInformation.getFile().getName(),
+						new APKExplorationInfo(apkInformation.getFile().getName()));
+			}
 		}
 
 		parser = new XMLLogParser(apksMapReaderHandler);
