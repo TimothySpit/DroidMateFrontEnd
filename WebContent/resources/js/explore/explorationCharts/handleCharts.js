@@ -122,11 +122,11 @@ define(
 				var apkStatus = getAPKStatusInformation();
 
 				var individualData = getIndividualData(choiceContainer);
-				elementsSeenHistory = [[ elementsSeenHistory ]]
+				elementsSeenHistory = [ elementsSeenHistory ]
 						.concat([ individualData.elementsSeenIndividual ]);
-				widgetsExploredHistory = [[ widgetsExploredHistory ]]
+				widgetsExploredHistory = [ widgetsExploredHistory ]
 						.concat(individualData.widgetsExploredIndividual);
-				screensSeenHistory = [[ screensSeenHistory ]]
+				screensSeenHistory = [ screensSeenHistory ]
 						.concat(individualData.screensSeenIndividual);
 
 				return {
@@ -267,9 +267,9 @@ define(
 				choiceContainer.find('[id="cb-total"]').parent().css(
 						'background-color', series[0].color);
 				for (var i = 1; i < series.length; ++i) { // no total checkbox
-					var name = apks[i - 1].name;
-					if (name)
-						choiceContainer.find('[id="cb-' + name + '"]').parent()
+					var apk = apks[i - 1];
+					if (apk)
+						choiceContainer.find('[id="cb-' + apk.name + '"]').parent()
 								.css('background-color', series[i].color);
 				}
 			});
