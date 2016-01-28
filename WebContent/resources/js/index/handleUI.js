@@ -66,6 +66,8 @@ define(
 
 									var path = encodeURIComponent(selectedItems[0].text);
 
+									console.log(selectedItems[0].text);
+									
 									$.droidmate.ajax.post.setAPKRoot(
 											selectedItems[0].text, false);
 									updateTable(table);

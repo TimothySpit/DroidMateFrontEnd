@@ -57,7 +57,7 @@
 				<div class="col-sm-4"></div>
 				<div class="col-sm-4"></div>
 				<div class="col-sm-4">
-					<button class="btn btn-default pull-right" data-toggle="modal"
+					<button class="btn btn-default pull-right" style="display: none;" data-toggle="modal"
 						data-target="#staticinfomodal" id="show-static" type="button">
 						<span class="glyphicon glyphicon-list-alt"></span> Show details
 					</button>

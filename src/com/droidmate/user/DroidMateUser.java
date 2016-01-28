@@ -28,6 +28,9 @@ public class DroidMateUser {
 			throw new IllegalArgumentException();
 		}
 
+		apks.clear();
+		droidMateOutput.clear();
+		
 		apkPath = apkPathToAnalyse;
 
 		AAPTHelper aaptHelper;
