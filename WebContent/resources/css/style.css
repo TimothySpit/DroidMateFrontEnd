@@ -3,6 +3,10 @@ body {
 	min-height: 100%;
 }
 
+body .container {
+	width: 90%; !important	
+}
+
 .main-heading {
 	padding-bottom: 60px; !important
 }
