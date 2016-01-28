@@ -75,8 +75,9 @@ public class AAPTHelper {
 		String packageName = getValueFromAaptOutput(output, "name");
 		String packageVersionCode = getValueFromAaptOutput(output, "versionCode");
 		String packageVersionName = getValueFromAaptOutput(output, "versionName");
+		String activityName	 = getValueFromAaptOutput(output, "launchable-activity: name");
 
-		return new AAPTInformation(apk, packageName, packageVersionCode, packageVersionName);
+		return new AAPTInformation(apk, packageName, packageVersionCode, packageVersionName,activityName);
 	}
 
 	/**

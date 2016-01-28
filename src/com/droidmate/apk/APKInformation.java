@@ -59,6 +59,7 @@ public class APKInformation {
 		object.put("size", FileUtils.byteCountToDisplaySize(getFile().length()));
 		object.put("package", getPackageName());
 		object.put("version", getVersionName() + " (#" + getVersionCode() + ")");
+		object.put("activityName", getActivityName());
 		object.put("selected", selected);
 
 		return object;
@@ -84,6 +85,10 @@ public class APKInformation {
 		return aaptInfo.getPackageVersionCode();
 	}
 
+	public String getActivityName() {
+		return aaptInfo.getActivityName();
+	}
+	
 	public String getVersionName() {
 		return aaptInfo.getPackageVersionName();
 	}

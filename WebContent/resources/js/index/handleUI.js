@@ -33,7 +33,7 @@ define(
 						inlinedStatus = table.inlinedStatus.NOT_INLINED;
 					}
 					table.addAPKData(value.name, value.size, value.package,
-							value.version, inlinedStatus);
+							value.version, inlinedStatus, value.activityName);
 				});
 				
 				table.redraw();

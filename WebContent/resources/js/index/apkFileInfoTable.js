@@ -14,7 +14,11 @@ define(
 							title : "Name"
 						}, {
 							title : "Size"
-						}, {
+						}, 
+						{
+							title : "Main activity Name"
+						},
+						{
 							title : "Package"
 						}, {
 							title : "Version"
@@ -32,7 +36,7 @@ define(
 							}
 						},
 						{
-							'targets' : 5,
+							'targets' : 6,
 							'searchable' : false,
 							'orderable' : false,
 							'className' : 'dt-body-center',
@@ -70,10 +74,13 @@ define(
 						return rowNode.data()[2];
 					},
 					getPackage : function() {
-						return rowNode.data()[3];
+						return rowNode.data()[4];
 					},
 					getVersion : function() {
-						return rowNode.data()[4];
+						return rowNode.data()[5];
+					},
+					getActivityName : function() {
+						return rowNode.data()[3];
 					},
 					getInlinedStatus : function() {
 						if (labelContainer.hasClass('label-success')) {
@@ -95,11 +102,14 @@ define(
 					updateSize : function(size) {
 						rowNode.data()[2] = size;
 					},
+					updateActivityName : function(activityName) {
+						rowNode.data()[3] = activityName;
+					},
 					updatePackage : function(packageInfo) {
-						rowNode.data()[3] = packageInfo;
+						rowNode.data()[4] = packageInfo;
 					},
 					updateVersion : function(version) {
-						rowNode.data()[4] = version;
+						rowNode.data()[5] = version;
 					},
 					updateInlinedStatus : function(status) {
 						labelContainer.removeClass(function(index, css) {
@@ -354,9 +364,9 @@ define(
 
 				// add new apk to table
 				modul.addAPKData = function(name, size, packageInfo, version,
-						inlinedStatus) {
+						inlinedStatus, activityName) {
 					var rowAdded = table.row.add(
-							[ "", name, size, packageInfo, version, "" ])
+							[ "", name, size, activityName, packageInfo, version, "" ])
 							;
 					var labelContainer = $(rowAdded.node()).find(
 							'.dt-body-center .inline-label').parent();
