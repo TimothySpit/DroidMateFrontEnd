@@ -18,7 +18,7 @@
 
 <!-- font awesome -->
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/font-awesome/css/font-awesome.min.css">
+	href="${pageContext.request.contextPath}/resources/libraries/font-awesome/css/font-awesome.min.css">
 
 <!-- jstree -->
 <link rel="stylesheet"

@@ -1,7 +1,8 @@
 define(
 		[ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 				'jquery.flot', 'jquery.flot.tooltip', 'jquery.droidmate.ajax',
-				'jquery.droidmate.inlining', 'DataTables','jquery.droidmate.dialogs' ],
+				'jquery.droidmate.inlining', 'DataTables',
+				'jquery.droidmate.dialogs' ],
 		function(require) {
 
 			var tableCreator = require('../index/apkFileInfoTable');
@@ -32,21 +33,30 @@ define(
 					if (value.inlined == false) {
 						inlinedStatus = table.inlinedStatus.NOT_INLINED;
 					}
-					table.addAPKData(value.name, value.sizeReadable, value.package,
-							value.version, inlinedStatus, value.activityName);
+					table.addAPKData(value.name, value.sizeReadable,
+							value.package, value.version, inlinedStatus,
+							value.activityName);
 				});
-				
+
 				table.redraw();
 			}
 
 			// set up event handler
 			table.on("row:select", function(e) {
-				if (e.length === 0) {
+				var notInlinedRows = $.map(table.getSelectedRows(), function(val, i) {
+					if (val.getInlinedStatus() == table.inlinedStatus.INLINED)
+						return null;
+					else
+						return true;
+				})
+				
+				if (e.length === 0 || notInlinedRows.length > 0) {
 					$("#startexploration").prop("disabled", true);
 				} else {
 					$("#startexploration").prop("disabled", false);
 				}
 
+			
 				var selectedAPKS = [];
 				$.each(e, function(index, value) {
 					selectedAPKS.push(value.getName());
@@ -55,25 +65,29 @@ define(
 			});
 
 			// configure Folder select dialog
-			$('#selectfolder').on(
-					'click',
-					function(e) {
-						$.droidmate.dialogs.createFileDialog(
-								'Select APK folder Path', function(
-										selectedItems) {
-									if (selectedItems.length > 0) {
-										$('#folder_name').val(
-												selectedItems[0].text);
+			$('#selectfolder')
+					.on(
+							'click',
+							function(e) {
+								$.droidmate.dialogs
+										.createFileDialog(
+												'Select APK folder Path',
+												function(selectedItems) {
+													if (selectedItems.length > 0) {
+														$('#folder_name')
+																.val(
+																		selectedItems[0].text);
 
+														var path = encodeURIComponent(selectedItems[0].text);
 
-								var path = encodeURIComponent(selectedItems[0].text);
-
-								$.droidmate.ajax.post.setAPKRoot(
-										selectedItems[0].text, false);
-								updateTable(table);
-									}
-								});
-					});
+														$.droidmate.ajax.post
+																.setAPKRoot(
+																		selectedItems[0].text,
+																		false);
+														updateTable(table);
+													}
+												});
+							});
 			// --------------------------------------------------------------
 
 			// fileSizeInformation Modal dialog
@@ -102,7 +116,7 @@ define(
 							});
 
 			// ------------------------------------------
-			
+
 			var path = $.droidmate.ajax.get.getSelectedAPKRoot();
 			$('#folder_name').val(path);
 

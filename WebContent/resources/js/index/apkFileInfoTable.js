@@ -433,6 +433,31 @@ define(
 					return row(resultingRow, modul);
 				}
 				
+				// get all rows
+				modul.getRows = function() {
+					var rows = [];
+					table.rows().every(function(rowIdx, tableLoop, rowLoop) {
+						rows.push(row(this, modul));
+					});
+				
+					return rows;
+				}
+				
+				// get selected rows
+				modul.getSelectedRows = function() {
+					var rows = [];
+					table.rows().every(function(rowIdx, tableLoop, rowLoop) {
+						var node = this.node();
+						var cbs = $('input[type="checkbox"]:checked',
+								node);
+						if (cbs.length === 0)
+							return;
+						rows.push(row(this, modul));
+					});
+				
+					return rows;
+				}
+				
 				modul.redraw = function() {
 					table.draw();
 				}
