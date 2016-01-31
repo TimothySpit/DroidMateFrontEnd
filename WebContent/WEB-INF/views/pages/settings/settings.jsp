@@ -11,7 +11,8 @@
 <jsp:include page="../../partials/header.jsp" />
 
 <!-- requirejs -->
-<script data-main="${pageContext.request.contextPath}/resources/js/settings/settings.js"
+<script
+	data-main="${pageContext.request.contextPath}/resources/js/settings/settings.js"
 	src="${pageContext.request.contextPath}/resources/libraries/requirejs/require.js"></script>
 
 </head>
@@ -31,8 +32,7 @@
 					name="filebrowser" type="text" placeholder="Select folder" />
 			</div>
 			<div class="col-sm-4">
-				<button type="button" class="btn btn-default btn-default"
-					data-toggle="modal" data-target="#fileSavingDialog">
+				<button type="button" id="output-folder-btn" class="btn btn-default btn-default">
 					<span class="glyphicon glyphicon-folder-open"></span>
 				</button>
 			</div>
@@ -40,16 +40,31 @@
 
 		<div class="row input-row">
 			<div class="col-sm-4">
-				<label class="pull-right" for="dm-output-folder-name">DroidMate
+				<label class="pull-right" for="droidmate-folder-name">DroidMate
 					Path:</label>
 			</div>
 			<div class="col-sm-4">
-				<input class="form-control" id="dm-output-folder-name"
+				<input class="form-control" id="droidmate-folder-name"
 					name="droidMatePath" type="text" placeholder="DroidMate Path" />
 			</div>
 			<div class="col-sm-4">
-				<button type="button" class="btn btn-default btn-default"
-					data-toggle="modal" data-target="#droidmateDialog">
+				<button type="button" class="btn btn-default btn-default" id="droidmate-folder-name-btn">
+					<span class="glyphicon glyphicon-folder-open"></span>
+				</button>
+			</div>
+		</div>
+
+		<div class="row input-row">
+			<div class="col-sm-4">
+				<label class="pull-right" for="aapt-folder-name">AAPT
+					Path:</label>
+			</div>
+			<div class="col-sm-4">
+				<input class="form-control" id="aapt-folder-name"
+					name="aaptPath" type="text" placeholder="AAPT Path" />
+			</div>
+			<div class="col-sm-4">
+				<button type="button" class="btn btn-default btn-default" id="aapt-folder-name-btn">
 					<span class="glyphicon glyphicon-folder-open"></span>
 				</button>
 			</div>
@@ -85,11 +100,6 @@
 			</div>
 		</div>
 
-	</div>
-	<!-- modal dialogs -->
-	<div>
-		<jsp:include page="modals/reportOutputPathSelection.jsp" />
-		<jsp:include page="modals/droidMatePathSelection.jsp" />
 	</div>
 </body>
 

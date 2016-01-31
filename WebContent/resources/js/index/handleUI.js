@@ -1,7 +1,7 @@
 define(
 		[ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 				'jquery.flot', 'jquery.flot.tooltip', 'jquery.droidmate.ajax',
-				'jquery.droidmate.inlining', 'DataTables' ],
+				'jquery.droidmate.inlining', 'DataTables','jquery.droidmate.dialogs' ],
 		function(require) {
 
 			var tableCreator = require('../index/apkFileInfoTable');
@@ -32,7 +32,7 @@ define(
 					if (value.inlined == false) {
 						inlinedStatus = table.inlinedStatus.NOT_INLINED;
 					}
-					table.addAPKData(value.name, value.size, value.package,
+					table.addAPKData(value.name, value.sizeReadable, value.package,
 							value.version, inlinedStatus, value.activityName);
 				});
 				
@@ -54,27 +54,55 @@ define(
 				$.droidmate.ajax.post.setSelectedAPKS(selectedAPKS);
 			});
 
-			$('#folderSelectModal .modal-footer button')
-					.click(
-							function(e) {
+			// configure Folder select dialog
+			$('#selectfolder').on(
+					'click',
+					function(e) {console.log("asd");
+						$.droidmate.dialogs.createFileDialog(
+								'Select APK folder Path', function(
+										selectedItems) {
+									if (selectedItems.length > 0) {
+										$('#folder_name').val(
+												selectedItems[0].text);
 
-								var selectedItems = $('#folderTree').jstree(
-										true).get_selected(true);
-								if (selectedItems.length > 0) {
-									$('#folder_name')
-											.val(selectedItems[0].text);
 
-									var path = encodeURIComponent(selectedItems[0].text);
+								var path = encodeURIComponent(selectedItems[0].text);
 
-									console.log(selectedItems[0].text);
-									
-									$.droidmate.ajax.post.setAPKRoot(
-											selectedItems[0].text, false);
-									updateTable(table);
-								}
-							});
+								$.droidmate.ajax.post.setAPKRoot(
+										selectedItems[0].text, false);
+								updateTable(table);
+									}
+								});
+					});
 			// --------------------------------------------------------------
 
+			// fileSizeInformation Modal dialog
+			$('#show-static')
+					.click(
+							function(e) {
+								var apks = $.droidmate.ajax.get.getAllAPKS()["info[]"].apks.data;
+
+								apks.sort(function(a, b) {
+									return a.name.toUpperCase().localeCompare(
+											b.name.toUpperCase());
+								});
+
+								var apkNames = $.map(apks, function(val, i) {
+									return val.name;
+								});
+								var apkSizes = $.map(apks, function(val, i) {
+									return val.size / 1000 / 1000; // in mb
+								});
+
+								$.droidmate.dialogs
+										.createFileSizeHistogramDialog(
+												'File Sizes in MB', apkNames,
+												apkSizes, 500, 400);
+
+							});
+
+			// ------------------------------------------
+			
 			var path = $.droidmate.ajax.get.getSelectedAPKRoot();
 			$('#folder_name').val(path);
 

@@ -16,16 +16,24 @@ public class AAPTHelper {
 	private final static int CONCURRENT_LOADING_MINIMUM = 3;
 
 	private Path apkPath;
+	private Path aaptPath;
 
-	public AAPTHelper(Path apkPath) throws FileNotFoundException {
+	public AAPTHelper(Path apkPath, Path aaptPath) throws FileNotFoundException {
 		if (apkPath == null) {
 			throw new NullPointerException();
 		}
 		if (!apkPath.toFile().exists()) {
 			throw new FileNotFoundException();
 		}
-
+		if (aaptPath == null) {
+			throw new NullPointerException();
+		}
+		if (!aaptPath.toFile().exists()) {
+			throw new FileNotFoundException();
+		}
+		
 		this.apkPath = apkPath;
+		this.aaptPath = aaptPath;
 	}
 
 	/**
@@ -35,6 +43,9 @@ public class AAPTHelper {
 	 */
 	public List<AAPTInformation> loadAPKInformation() {
 
+		if (!isAAPTAvailable())
+			return null;
+
 		List<AAPTInformation> apkInformation = new LinkedList<>();
 
 		try {
@@ -43,6 +54,17 @@ public class AAPTHelper {
 			e.printStackTrace();
 		}
 		return apkInformation;
+	}
+
+	public boolean isAAPTAvailable() {
+		ProcessBuilder pb = new ProcessBuilder(aaptPath.toString() + "/aapt");
+		pb.redirectErrorStream(false);
+		try {
+			pb.start();
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
 	}
 
 	private List<AAPTInformation> loadAPKInformationForPath() {
@@ -75,9 +97,9 @@ public class AAPTHelper {
 		String packageName = getValueFromAaptOutput(output, "name");
 		String packageVersionCode = getValueFromAaptOutput(output, "versionCode");
 		String packageVersionName = getValueFromAaptOutput(output, "versionName");
-		String activityName	 = getValueFromAaptOutput(output, "launchable-activity: name");
+		String activityName = getValueFromAaptOutput(output, "launchable-activity: name");
 
-		return new AAPTInformation(apk, packageName, packageVersionCode, packageVersionName,activityName);
+		return new AAPTInformation(apk, packageName, packageVersionCode, packageVersionName, activityName);
 	}
 
 	/**
@@ -122,7 +144,7 @@ public class AAPTHelper {
 	}
 
 	private String getAaptOutput(File apk) {
-		ProcessBuilder pb = new ProcessBuilder("aapt", "d", "badging", apk.getAbsolutePath());
+		ProcessBuilder pb = new ProcessBuilder(aaptPath.toString()+ "/aapt", "d", "badging", apk.getAbsolutePath());
 		pb.redirectErrorStream(false);
 		try {
 			Process p = pb.start();
@@ -140,12 +162,15 @@ public class AAPTHelper {
 			return output.toString();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			return null;
+			return "";
 		}
 	}
 
 	private String getValueFromAaptOutput(String output, String value) {
 		int index = output.indexOf(value + "='") + value.length() + 2;
+		if (index == -1)
+			return "";
+
 		return output.substring(index, output.indexOf("'", index + 1));
 	}
 }

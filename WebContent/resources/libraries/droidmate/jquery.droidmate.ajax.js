@@ -17,7 +17,7 @@ define([ 'jquery' ], function(require) {
 			async : false,
 			type : 'GET',
 			data : {
-				get : [ "outputPath", "droidmatePath", "time" ],
+				get : [ "outputPath", "droidmatePath", "aaptPath", "time" ],
 			},
 			success : function(data) {
 				result = data;
@@ -335,7 +335,7 @@ define([ 'jquery' ], function(require) {
 	post.openReportFolder = openReportFolder;
 	// ----------------------------------
 
-	function saveDroidMateSettings(outputPath, dmPath, explorationTimeout,
+	function saveDroidMateSettings(outputPath, dmPath, aaptPath, explorationTimeout,
 			async, success, error, complete) {
 		$.ajax({
 			async : async,
@@ -345,6 +345,7 @@ define([ 'jquery' ], function(require) {
 				save : true,
 				outputPath : outputPath,
 				droidmatePath : dmPath,
+				aaptPath: aaptPath,
 				time : explorationTimeout
 			},
 			success : success,

@@ -58,6 +58,9 @@ public class Settings extends HttpServlet {
 					case "droidmatePath":
 						result.put("droidmatePath", settings.getDroidMatePath());
 						break;
+					case "aaptPath":
+						result.put("aaptPath", settings.getAaptToolPath());
+						break;
 					case "time":
 						result.put("time", settings.getExplorationTimeout());
 					default:
@@ -81,6 +84,7 @@ public class Settings extends HttpServlet {
 
 			String outputPath = request.getParameter("outputPath");
 			String droidmatePath = request.getParameter("droidmatePath");
+			String aaptPath = request.getParameter("aaptPath");
 			String explorationTime = request.getParameter("time");
 			boolean settingsCorrect = true;
 
@@ -100,6 +104,15 @@ public class Settings extends HttpServlet {
 				}
 			}
 
+			if (settingsCorrect) {
+				try {
+					settings.setAaptToolPath(Paths.get(aaptPath));
+				} catch (InvalidPathException e) {
+					result.put("reason", "Not a valid path.");
+					settingsCorrect = false;
+				}
+			}
+			
 			if (settingsCorrect && NumberUtils.isDigits(explorationTime)) {
 				try {
 					int number = Integer.parseInt(explorationTime);

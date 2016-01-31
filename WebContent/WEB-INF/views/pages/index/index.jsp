@@ -35,8 +35,8 @@
 					<div class="form-group folder-select">
 						<input class="form-control" id="folder_name" name="filebrowser"
 							type="text" placeholder="Select folder" />
-						<div class="btn btn-default" id="selectfolder" data-toggle="modal"
-							data-target="#folderSelectModal">Select folder</div>
+						<div class="btn btn-default" id="selectfolder"
+							>Select folder</div>
 					</div>
 				</form>
 				<div id="load-result-indikator"></div>
@@ -57,8 +57,8 @@
 				<div class="col-sm-4"></div>
 				<div class="col-sm-4"></div>
 				<div class="col-sm-4">
-					<button class="btn btn-default pull-right" style="display: none;" data-toggle="modal"
-						data-target="#staticinfomodal" id="show-static" type="button">
+					<button class="btn btn-default pull-right" style="display: none;" 
+						 id="show-static" type="button">
 						<span class="glyphicon glyphicon-list-alt"></span> Show details
 					</button>
 				</div>
@@ -76,11 +76,6 @@
 				</table>
 			</div>
 		</div>
-	</div>
-	<!-- modal dialogs -->
-	<div>
-		<jsp:include page="modals/apkFolderSelection.jsp" />
-		<jsp:include page="modals/fileSizeInformation.jsp" />
 	</div>
 </body>
 

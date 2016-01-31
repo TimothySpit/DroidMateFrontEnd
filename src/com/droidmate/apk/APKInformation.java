@@ -56,7 +56,8 @@ public class APKInformation {
 		object.put("status", status.getName());
 		object.put("inliningStatus", inliningStatus.getName());
 		object.put("name", getFile().getName());
-		object.put("size", FileUtils.byteCountToDisplaySize(getFile().length()));
+		object.put("size", getFile().length());
+		object.put("sizeReadable", FileUtils.byteCountToDisplaySize(getFile().length()));
 		object.put("package", getPackageName());
 		object.put("version", getVersionName() + " (#" + getVersionCode() + ")");
 		object.put("activityName", getActivityName());

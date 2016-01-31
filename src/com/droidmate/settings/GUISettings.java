@@ -12,7 +12,8 @@ public class GUISettings {
 
 	private Path outputFolder;
 	private Path droidMatePath;
-
+	private Path aaptToolPath;
+	
 	private int explorationTimeout;
 
 	public GUISettings() {
@@ -22,7 +23,7 @@ public class GUISettings {
 			File currentDirFile = new File("");
 			String pathString = prefs.get("OutputFolderPath", currentDirFile.getAbsolutePath());
 			String dmPath = prefs.get("DroidMatePath", currentDirFile.getAbsolutePath());
-			String aSDKPath = prefs.get("AndroidSDKPath", currentDirFile.getAbsolutePath());
+			String aaptPath = prefs.get("AAPTPath", currentDirFile.getAbsolutePath());
 
 			try {
 				outputFolder = (Paths.get(pathString));
@@ -38,6 +39,13 @@ public class GUISettings {
 				prefs.put("DroidMatePath", currentDirFile.getAbsolutePath());
 			}
 
+			try {
+				setAaptToolPath((Paths.get(aaptPath)));
+			} catch (InvalidPathException e) {
+				setAaptToolPath((Paths.get(currentDirFile.getAbsolutePath())));
+				prefs.put("AAPTPath", currentDirFile.getAbsolutePath());
+			}
+			
 			explorationTimeout = prefs.getInt("ExplorationTimeout", 10);
 			if (explorationTimeout <= 0) {
 				explorationTimeout = 10;
@@ -96,4 +104,22 @@ public class GUISettings {
 		}
 	}
 
+	public Path getAaptToolPath() {
+		return aaptToolPath;
+	}
+
+	public void setAaptToolPath(Path aaptToolPath) {
+		if (aaptToolPath == null) {
+			throw new IllegalArgumentException("Path must not be null.");
+		}
+		this.aaptToolPath = aaptToolPath;
+		try {
+			prefs.put("AAPTPath", aaptToolPath.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	
+	
 }

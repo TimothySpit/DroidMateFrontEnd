@@ -52,6 +52,10 @@ requirejs
 					deps : [ 'jquery' ],
 					exports : '$.droidmate'
 				},
+				'jquery.droidmate.dialogs' : {
+					deps : [ 'jquery' ],
+					exports : '$.droidmate'
+				},
 				'DataTables' : {
 					deps : [ 'jquery' ]
 				}
@@ -76,6 +80,7 @@ requirejs
 				'jquery.droidmate.explore' : 'droidmate/jquery.droidmate.explore',
 				'jquery.droidmate.inlining' : 'droidmate/jquery.droidmate.inlining',
 				'jquery.droidmate.overlays' : 'droidmate/jquery.droidmate.overlays',
+				'jquery.droidmate.dialogs' : 'droidmate/jquery.droidmate.dialogs',
 				'DataTables' : 'datatables/media/js/jquery.dataTables.min',
 			}
 		});

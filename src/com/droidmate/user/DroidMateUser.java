@@ -28,6 +28,8 @@ public class DroidMateUser {
 			throw new IllegalArgumentException();
 		}
 
+		GUISettings settings = new GUISettings();
+		
 		apks.clear();
 		droidMateOutput.clear();
 		
@@ -35,10 +37,10 @@ public class DroidMateUser {
 
 		AAPTHelper aaptHelper;
 		try {
-			aaptHelper = new AAPTHelper(apkPath);
+			aaptHelper = new AAPTHelper(apkPath,settings.getAaptToolPath());
 			List<AAPTInformation> aaptInfo = aaptHelper.loadAPKInformation();
 
-			Path inlineTempPath = Paths.get((new GUISettings()).getDroidMatePath().toString(), "/projects/apk-inliner/output-apks/");
+			Path inlineTempPath = Paths.get(settings.getDroidMatePath().toString(), "/projects/apk-inliner/output-apks/");
 
 			for (AAPTInformation aaptInformation : aaptInfo) {
 				apks.add(new APKInformation(aaptInformation, inlineTempPath));
