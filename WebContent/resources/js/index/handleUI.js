@@ -57,7 +57,7 @@ define(
 			// configure Folder select dialog
 			$('#selectfolder').on(
 					'click',
-					function(e) {console.log("asd");
+					function(e) {
 						$.droidmate.dialogs.createFileDialog(
 								'Select APK folder Path', function(
 										selectedItems) {

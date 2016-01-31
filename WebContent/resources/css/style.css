@@ -64,7 +64,7 @@ input#folder_name {
 }
 
 /*scrollbars for dialogs*/
-.modal-dialog .modal-body .file-dialog {
+.file-dialog  .modal-dialog .modal-body {
     max-height:calc(100vh - 150px);
     overflow-y:auto;
     overflow-x:auto;
