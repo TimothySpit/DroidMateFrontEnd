@@ -1,5 +1,6 @@
 package com.droidmate.servlets.ajax;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -63,7 +64,8 @@ public class APKExploreHandler extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 
 		Runnable r = null;
@@ -100,9 +102,9 @@ public class APKExploreHandler extends HttpServlet {
 			};
 		} else if (request.getParameter(AjaxConstants.EXPLORE_OPEN_REPORT_FOLDER) != null) {
 			JSONObject o = new JSONObject();
-			if(openExplorerWindow(settings.getOutputFolder())) {
+			if (openExplorerWindow(settings.getOutputFolder())) {
 				o.put("status", "success");
-			}else {
+			} else {
 				o.put("status", "error");
 			}
 			response.setContentType("application/json");
@@ -124,7 +126,8 @@ public class APKExploreHandler extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute(ServletContextConstants.DROIDMATE_USER);
 		PrintWriter out = response.getWriter();
 
@@ -134,7 +137,8 @@ public class APKExploreHandler extends HttpServlet {
 				if (logReader != null) {
 					boolean found = false;
 					for (APKExplorationInfo apk : logReader.getApksInfo()) {
-						if (apk.getName().equalsIgnoreCase(request.getParameter(AjaxConstants.EXPLORE_GET_INFO_APK_NAME))) {
+						if (apk.getName()
+								.equalsIgnoreCase(request.getParameter(AjaxConstants.EXPLORE_GET_INFO_APK_NAME))) {
 							out.print(apk.toJSONObject());
 							found = true;
 						}
@@ -181,7 +185,7 @@ public class APKExploreHandler extends HttpServlet {
 				out.print(0);
 			}
 		} else if (request.getParameter("status") != null) {
-				out.print(user.getStatus().getName());
+			out.print(user.getStatus().getName());
 		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_SCREENS_SEEN_HISTORY) != null) {
 			response.setContentType("application/json");
 			JSONArray result = new JSONArray();
@@ -235,12 +239,23 @@ public class APKExploreHandler extends HttpServlet {
 	}
 
 	private boolean openExplorerWindow(Path path) {
-		try {
-			int exitCode = Runtime.getRuntime().exec("explorer.exe " + path).waitFor();
-			return exitCode == 0 || exitCode == 1;
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-			return false;
+		if (Desktop.isDesktopSupported()) {
+			try {
+				Desktop.getDesktop().open(path.toFile());
+				return true;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		} else {
+
+			try {
+				int exitCode = Runtime.getRuntime().exec("explorer.exe " + path).waitFor();
+				return exitCode == 0 || exitCode == 1;
+			} catch (IOException | InterruptedException e) {
+				e.printStackTrace();
+				return false;
+			}
 		}
 	}
 
@@ -261,7 +276,7 @@ public class APKExploreHandler extends HttpServlet {
 			try {
 				killAdb();
 				Thread.sleep(500);
-			}catch(InterruptedException e) {
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
@@ -299,8 +314,8 @@ public class APKExploreHandler extends HttpServlet {
 		}
 		killAdb();
 
-		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace", ":projects:core:run", "--project-prop",
-				"timeLimit=" + settings.getExplorationTimeout());
+		ProcessBuilder pb = new ProcessBuilder(droidMateExecutable.toString(), "--stacktrace", ":projects:core:run",
+				"--project-prop", "timeLimit=" + settings.getExplorationTimeout());
 		pb.directory(droidMateRoot.toFile());
 		pb.redirectErrorStream(true);
 
@@ -345,7 +360,7 @@ public class APKExploreHandler extends HttpServlet {
 
 		return droidmateProcess.exitValue() == 0;
 	}
-	
+
 	private void killAdb() {
 		System.out.println("Killing adb process...");
 		Runtime rt = Runtime.getRuntime();
