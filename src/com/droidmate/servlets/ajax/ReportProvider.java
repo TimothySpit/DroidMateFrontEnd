@@ -60,8 +60,9 @@ public class ReportProvider extends HttpServlet {
 	private boolean saveReport(String rawHtml) {
 		String html = generateReport(rawHtml);
 		File outputFolder = (new GUISettings()).getOutputFolder().toFile();
+		
 		File resourcesSourceFolder = new File(
-				getServletContext().getRealPath(File.separator) + File.separator + "WebContent" + File.separator + "resources");
+				getServletContext().getRealPath("/resources"));
 		try {
 			System.out.println("Saving report...");
 			System.out.println("Copying resource files from " + resourcesSourceFolder + " to " + (new File(outputFolder + File.separator + "resources")));
