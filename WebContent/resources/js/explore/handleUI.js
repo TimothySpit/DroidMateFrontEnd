@@ -84,14 +84,14 @@ define(
 
 						});
 
-				var status = $.droidmate.ajax.get.getExplorationStatus();
-
-				if (status != "STARTED") {
-					handleEndScreen(status);
-					return;
-				}
-
 				if (repeat) {
+					var status = $.droidmate.ajax.get.getExplorationStatus();
+
+					if (status != "STARTED") {
+						handleEndScreen(status);
+						return;
+					}
+
 					setTimeout(function() {
 						updateCharts();
 					}, $.droidmate.ajax.UPDATE_EXPLORATION_INFO_INTERVAL);
