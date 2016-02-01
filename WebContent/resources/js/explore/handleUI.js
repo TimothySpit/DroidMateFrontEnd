@@ -31,7 +31,7 @@ define(
 
 			// register events
 			table.on('row:open', function(row) {
-				updateCharts();
+				updateCharts(false);
 			});
 
 			// start updating
@@ -98,7 +98,7 @@ define(
 				}
 			}
 
-			updateCharts();
+			updateCharts(true);
 
 			function handleEndScreen(status) {
 				$.droidmate.ajax.post.saveReport();
