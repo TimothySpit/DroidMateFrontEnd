@@ -93,7 +93,7 @@ define(
 					}
 
 					setTimeout(function() {
-						updateCharts();
+						updateCharts(true);
 					}, $.droidmate.ajax.UPDATE_EXPLORATION_INFO_INTERVAL);
 				}
 			}
