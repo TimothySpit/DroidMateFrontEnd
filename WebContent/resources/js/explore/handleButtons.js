@@ -50,7 +50,7 @@ define(
 													$('back-to-index').prop(
 															"disabled", true);
 													$.droidmate.ajax.post
-															.stopDroidMate(function(
+															.returnToIndex(function(
 																	e) {
 																window.location = "/DroidMate/Index";
 															});

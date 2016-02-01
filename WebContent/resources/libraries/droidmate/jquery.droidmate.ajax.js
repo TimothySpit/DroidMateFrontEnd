@@ -420,6 +420,22 @@ define([ 'jquery' ], function(require) {
 	post.stopDroidMate = stopDroidMate;
 	// -----------------------------------
 
+	function returnToIndex(success, error, complete) {
+		$.ajax({
+			async : false,
+			url : "/DroidMate/APKExploreHandler",
+			method : "POST",
+			data : {
+				return_to_index : true
+			},
+			success : success,
+			error : error,
+			complete : complete
+		});
+	}
+	post.returnToIndex = returnToIndex;
+	// -----------------------------------
+	
 	ajax.get = get;
 	ajax.post = post;
 	droidmate.ajax = ajax;

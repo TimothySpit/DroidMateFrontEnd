@@ -74,7 +74,6 @@ public class APKExploreHandler extends HttpServlet {
 					user.setStatus(APKExplorationStatus.STARTED);
 					if (!startDroidmate(user)) {
 						user.setStatus(APKExplorationStatus.ERROR);
-						user.clear();
 					} else {
 						user.setStatus(APKExplorationStatus.FINISHED);
 					}
@@ -83,7 +82,10 @@ public class APKExploreHandler extends HttpServlet {
 		} else if (request.getParameter(AjaxConstants.EXPLORE_STOP) != null) {
 			stopDroidmateForcibly();
 			user.setStatus(APKExplorationStatus.ABORTED);
+		} else if (request.getParameter(AjaxConstants.RETURN_TO_INDEX) != null) {
+			stopDroidmateForcibly();
 			user.clear();
+			user.setStatus(APKExplorationStatus.ABORTED);
 		} else if (request.getParameter(AjaxConstants.EXPLORE_RESTART) != null) {
 			stopDroidmateForcibly();
 			r = new Runnable() {
@@ -92,7 +94,6 @@ public class APKExploreHandler extends HttpServlet {
 					user.setStatus(APKExplorationStatus.STARTED);
 					if (!startDroidmate(user)) {
 						user.setStatus(APKExplorationStatus.ERROR);
-						user.clear();
 					} else {
 						user.setStatus(APKExplorationStatus.FINISHED);
 					}
@@ -100,9 +101,9 @@ public class APKExploreHandler extends HttpServlet {
 			};
 		} else if (request.getParameter(AjaxConstants.EXPLORE_OPEN_REPORT_FOLDER) != null) {
 			JSONObject o = new JSONObject();
-			if(openExplorerWindow(settings.getOutputFolder())) {
+			if (openExplorerWindow(settings.getOutputFolder())) {
 				o.put("status", "success");
-			}else {
+			} else {
 				o.put("status", "error");
 			}
 			response.setContentType("application/json");
@@ -181,7 +182,7 @@ public class APKExploreHandler extends HttpServlet {
 				out.print(0);
 			}
 		} else if (request.getParameter("status") != null) {
-				out.print(user.getStatus().getName());
+			out.print(user.getStatus().getName());
 		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_SCREENS_SEEN_HISTORY) != null) {
 			response.setContentType("application/json");
 			JSONArray result = new JSONArray();
@@ -261,7 +262,7 @@ public class APKExploreHandler extends HttpServlet {
 			try {
 				killAdb();
 				Thread.sleep(500);
-			}catch(InterruptedException e) {
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
@@ -345,7 +346,7 @@ public class APKExploreHandler extends HttpServlet {
 
 		return droidmateProcess.exitValue() == 0;
 	}
-	
+
 	private void killAdb() {
 		System.out.println("Killing adb process...");
 		Runtime rt = Runtime.getRuntime();

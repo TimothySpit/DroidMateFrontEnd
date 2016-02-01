@@ -31,6 +31,7 @@ public class AjaxConstants {
 	// explore requests
 	public final static String EXPLORE_START = "explore_start";
 	public final static String EXPLORE_STOP = "explore_stop";
+	public final static String RETURN_TO_INDEX = "return_to_index";
 	public final static String EXPLORE_RESTART = "explore_restart";
 	public final static String EXPLORE_GET_INFO = "explore_get_info";
 	public final static String EXPLORE_GET_INFO_APK_NAME = "explore_get_info_apkname";
