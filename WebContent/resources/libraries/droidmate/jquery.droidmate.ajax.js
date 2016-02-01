@@ -47,7 +47,25 @@ define([ 'jquery' ], function(require) {
 	}
 	get.getSelectedAPKRoot = getSelectedAPKRoot;
 	// ----------------------------------
-
+	
+	function getExplorationStatus() {
+		var result = "";
+		$.ajax({
+			url : "/DroidMate/APKExploreHandler",
+			async : false,
+			type : 'GET',
+			data : {
+				status : ""
+			},
+			success : function(data) {
+				result = data;
+			}
+		});
+		return result;
+	}
+	get.getExplorationStatus = getExplorationStatus;
+	// ----------------------------------
+	
 	function getGlobalStartingTime() {
 		var result = [];
 		$.ajax({

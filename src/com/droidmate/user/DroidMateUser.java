@@ -78,7 +78,9 @@ public class DroidMateUser {
 	public void setStatus(APKExplorationStatus newStatus) {
 		this.explorationStatus = newStatus;
 	}
-
+	public APKExplorationStatus getStatus( ) {
+		return explorationStatus;
+	}
 	public List<String> getDroidMateOutput() {
 		return droidMateOutput;
 	}

@@ -1,6 +1,6 @@
-define([ 'require', 'jquery', 'jstree', '../explore/apkExplorationTable',
+define([ 'require', 'jquery', 'bootbox', 'jstree', '../explore/apkExplorationTable',
 		'jquery.flot', 'jquery.flot.tooltip', 'jquery.droidmate.ajax',
-		'jquery.droidmate.inlining', 'DataTables' ], function(require) {
+		'jquery.droidmate.inlining', 'DataTables' ], function(require, jquery, bootbox) {
 
 	var tableCreator = require('../explore/apkExplorationTable');
 
@@ -76,11 +76,28 @@ define([ 'require', 'jquery', 'jstree', '../explore/apkExplorationTable',
 			
 		});
 
+		var status = $.droidmate.ajax.get.getExplorationStatus();
+		
+		if(status != "STARTED") {
+			handleEndScreen(status);
+			return;
+		}
+		
 		setTimeout(function() {
 			updateCharts();
 		}, $.droidmate.ajax.UPDATE_EXPLORATION_INFO_INTERVAL)
 	}
 
-	updateCharts();
-
+	function handleEndScreen(status) {
+		$.droidmate.ajax.post.saveReport();
+		var message = "";
+		if(status == "FINISHED") {
+			message = "DroidMate finished successful. Reports got saved."
+		} else {
+			message = "DroidMate crashed. Reports got saved."
+		}
+		
+		bootbox.confirm(message, function() {});
+	}
+	
 });

@@ -71,11 +71,12 @@ public class APKExploreHandler extends HttpServlet {
 			r = new Runnable() {
 				@Override
 				public void run() {
+					user.setStatus(APKExplorationStatus.STARTED);
 					if (!startDroidmate(user)) {
 						user.setStatus(APKExplorationStatus.ERROR);
 						user.clear();
 					} else {
-						user.setStatus(APKExplorationStatus.STARTED);
+						user.setStatus(APKExplorationStatus.FINISHED);
 					}
 				}
 			};
@@ -88,11 +89,12 @@ public class APKExploreHandler extends HttpServlet {
 			r = new Runnable() {
 				@Override
 				public void run() {
+					user.setStatus(APKExplorationStatus.STARTED);
 					if (!startDroidmate(user)) {
 						user.setStatus(APKExplorationStatus.ERROR);
 						user.clear();
 					} else {
-						user.setStatus(APKExplorationStatus.STARTED);
+						user.setStatus(APKExplorationStatus.FINISHED);
 					}
 				}
 			};
@@ -178,6 +180,8 @@ public class APKExploreHandler extends HttpServlet {
 			} else {
 				out.print(0);
 			}
+		} else if (request.getParameter("status") != null) {
+				out.print(user.getStatus().getName());
 		} else if (request.getParameter(AjaxConstants.EXPLORE_GET_GLOBAL_SCREENS_SEEN_HISTORY) != null) {
 			response.setContentType("application/json");
 			JSONArray result = new JSONArray();
