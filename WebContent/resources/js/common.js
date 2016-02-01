@@ -74,7 +74,7 @@ requirejs
 				'jquery.flot.axislabels' : 'flot/flot-axislabels/jquery.flot.axislabels',
 				'jquery.flot.navigate' : 'flot/jquery.flot.navigate.min',
 				'bootstrap' : 'bootstrap/js/bootstrap.min',
-				'bootbox' : '//cdn.jsdelivr.net/bootbox/4.3.0/bootbox',
+				'bootbox' : 'bootboxjs/bootbox.min',
 				'jstree' : 'jstree/jstree.min',
 				'jquery.droidmate.ajax' : 'droidmate/jquery.droidmate.ajax',
 				'jquery.droidmate.explore' : 'droidmate/jquery.droidmate.explore',

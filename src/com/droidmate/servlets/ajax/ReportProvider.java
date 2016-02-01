@@ -60,9 +60,8 @@ public class ReportProvider extends HttpServlet {
 	private boolean saveReport(String rawHtml) {
 		String html = generateReport(rawHtml);
 		File outputFolder = (new GUISettings()).getOutputFolder().toFile();
-		
-		File resourcesSourceFolder = new File(
-				getServletContext().getRealPath("/resources"));
+
+		File resourcesSourceFolder = new File(getServletContext().getRealPath("/resources"));
 		try {
 			System.out.println("Saving report...");
 			System.out.println("Copying resource files from " + resourcesSourceFolder + " to " + (new File(outputFolder + File.separator + "resources")));
@@ -70,13 +69,12 @@ public class ReportProvider extends HttpServlet {
 			FileUtils.copyDirectory(resourcesSourceFolder, new File(outputFolder + File.separator + "resources"), true);
 
 			// Save report
-			File reportFile = new File(
-					outputFolder + "/Report_" + (new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date())) + ".html");
+			File reportFile = new File(outputFolder + "/Report_" + (new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date())) + ".html");
 			reportFile.createNewFile();
 			PrintWriter writer = new PrintWriter(reportFile, "UTF-8");
 			writer.println(html);
 			writer.close();
-			
+
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -88,10 +86,7 @@ public class ReportProvider extends HttpServlet {
 	private String generateReport(String rawHtml) {
 		String html = rawHtml.replace("href=\"/DroidMate/", "href=\"");
 		// Remove return to start button
-		html = html.replace("<button class=\"btn btn-default\" id=\"back-to-index\" type=\"button\">Return to start</button>",
-				"");
-		html = html.replace("<button id=\"stopAllBtn\" class=\"btn btn-default\" type=\"button\">Stop\r\n"
-				+ "						All</button>", "");
+		html.replaceAll("<button*button>", "");
 
 		return html;
 	}

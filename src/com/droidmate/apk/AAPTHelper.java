@@ -44,7 +44,7 @@ public class AAPTHelper {
 	public List<AAPTInformation> loadAPKInformation() {
 
 		if (!isAAPTAvailable())
-			return null;
+			return new LinkedList<>();
 
 		List<AAPTInformation> apkInformation = new LinkedList<>();
 
