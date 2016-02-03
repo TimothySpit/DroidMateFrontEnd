@@ -3,6 +3,10 @@ define([ 'jquery'], function(require) {
 	var droidmate = $.droidmate || {};
 	var overlays = {};
 	
+	var ERROR_MESSAGE_TIMEOUT = 5000; //milliseconds
+	
+	overlays.ERROR_MESSAGE_TIMEOUT = ERROR_MESSAGE_TIMEOUT;
+	
 	//alert types
 	var alertTypes = {
 			SUCCESS : "alert-success",

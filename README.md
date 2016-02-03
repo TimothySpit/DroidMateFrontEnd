@@ -79,7 +79,7 @@ To build DroidMateGUI for first time, follow these steps:
 
 9. Configure DroidMate Path and reports path in the settings (http://localhost.com:8080/DroidMate/Settings).
 
-10. Add Android-SDK build tools path  (C:\Program Files (x86)\Android\android-sdk\build-tools\19.1.0) to the path variable.
+10. Add Android-SDK AAPT build tool path in the settings.
 
 ### Dependencies ###
 

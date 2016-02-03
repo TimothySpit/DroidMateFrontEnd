@@ -44,7 +44,7 @@ input#folder_name {
 	padding-top: 1em;
 }
 
-.settings-button button {
+.button-settings-container #button-settings {
 	position: absolute;
 	top: 2em;
 	right: 2em;

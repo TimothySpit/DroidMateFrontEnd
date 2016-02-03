@@ -28,26 +28,27 @@ define([ 'jquery' ], function(require) {
 	get.getDroidMateSettings = getDroidMateSettings;
 	// ----------------------------------
 
-	function getSelectedAPKRoot() {
+	function getAPKsRoot() {
 		var result = "";
 		$.ajax({
-			url : "/DroidMate/APKPathHandler",
+			url : "/DroidMate2/APKRootFolderHandler",
 			async : false,
 			type : 'GET',
 			data : {
-				info : [ "apkRoot" ]
+				getAPKsRoot : true
 			},
 			success : function(data) {
-				if (data && data["info[]"] && data["info[]"].apkRoot) {
-					result = data["info[]"].apkRoot;
+				if(!data) {
+					return;
 				}
+				result = data.getAPKsRoot;
 			}
 		});
 		return result;
 	}
-	get.getSelectedAPKRoot = getSelectedAPKRoot;
+	get.getAPKsRoot = getAPKsRoot;
 	// ----------------------------------
-	
+
 	function getExplorationStatus() {
 		var result = "";
 		$.ajax({
@@ -65,7 +66,7 @@ define([ 'jquery' ], function(require) {
 	}
 	get.getExplorationStatus = getExplorationStatus;
 	// ----------------------------------
-	
+
 	function getGlobalStartingTime() {
 		var result = [];
 		$.ajax({
@@ -242,38 +243,26 @@ define([ 'jquery' ], function(require) {
 
 	// ----------------------------------
 
-	function getSelectedAPKS(async) {
-		var result = null;
-		$.ajax({
-			// Wait for the server to finish apk list and request the table data
-			// afterwards
-			async : false,
-			type : 'GET',
-			url : "/DroidMate/APKPathHandler?info[]=selApks",
-			success : function(data) {
-				result = data;
-			}
-		});
-		return result;
-	}
-	get.getSelectedAPKS = getSelectedAPKS;
-	// ----------------------------------
+	// TODO: change all droidmate2 to droidmate!!!!!!!!!!!!!
 
-	function getAllAPKS(async) {
+	function getAPKSData() {
 		var result = null;
 		$.ajax({
 			// Wait for the server to finish apk list and request the table data
 			// afterwards
 			async : false,
 			type : 'GET',
-			url : "/DroidMate/APKPathHandler?info[]=apks",
+			url : "/DroidMate2/APKInformationHandler",
+			data : {
+				getAPKSData : true
+			},
 			success : function(data) {
 				result = data;
 			}
 		});
 		return result;
 	}
-	get.getAllAPKS = getAllAPKS;
+	get.getAPKSData = getAPKSData;
 	// ----------------------------------
 
 	// create ajax post functions
@@ -293,7 +282,7 @@ define([ 'jquery' ], function(require) {
 	}
 	post.saveReport = saveReport;
 	// ----------------------------------
-	
+
 	function setSelectedAPKS(ids, async, success, error, complete) {
 		$.ajax({
 			// Wait for the server to finish apk list and request the table data
@@ -312,22 +301,22 @@ define([ 'jquery' ], function(require) {
 	post.setSelectedAPKS = setSelectedAPKS;
 	// ----------------------------------
 
-	function setAPKRoot(newRoot, async, success, error, complete) {
+	function setAPKsRoot(newRoot, async, success, error, complete) {
 		$.ajax({
 			// Wait for the server to finish apk list and request the table data
 			// afterwards
 			async : async,
-			type : 'POST',
-			url : "/DroidMate/APKPathHandler",
+			type : 'GET',
+			url : "/DroidMate2/APKRootFolderHandler",
 			data : {
-				apkRoot : newRoot
+				setAPKsRoot : newRoot
 			},
 			success : success,
 			error : error,
 			complete : complete
 		});
 	}
-	post.setAPKRoot = setAPKRoot;
+	post.setAPKsRoot = setAPKsRoot;
 	// ----------------------------------
 
 	function openReportFolder(async) {
@@ -339,7 +328,7 @@ define([ 'jquery' ], function(require) {
 			data : {
 				explore_open_report_folder : true
 			},
-			dataType: "json",
+			dataType : "json",
 			success : function(data) {
 				status = data.status == "success";
 			},
@@ -347,23 +336,23 @@ define([ 'jquery' ], function(require) {
 				status = false;
 			}
 		});
-		
+
 		return status;
 	}
 	post.openReportFolder = openReportFolder;
 	// ----------------------------------
 
-	function saveDroidMateSettings(outputPath, dmPath, aaptPath, explorationTimeout,
-			async, success, error, complete) {
+	function saveDroidMateSettings(outputPath, dmPath, aaptPath,
+			explorationTimeout, async, success, error, complete) {
 		$.ajax({
 			async : async,
-			url : "/DroidMate/Settings",
-			type : 'POST',
+			url : "/DroidMate2/SettingsHandler",
+			type : 'GET',
 			data : {
-				save : true,
+				setSettings: true,
 				outputPath : outputPath,
 				droidmatePath : dmPath,
-				aaptPath: aaptPath,
+				aaptPath : aaptPath,
 				time : explorationTimeout
 			},
 			success : success,
@@ -435,7 +424,7 @@ define([ 'jquery' ], function(require) {
 	}
 	post.returnToIndex = returnToIndex;
 	// -----------------------------------
-	
+
 	ajax.get = get;
 	ajax.post = post;
 	droidmate.ajax = ajax;

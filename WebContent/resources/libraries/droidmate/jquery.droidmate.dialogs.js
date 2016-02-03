@@ -29,15 +29,22 @@ define([ 'require', 'jquery', 'bootbox', 'jquery.droidmate.ajax',
 		settings.className = 'file-dialog';
 
 		var dialog = bootbox.dialog(settings);
-		$(dialog).find(".dialog-container").jstree({
+		var dialogContainer = $(dialog).find(".dialog-container");
+		dialogContainer.jstree({
 			'core' : {
 				'data' : {
-					"url" : "FileSystem?type=directory",
+					"url" : "FileSystemHandler?type=directory",
 					"data" : function(node) {
-						if (node.text)
+						if (node.text) {
+							var path = "";
+							dialogContainer.find('#'+node.id).parents("li").each(function () {
+								path = $(this).children("a").text() + path;
+								});
+							
 							return {
-								"path" : node.text
+								"path" : path + node.text
 							};
+						}
 						else
 							return {
 								"path" : "root"
@@ -48,7 +55,27 @@ define([ 'require', 'jquery', 'bootbox', 'jquery.droidmate.ajax',
 		});
 
 		$(dialog).find(".btn-success").on('click', function() {
-			cb($(dialog).find(".dialog-container").jstree(true).get_selected(true));
+			//get selected items
+			var selectedNodes = $(dialog).find(".dialog-container").jstree(true).get_selected(true);
+			
+			//no item has been selected
+			if(!selectedNodes.length) {
+				return;
+			}
+			
+			//get first selected item
+			var firstItem = selectedNodes[0];
+			
+			var path = "";
+			
+			//calculate path up to root node
+			dialogContainer.find('#'+firstItem.id).parents("li").each(function () {
+				path = $(this).children("a").text() + path;
+			});
+			
+			path = path + firstItem.text;
+		
+			cb(path);
 		});
 		dialog.modal('show');
 	}

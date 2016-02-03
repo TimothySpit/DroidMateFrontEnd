@@ -1,98 +1,116 @@
 package com.droidmate.user;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
+import java.lang.reflect.Array;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.droidmate.apk.AAPTHelper;
-import com.droidmate.apk.AAPTInformation;
-import com.droidmate.apk.APKExplorationStatus;
-import com.droidmate.apk.APKInformation;
-import com.droidmate.settings.GUISettings;
+import org.apache.commons.io.FilenameUtils;
+
+import com.droidmate.processes.AAPTInformation;
+import com.droidmate.processes.AAPTProcess;
 
 public class DroidMateUser {
 
-	private Path apkPath = null;
-	private List<APKInformation> apks = new LinkedList<>();
-	private APKExplorationStatus explorationStatus = APKExplorationStatus.UNKNOWN;
+	private Path apksRootPath = null;
+	private List<APKInformation> apksInformation = new LinkedList<>();
 
-	private List<String> droidMateOutput = new LinkedList<>();
+	private final GUISettings settings;
 
-	public synchronized boolean setAPKPath(Path apkPathToAnalyse) {
-		if (apkPathToAnalyse == null) {
-			throw new NullPointerException();
-		}
-		if (!(apkPathToAnalyse.toFile().exists() && apkPathToAnalyse.toFile().isDirectory())) {
-			throw new IllegalArgumentException();
-		}
-
-		GUISettings settings = new GUISettings();
-		
-		apks.clear();
-		droidMateOutput.clear();
-		
-		apkPath = apkPathToAnalyse;
-
-		AAPTHelper aaptHelper;
-		try {
-			aaptHelper = new AAPTHelper(apkPath,settings.getAaptToolPath());
-			List<AAPTInformation> aaptInfo = aaptHelper.loadAPKInformation();
-
-			Path inlineTempPath = Paths.get(settings.getDroidMatePath().toString(), "/projects/apk-inliner/output-apks/");
-
-			for (AAPTInformation aaptInformation : aaptInfo) {
-				apks.add(new APKInformation(aaptInformation, inlineTempPath));
-			}
-
-			return true;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}
+	public DroidMateUser() {
+		// get current settings
+		this.settings = new GUISettings();
 	}
 
 	public synchronized Path getAPKPath() {
-		return apkPath;
+		return apksRootPath;
 	}
 
-	public synchronized List<APKInformation> getAPKS() {
-		return apks;
-	}
-
-	public int getSelectedAPKSCount() {
-		int counter = 0;
-		for (APKInformation apk : apks) {
-			if (apk.isSelected()) {
-				counter++;
-			}
+	public synchronized void setAPKPath(Path newPath) throws Exception {
+		if (newPath == null) {
+			throw new NullPointerException("APK root path was null.");
 		}
-		return counter;
+		if (!(newPath.toFile().exists() && newPath.toFile().isDirectory())) {
+			throw new IllegalArgumentException("APK root path must exist and must be a directory.");
+		}
+
+		apksInformation.clear();
+		apksRootPath = newPath;
+
+		// collect new information
+		Path aaptPath = settings.getAaptToolPath();
+
+		if (!Files.exists(aaptPath)) {
+			throw new FileNotFoundException("AAPT path not found at: " + aaptPath);
+		}
+		if (!Files.isDirectory(aaptPath)) {
+			throw new FileNotFoundException("AAPT path: " + aaptPath + " is no directory.");
+		}
+
+		// aapt path exists, try to load info
+		List<AAPTInformation> aaptResult = getAAPTInformation(aaptPath.toFile());
+
+		// create APKInformation out of AAPT information
+		List<APKInformation> apksInfos = setUpAPKInformations(aaptResult);
+		
+		this.apksInformation = apksInfos;
 	}
 
-	public boolean isExplorationStarted() {
-		return explorationStatus.equals(APKExplorationStatus.STARTED);
+	private List<APKInformation> setUpAPKInformations(List<AAPTInformation> aaptResults) {
+		List<APKInformation> apksInfos = new LinkedList<>();
+		
+		for (AAPTInformation aaptInfo : aaptResults) {
+			//create new APKInformation
+			APKInformation apkInfo = new APKInformation(aaptInfo);
+			apksInfos.add(apkInfo);
+		}
+		
+		return apksInfos;
 	}
 
-	public void setStatus(APKExplorationStatus newStatus) {
-		this.explorationStatus = newStatus;
-	}
-	public APKExplorationStatus getStatus( ) {
-		return explorationStatus;
-	}
-	public List<String> getDroidMateOutput() {
-		return droidMateOutput;
+	private List<AAPTInformation> getAAPTInformation(File aaptPath) throws Exception {
+		assert aaptPath != null && aaptPath.exists() && aaptPath.isDirectory();
+		
+		//create AAPT process
+		AAPTProcess aaptHelper = new AAPTProcess(aaptPath);
+
+		List<File> apks = getAPKFilesFromDirectory(apksRootPath);
+		
+		//load apk aapt information and return it
+		List<AAPTInformation> aaptResult = aaptHelper.loadInformation(apks);
+		return aaptResult;
 	}
 
-	public void setDroidMateOutput(List<String> droidMateOutput) {
-		this.droidMateOutput = droidMateOutput;
+	private List<File> getAPKFilesFromDirectory(Path apksPath) {
+		assert apksPath != null && apksPath.toFile().exists() && apksPath.toFile().isDirectory();
+		
+		// Filter apks
+		File[] apkFiles = apksPath.toFile().listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return FilenameUtils.getExtension(name).toLowerCase().equals("apk");
+			}
+		});
+
+		// There was an IO error, or apksPath is no directory
+		if (apkFiles == null) {
+			return new LinkedList<>();
+		}
+
+		// return all found apks
+		return Arrays.asList(apkFiles);
 	}
 
-	public void clear() {
-		apks.clear();
-		droidMateOutput.clear();
-		setAPKPath(apkPath);
+	public List<APKInformation> getAPKS() {
+		return apksInformation;
 	}
 
+	public GUISettings getSettings() {
+		return settings;
+	}
 }

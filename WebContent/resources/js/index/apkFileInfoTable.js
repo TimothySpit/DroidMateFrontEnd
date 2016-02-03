@@ -205,7 +205,7 @@ define(
 			function removeStadardEvents(table) {
 				tableID.find('tbody').off('click');
 				tableID.off('click');
-				$('#selectiontable thead input[name="select_all"]')
+				tableID.find('thead input[name="select_all"]')
 						.off('click');
 
 				table.off('draw');
@@ -277,12 +277,12 @@ define(
 									checkbox_all_click = true;
 
 									if (this.checked) {
-										$(
-												'#selectiontable tbody input[type="checkbox"]:not(:checked)')
+										tableID.find(
+												'tbody input[type="checkbox"]:not(:checked)')
 												.trigger('click');
 									} else {
-										$(
-												'#selectiontable tbody input[type="checkbox"]:checked')
+										tableID.find(
+												'tbody input[type="checkbox"]:checked')
 												.trigger('click');
 									}
 
@@ -300,8 +300,8 @@ define(
 						.on(
 								'draw',
 								function() {
-									$(
-											'#selectiontable tbody input[type="checkbox"]:not(:checked)')
+									tableID.find(
+											'tbody input[type="checkbox"]:not(:checked)')
 											.trigger('click');
 									// Update state of "Select all" control
 									updateDataTableSelectAllCtrl(table);
