@@ -2,6 +2,7 @@ package com.droidmate.processes;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,12 +24,14 @@ public class AAPTProcess {
 		this.aaptPath = aaptPath;
 	}
 
-	public List<AAPTInformation> loadInformation(List<File> apks) throws Exception {
+
+	public List<AAPTInformation> loadInformation(List<File> apks) throws IOException
+	{
 		if(apks == null) {
 			throw new IllegalArgumentException("APKS list must not be null");
 		}
 		
-		// create Process
+		// create Process arguments and start AAPT tool
 		List<String> arguments = new LinkedList<>();
 		arguments.add("aapt");
 		arguments.add("d");
@@ -37,14 +40,15 @@ public class AAPTProcess {
 		return collectAAPTInformation(apks, arguments);
 	}
 
-	private List<AAPTInformation> collectAAPTInformation(List<File> apks, List<String> arguments) throws Exception {
+	private List<AAPTInformation> collectAAPTInformation(List<File> apks, List<String> arguments) throws IOException
+	{
 		List<AAPTInformation> result = new LinkedList<>();
 		for (File apk : apks) {
 			arguments.add(apk.getAbsolutePath());
 			// start process and collect data
 
 			ProcessWrapper pbd = new ProcessWrapper(aaptPath, arguments);
-			pbd.start();
+			try {pbd.start();} catch (InterruptedException e) {/** do nothing*/}
 			if (pbd.getExitValue() != 0) {
 				// there was an intern error
 				continue;

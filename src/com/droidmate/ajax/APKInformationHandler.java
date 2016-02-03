@@ -14,7 +14,8 @@ import com.droidmate.user.APKInformation;
 import com.droidmate.user.DroidMateUser;
 
 /**
- * Servlet implementation class APKInformationHandler
+ * Instance of Servlet implementation: APKInformationHandler.
+ * This is responsible for retrieving all .apk information e.g. used in the exploration table.
  */
 @WebServlet("/APKInformationHandler")
 public class APKInformationHandler extends HttpServlet {
@@ -24,6 +25,7 @@ public class APKInformationHandler extends HttpServlet {
 	private static final String APKS_DATA = "getAPKSData";
 
 	/**
+	 * Creates a new instance of the ApkInformationHandler class
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public APKInformationHandler() {
@@ -31,6 +33,7 @@ public class APKInformationHandler extends HttpServlet {
 	}
 
 	/**
+	 * Sends back a .json object with all .apk information.
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
