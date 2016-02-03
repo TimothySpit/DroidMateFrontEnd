@@ -7,20 +7,27 @@ import java.util.List;
 
 public class AAPTProcess {
 
-	private final File aaptFile;
+	private final File aaptPath;
 
 	public AAPTProcess(File aaptPath) throws FileNotFoundException {
 		if (aaptPath == null) {
-			throw new NullPointerException();
+			throw new IllegalArgumentException("AAPT path must not be null.");
 		}
 		if (!aaptPath.exists()) {
-			throw new FileNotFoundException();
+			throw new FileNotFoundException("AAPT path " + aaptPath + " not found.");
+		}
+		if(!aaptPath.isDirectory()) {
+			throw new IllegalArgumentException("AAPT path " + aaptPath + " is no directory.");
 		}
 
-		this.aaptFile = aaptPath;
+		this.aaptPath = aaptPath;
 	}
 
 	public List<AAPTInformation> loadInformation(List<File> apks) throws Exception {
+		if(apks == null) {
+			throw new IllegalArgumentException("APKS list must not be null");
+		}
+		
 		// create Process
 		List<String> arguments = new LinkedList<>();
 		arguments.add("aapt");
@@ -35,7 +42,8 @@ public class AAPTProcess {
 		for (File apk : apks) {
 			arguments.add(apk.getAbsolutePath());
 			// start process and collect data
-			ProcessWrapper pbd = new ProcessWrapper(aaptFile, arguments);
+			ProcessWrapper pbd = new ProcessWrapper(aaptPath, arguments);
+			
 			if (pbd.getStatus() != 0) {
 				// there was an intern error
 				continue;
@@ -61,5 +69,9 @@ public class AAPTProcess {
 			return "";
 
 		return output.substring(index, output.indexOf("'", index + 1));
+	}
+	
+	public File getAAPTPath() {
+		return aaptPath;
 	}
 }
