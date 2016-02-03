@@ -24,7 +24,11 @@ public class AAPTProcess {
 		this.aaptPath = aaptPath;
 	}
 
+<<<<<<< HEAD
+	public List<AAPTInformation> loadInformation(List<File> apks) throws IOException{
+=======
 	public List<AAPTInformation> loadInformation(List<File> apks) throws FileNotFoundException, IOException, InterruptedException {
+>>>>>>> fd57a8bd0dba09e43f8aba7f200f55707744b218
 		if(apks == null) {
 			throw new IllegalArgumentException("APKS list must not be null");
 		}
@@ -38,14 +42,18 @@ public class AAPTProcess {
 		return collectAAPTInformation(apks, arguments);
 	}
 
+<<<<<<< HEAD
+	private List<AAPTInformation> collectAAPTInformation(List<File> apks, List<String> arguments) throws IOException {
+=======
 	private List<AAPTInformation> collectAAPTInformation(List<File> apks, List<String> arguments) throws FileNotFoundException, IOException, InterruptedException {
+>>>>>>> fd57a8bd0dba09e43f8aba7f200f55707744b218
 		List<AAPTInformation> result = new LinkedList<>();
 		for (File apk : apks) {
 			arguments.add(apk.getAbsolutePath());
 			// start process and collect data
 
 			ProcessWrapper pbd = new ProcessWrapper(aaptPath, arguments);
-			pbd.start();
+			try {pbd.start();} catch (InterruptedException e) {/** do nothing*/}
 			if (pbd.getExitValue() != 0) {
 				// there was an intern error
 				continue;

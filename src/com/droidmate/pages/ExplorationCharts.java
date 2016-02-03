@@ -25,7 +25,7 @@ public class ExplorationCharts extends HttpServlet
 	}
 
 	/**
-	 * Sends back the html-code for the page with the eploration charts.
+	 * Sends back the html-code for the page with the exploration charts.
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
