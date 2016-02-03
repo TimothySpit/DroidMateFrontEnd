@@ -31,7 +31,7 @@ public class AAPTProcess {
 			throw new IllegalArgumentException("APKS list must not be null");
 		}
 		
-		// create Process
+		// create Process arguments and start AAPT tool
 		List<String> arguments = new LinkedList<>();
 		arguments.add("aapt");
 		arguments.add("d");
