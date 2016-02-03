@@ -31,7 +31,7 @@ define([ 'jquery' ], function(require) {
 	function getAPKsRoot() {
 		var result = "";
 		$.ajax({
-			url : "/DroidMate2/APKRootFolderHandler",
+			url : "/DroidMate/APKRootFolderHandler",
 			async : false,
 			type : 'GET',
 			data : {
@@ -243,8 +243,6 @@ define([ 'jquery' ], function(require) {
 
 	// ----------------------------------
 
-	// TODO: change all droidmate2 to droidmate!!!!!!!!!!!!!
-
 	function getAPKSData() {
 		var result = null;
 		$.ajax({
@@ -252,7 +250,7 @@ define([ 'jquery' ], function(require) {
 			// afterwards
 			async : false,
 			type : 'GET',
-			url : "/DroidMate2/APKInformationHandler",
+			url : "/DroidMate/APKInformationHandler",
 			data : {
 				getAPKSData : true
 			},
@@ -307,7 +305,7 @@ define([ 'jquery' ], function(require) {
 			// afterwards
 			async : async,
 			type : 'GET',
-			url : "/DroidMate2/APKRootFolderHandler",
+			url : "/DroidMate/APKRootFolderHandler",
 			data : {
 				setAPKsRoot : newRoot
 			},
@@ -346,7 +344,7 @@ define([ 'jquery' ], function(require) {
 			explorationTimeout, async, success, error, complete) {
 		$.ajax({
 			async : async,
-			url : "/DroidMate2/SettingsHandler",
+			url : "/DroidMate/SettingsHandler",
 			type : 'GET',
 			data : {
 				setSettings: true,
