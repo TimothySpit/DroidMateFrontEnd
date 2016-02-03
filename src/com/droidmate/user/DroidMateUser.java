@@ -52,8 +52,9 @@ public class DroidMateUser
 	 * @throws NullPointerException if the given path ist null
 	 * @throws IllegalArgumentException if the given path not a directory or does not exist
 	 * @throws IOException if a IO Error occured
+	 * @throws InterruptedException 
 	 */
-	public synchronized void setAPKPath(Path newPath) throws IOException
+	public synchronized void setAPKPath(Path newPath) throws IOException, InterruptedException
 	{
 		// exception handling
 		if (newPath == null) {
@@ -106,9 +107,10 @@ public class DroidMateUser
 	 * Gets .apks aapt informations.
 	 * @param aaptPath
 	 * @return List of .apks aapt informations
-	 * @throws Exception
+	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
-	private List<AAPTInformation> getAAPTInformation(File aaptPath) throws IOException {
+	private List<AAPTInformation> getAAPTInformation(File aaptPath) throws IOException, InterruptedException {
 		assert aaptPath != null && aaptPath.exists() && aaptPath.isDirectory();
 
 		// create AAPT process
