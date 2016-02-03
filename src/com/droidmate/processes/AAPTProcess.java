@@ -2,6 +2,7 @@ package com.droidmate.processes;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class AAPTProcess {
 		this.aaptPath = aaptPath;
 	}
 
-	public List<AAPTInformation> loadInformation(List<File> apks) throws Exception {
+	public List<AAPTInformation> loadInformation(List<File> apks) throws FileNotFoundException, IOException, InterruptedException {
 		if(apks == null) {
 			throw new IllegalArgumentException("APKS list must not be null");
 		}
@@ -37,7 +38,7 @@ public class AAPTProcess {
 		return collectAAPTInformation(apks, arguments);
 	}
 
-	private List<AAPTInformation> collectAAPTInformation(List<File> apks, List<String> arguments) throws Exception {
+	private List<AAPTInformation> collectAAPTInformation(List<File> apks, List<String> arguments) throws FileNotFoundException, IOException, InterruptedException {
 		List<AAPTInformation> result = new LinkedList<>();
 		for (File apk : apks) {
 			arguments.add(apk.getAbsolutePath());
