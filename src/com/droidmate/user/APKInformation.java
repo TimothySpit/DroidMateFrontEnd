@@ -20,6 +20,7 @@ public class APKInformation {
 		}
 
 		this.aaptInfo = aaptInfo;
+		inliningStatusReference.set(InliningStatus.NOT_INLINED);
 	}
 
 	public JSONObject toJSONObject() {

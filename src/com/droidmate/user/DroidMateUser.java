@@ -3,7 +3,7 @@ package com.droidmate.user;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
-import java.lang.reflect.Array;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -15,23 +15,48 @@ import org.apache.commons.io.FilenameUtils;
 import com.droidmate.processes.AAPTInformation;
 import com.droidmate.processes.AAPTProcess;
 
-public class DroidMateUser {
-
+/**
+ * Sets the path for the .apks to be explored and tracks the exploration status for
+ * all .apks.
+ */
+public class DroidMateUser
+{
+	/** The given .apks Path. */
 	private Path apksRootPath = null;
+
+	/** List of .apks informations from the selected .apks ordner. */
 	private List<APKInformation> apksInformation = new LinkedList<>();
 
+	/** Instance of GUISettings */
 	private final GUISettings settings;
 
+	/**
+	 * Creates a new instance of the DroidMateUser class
+	 */
 	public DroidMateUser() {
 		// get current settings
 		this.settings = new GUISettings();
 	}
 
+	/**
+	 * Gets the .apks path.
+	 * @return The .apks path
+	 */
 	public synchronized Path getAPKPath() {
 		return apksRootPath;
 	}
 
-	public synchronized void setAPKPath(Path newPath) throws Exception {
+	/**
+	 * Sets the path for the users given .apks.
+	 * @param newPath the path for the apks
+	 * @throws NullPointerException if the given path ist null
+	 * @throws IllegalArgumentException if the given path not a directory or does not exist
+	 * @throws IOException if a IO Error occured
+	 * @throws InterruptedException 
+	 */
+	public synchronized void setAPKPath(Path newPath) throws IOException, InterruptedException
+	{
+		// exception handling
 		if (newPath == null) {
 			throw new NullPointerException("APK root path was null.");
 		}
@@ -57,38 +82,55 @@ public class DroidMateUser {
 
 		// create APKInformation out of AAPT information
 		List<APKInformation> apksInfos = setUpAPKInformations(aaptResult);
-		
+
 		this.apksInformation = apksInfos;
 	}
 
+	/**
+	 * Sets the .apks information and return a list of them
+	 * @param aaptResults
+	 * @return List of .apks information
+	 */
 	private List<APKInformation> setUpAPKInformations(List<AAPTInformation> aaptResults) {
 		List<APKInformation> apksInfos = new LinkedList<>();
-		
+
 		for (AAPTInformation aaptInfo : aaptResults) {
-			//create new APKInformation
+			// create new APKInformation
 			APKInformation apkInfo = new APKInformation(aaptInfo);
 			apksInfos.add(apkInfo);
 		}
-		
+
 		return apksInfos;
 	}
 
-	private List<AAPTInformation> getAAPTInformation(File aaptPath) throws Exception {
+	/**
+	 * Gets .apks aapt informations.
+	 * @param aaptPath
+	 * @return List of .apks aapt informations
+	 * @throws InterruptedException 
+	 * @throws InterruptedException
+	 */
+	private List<AAPTInformation> getAAPTInformation(File aaptPath) throws IOException, InterruptedException {
 		assert aaptPath != null && aaptPath.exists() && aaptPath.isDirectory();
-		
-		//create AAPT process
+
+		// create AAPT process
 		AAPTProcess aaptHelper = new AAPTProcess(aaptPath);
 
 		List<File> apks = getAPKFilesFromDirectory(apksRootPath);
-		
-		//load apk aapt information and return it
+
+		// load apk aapt information and return it
 		List<AAPTInformation> aaptResult = aaptHelper.loadInformation(apks);
 		return aaptResult;
 	}
 
+	/**
+	 * Gets found .apks files from given path's directory.
+	 * @param apksPath
+	 * @return List of all found .apks in the given directory
+	 */
 	private List<File> getAPKFilesFromDirectory(Path apksPath) {
 		assert apksPath != null && apksPath.toFile().exists() && apksPath.toFile().isDirectory();
-		
+
 		// Filter apks
 		File[] apkFiles = apksPath.toFile().listFiles(new FilenameFilter() {
 			@Override
@@ -106,10 +148,18 @@ public class DroidMateUser {
 		return Arrays.asList(apkFiles);
 	}
 
+	/**
+	 * Gets the .apks informations.
+	 * @return List of .apks informations
+	 */
 	public List<APKInformation> getAPKS() {
 		return apksInformation;
 	}
 
+	/**
+	 * Gets GUISettings.
+	 * @return The GUISettings
+	 */
 	public GUISettings getSettings() {
 		return settings;
 	}

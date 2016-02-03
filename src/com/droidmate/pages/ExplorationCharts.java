@@ -8,13 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ExplorationCharts
+ * Instance of Servlet implementation: ExplorationCharts
+ * Responsible for the page with the charts tracking the exploration progress.
  */
 @WebServlet("/ExplorationCharts")
-public class ExplorationCharts extends HttpServlet {
+public class ExplorationCharts extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Creates a new instance of the ExplorationCharts class.
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public ExplorationCharts() {
@@ -22,6 +25,7 @@ public class ExplorationCharts extends HttpServlet {
 	}
 
 	/**
+	 * Sends back the html-code for the page with the eploration charts.
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
