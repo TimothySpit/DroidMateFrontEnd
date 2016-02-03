@@ -29,13 +29,16 @@ public class DirectoryWatcher extends Observable<DirectoryWatcherEvent> {
 	private final Map<WatchKey, Path> keys;
 	private final boolean recursive;
 
-	private AtomicBoolean	isWatchingEvents;
-	
+	private AtomicBoolean isWatchingEvents = new AtomicBoolean(false);
+	private AtomicBoolean shouldClose = new AtomicBoolean(false);
+
+	private Thread readinThread = null;
+
 	@SuppressWarnings("unchecked")
-    static <T> WatchEvent<T> cast(WatchEvent<?> event) {
-        return (WatchEvent<T>)event;
-    }
-	
+	static <T> WatchEvent<T> cast(WatchEvent<?> event) {
+		return (WatchEvent<T>) event;
+	}
+
 	public DirectoryWatcher(Path dirToWatch, boolean recursive) throws IOException {
 		if (dirToWatch == null) {
 			throw new IllegalArgumentException("Directory to be watched must not be null.");
@@ -78,21 +81,30 @@ public class DirectoryWatcher extends Observable<DirectoryWatcherEvent> {
 	void stop() {
 		isWatchingEvents.set(false);
 	}
-	
+
+	void joinIfNoDataAvailable() throws InterruptedException {
+		if (readinThread == null)
+			return;
+
+		shouldClose.set(true);
+
+		readinThread.join();
+	}
+
 	void processEvents() throws FileNotFoundException, InterruptedException {
-		if(isWatchingEvents.get()) {
+		if (isWatchingEvents.get()) {
 			throw new IllegalStateException("Directory watcher is already started.");
 		}
-		isWatchingEvents.set(true);
-		
-		Thread eventThread = new Thread() {
-		    @Override
+
+		// concurrent reading
+		this.readinThread = (new Thread() {
+			@Override
 			public void run() {
-		    	startReadingEvents();
-		    }
-		};
-		eventThread.start();
-		eventThread.join();
+				isWatchingEvents.set(true);
+				startReadingEvents();
+			}
+		});
+		readinThread.start();
 	}
 
 	private void startReadingEvents() {
@@ -100,10 +112,18 @@ public class DirectoryWatcher extends Observable<DirectoryWatcherEvent> {
 
 			// wait for key to be signaled
 			WatchKey key;
-			try {
-				key = watcher.take();
-			} catch (InterruptedException x) {
-				return;
+			key = watcher.poll();
+
+			if (key == null) {
+				// if should exit, exit because no more data information is
+				// needed
+				if (shouldClose.get()) {
+					if ((key = watcher.poll()) == null) {
+						return;
+					}
+				} else {
+					continue;
+				}
 			}
 
 			Path dir = keys.get(key);

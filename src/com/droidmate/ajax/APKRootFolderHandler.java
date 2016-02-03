@@ -15,12 +15,11 @@ import org.json.JSONObject;
 import com.droidmate.user.DroidMateUser;
 
 /**
- * Instance of Servlet implementation: APKRootFolderHandler
- * Sets and retrieves the root folder of the .apks to be explored.
+ * Instance of Servlet implementation: APKRootFolderHandler Sets and retrieves
+ * the root folder of the .apks to be explored.
  */
 @WebServlet("/APKRootFolderHandler")
-public class APKRootFolderHandler extends HttpServlet
-{
+public class APKRootFolderHandler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	// request parameters
@@ -29,6 +28,7 @@ public class APKRootFolderHandler extends HttpServlet
 
 	/**
 	 * Creates a new instance of the APKRootFolderHandler class
+	 * 
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public APKRootFolderHandler() {
@@ -36,7 +36,9 @@ public class APKRootFolderHandler extends HttpServlet
 	}
 
 	/**
-	 * Sets and retrieves the root folder of the .apks to be explored in a .json file.
+	 * Sets and retrieves the root folder of the .apks to be explored in a .json
+	 * file.
+	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -53,8 +55,18 @@ public class APKRootFolderHandler extends HttpServlet
 
 		// get apks root
 		String apkGetRoot = request.getParameter(APKS_ROOT_GET);
-		if (apkGetRoot != null && user.getAPKPath() != null) {
-			result.put(APKS_ROOT_GET, user.getAPKPath());
+		if (apkGetRoot != null) {
+			JSONResponseWrapper apkGetRootResult = new JSONResponseWrapper();
+			if (user.getAPKPath() == null) {
+				apkGetRootResult = new JSONResponseWrapper(false, "Path is not yet set.");
+			} else {
+				apkGetRootResult = new JSONResponseWrapper(true, "Path successfully get.");
+				// set payload
+				JSONObject payload = new JSONObject();
+				payload.put("data", user.getAPKPath());
+				apkGetRootResult.setPayload(payload);
+			}
+			result.put(APKS_ROOT_GET, apkGetRootResult.toJSONObject());
 		}
 
 		// save apks root

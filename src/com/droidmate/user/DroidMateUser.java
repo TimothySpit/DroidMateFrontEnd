@@ -6,6 +6,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import com.droidmate.processes.AAPTInformation;
 import com.droidmate.processes.AAPTProcess;
+import com.droidmate.processes.InlinerProcess;
 
 /**
  * Sets the path for the .apks to be explored and tracks the exploration status for
@@ -21,6 +23,8 @@ import com.droidmate.processes.AAPTProcess;
  */
 public class DroidMateUser
 {
+	private final static String INLINED_APKS_FOLDER_NAME = "inlined";
+	
 	/** The given .apks Path. */
 	private Path apksRootPath = null;
 
@@ -30,6 +34,15 @@ public class DroidMateUser
 	/** Instance of GUISettings */
 	private final GUISettings settings;
 
+	/**
+	 * The current status, the user is in.
+	 */
+	private UserStatus userStatus = UserStatus.IDLE;
+	
+	//Processes the user can start
+	private InlinerProcess inlinerProcess = null;
+	//----------------------------
+	
 	/**
 	 * Creates a new instance of the DroidMateUser class
 	 */
@@ -97,10 +110,31 @@ public class DroidMateUser
 		for (AAPTInformation aaptInfo : aaptResults) {
 			// create new APKInformation
 			APKInformation apkInfo = new APKInformation(aaptInfo);
+			setAPKInlinedInformation(apkInfo);
 			apksInfos.add(apkInfo);
 		}
 
 		return apksInfos;
+	}
+
+	private void setAPKInlinedInformation(APKInformation apkInfo) {
+		assert apkInfo != null;
+		
+		//check if inlined apks folder exists
+		Path inlinedAPKSPath = Paths.get(apksRootPath.toString(), INLINED_APKS_FOLDER_NAME);
+		if(Files.exists(inlinedAPKSPath)) {
+			//check if apk is in that folder, if yes, the file is already inlined.
+			String inlinedAPKName = FilenameUtils.removeExtension(apkInfo.getAPKFile().getName()) + "-inlined.apk";
+			Path inlinedAPKPath = Paths.get(inlinedAPKSPath.toString(), inlinedAPKName);
+			
+			if(Files.exists(inlinedAPKPath)) {
+				//File is already inlined
+				apkInfo.setInliningStatus(InliningStatus.INLINED);
+			} else {
+				//File is not inlined
+				apkInfo.setInliningStatus(InliningStatus.NOT_INLINED);
+			}
+		}
 	}
 
 	/**
@@ -162,5 +196,66 @@ public class DroidMateUser
 	 */
 	public GUISettings getSettings() {
 		return settings;
+	}
+
+	public boolean isInlinerStarted() {
+		return userStatus == UserStatus.INLINING;
+	}
+
+	public boolean startInliner() throws IOException {
+		if(userStatus != UserStatus.IDLE) {
+			throw new IllegalStateException("Inliner can not be started in state " + userStatus.getName());
+		}
+		if(apksRootPath == null) {
+			throw new IllegalArgumentException("APK Path has not been set.");
+		}
+		if(!apksRootPath.toFile().exists()) {
+			throw new FileNotFoundException("APK path does not exist.");
+		}
+		if(!apksRootPath.toFile().isDirectory()) {
+			throw new IllegalArgumentException("APK path must be a directory");
+		}
+		
+		//set up apks to inline
+		List<APKInformation> apksToInline = new LinkedList<>();
+		for (APKInformation apk : apksInformation) {
+			if (apk.getInliningStatus() != InliningStatus.INLINED) {
+				apksToInline.add(apk);
+			}
+		}
+		
+		//if there are no apks to inline, no need to inline, return true
+		if(apksToInline.size() == 0) {
+			return true;
+		}
+		
+		//change user status
+		this.userStatus = UserStatus.INLINING;
+		
+		//if inliner was never used, create it
+		boolean inlineResult = false;
+		try {
+		if(inlinerProcess == null) {
+			//Get inliner path and otput path
+			Path inlinerPath = settings.getDroidMatePath();
+			Path outputPath = apksRootPath;
+			inlinerProcess = new InlinerProcess(inlinerPath.toFile(), outputPath.toFile());
+		}
+		
+		//start inliner
+		inlineResult = inlinerProcess.inlineAPKS(apksToInline);
+		} catch (Exception e) {
+			//rethrow exception
+			throw e;
+		} finally {
+			//change user state
+			this.userStatus = UserStatus.IDLE;
+		}
+		
+		return inlineResult;
+	}
+
+	public UserStatus getStatus() {
+		return userStatus;
 	}
 }

@@ -10,83 +10,113 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 	
 	//update APKS in table
 	function updateInlineAPKStatus() {
-		//get apks
-		var apks = $.droidmate.ajax.get.getAPKSData();
-		
-		//variable holding the resulting inlined status
-		var inlinedStatus = table.inlinedStatus.INLINED;
-		
-		//clear table first
-		table.clear();
-		
-		$.each(apks, function(index,value) {
-			switch (value.inlineStatus) {
-			case $.droidmate.inlining.inliningStatus.NOT_INLINED: {
-				inlinedStatus = table.inlinedStatus.NOT_INLINED;
-				break;
-			}
-			case $.droidmate.inlining.inliningStatus.INLINING: {
-				inlinedStatus = table.inlinedStatus.INLINING;
-				break;
-			}
-			case $.droidmate.inlining.inliningStatus.INLINED: {
-				inlinedStatus = table.inlinedStatus.INLINED;
-				break;
-			}
-			case $.droidmate.inlining.inliningStatus.ERROR: {
-				inlinedStatus = table.inlinedStatus.ERROR;
-				break;
-			}
+		//get user status
+		$.droidmate.ajax.get.getUserStatus(true, function(data) {
+			var repeatUpdate = true;
+			
+			//check for error in data receiving
+			if(!data || !data.getUserStatus || !data.getUserStatus.result) {
+				$.droidmate.overlays.alert("Could not parse server returned value.", $.droidmate.overlays.alertTypes.DANGER, 
+						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+				return;
 			}
 			
-			//add new status
-			table.addAPKData(value.name, value.size, value.package,
-					value.version, inlinedStatus, value.activityName);
+			var statusData = data.getUserStatus.payload.data;
+			
+			if(!statusData) {
+				return;
+			}
+			
+			//If status is inlining, then update, else return
+			if(statusData !== "INLINING") {
+				repeatUpdate = false;
+			}
+			
+			//get apks
+			var apks = $.droidmate.ajax.get.getAPKSData();
+			
+			if(!apks || !apks.getAPKSData || !apks.getAPKSData.result) {
+				$.droidmate.overlays.alert("Could not parse server returned value.", $.droidmate.overlays.alertTypes.DANGER, 
+						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+				return;
+			}
+			
+			//variable holding the resulting inlined status
+			var inlinedStatus = table.inlinedStatus.INLINED;
+			
+			//clear table first
+			table.clear();
+			
+			$.each(apks.getAPKSData.payload.data, function(index,value) {
+				switch (value.inlineStatus) {
+				case $.droidmate.inlining.inliningStatus.NOT_INLINED: {
+					inlinedStatus = table.inlinedStatus.NOT_INLINED;
+					break;
+				}
+				case $.droidmate.inlining.inliningStatus.INLINING: {
+					inlinedStatus = table.inlinedStatus.INLINING;
+					break;
+				}
+				case $.droidmate.inlining.inliningStatus.INLINED: {
+					inlinedStatus = table.inlinedStatus.INLINED;
+					break;
+				}
+				case $.droidmate.inlining.inliningStatus.ERROR: {
+					inlinedStatus = table.inlinedStatus.ERROR;
+					break;
+				}
+				}
+				
+				//add new status
+				table.addAPKData(value.name, value.sizeReadable, value.packageName,
+						value.packageVersionCode, inlinedStatus, value.activityName);
+			});
+			
+			
+			table.redraw();
+			
+			//update again if repeatUpdate is true
+			if(repeatUpdate) {
+				setTimeout(function() {updateInlineAPKStatus()}, $.droidmate.inlining.WATCH_INLINER_INTERVAL);
+			}
 		});
-		
-		
-		table.redraw();
-	}
-	
-	//watches inliner status
-	function watchInlinerStatus() {
-		//get current inline status
-		var inlinerStatus = $.droidmate.inlining.getInliningStatus();
-		
-		switch (inlinerStatus) {
-		case $.droidmate.inlining.status.FINISHED: {
-			$.droidmate.overlays.alert(
-					"<strong>Inliner finished successfully.</strong>",
-					$.droidmate.overlays.alertTypes.SUCCESS,
-					INLINER_OVERLAY_DISPLAY_TIME);
-			updateInlineAPKStatus();
-			break;
-		}
-		case $.droidmate.inlining.status.ERROR: {
-			$.droidmate.overlays.alert(
-					"<strong>There was an error while inlining.</strong>",
-					$.droidmate.overlays.alertTypes.ERROR,
-					INLINER_OVERLAY_DISPLAY_TIME);
-			break;
-		}
-		case $.droidmate.inlining.status.INLINING: {
-			setTimeout(function() {watchInlinerStatus()}, $.droidmate.inlining.WATCH_INLINER_INTERVAL);
-			break;
-		}
-		}
 	}
 	
 	// handle inline button click method
 	$('#button-inline-files').click(function() {
-		//notify user that the inliner has been started
-		$.droidmate.overlays.alert(
-				"<strong>Inliner has been started.</strong>",
-				$.droidmate.overlays.alertTypes.INFO,
-				INLINER_OVERLAY_DISPLAY_TIME);
+		//Disable exploration/inliner button
+		$('#button-inline-files').prop("disabled", true);
+		
+		//notify user that inliner has been started
+		$.droidmate.overlays.alert("Inliner started...",$.droidmate.overlays.alertTypes.INFO,INLINER_OVERLAY_DISPLAY_TIME);
+		
+		//watch apk inline state change
+		setTimeout(function() {updateInlineAPKStatus()}, $.droidmate.inlining.WATCH_INLINER_INTERVAL);
 		
 		//send inline request and start watching the resulting status
-		$.droidmate.inlining.startInlining();
+		$.droidmate.inlining.startInlining(true,function(data) {
+			if(!data || !data.startInlining) {
+				//no connection to the server, or wrong answer
+				$.droidmate.overlays.alert("Could not parse server returned value.", $.droidmate.overlays.alertTypes.DANGER, 
+						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+				return;
+			}
+			
+			var infoBoxType;
+			var result = data.startInlining;
+			//check result
+			if(result && result.result) {
+				//inliner finished successfully
+				infoBoxType = $.droidmate.overlays.alertTypes.INFO;
+			} else {
+				infoBoxType = $.droidmate.overlays.alertTypes.WARNING;
+			}
+			
+			$.droidmate.overlays.alert(result.message,infoBoxType,INLINER_OVERLAY_DISPLAY_TIME);
+			
+			//enable button again
+			$('#button-inline-files').prop("disabled", false);
+		});
 		
-		setTimeout(function() {watchInlinerStatus()}, $.droidmate.inlining.WATCH_INLINER_INTERVAL);
 	});
 });

@@ -15,11 +15,15 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 				return true;
 		})
 
-		if (selectedRows.length === 0 || notInlinedRows.length > 0) {
+		if (selectedRows.length === 0) {
+			$("#button-start-exploration").prop("disabled", true);
+			$('#button-inline-files').prop("disabled",true);
+		} else if(notInlinedRows.length > 0) {
 			$("#button-start-exploration").prop("disabled", true);
 			$('#button-inline-files').prop("disabled",false);
 		} else {
 			$("#button-start-exploration").prop("disabled", false);
+			$('#button-inline-files').prop("disabled",false);
 		}
 	}
 	

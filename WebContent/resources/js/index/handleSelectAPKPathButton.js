@@ -12,11 +12,11 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		var apksData = $.droidmate.ajax.get.getAPKSData();
 		
 		//If there are no apks, there was an intern error, return
-		if(!apksData || !apksData.getAPKSData) {
+		if(!apksData || !apksData.getAPKSData || !apksData.getAPKSData.result) {
 			return;
 		}
 		
-		var numAPKS = apksData.getAPKSData.length;
+		var numAPKS = apksData.getAPKSData.payload.data.length;
 		
 		//Show gui indikator
 		var apksLoadingResultDiv = $('#div-apk-folder-selection-result').show();
@@ -40,7 +40,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		
 		//Set inlined status
 		var inlinedStatus = table.inlinedStatus.INLINED;
-		$.each(apksData.getAPKSData, function(index,value) {
+		$.each(apksData.getAPKSData.payload.data, function(index,value) {
 			switch (value.inlineStatus) {
 			case $.droidmate.inlining.inliningStatus.NOT_INLINED: {
 				inlinedStatus = table.inlinedStatus.NOT_INLINED;
@@ -93,9 +93,11 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		});
 	});
 	
-	var path = $.droidmate.ajax.get.getAPKsRoot();
-	if (path) {
-		$('#input-apk-folder-selection').val(path);
-		updateAPKSTable();
-	}
+	var path = $.droidmate.ajax.get.getAPKsRoot(true, function(data) {
+		if (data && data.getAPKsRoot && data.getAPKsRoot.result) {
+			var path = data.getAPKsRoot.payload.data;
+			$('#input-apk-folder-selection').val(path);
+			updateAPKSTable();
+		}
+	});
 });

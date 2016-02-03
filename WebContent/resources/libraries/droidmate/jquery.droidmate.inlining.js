@@ -9,44 +9,24 @@ define([ 'jquery'], function(require) {
 	
 	//Inlining status
 	var inliningStatus = {
-			NOT_STARTED : "NOT_STARTED",
+			NOT_INLINED : "NOT_INLINED",
 			INLINING	: "INLINING",
-			FINISHED	: "FINISHED",
-			ERROR		: "ERROR",
+			INLINED		: "INLINED"
 	};
 	inlining.inliningStatus = inliningStatus;
 	//--------------------------------------
 	
-	function startInlining() {
-		var result = null;
+	function startInlining(async, success) {
 		$.ajax({
-	        url:  "/DroidMate/APKInliningHandler",
-	        async: false,
-	        type: 'POST',
-	        data: {inline : true},
-	        success: function(data) {
-	            result = data;
-	        } 
+	        url:  "/DroidMate/InlinerHandler",
+	        async: async,
+	        type: 'GET',
+	        dataType : "json",
+	        data: {startInlining : true},
+	        success: success
 	     });
-		return result.success;
 	}
 	inlining.startInlining = startInlining;
-	//--------------------------------------
-	
-	function getInliningStatus() {
-		var result = null;
-		$.ajax({
-	        url:  "/DroidMate/APKInliningHandler",
-	        async: false,
-	        type: 'POST',
-	        data: {status : true},
-	        success: function(data) {
-	            result = data;
-	        } 
-	     });
-		return result.status;
-	}
-	inlining.getInliningStatus = getInliningStatus;
 	//--------------------------------------
 	
 	droidmate.inlining = inlining;

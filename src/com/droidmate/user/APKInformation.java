@@ -45,7 +45,8 @@ public class APKInformation {
 		result.put("activityName", getAPKActivityName());
 		result.put("sizeByte", getAPKFileSizeInBytes());
 		result.put("sizeReadable", FileUtils.byteCountToDisplaySize(getAPKFile().length()));
-
+		result.put("inlineStatus", inliningStatusReference.get().getName());
+		
 		return result;
 	}
 

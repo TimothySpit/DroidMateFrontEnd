@@ -42,7 +42,12 @@ public class JSONResponseWrapper {
 		object.put("message", message);
 	}
 	
-	public String toJSON() {
+	public JSONObject toJSONObject() {
+		return object;
+	}
+	
+	@Override
+	public String toString() {
 		return object.toString();
 	}
 }

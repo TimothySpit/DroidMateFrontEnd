@@ -28,43 +28,34 @@ define([ 'jquery' ], function(require) {
 	get.getDroidMateSettings = getDroidMateSettings;
 	// ----------------------------------
 
-	function getAPKsRoot() {
+	function getAPKsRoot(async,success) {
 		var result = "";
 		$.ajax({
 			url : "/DroidMate/APKRootFolderHandler",
-			async : false,
+			async : async,
 			type : 'GET',
 			data : {
 				getAPKsRoot : true
 			},
-			success : function(data) {
-				if(!data) {
-					return;
-				}
-				result = data.getAPKsRoot;
-			}
+			success : success
 		});
 		return result;
 	}
 	get.getAPKsRoot = getAPKsRoot;
 	// ----------------------------------
 
-	function getExplorationStatus() {
-		var result = "";
+	function getUserStatus(async, success) {
 		$.ajax({
-			url : "/DroidMate/APKExploreHandler",
-			async : false,
+			url : "/DroidMate/UserStatusHandler",
+			async : async,
 			type : 'GET',
 			data : {
-				status : ""
+				getUserStatus : true
 			},
-			success : function(data) {
-				result = data;
-			}
+			success :success
 		});
-		return result;
 	}
-	get.getExplorationStatus = getExplorationStatus;
+	get.getUserStatus = getUserStatus;
 	// ----------------------------------
 
 	function getGlobalStartingTime() {

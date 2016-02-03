@@ -12,17 +12,24 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		//get apks
 		var apks = $.droidmate.ajax.get.getAPKSData();
 		
+		if(!apks || !apks.getAPKSData) {
+			//path could not been set, show error message
+			$.droidmate.overlays.alert("Could not retreive file size data from the server.", $.droidmate.overlays.alertTypes.DANGER, 
+					$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+			return;
+		}
+		
 		//sort apks alphabetically 
-		apks.sort(function(a, b) {
+		apks.getAPKSData.sort(function(a, b) {
 			return a.name.toUpperCase().localeCompare(
 					b.name.toUpperCase());
 		});
 		
-		var apkNames = $.map(apks, function(val, i) {
+		var apkNames = $.map(apks.getAPKSData, function(val, i) {
 			return val.name;
 		});
-		var apkSizes = $.map(apks, function(val, i) {
-			return val.size / 1000 / 1000; // in mb
+		var apkSizes = $.map(apks.getAPKSData, function(val, i) {
+			return val.sizeByte / 1000 / 1000; // in mb
 		});
 		
 		//Show dialog
