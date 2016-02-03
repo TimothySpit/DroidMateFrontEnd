@@ -1,5 +1,6 @@
 package com.droidmate.ajax;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class JSONResponseWrapper {
@@ -26,6 +27,14 @@ public class JSONResponseWrapper {
 		JSONObject parameterObject = new JSONObject();
 		setValues(parameterObject, result, message);
 		object.put(parameterName, parameterObject);
+	}
+	
+	public void setPayload(JSONObject payload) {
+		object.put("payload", payload);
+	}
+	
+	public void setPayload(JSONArray payload) {
+		object.put("payload", payload);
 	}
 	
 	private void setValues(JSONObject object, boolean result, String message) {
