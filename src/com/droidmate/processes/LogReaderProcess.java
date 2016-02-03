@@ -447,37 +447,14 @@ public class LogReaderProcess {
 
 	}
 
-	private final File sourceFile;
-
-	private final ConcurrentHashMap<String, APKExplorationInfo> apksMapReaderHandler = new ConcurrentHashMap<>();
-
+	private final File sourceFile = null;
 	private ForeverFileInputStream inputStream;
-
-	private List<APKInformation> apks;
-
 	private XMLLogParser parser;
 
-	public XMLLogReader(File source, List<APKInformation> apks) {
-
-	                this.sourceFile = source;
-
-	                this.apks = apks;
-
-	                for (APKInformation apkInformation : apks) {
-
-	                        if (apkInformation.isSelected()) {
-
-	                                apksMapReaderHandler.put(apkInformation.getFile().getName(),
-
-	                                                new APKExplorationInfo(apkInformation.getFile().getName()));
-
-	                        }
-
-	                }
-
-	                parser = new XMLLogParser(apksMapReaderHandler);
-
-	        }
+	public XMLLogReader(File source) throws FileNotFoundException{
+		this.sourceFile = source;
+parser = new XMLLogParser(apksMapReaderHandler);
+	}
 
 	public void stopReading() {
 		if (inputStream != null) {
