@@ -1,5 +1,5 @@
 define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
-		'jquery.droidmate.overlays' ], function(require) {
+		'jquery.droidmate.overlays', '../index/handleUpdate' ], function(require) {
 
 	//handle settings button click
 	$('#button-settings').click(function() {
@@ -12,7 +12,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		//get apks
 		var apks = $.droidmate.ajax.get.getAPKSData();
 		
-		if(!apks || !apks.getAPKSData) {
+		if(!apks || !apks.getAPKSData || !apks.getAPKSData.result) {
 			//path could not been set, show error message
 			$.droidmate.overlays.alert("Could not retreive file size data from the server.", $.droidmate.overlays.alertTypes.DANGER, 
 					$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
@@ -20,15 +20,15 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		}
 		
 		//sort apks alphabetically 
-		apks.getAPKSData.sort(function(a, b) {
+		apks.getAPKSData.payload.data.sort(function(a, b) {
 			return a.name.toUpperCase().localeCompare(
 					b.name.toUpperCase());
 		});
 		
-		var apkNames = $.map(apks.getAPKSData, function(val, i) {
+		var apkNames = $.map(apks.getAPKSData.payload.data, function(val, i) {
 			return val.name;
 		});
-		var apkSizes = $.map(apks.getAPKSData, function(val, i) {
+		var apkSizes = $.map(apks.getAPKSData.payload.data, function(val, i) {
 			return val.sizeByte / 1000 / 1000; // in mb
 		});
 		

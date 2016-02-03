@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -37,7 +38,7 @@ public class DroidMateUser
 	/**
 	 * The current status, the user is in.
 	 */
-	private UserStatus userStatus = UserStatus.IDLE;
+	private final AtomicReference<UserStatus> userStatus = new AtomicReference<>(UserStatus.IDLE);
 	
 	//Processes the user can start
 	private InlinerProcess inlinerProcess = null;
@@ -104,7 +105,7 @@ public class DroidMateUser
 	 * @param aaptResults
 	 * @return List of .apks information
 	 */
-	private List<APKInformation> setUpAPKInformations(List<AAPTInformation> aaptResults) {
+	private synchronized List<APKInformation> setUpAPKInformations(List<AAPTInformation> aaptResults) {
 		List<APKInformation> apksInfos = new LinkedList<>();
 
 		for (AAPTInformation aaptInfo : aaptResults) {
@@ -199,12 +200,12 @@ public class DroidMateUser
 	}
 
 	public boolean isInlinerStarted() {
-		return userStatus == UserStatus.INLINING;
+		return userStatus.get() == UserStatus.INLINING;
 	}
 
 	public boolean startInliner() throws IOException {
-		if(userStatus != UserStatus.IDLE) {
-			throw new IllegalStateException("Inliner can not be started in state " + userStatus.getName());
+		if(userStatus.getAndSet(UserStatus.INLINING) != UserStatus.IDLE) {
+			throw new IllegalStateException("Inliner can not be started in state " + userStatus.get().getName());
 		}
 		if(apksRootPath == null) {
 			throw new IllegalArgumentException("APK Path has not been set.");
@@ -226,11 +227,9 @@ public class DroidMateUser
 		
 		//if there are no apks to inline, no need to inline, return true
 		if(apksToInline.size() == 0) {
+			this.userStatus.set(UserStatus.IDLE);
 			return true;
 		}
-		
-		//change user status
-		this.userStatus = UserStatus.INLINING;
 		
 		//if inliner was never used, create it
 		boolean inlineResult = false;
@@ -249,13 +248,13 @@ public class DroidMateUser
 			throw e;
 		} finally {
 			//change user state
-			this.userStatus = UserStatus.IDLE;
+			this.userStatus.set(UserStatus.IDLE);
 		}
 		
 		return inlineResult;
 	}
 
 	public UserStatus getStatus() {
-		return userStatus;
+		return userStatus.get();
 	}
 }

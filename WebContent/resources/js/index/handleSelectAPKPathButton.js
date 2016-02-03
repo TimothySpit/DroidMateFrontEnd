@@ -1,9 +1,11 @@
 define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
-		'jquery.droidmate.overlays','jquery.droidmate.dialogs','jquery.droidmate.ajax' ], function(require) {
+		'jquery.droidmate.overlays','jquery.droidmate.dialogs','jquery.droidmate.ajax','../index/handleUpdate' ], function(require) {
 
 	//get current apks table
 	var tableCreator = require('../index/apkFileInfoTable');
 	var table = tableCreator.initModul($('#table-apk-static-information'));
+	
+	var updateHelper = require('../index/handleUpdate' );
 	
 	//updates apks table with new apk data
 	function updateAPKSTable() {
@@ -16,26 +18,18 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 			return;
 		}
 		
+		var apksLoadingResultDiv = $('#div-apk-folder-selection-result');
 		var numAPKS = apksData.getAPKSData.payload.data.length;
-		
-		//Show gui indikator
-		var apksLoadingResultDiv = $('#div-apk-folder-selection-result').show();
 		
 		if (numAPKS > 0) {
 			//more than one apk is in the selected root folder, notice user
 			apksLoadingResultDiv.html(
 					'<span class="label label-success text-center">'
 							+ numAPKS + ' apks loaded.</span>');
-			$('#buttons-start-inline').show();
-			$('#button-show-static-information').show();
-			$('#div-apk-static-information-container').show();
 		} else {
 			//hide controls and set indikator
 			apksLoadingResultDiv.html(
 					'<span class="label label-danger text-center">no apks loaded.</span>');
-			$('#buttons-start-inline').hide();
-			$('#button-show-static-information').hide();
-			$('#div-apk-static-information-container').hide();
 		}
 		
 		//Set inlined status
@@ -67,6 +61,8 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		
 		
 		table.redraw();
+		
+		updateHelper.updateUI();
 	}
 	
 	//handle select apk folder path button click

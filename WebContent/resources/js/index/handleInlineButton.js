@@ -1,15 +1,19 @@
 define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
-		'jquery.droidmate.overlays' ], function(require) {
+		'jquery.droidmate.overlays','../index/handleUpdate' ], function(require) {
 
 	// Get current table
 	var tableCreator = require('../index/apkFileInfoTable');
 	var table = tableCreator.initModul($('#table-apk-static-information'));
-
+	
+	var updateHelper = require('../index/handleUpdate' );
+	
 	//Set default overlay display time
 	var INLINER_OVERLAY_DISPLAY_TIME = 2000;
 	
 	//update APKS in table
 	function updateInlineAPKStatus() {
+		updateHelper.updateUI();
+		
 		//get user status
 		$.droidmate.ajax.get.getUserStatus(true, function(data) {
 			var repeatUpdate = true;
@@ -44,9 +48,6 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 			//variable holding the resulting inlined status
 			var inlinedStatus = table.inlinedStatus.INLINED;
 			
-			//clear table first
-			table.clear();
-			
 			$.each(apks.getAPKSData.payload.data, function(index,value) {
 				switch (value.inlineStatus) {
 				case $.droidmate.inlining.inliningStatus.NOT_INLINED: {
@@ -67,13 +68,12 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 				}
 				}
 				
-				//add new status
-				table.addAPKData(value.name, value.sizeReadable, value.packageName,
-						value.packageVersionCode, inlinedStatus, value.activityName);
+				//set new status
+				var row = table.getRowByName(value.name);
+				if(row) {
+					row.updateInlinedStatus(inlinedStatus);
+				}
 			});
-			
-			
-			table.redraw();
 			
 			//update again if repeatUpdate is true
 			if(repeatUpdate) {
@@ -84,8 +84,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 	
 	// handle inline button click method
 	$('#button-inline-files').click(function() {
-		//Disable exploration/inliner button
-		$('#button-inline-files').prop("disabled", true);
+		updateHelper.updateUI();
 		
 		//notify user that inliner has been started
 		$.droidmate.overlays.alert("Inliner started...",$.droidmate.overlays.alertTypes.INFO,INLINER_OVERLAY_DISPLAY_TIME);
@@ -113,10 +112,10 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 			}
 			
 			$.droidmate.overlays.alert(result.message,infoBoxType,INLINER_OVERLAY_DISPLAY_TIME);
-			
-			//enable button again
-			$('#button-inline-files').prop("disabled", false);
+			updateHelper.updateUI();
 		});
 		
 	});
+	
+	updateInlineAPKStatus();
 });
