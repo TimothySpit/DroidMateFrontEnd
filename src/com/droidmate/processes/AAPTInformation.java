@@ -16,13 +16,13 @@ public class AAPTInformation {
 	
 	public AAPTInformation(File apk, String packageName, String packageVersionCode, String packageVersionName, String activityName) throws FileNotFoundException {
 		if(apk == null || packageName == null || packageVersionCode == null || packageVersionName == null || activityName == null) {
-			throw new NullPointerException();
-		}
-		if(!apk.exists()) {
-			throw new FileNotFoundException();
+			throw new IllegalArgumentException("Arguments must be not null.");
 		}
 		if(!FilenameUtils.getExtension(apk.getName()).equals("apk")) {
-			throw new IllegalArgumentException("File must be an .apk file.");
+			throw new IllegalArgumentException("File 'apk' must be an .apk file.");
+		}
+		if(!apk.exists()) {
+			throw new FileNotFoundException("File " + apk + " does not exist.");
 		}
 		
 		this.apkFile = apk;
