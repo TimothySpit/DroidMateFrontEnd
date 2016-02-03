@@ -51,6 +51,7 @@ public class SettingsHandler extends HttpServlet {
 
 		JSONObject result = new JSONObject();
 		String settingsSet = request.getParameter(SETTINGS_SET);
+		boolean allSettingsCorrect = true;
 		if (settingsSet != null) {
 			// check for reports path parameter
 			String settingsParameter = request.getParameter(SETTINGS_REPORTS_OUTPUT_PATH);
@@ -62,10 +63,12 @@ public class SettingsHandler extends HttpServlet {
 					// path does not exist
 					reportsPathSetResult.put("result", false);
 					reportsPathSetResult.put("message", "Report path " + reportsPath + " does not exist.");
+					allSettingsCorrect = false;
 				} else if (!reportsPath.toFile().isDirectory()) {
 					// path is no valid directory
 					reportsPathSetResult.put("result", false);
 					reportsPathSetResult.put("message", "Report path " + reportsPath + " is no valid directory.");
+					allSettingsCorrect = false;
 				} else {
 					// valid path, save it
 					settings.setOutputFolder(reportsPath);
@@ -85,10 +88,12 @@ public class SettingsHandler extends HttpServlet {
 					// path does not exist
 					droidMatePathSetResult.put("result", false);
 					droidMatePathSetResult.put("message", "DroidMate path " + droidMatePath + " does not exist.");
+					allSettingsCorrect = false;
 				} else if (!droidMatePath.toFile().isDirectory()) {
 					// path is no valid directory
 					droidMatePathSetResult.put("result", false);
 					droidMatePathSetResult.put("message", "DroidMate path " + droidMatePath + " is no valid directory.");
+					allSettingsCorrect = false;
 				} else {
 					// valid path, save it
 					settings.setDroidMatePath(droidMatePath);
@@ -108,10 +113,12 @@ public class SettingsHandler extends HttpServlet {
 					// path does not exist
 					aaptPathSetResult.put("result", false);
 					aaptPathSetResult.put("message", "AAPT path " + aaptPath + " does not exist.");
+					allSettingsCorrect = false;
 				} else if (!aaptPath.toFile().isDirectory()) {
 					// path is no valid directory
 					aaptPathSetResult.put("result", false);
 					aaptPathSetResult.put("message", "AAPT path " + aaptPath + " is no valid directory.");
+					allSettingsCorrect = false;
 				} else {
 					// valid path, save it
 					settings.setAaptToolPath(aaptPath);
@@ -130,6 +137,7 @@ public class SettingsHandler extends HttpServlet {
 					// exploration time is no number
 					explorationTimeSetResult.put("result", false);
 					explorationTimeSetResult.put("message", "Exploration time " + settingsParameter + " is no integer number.");
+					allSettingsCorrect = false;
 				}
 				// try to cast exploration time
 				try {
@@ -139,6 +147,7 @@ public class SettingsHandler extends HttpServlet {
 						//exploration time must be grater than zero
 						explorationTimeSetResult.put("result", false);
 						explorationTimeSetResult.put("message", "Exploration time " + settingsParameter + " is negative.");
+						allSettingsCorrect = false;
 					} else {
 						// valid exploration time, save it
 						settings.setExplorationTimeout(explorationTime);
@@ -148,12 +157,22 @@ public class SettingsHandler extends HttpServlet {
 				} catch (NumberFormatException e) {
 					explorationTimeSetResult.put("result", false);
 					explorationTimeSetResult.put("message", "Exploration time " + settingsParameter + " is no valid number.");
+					allSettingsCorrect = false;
 				}
 
 				result.put(SETTINGS_EXPLORATION_TIME, explorationTimeSetResult);
 			}
 		}
 
+		JSONObject settingsSetResult = new JSONObject();
+		settingsSetResult.put("result", allSettingsCorrect);
+		if(allSettingsCorrect) {
+			settingsSetResult.put("message", "All Settings have been saved successfully.");
+		} else {
+			settingsSetResult.put("message", "There were errors in saving the settings.");
+		}
+		result.put(SETTINGS_SET, settingsSetResult);
+		
 		response.getWriter().print(result);
 	}
 

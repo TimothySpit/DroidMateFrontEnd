@@ -71,7 +71,17 @@ define([ 'require', 'bootbox',
 		//no errors here, try to save settings
 		var callback = function(data) {
 			//check, if saving was successful, if not, post message
+			if(!data || !data.setSettings || !data.setSettings.result) {
+				//error in settings saving
+				$.droidmate.overlays.alert("Could not parse server returned value.", $.droidmate.overlays.alertTypes.DANGER, 
+						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+				return;
+			}
 			
+			var saveResult = data.setSettings;
+			$.droidmate.overlays.alert(saveResult.message,
+					$.droidmate.overlays.alertTypes.INFO,
+					$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
 		}
 		$.droidmate.ajax.post.saveDroidMateSettings(reportsOutputPath, droidmatePath, 
 				aaptPath, explorationTimeOut, true,callback);
