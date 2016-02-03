@@ -7,24 +7,28 @@ import java.nio.file.Paths;
 import java.util.prefs.Preferences;
 
 public class GUISettings {
+	
+	//default values
+	private static final int DEFAULT_EXPLORATION_TIMEOUT = 10;
+	private static final String DEFAULT_OUTPUT_PATH = (new File("")).getAbsolutePath();
+	private static final String DEFAULT_DROIDMATE_PATH = (new File("")).getAbsolutePath();
+	private static final String DEFAULT_AAPT_TOOL_PATH = (new File("")).getAbsolutePath();
 
 	private Preferences prefs;
 
+	private int explorationTimeout;
 	private Path outputFolder;
 	private Path droidMatePath;
 	private Path aaptToolPath;
-
-	private int explorationTimeout;
 
 	public GUISettings() {
 		this.prefs = Preferences.userNodeForPackage(GUISettings.class);
 	}
 
 	public int getExplorationTimeout() {
-		explorationTimeout = prefs.getInt("ExplorationTimeout", 10);
+		explorationTimeout = prefs.getInt("ExplorationTimeout", DEFAULT_EXPLORATION_TIMEOUT);
 		if (explorationTimeout <= 0) {
-			explorationTimeout = 10;
-			prefs.putInt("ExplorationTimeout", explorationTimeout);
+			setExplorationTimeout(DEFAULT_EXPLORATION_TIMEOUT);
 		}
 		return explorationTimeout;
 	}
@@ -42,13 +46,11 @@ public class GUISettings {
 	}
 
 	public Path getOutputFolder() {
-		File currentDirFile = new File("");
-		String pathString = prefs.get("OutputFolderPath", currentDirFile.getAbsolutePath());
+		String pathString = prefs.get("OutputFolderPath", DEFAULT_OUTPUT_PATH);
 		try {
 			outputFolder = (Paths.get(pathString));
 		} catch (InvalidPathException e) {
-			outputFolder = (Paths.get(currentDirFile.getAbsolutePath()));
-			prefs.put("OutputFolderPath", currentDirFile.getAbsolutePath());
+			setOutputFolder(Paths.get(DEFAULT_DROIDMATE_PATH));
 		}
 		return outputFolder;
 	}
@@ -66,14 +68,13 @@ public class GUISettings {
 	}
 
 	public Path getDroidMatePath() {
-		File currentDirFile = new File("");
-		String dmPath = prefs.get("DroidMatePath", currentDirFile.getAbsolutePath());
+		String dmPath = prefs.get("DroidMatePath", DEFAULT_DROIDMATE_PATH);
 		try {
 			droidMatePath = (Paths.get(dmPath));
 		} catch (InvalidPathException e) {
-			droidMatePath = (Paths.get(currentDirFile.getAbsolutePath()));
-			prefs.put("DroidMatePath", currentDirFile.getAbsolutePath());
+			setDroidMatePath(Paths.get(DEFAULT_DROIDMATE_PATH));
 		}
+		
 		return droidMatePath;
 	}
 
@@ -90,13 +91,11 @@ public class GUISettings {
 	}
 
 	public Path getAaptToolPath() {
-		File currentDirFile = new File("");
-		String aaptPath = prefs.get("AAPTPath", currentDirFile.getAbsolutePath());
+		String aaptPath = prefs.get("AAPTPath", DEFAULT_AAPT_TOOL_PATH);
 		try {
 			setAaptToolPath((Paths.get(aaptPath)));
 		} catch (InvalidPathException e) {
-			setAaptToolPath((Paths.get(currentDirFile.getAbsolutePath())));
-			prefs.put("AAPTPath", currentDirFile.getAbsolutePath());
+			setAaptToolPath((Paths.get(DEFAULT_AAPT_TOOL_PATH)));
 		}
 		return aaptToolPath;
 	}
@@ -112,5 +111,4 @@ public class GUISettings {
 			e.printStackTrace();
 		}
 	}
-
 }
