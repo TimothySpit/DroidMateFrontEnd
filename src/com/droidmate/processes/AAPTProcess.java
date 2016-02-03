@@ -36,7 +36,8 @@ public class AAPTProcess {
 			arguments.add(apk.getAbsolutePath());
 			// start process and collect data
 			ProcessWrapper pbd = new ProcessWrapper(aaptFile, arguments);
-			if (pbd.getStatus() != 0) {
+			pbd.start();
+			if (pbd.getExitValue() != 0) {
 				// there was an intern error
 				continue;
 			}
