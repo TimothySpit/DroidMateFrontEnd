@@ -90,7 +90,7 @@ define([ 'require', 'jquery', 'bootbox', 'jquery.droidmate.ajax',
 		var sizeMapping = $.map(sizesMB, function(val, i) {
 			return [ [ i, val ] ];
 		});
-		console.log(sizeMapping);
+		
 		var dataset = [ {
 			label : "File Sizes (MB)",
 			data : sizeMapping,

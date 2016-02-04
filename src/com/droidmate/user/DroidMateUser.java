@@ -8,8 +8,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.FilenameUtils;
@@ -30,7 +32,7 @@ public class DroidMateUser
 	private Path apksRootPath = null;
 
 	/** List of .apks informations from the selected .apks ordner. */
-	private List<APKInformation> apksInformation = new LinkedList<>();
+	private Map<String,APKInformation> apksInformation = new HashMap<>();
 
 	/** Instance of GUISettings */
 	private final GUISettings settings;
@@ -97,7 +99,9 @@ public class DroidMateUser
 		// create APKInformation out of AAPT information
 		List<APKInformation> apksInfos = setUpAPKInformations(aaptResult);
 
-		this.apksInformation = apksInfos;
+		for (APKInformation apkInfo : apksInfos) {
+			this.apksInformation.put(apkInfo.getAPKName(), apkInfo);
+		}
 	}
 
 	/**
@@ -187,7 +191,7 @@ public class DroidMateUser
 	 * Gets the .apks informations.
 	 * @return List of .apks informations
 	 */
-	public List<APKInformation> getAPKS() {
+	public Map<String,APKInformation> getAPKS() {
 		return apksInformation;
 	}
 
@@ -219,7 +223,7 @@ public class DroidMateUser
 		
 		//set up apks to inline
 		List<APKInformation> apksToInline = new LinkedList<>();
-		for (APKInformation apk : apksInformation) {
+		for (APKInformation apk : apksInformation.values()) {
 			if (apk.getInliningStatus() != InliningStatus.INLINED) {
 				apksToInline.add(apk);
 			}

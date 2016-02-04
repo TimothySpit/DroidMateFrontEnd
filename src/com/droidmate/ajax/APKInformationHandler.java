@@ -62,7 +62,7 @@ public class APKInformationHandler extends HttpServlet {
 			JSONObject payload = new JSONObject();
 			// insert apk data
 			JSONArray apksArray = new JSONArray();
-			for (APKInformation apk : user.getAPKS()) {
+			for (APKInformation apk : user.getAPKS().values()) {
 				apksArray.put(apk.toJSONObject());
 			}
 			payload.put("data", apksArray);

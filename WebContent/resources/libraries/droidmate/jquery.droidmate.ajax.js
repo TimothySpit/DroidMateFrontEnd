@@ -272,15 +272,18 @@ define([ 'jquery' ], function(require) {
 	post.saveReport = saveReport;
 	// ----------------------------------
 
-	function setSelectedAPKS(ids, async, success, error, complete) {
+	function setSelectedAPKS(names, async, success, error, complete) {
+		if( Object.prototype.toString.call( names ) !== '[object Array]' ) {
+			names = [names];
+		}
 		$.ajax({
 			// Wait for the server to finish apk list and request the table data
 			// afterwards
 			async : async,
-			type : 'GET',
-			url : "/DroidMate/APKPathHandler",
+			type : 'POST',
+			url : "/DroidMate/SaveSelectedAPKSHandler",
 			data : {
-				setSelectedAPKS : ids
+				setSelectedAPKS : names
 			},
 			success : success,
 			error : error,

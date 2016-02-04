@@ -1,6 +1,7 @@
 package com.droidmate.user;
 
 import java.io.File;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.FileUtils;
@@ -17,6 +18,8 @@ public class APKInformation {
 	/** The aapt information. */
 	private AAPTInformation aaptInfo;
 
+	private AtomicBoolean	isSelected = new AtomicBoolean(false);
+	
 	/** The gui and InlinerProcess may access the status concurrently. */
 	private final AtomicReference<InliningStatus> inliningStatusReference = new AtomicReference<>();
 
@@ -135,5 +138,17 @@ public class APKInformation {
 	@Override
 	public String toString() {
 		return "APKInformation [APK-Name: " + getAPKName() + ", " + "Path: " + getAPKFile().getAbsolutePath() + "]";
+	}
+
+	public boolean isAPKSelected() {
+		return isSelected.get();
+	}
+
+	public void setAPKSelected(boolean isSelected) {
+		if(inliningStatusReference.get() != InliningStatus.INLINED) {
+			throw new IllegalStateException("APK is not yet inlined and cannot be selected.");
+		}
+		
+		this.isSelected.set(isSelected);
 	}
 }
