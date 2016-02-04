@@ -57,11 +57,12 @@ public class DroidMateUser
 		this.settings = new GUISettings();
 	}
 	
-	public LogReaderProcess getLogReader(File logFile) throws FileNotFoundException {
+	private LogReaderProcess getLogReader(File logFile) throws FileNotFoundException {
 		globalExplorationInfo = new ExplorationInfo();
 		Map<String, ExplorationInfo> apksMap = new ConcurrentHashMap<>();
 		for(APKInformation apk : getAPKS()) {
-			apksMap.put(apk.getAPKName(), new ExplorationInfo());
+			apk.setExplorationInfo(new ExplorationInfo());
+			apksMap.put(apk.getAPKName(), apk.getExplorationInfo());
 		}
 		
 		return new LogReaderProcess(logFile, apksMap, globalExplorationInfo);
