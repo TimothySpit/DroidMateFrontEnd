@@ -117,11 +117,11 @@ public class InlinerProcess {
 				return true;
 			}
 		} catch (InterruptedException e) {
+			resetAllAPKs(apks);
 			return false;
 		} catch (Exception e) {
-			throw e;
-		} finally {
 			resetAllAPKs(apks);
+			throw e;
 		}
 	}
 

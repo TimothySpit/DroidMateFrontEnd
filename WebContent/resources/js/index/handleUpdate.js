@@ -77,11 +77,14 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 			//if all apks are inlined, disable inline button
 			if (!notInlinedRows) {
 				$("#button-inline-files").prop("disabled", true);
+			} else {
+				$("#button-inline-files").prop("disabled", false);
 			}
 			
 			//If status is inlining, disable exploration button
 			if(statusData === "INLINING") {
 				$("#button-start-exploration").prop("disabled", true);
+				$("#button-inline-files").prop("disabled", true);
 			}
 		});
 	}
