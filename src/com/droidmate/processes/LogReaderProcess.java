@@ -266,10 +266,7 @@ public class LogReaderProcess {
 	private ForeverFileInputStream inputStream;
 	private XMLLogParser parser;
 
-	private Map<String, ExplorationInfo> apksMap = new ConcurrentHashMap<>();
-	private ExplorationInfo globalExplorationInfo = new ExplorationInfo();
-
-	public LogReaderProcess(File source) throws FileNotFoundException {
+	public LogReaderProcess(File source, Map<String, ExplorationInfo> apksMap, ExplorationInfo globalExplorationInfo) throws FileNotFoundException {
 		this.sourceFile = source;
 		parser = new XMLLogParser(apksMap, globalExplorationInfo);
 	}
@@ -328,13 +325,5 @@ public class LogReaderProcess {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public Map<String, ExplorationInfo> getApksExplorationMap() {
-		return apksMap;
-	}
-
-	public ExplorationInfo getGlobalExplorationInfo() {
-		return globalExplorationInfo;
 	}
 }

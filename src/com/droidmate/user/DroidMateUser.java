@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.FilenameUtils;
@@ -19,6 +20,7 @@ import org.apache.commons.io.FilenameUtils;
 import com.droidmate.processes.AAPTInformation;
 import com.droidmate.processes.AAPTProcess;
 import com.droidmate.processes.InlinerProcess;
+import com.droidmate.processes.LogReaderProcess;
 
 /**
  * Sets the path for the .apks to be explored and tracks the exploration status for
@@ -28,17 +30,19 @@ public class DroidMateUser
 {
 	private final static String INLINED_APKS_FOLDER_NAME = "inlined";
 	
-	/** The given .apks Path. */
+	/** Path to the folder containing .apk files */
 	private Path apksRootPath = null;
 
 	/** List of .apks informations from the selected .apks ordner. */
-	private Map<String,APKInformation> apksInformation = new HashMap<>();
+	private Map<String,APKInformation> apksInformation = new ConcurrentHashMap<>();
 
 	/** Instance of GUISettings */
 	private final GUISettings settings;
+	
+	private ExplorationInfo globalExplorationInfo;
 
 	/**
-	 * The current status, the user is in.
+	 * The current status the user is in.
 	 */
 	private final AtomicReference<UserStatus> userStatus = new AtomicReference<>(UserStatus.IDLE);
 	
@@ -52,6 +56,17 @@ public class DroidMateUser
 	public DroidMateUser() {
 		// get current settings
 		this.settings = new GUISettings();
+	}
+	
+	private LogReaderProcess getLogReader(File logFile) throws FileNotFoundException {
+		globalExplorationInfo = new ExplorationInfo();
+		Map<String, ExplorationInfo> apksMap = new ConcurrentHashMap<>();
+		for(APKInformation apk : getAPKS().values()) {
+			apk.setExplorationInfo(new ExplorationInfo());
+			apksMap.put(apk.getAPKName(), apk.getExplorationInfo());
+		}
+		
+		return new LogReaderProcess(logFile, apksMap, globalExplorationInfo);
 	}
 
 	/**

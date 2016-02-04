@@ -17,6 +17,8 @@ public class APKInformation {
 
 	/** The aapt information. */
 	private AAPTInformation aaptInfo;
+	/** The exploration info. */
+	private ExplorationInfo explorationInfo;
 
 	private AtomicBoolean	isSelected = new AtomicBoolean(false);
 	
@@ -49,8 +51,17 @@ public class APKInformation {
 		result.put("sizeByte", getAPKFileSizeInBytes());
 		result.put("sizeReadable", FileUtils.byteCountToDisplaySize(getAPKFile().length()));
 		result.put("inlineStatus", inliningStatusReference.get().getName());
+		result.put("explorationInfo", getExplorationInfo() == null ? null : getExplorationInfo().toJSONObject());
 		
 		return result;
+	}
+
+	public ExplorationInfo getExplorationInfo() {
+		return explorationInfo;
+	}
+
+	public void setExplorationInfo(ExplorationInfo explorationInfo) {
+		this.explorationInfo = explorationInfo;
 	}
 
 	/**
