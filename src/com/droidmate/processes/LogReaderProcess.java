@@ -8,12 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +29,6 @@ import com.droidmate.user.ExplorationInfo;
  * <success>true</success> </apk> <apk> ... </exploration> *
  * 
  */
-
 public class LogReaderProcess {
 
 	/**
@@ -118,19 +113,25 @@ public class LogReaderProcess {
 
 	private class XMLLogParser {
 
-		private Map<String, ExplorationInfo> apksMap = new ConcurrentHashMap<>();
-		private ExplorationInfo globalExplorationInfo = new ExplorationInfo();
+		private Map<String, ExplorationInfo> apksMap;
+		private ExplorationInfo globalExplorationInfo;
 		private ExplorationInfo currentApkExplorationInfo;
 
 		// Flags to determine parsing state
-		private boolean readExploration = false;
-		private boolean readApk = false;
 		private boolean readName = false;
-		private boolean readEvents = false;
 		private boolean readElementsSeen = false;
 		private boolean readScreensSeen = false;
 		private boolean readSuccess = false;
 		private boolean readWidgetExplored = false;
+		//Flags not used right now
+		private boolean readExploration = false;
+		private boolean readApk = false;
+		private boolean readEvents = false;
+
+		public XMLLogParser(Map<String, ExplorationInfo> apksMap, ExplorationInfo globalExplorationInfo) {
+			this.apksMap = apksMap;
+			this.globalExplorationInfo = globalExplorationInfo;
+		}
 
 		public void parse(XmlPullParser xpp) {
 			try {
@@ -217,7 +218,7 @@ public class LogReaderProcess {
 				readWidgetExplored();
 				readWidgetExplored = false;
 			}
-			//Ignore the other states, they don't contain necessary information
+			// Ignore the other states, they don't contain necessary information
 		}
 
 		public void startElement(String name) {
@@ -265,9 +266,12 @@ public class LogReaderProcess {
 	private ForeverFileInputStream inputStream;
 	private XMLLogParser parser;
 
+	private Map<String, ExplorationInfo> apksMap = new ConcurrentHashMap<>();
+	private ExplorationInfo globalExplorationInfo = new ExplorationInfo();
+
 	public LogReaderProcess(File source) throws FileNotFoundException {
 		this.sourceFile = source;
-		parser = new XMLLogParser();
+		parser = new XMLLogParser(apksMap, globalExplorationInfo);
 	}
 
 	public void stopReading() {
@@ -324,5 +328,13 @@ public class LogReaderProcess {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public Map<String, ExplorationInfo> getApksExplorationMap() {
+		return apksMap;
+	}
+
+	public ExplorationInfo getGlobalExplorationInfo() {
+		return globalExplorationInfo;
 	}
 }
