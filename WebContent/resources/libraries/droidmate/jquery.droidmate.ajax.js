@@ -277,10 +277,10 @@ define([ 'jquery' ], function(require) {
 			// Wait for the server to finish apk list and request the table data
 			// afterwards
 			async : async,
-			type : 'POST',
+			type : 'GET',
 			url : "/DroidMate/APKPathHandler",
 			data : {
-				selApks : ids
+				setSelectedAPKS : ids
 			},
 			success : success,
 			error : error,

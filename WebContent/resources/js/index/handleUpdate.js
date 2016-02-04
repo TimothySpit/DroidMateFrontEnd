@@ -51,8 +51,8 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 			}
 			
 			//if more than zero entries are in the table, show buttons and table
-			var selectedRowsCount = table.getRows().length;
-			if(selectedRowsCount) {
+			var rowsCount = table.getRows().length;
+			if(rowsCount) {
 				showControls();
 			}
 			
@@ -72,6 +72,11 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 			})
 			if (notInlinedRows.length) {
 				$("#button-start-exploration").prop("disabled", true);
+			}
+
+			//if all apks are inlined, disable inline button
+			if (!notInlinedRows) {
+				$("#button-inline-files").prop("disabled", true);
 			}
 			
 			//If status is inlining, disable exploration button

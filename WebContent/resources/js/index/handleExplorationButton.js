@@ -12,7 +12,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		});
 		
 		//set selected apks 
-		$.droidmate.ajax.post.setSelectedAPKS(selectedAPKS,true, function() {
+		$.droidmate.ajax.post.setSelectedAPKS(selectedAPKS,true, function(data) {
 			//apks have been set, go to exploration page
 			window.location = "Explore";
 		});

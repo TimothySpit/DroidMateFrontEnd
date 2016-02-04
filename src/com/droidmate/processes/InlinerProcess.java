@@ -63,7 +63,8 @@ public class InlinerProcess {
 
 		// create Process arguments and start DroidMate inliner tool
 		List<String> arguments = new LinkedList<>();
-		arguments.add(inlinerPath.toString() + "/gradlew.bat"); //only support windows here
+		arguments.add(inlinerPath.toString() + "/gradlew.bat"); // only support
+															// windows here
 		if (printStackTrace) {
 			arguments.add("--stacktrace");
 		}
@@ -102,39 +103,42 @@ public class InlinerProcess {
 			// register Observer for apk folder changes
 			DirectoryWatcher watcher = registerWatchOutputDirectory(apks, inlinerOutputAPKSPath, inlinedOutputPath);
 
-			//set apk status to inlining
+			// set apk status to inlining
 			for (APKInformation apk : apks) {
 				apk.setInliningStatus(InliningStatus.INLINING);
 			}
-			
+
 			// start the inliner
-			if(!startInliner(watcher, arguments)) {
-				//reset status of apks
+			if (!startInliner(watcher, arguments)) {
+				// reset status of apks
 				resetAllAPKs(apks);
 				return false;
 			} else {
 				return true;
 			}
 		} catch (InterruptedException e) {
-			resetAllAPKs(apks);
 			return false;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			resetAllAPKs(apks);
 		}
 	}
 
 	private void resetAllAPKs(List<APKInformation> apks) {
 		for (APKInformation apkInformation : apks) {
 			apkInformation.setInliningStatus(InliningStatus.NOT_INLINED);
-		}		
+		}
 	}
 
 	private boolean startInliner(DirectoryWatcher watcher, List<String> arguments) throws IOException, InterruptedException {
-		//create inliner process
+		// create inliner process
 		ProcessWrapper pbd = new ProcessWrapper(inlinerPath, arguments);
-		
-		//watch directory and start the inliner
+
+		// watch directory and start the inliner
 		watcher.processEvents();
-		try {pbd.start();} catch (InterruptedException e) {/** do nothing*/}
-		
+		pbd.start();
+
 		watcher.joinIfNoDataAvailable();
 		if (pbd.getExitValue() != 0) {
 			// there was an intern error
@@ -185,16 +189,16 @@ public class InlinerProcess {
 
 			private APKInformation getCorrespondingAPK(List<APKInformation> apks, Path filePath) {
 				for (APKInformation apk : apks) {
-					//get -inlined postfix
+					// get -inlined postfix
 					String filePathString = filePath.toString();
 					int indexOfInlinedPostfix = filePathString.lastIndexOf("-inlined.apk");
-					if(indexOfInlinedPostfix < 0) {
-						//no inlined file
+					if (indexOfInlinedPostfix < 0) {
+						// no inlined file
 						return null;
 					}
-					//remove postfix
+					// remove postfix
 					filePathString = filePathString.substring(0, indexOfInlinedPostfix) + ".apk";
-					
+
 					if (apk.getAPKFile().getName().equals(FilenameUtils.getName(filePathString))) {
 						return apk;
 					}
@@ -239,7 +243,7 @@ public class InlinerProcess {
 				return FilenameUtils.getExtension(name).equals(fileExtension);
 			}
 		});
-		
+
 		for (File file : filesToDelete) {
 			file.delete();
 		}
