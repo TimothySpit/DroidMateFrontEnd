@@ -36,6 +36,14 @@ define(
 							}
 						},
 						{
+							'targets' : 2,
+							'orderable' : false,
+						},
+						{
+							'targets' : 5,
+							'orderable' : false,
+						},
+						{
 							'targets' : 6,
 							'searchable' : false,
 							'orderable' : false,
