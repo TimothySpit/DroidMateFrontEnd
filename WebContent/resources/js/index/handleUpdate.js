@@ -84,7 +84,7 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 				$("#button-inline-files").prop("disabled", true);
 			} else {
 				// if all apks are inlined, disable inline button
-				if (!notInlinedRows) {
+				if (!notInlinedRows.length) {
 					$("#button-inline-files").prop("disabled", true);
 				} else {
 					$("#button-inline-files").prop("disabled", false);
