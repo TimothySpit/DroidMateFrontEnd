@@ -56,7 +56,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 			
 			//add apk to table
 			table.addAPKData(value.name, value.sizeReadable, value.packageName,
-					value.packageVersionCode, inlinedStatus, value.activityName);
+					value.packageVersionName + ' (#' + value.packageVersionCode + ')', inlinedStatus, value.activityName);
 		});
 		
 		
