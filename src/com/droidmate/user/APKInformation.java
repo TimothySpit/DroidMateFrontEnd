@@ -16,6 +16,8 @@ public class APKInformation {
 
 	/** The aapt information. */
 	private AAPTInformation aaptInfo;
+	/** The exploration info. */
+	private ExplorationInfo explorationInfo;
 
 	/** The gui and InlinerProcess may access the status concurrently. */
 	private final AtomicReference<InliningStatus> inliningStatusReference = new AtomicReference<>();
@@ -48,6 +50,14 @@ public class APKInformation {
 		result.put("inlineStatus", inliningStatusReference.get().getName());
 		
 		return result;
+	}
+
+	public ExplorationInfo getExplorationInfo() {
+		return explorationInfo;
+	}
+
+	public void setExplorationInfo(ExplorationInfo explorationInfo) {
+		this.explorationInfo = explorationInfo;
 	}
 
 	/**
