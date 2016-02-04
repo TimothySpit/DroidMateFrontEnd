@@ -73,8 +73,13 @@ define([ 'require', 'bootbox',
 			//check, if saving was successful, if not, post message
 			if(!data || !data.setSettings || !data.setSettings.result) {
 				//error in settings saving
-				$.droidmate.overlays.alert("Could not parse server returned value.", $.droidmate.overlays.alertTypes.DANGER, 
+				if(data.setSettings.message) {
+				$.droidmate.overlays.alert(data.setSettings.message, $.droidmate.overlays.alertTypes.DANGER, 
 						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+				} else {
+					$.droidmate.overlays.alert("Could not parse server returned value.", $.droidmate.overlays.alertTypes.DANGER, 
+							$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+				}
 				return;
 			}
 			

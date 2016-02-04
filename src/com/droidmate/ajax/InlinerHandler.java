@@ -1,6 +1,7 @@
 package com.droidmate.ajax;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-import com.droidmate.processes.InlinerProcess;
 import com.droidmate.user.DroidMateUser;
 
 /**
