@@ -29,7 +29,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		} else {
 			//hide controls and set indikator
 			apksLoadingResultDiv.html(
-					'<span class="label label-danger text-center">no apks loaded.</span>');
+					'<span class="label label-danger text-center">No apks loaded.</span>');
 		}
 		
 		//Set inlined status

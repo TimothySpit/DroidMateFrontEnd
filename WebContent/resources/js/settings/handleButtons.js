@@ -85,29 +85,10 @@ define([ 'require', 'bootbox',
 			
 			var saveResult = data.setSettings;
 			$.droidmate.overlays.alert(saveResult.message,
-					$.droidmate.overlays.alertTypes.INFO,
+					$.droidmate.overlays.alertTypes.SUCCESS,
 					$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
 		}
 		$.droidmate.ajax.post.saveDroidMateSettings(reportsOutputPath, droidmatePath, 
 				aaptPath, explorationTimeOut, true,callback);
 	});
 })
-
-
-
-function saveSettings(outputPath, dmPath, aaptPath, explorationTime) {
-		
-	$.droidmate.ajax.post.saveDroidMateSettings(outputPath,dmPath, aaptPath, explorationTime, true, function(result) {
-			var infobox = $('#saveinfo-box');
-			if (result.success) {
-				$.droidmate.overlays.alert(
-						'<span><strong>Success!</strong> All data were saved.</span>',
-						$.droidmate.overlays.alertTypes.SUCCESS, 2000);
-			} else {
-				$.droidmate.overlays.alert(
-						"<span><strong>Error!</strong> "
-								+ result.reason + "</span>",
-								$.droidmate.overlays.alertTypes.DANGER, 2000);
-			}
-		});
-	}
