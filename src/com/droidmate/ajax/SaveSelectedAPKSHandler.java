@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import com.droidmate.user.APKInformation;
 import com.droidmate.user.DroidMateUser;
+import com.droidmate.user.UserStatus;
 
 /**
  * Servlet implementation class SaveSelectedAPKSHandler
@@ -53,17 +54,22 @@ public class SaveSelectedAPKSHandler extends HttpServlet {
 		if (setSelectedAPKSString != null) {
 			JSONResponseWrapper setSelectedAPKSResult = new JSONResponseWrapper();
 
-			if (setSelectedAPKSString.length == 0) {
+			// check errors
+			if (user.getStatus() != UserStatus.IDLE) {
+				// only set apks selected, when in idle mode (not exploring or
+				// something else
+				setSelectedAPKSResult = new JSONResponseWrapper(false, "User in not in IDLE state, can not set APKS selected.");
+			} else if (setSelectedAPKSString.length == 0) {
 				// no apks set for selection
 				setSelectedAPKSResult = new JSONResponseWrapper(false, "No APKS set for selection.");
 			} else {
-				//more than zero apks specified, test if apks exist
-				Map<String,APKInformation> apkMap = user.getAPKS();
+				// more than zero apks specified, test if apks exist
+				Map<String, APKInformation> apkMap = user.getAPKS();
 				boolean apksCorrect = true;
-				//list containing the apks to set selected if no error occurs
+				// list containing the apks to set selected if no error occurs
 				List<APKInformation> apksToSetSelected = new LinkedList<>();
 				for (String apkStringToTest : setSelectedAPKSString) {
-					if(apkMap.containsKey(apkStringToTest)) {
+					if (apkMap.containsKey(apkStringToTest)) {
 						APKInformation apkInfo = apkMap.get(apkStringToTest);
 						apksToSetSelected.add(apkInfo);
 					} else {
@@ -72,9 +78,9 @@ public class SaveSelectedAPKSHandler extends HttpServlet {
 						break;
 					}
 				}
-				
-				//test if all apks could be selected
-				if(apksCorrect) {
+
+				// test if all apks could be selected
+				if (apksCorrect) {
 					for (APKInformation apk : apksToSetSelected) {
 						apk.setAPKSelected(true);
 					}
