@@ -12,7 +12,7 @@ define([ 'jquery' ], function(require) {
 		$.ajax({
 			url : "/DroidMate/Settings",
 			async : async,
-			type : 'GET',
+			type : 'POST',
 			data : {
 				get : [ "outputPath", "droidmatePath", "aaptPath", "time" ],
 			},
@@ -27,7 +27,7 @@ define([ 'jquery' ], function(require) {
 		$.ajax({
 			url : "/DroidMate/APKRootFolderHandler",
 			async : async,
-			type : 'GET',
+			type : 'POST',
 			data : {
 				getAPKsRoot : true
 			},
@@ -42,7 +42,7 @@ define([ 'jquery' ], function(require) {
 		$.ajax({
 			url : "/DroidMate/UserStatusHandler",
 			async : async,
-			type : 'GET',
+			type : 'POST',
 			data : {
 				getUserStatus : true
 			},
@@ -225,7 +225,7 @@ define([ 'jquery' ], function(require) {
 			// Wait for the server to finish apk list and request the table data
 			// afterwards
 			async : async,
-			type : 'GET',
+			type : 'POST',
 			url : "/DroidMate/APKInformationHandler",
 			data : {
 				getAPKSData : true
@@ -263,7 +263,7 @@ define([ 'jquery' ], function(require) {
 			// Wait for the server to finish apk list and request the table data
 			// afterwards
 			async : async,
-			type : 'GET',
+			type : 'POST',
 			url : "/DroidMate/APKRootFolderHandler",
 			data : {
 				setAPKsRoot : newRoot
@@ -304,7 +304,7 @@ define([ 'jquery' ], function(require) {
 		$.ajax({
 			async : async,
 			url : "/DroidMate/SettingsHandler",
-			type : 'GET',
+			type : 'POST',
 			data : {
 				setSettings: true,
 				outputPath : outputPath,

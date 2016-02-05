@@ -44,12 +44,16 @@ public class SettingsHandler extends HttpServlet {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Handling for Setting changes.
 	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+=======
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+>>>>>>> e3846e5d9e42076478079c6bc2f645366e189849
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		logger.info("Serve {} page request.",request.getRequestURI());
 		
 		// return json

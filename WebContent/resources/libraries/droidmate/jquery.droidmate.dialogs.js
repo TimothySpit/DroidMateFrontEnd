@@ -33,8 +33,9 @@ define([ 'require', 'jquery', 'bootbox', 'jquery.droidmate.ajax',
 		dialogContainer.jstree({
 			'core' : {
 				'data' : {
-					"url" : "FileSystemHandler?type=directory",
-					"data" : function(node) {
+					url : "FileSystemHandler",
+					type : 'POST',
+					data : function(node) {
 						if (node.text) {
 							var path = "";
 							dialogContainer.find('#'+node.id).parents("li").each(function () {
@@ -42,12 +43,14 @@ define([ 'require', 'jquery', 'bootbox', 'jquery.droidmate.ajax',
 								});
 							
 							return {
-								"path" : path + node.text
+								path : path + node.text,
+								type : "directory"
 							};
 						}
 						else
 							return {
-								"path" : "root"
+								path : "root",
+								type : "directory"
 							};
 					}
 				}
