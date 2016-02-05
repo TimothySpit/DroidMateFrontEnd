@@ -11,58 +11,46 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 	function updateAPKSTable() {
 		table.clear();
 		
-		var apksData = $.droidmate.ajax.get.getAPKSData();
-		
-		//If there are no apks, there was an intern error, return
-		if(!apksData || !apksData.getAPKSData || !apksData.getAPKSData.result) {
-			return;
-		}
-		
-		var apksLoadingResultDiv = $('#div-apk-folder-selection-result');
-		var numAPKS = apksData.getAPKSData.payload.data.length;
-		
-		if (numAPKS > 0) {
-			//more than one apk is in the selected root folder, notice user
-			apksLoadingResultDiv.html(
-					'<span class="label label-success text-center">'
-							+ numAPKS + ' apks loaded.</span>');
-		} else {
-			//hide controls and set indikator
-			apksLoadingResultDiv.html(
-					'<span class="label label-danger text-center">No apks loaded.</span>');
-		}
-		
-		//Set inlined status
-		var inlinedStatus = table.inlinedStatus.INLINED;
-		$.each(apksData.getAPKSData.payload.data, function(index,value) {
-			switch (value.inlineStatus) {
-			case $.droidmate.inlining.inliningStatus.NOT_INLINED: {
-				inlinedStatus = table.inlinedStatus.NOT_INLINED;
-				break;
-			}
-			case $.droidmate.inlining.inliningStatus.INLINING: {
-				inlinedStatus = table.inlinedStatus.INLINING;
-				break;
-			}
-			case $.droidmate.inlining.inliningStatus.INLINED: {
-				inlinedStatus = table.inlinedStatus.INLINED;
-				break;
-			}
-			case $.droidmate.inlining.inliningStatus.ERROR: {
-				inlinedStatus = table.inlinedStatus.ERROR;
-				break;
-			}
+		function updateAPKSCallback(data) {
+			//If there are no apks, there was an intern error, return
+			if(!data || !data.getAPKSData || !data.getAPKSData.result) {
+				return;
 			}
 			
-			//add apk to table
-			table.addAPKData(value.name, value.sizeReadable, value.packageName,
-					value.packageVersionName + ' (#' + value.packageVersionCode + ')', inlinedStatus, value.activityName);
-		});
+			//Set inlined status
+			var inlinedStatus = table.inlinedStatus.INLINED;
+			$.each(data.getAPKSData.payload.data, function(index,value) {
+				switch (value.inlineStatus) {
+				case $.droidmate.inlining.inliningStatus.NOT_INLINED: {
+					inlinedStatus = table.inlinedStatus.NOT_INLINED;
+					break;
+				}
+				case $.droidmate.inlining.inliningStatus.INLINING: {
+					inlinedStatus = table.inlinedStatus.INLINING;
+					break;
+				}
+				case $.droidmate.inlining.inliningStatus.INLINED: {
+					inlinedStatus = table.inlinedStatus.INLINED;
+					break;
+				}
+				case $.droidmate.inlining.inliningStatus.ERROR: {
+					inlinedStatus = table.inlinedStatus.ERROR;
+					break;
+				}
+				}
+				
+				//add apk to table
+				table.addAPKData(value.name, value.sizeReadable, value.packageName,
+						value.packageVersionName + ' (#' + value.packageVersionCode + ')', inlinedStatus, value.activityName);
+			});
+			
+			
+			table.redraw();
+			
+			updateHelper.updateUI();
+		}
 		
-		
-		table.redraw();
-		
-		updateHelper.updateUI();
+		$.droidmate.ajax.getAPKSData(true, updateAPKSCallback);
 	}
 	
 	//handle select apk folder path button click
@@ -75,7 +63,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 				$('#input-apk-folder-selection').val(path);
 				
 				//set this path as the new selected apk root to get apks from
-				$.droidmate.ajax.post.setAPKsRoot(path,true,function(data) {
+				$.droidmate.ajax.setAPKsRoot(path,true,function(data) {
 					if(data.setAPKsRoot.result) {
 						//path has been successfully set, update table with new apks
 						updateAPKSTable(table);
@@ -89,7 +77,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		});
 	});
 	
-	var path = $.droidmate.ajax.get.getAPKsRoot(true, function(data) {
+	var path = $.droidmate.ajax.getAPKsRoot(true, function(data) {
 		if (data && data.getAPKsRoot && data.getAPKsRoot.result) {
 			var path = data.getAPKsRoot.payload.data;
 			$('#input-apk-folder-selection').val(path);

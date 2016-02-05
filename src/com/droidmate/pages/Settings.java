@@ -8,13 +8,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Servlet implementation class Settings
  */
 @WebServlet("/Settings")
 public class Settings extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -26,6 +31,8 @@ public class Settings extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		logger.info("Serve {} page request.",request.getRequestURI());
+		
 		request.getRequestDispatcher("/WEB-INF/pages/settings/settings.jsp").forward(request, response);
 	}
 

@@ -36,7 +36,7 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 		disableUI();
 
 		// get current user status
-		$.droidmate.ajax.get.getUserStatus(true, function(data) {
+		$.droidmate.ajax.getUserStatus(true, function(data) {
 			// check for error in data receiving
 			if (!data || !data.getUserStatus || !data.getUserStatus.result) {
 				$.droidmate.overlays.alert(
@@ -53,10 +53,17 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 			}
 
 			// if more than zero entries are in the table, show buttons and
-			// table
+			// table and indicator 
 			var rowsCount = table.getRows().length;
+			var apksLoadingResultDiv = $('#div-apk-folder-selection-result');
 			if (rowsCount) {
 				showControls();
+				apksLoadingResultDiv.html(
+							'<span class="label label-success text-center">'
+									+ rowsCount + ' apks loaded.</span>');
+			} else {
+				apksLoadingResultDiv.html(
+						'<span class="label label-danger text-center">No apks loaded.</span>');
 			}
 
 			// if more than one apk is selected, enable buttons

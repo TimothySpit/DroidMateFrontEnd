@@ -8,24 +8,18 @@ define([ 'jquery' ], function(require) {
 	ajax.UPDATE_CONSOLE_OUTPUT_INTERVAL = 1000;
 	// --------------------------------------
 
-	// create ajax get functions
-	var get = {};
-	function getDroidMateSettings() {
-		var result = null;
+	function getDroidMateSettings(async,success) {
 		$.ajax({
 			url : "/DroidMate/Settings",
-			async : false,
+			async : async,
 			type : 'GET',
 			data : {
 				get : [ "outputPath", "droidmatePath", "aaptPath", "time" ],
 			},
-			success : function(data) {
-				result = data;
-			}
+			success : success
 		});
-		return result;
 	}
-	get.getDroidMateSettings = getDroidMateSettings;
+	ajax.getDroidMateSettings = getDroidMateSettings;
 	// ----------------------------------
 
 	function getAPKsRoot(async,success) {
@@ -41,7 +35,7 @@ define([ 'jquery' ], function(require) {
 		});
 		return result;
 	}
-	get.getAPKsRoot = getAPKsRoot;
+	ajax.getAPKsRoot = getAPKsRoot;
 	// ----------------------------------
 
 	function getUserStatus(async, success) {
@@ -55,7 +49,7 @@ define([ 'jquery' ], function(require) {
 			success :success
 		});
 	}
-	get.getUserStatus = getUserStatus;
+	ajax.getUserStatus = getUserStatus;
 	// ----------------------------------
 
 	function getGlobalStartingTime() {
@@ -77,47 +71,39 @@ define([ 'jquery' ], function(require) {
 		});
 		return result;
 	}
-	get.getGlobalStartingTime = getGlobalStartingTime;
+	ajax.getGlobalStartingTime = getGlobalStartingTime;
 
 	// ----------------------------------
 
-	function getConsoleOutput(line) {
-		var result = "";
-		if (line == null)
-			line = 0;
+	function getConsoleOutput(startLine, async, success) {
+		if (startLine == null)
+			startLine = 0;
 		$.ajax({
 			url : "/DroidMate/ConsoleOutput",
 			async : false,
 			dataType : "json",
 			type : 'GET',
 			data : {
-				get : line.toString()
+				get : startLine.toString()
 			},
-			success : function(data) {
-				result = data;
-			}
+			success : success
 		});
-		return result;
 	}
-	get.getConsoleOutput = getConsoleOutput;
+	ajax.getConsoleOutput = getConsoleOutput;
 	// ----------------------------------
 
-	function getGlobalElementsSeen() {
-		var result = [];
+	function getGlobalElementsSeen(async, success) {
 		$.ajax({
 			url : "/DroidMate/APKExploreHandler",
-			async : false,
+			async : async,
 			type : 'GET',
 			data : {
 				explore_get_global_elements_seen : true
 			},
-			success : function(data) {
-				result = data;
-			}
+			success : success
 		});
-		return result;
 	}
-	get.getGlobalElementsSeen = getGlobalElementsSeen;
+	ajax.getGlobalElementsSeen = getGlobalElementsSeen;
 	// ----------------------------------
 
 	function getGlobalElementsSeenHistory() {
@@ -136,7 +122,7 @@ define([ 'jquery' ], function(require) {
 		});
 		return result;
 	}
-	get.getGlobalElementsSeenHistory = getGlobalElementsSeenHistory;
+	ajax.getGlobalElementsSeenHistory = getGlobalElementsSeenHistory;
 	// ----------------------------------
 
 	function getGlobalWidgetsExplored() {
@@ -154,7 +140,7 @@ define([ 'jquery' ], function(require) {
 		});
 		return result;
 	}
-	get.getGlobalWidgetsExplored = getGlobalWidgetsExplored;
+	ajax.getGlobalWidgetsExplored = getGlobalWidgetsExplored;
 	// ----------------------------------
 
 	function getGlobalWidgetsExploredHistory() {
@@ -173,7 +159,7 @@ define([ 'jquery' ], function(require) {
 		});
 		return result;
 	}
-	get.getGlobalWidgetsExploredHistory = getGlobalWidgetsExploredHistory;
+	ajax.getGlobalWidgetsExploredHistory = getGlobalWidgetsExploredHistory;
 	// ----------------------------------
 
 	function getGlobalScreensSeen() {
@@ -191,7 +177,7 @@ define([ 'jquery' ], function(require) {
 		});
 		return result;
 	}
-	get.getGlobalScreensSeen = getGlobalScreensSeen;
+	ajax.getGlobalScreensSeen = getGlobalScreensSeen;
 	// ----------------------------------
 
 	function getGlobalScreensSeenHistory() {
@@ -210,7 +196,7 @@ define([ 'jquery' ], function(require) {
 		});
 		return result;
 	}
-	get.getGlobalScreensSeenHistory = getGlobalScreensSeenHistory;
+	ajax.getGlobalScreensSeenHistory = getGlobalScreensSeenHistory;
 	// ----------------------------------
 
 	function getExplorationInfo(apkname) {
@@ -230,47 +216,26 @@ define([ 'jquery' ], function(require) {
 		});
 		return result;
 	}
-	get.getExplorationInfo = getExplorationInfo;
+	ajax.getExplorationInfo = getExplorationInfo;
 
 	// ----------------------------------
 
-	function getAPKSData() {
-		var result = null;
+	function getAPKSData(async, success) {
 		$.ajax({
 			// Wait for the server to finish apk list and request the table data
 			// afterwards
-			async : false,
+			async : async,
 			type : 'GET',
 			url : "/DroidMate/APKInformationHandler",
 			data : {
 				getAPKSData : true
 			},
-			success : function(data) {
-				result = data;
-			}
-		});
-		return result;
-	}
-	get.getAPKSData = getAPKSData;
-	// ----------------------------------
-
-	// create ajax post functions
-	var post = {};
-
-	function saveReport() {
-		var reportHtml = new XMLSerializer().serializeToString(document);
-		$.ajax({
-			url : "/DroidMate/ReportProvider",
-			async : false,
-			type : 'POST',
-			dataType : "json",
-			data : {
-				save_report_html : reportHtml
-			}
+			success : success
 		});
 	}
-	post.saveReport = saveReport;
+	ajax.getAPKSData = getAPKSData;
 	// ----------------------------------
+	
 
 	function setSelectedAPKS(names, async, success, error, complete) {
 		if( Object.prototype.toString.call( names ) !== '[object Array]' ) {
@@ -290,7 +255,7 @@ define([ 'jquery' ], function(require) {
 			complete : complete
 		});
 	}
-	post.setSelectedAPKS = setSelectedAPKS;
+	ajax.setSelectedAPKS = setSelectedAPKS;
 	// ----------------------------------
 
 	function setAPKsRoot(newRoot, async, success, error, complete) {
@@ -308,7 +273,7 @@ define([ 'jquery' ], function(require) {
 			complete : complete
 		});
 	}
-	post.setAPKsRoot = setAPKsRoot;
+	ajax.setAPKsRoot = setAPKsRoot;
 	// ----------------------------------
 
 	function openReportFolder(async) {
@@ -331,7 +296,7 @@ define([ 'jquery' ], function(require) {
 
 		return status;
 	}
-	post.openReportFolder = openReportFolder;
+	ajax.openReportFolder = openReportFolder;
 	// ----------------------------------
 
 	function saveDroidMateSettings(outputPath, dmPath, aaptPath,
@@ -352,7 +317,7 @@ define([ 'jquery' ], function(require) {
 			complete : complete
 		});
 	}
-	post.saveDroidMateSettings = saveDroidMateSettings;
+	ajax.saveDroidMateSettings = saveDroidMateSettings;
 	// ----------------------------------
 
 	function startDroidMate(success, error, complete) {
@@ -369,7 +334,7 @@ define([ 'jquery' ], function(require) {
 			complete : complete
 		});
 	}
-	post.startDroidMate = startDroidMate;
+	ajax.startDroidMate = startDroidMate;
 	// -----------------------------------
 
 	function restartDroidMate() {
@@ -382,7 +347,7 @@ define([ 'jquery' ], function(require) {
 			}
 		});
 	}
-	post.restartDroidMate = restartDroidMate;
+	ajax.restartDroidMate = restartDroidMate;
 	// -----------------------------------
 
 	function stopDroidMate(success, error, complete) {
@@ -398,7 +363,7 @@ define([ 'jquery' ], function(require) {
 			complete : complete
 		});
 	}
-	post.stopDroidMate = stopDroidMate;
+	ajax.stopDroidMate = stopDroidMate;
 	// -----------------------------------
 
 	function returnToIndex(success, error, complete) {
@@ -414,11 +379,9 @@ define([ 'jquery' ], function(require) {
 			complete : complete
 		});
 	}
-	post.returnToIndex = returnToIndex;
+	ajax.returnToIndex = returnToIndex;
 	// -----------------------------------
 
-	ajax.get = get;
-	ajax.post = post;
 	droidmate.ajax = ajax;
 	$.droidmate = droidmate;
 

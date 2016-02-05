@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.droidmate.user.APKInformation;
 import com.droidmate.user.DroidMateUser;
@@ -27,6 +29,8 @@ public class SaveSelectedAPKSHandler extends HttpServlet {
 	// request parameters
 	private static final String SELECTED_APKS_SET = "setSelectedAPKS[]";
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -39,6 +43,8 @@ public class SaveSelectedAPKSHandler extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		logger.info("Serve {} page request.",request.getRequestURI());
+		
 		// return json
 		response.setContentType("application/json");
 		// Do not cache
@@ -52,6 +58,8 @@ public class SaveSelectedAPKSHandler extends HttpServlet {
 		// handle SELECTED_APKS_SET request
 		String[] setSelectedAPKSString = request.getParameterValues(SELECTED_APKS_SET);
 		if (setSelectedAPKSString != null) {
+			logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), SELECTED_APKS_SET,setSelectedAPKSString);
+			
 			JSONResponseWrapper setSelectedAPKSResult = new JSONResponseWrapper();
 
 			// check errors
@@ -90,6 +98,7 @@ public class SaveSelectedAPKSHandler extends HttpServlet {
 			result.put(SELECTED_APKS_SET, setSelectedAPKSResult.toJSONObject());
 		}
 
+		logger.info("{}: Request result: {}",request.getRequestURI(),result);
 		response.getWriter().print(result);
 	}
 

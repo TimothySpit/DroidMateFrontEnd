@@ -88,7 +88,7 @@ define([ 'require', 'bootbox',
 					$.droidmate.overlays.alertTypes.SUCCESS,
 					$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
 		}
-		$.droidmate.ajax.post.saveDroidMateSettings(reportsOutputPath, droidmatePath, 
+		$.droidmate.ajax.saveDroidMateSettings(reportsOutputPath, droidmatePath, 
 				aaptPath, explorationTimeOut, true,callback);
 	});
 })
