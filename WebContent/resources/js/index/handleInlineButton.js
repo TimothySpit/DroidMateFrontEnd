@@ -117,4 +117,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		
 		updateInlineAPKStatus();
 	});
+	
+	//start update on page load
+	updateInlineAPKStatus();
 });

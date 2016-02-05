@@ -31,10 +31,18 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 		$('#buttons-start-inline').hide();
 	}
 
+	function enableAPKFolderSelectionButton() {
+		$('#button-apk-folder-selection').prop("disabled", false);
+	}
+	
+	function disableAPKFolderSelectionButton() {
+		$('#button-apk-folder-selection').prop("disabled", true);
+	}
+	
 	function updateUIControls() {
 		// disables all visible controls to disabled
 		disableUI();
-
+		
 		// get current user status
 		$.droidmate.ajax.getUserStatus(true, function(data) {
 			// check for error in data receiving
@@ -86,9 +94,10 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 
 			// If status is inlining, disable exploration button
 			if (statusData === "INLINING") {
-				$("#button-start-exploration").prop("disabled", true);
-				$("#button-inline-files").prop("disabled", true);
+				disableUI();
+				disableAPKFolderSelectionButton();
 			} else {
+				enableAPKFolderSelectionButton();
 				// if all apks are inlined, disable inline button
 				if (!notInlinedRows.length) {
 					$("#button-inline-files").prop("disabled", true);

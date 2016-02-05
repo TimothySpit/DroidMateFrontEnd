@@ -33,7 +33,7 @@ public class AAPTProcess {
 		
 		// create Process arguments and start AAPT tool
 		List<String> arguments = new LinkedList<>();
-		arguments.add("aapt");
+		arguments.add(aaptPath + "/aapt");
 		arguments.add("d");
 		arguments.add("badging");
 

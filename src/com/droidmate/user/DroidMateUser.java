@@ -23,33 +23,32 @@ import com.droidmate.processes.InlinerProcess;
 import com.droidmate.processes.LogReaderProcess;
 
 /**
- * Sets the path for the .apks to be explored and tracks the exploration status for
- * all .apks.
+ * Sets the path for the .apks to be explored and tracks the exploration status
+ * for all .apks.
  */
-public class DroidMateUser
-{
+public class DroidMateUser {
 	private final static String INLINED_APKS_FOLDER_NAME = "inlined";
-	
+
 	/** Path to the folder containing .apk files */
 	private Path apksRootPath = null;
 
 	/** List of .apks informations from the selected .apks ordner. */
-	private Map<String,APKInformation> apksInformation = new ConcurrentHashMap<>();
+	private Map<String, APKInformation> apksInformation = new ConcurrentHashMap<>();
 
 	/** Instance of GUISettings */
 	private final GUISettings settings;
-	
+
 	private ExplorationInfo globalExplorationInfo;
 
 	/**
 	 * The current status the user is in.
 	 */
 	private final AtomicReference<UserStatus> userStatus = new AtomicReference<>(UserStatus.IDLE);
-	
-	//Processes the user can start
+
+	// Processes the user can start
 	private InlinerProcess inlinerProcess = null;
-	//----------------------------
-	
+	// ----------------------------
+
 	/**
 	 * Creates a new instance of the DroidMateUser class
 	 */
@@ -57,20 +56,21 @@ public class DroidMateUser
 		// get current settings
 		this.settings = new GUISettings();
 	}
-	
+
 	private LogReaderProcess getLogReader(File logFile) throws FileNotFoundException {
 		globalExplorationInfo = new ExplorationInfo();
 		Map<String, ExplorationInfo> apksMap = new ConcurrentHashMap<>();
-		for(APKInformation apk : getAPKS().values()) {
+		for (APKInformation apk : getAPKS().values()) {
 			apk.setExplorationInfo(new ExplorationInfo());
 			apksMap.put(apk.getAPKName(), apk.getExplorationInfo());
 		}
-		
+
 		return new LogReaderProcess(logFile, apksMap, globalExplorationInfo);
 	}
 
 	/**
 	 * Gets the .apks path.
+	 * 
 	 * @return The .apks path
 	 */
 	public synchronized Path getAPKPath() {
@@ -79,14 +79,18 @@ public class DroidMateUser
 
 	/**
 	 * Sets the path for the users given .apks.
-	 * @param newPath the path for the apks
-	 * @throws NullPointerException if the given path ist null
-	 * @throws IllegalArgumentException if the given path not a directory or does not exist
-	 * @throws IOException if a IO Error occured
-	 * @throws InterruptedException 
+	 * 
+	 * @param newPath
+	 *            the path for the apks
+	 * @throws NullPointerException
+	 *             if the given path ist null
+	 * @throws IllegalArgumentException
+	 *             if the given path not a directory or does not exist
+	 * @throws IOException
+	 *             if a IO Error occured
+	 * @throws InterruptedException
 	 */
-	public synchronized void setAPKPath(Path newPath) throws IOException, InterruptedException
-	{
+	public synchronized void setAPKPath(Path newPath) throws IOException, InterruptedException {
 		// exception handling
 		if (newPath == null) {
 			throw new NullPointerException("APK root path was null.");
@@ -94,6 +98,10 @@ public class DroidMateUser
 		if (!(newPath.toFile().exists() && newPath.toFile().isDirectory())) {
 			throw new IllegalArgumentException("APK root path must exist and must be a directory.");
 		}
+		if(userStatus.get() != UserStatus.IDLE) {
+			throw new IllegalStateException("User is not in IDLE state. Cannot set APK path now.");
+		}
+		
 
 		apksInformation.clear();
 		apksRootPath = newPath;
@@ -109,18 +117,26 @@ public class DroidMateUser
 		}
 
 		// aapt path exists, try to load info
-		List<AAPTInformation> aaptResult = getAAPTInformation(aaptPath.toFile());
+		try {
+			List<AAPTInformation> aaptResult = getAAPTInformation(aaptPath.toFile());
+			// create APKInformation out of AAPT information
+			List<APKInformation> apksInfos = setUpAPKInformations(aaptResult);
+			//save all apks
+			for (APKInformation apkInfo : apksInfos) {
+				this.apksInformation.put(apkInfo.getAPKName(), apkInfo);
+			}
+			
+		} catch (IOException e) {
+			//error, reset apk path
+			apksRootPath = null;
+			throw e;
+		} 
 
-		// create APKInformation out of AAPT information
-		List<APKInformation> apksInfos = setUpAPKInformations(aaptResult);
-
-		for (APKInformation apkInfo : apksInfos) {
-			this.apksInformation.put(apkInfo.getAPKName(), apkInfo);
-		}
 	}
 
 	/**
 	 * Sets the .apks information and return a list of them
+	 * 
 	 * @param aaptResults
 	 * @return List of .apks information
 	 */
@@ -139,19 +155,20 @@ public class DroidMateUser
 
 	private void setAPKInlinedInformation(APKInformation apkInfo) {
 		assert apkInfo != null;
-		
-		//check if inlined apks folder exists
+
+		// check if inlined apks folder exists
 		Path inlinedAPKSPath = Paths.get(apksRootPath.toString(), INLINED_APKS_FOLDER_NAME);
-		if(Files.exists(inlinedAPKSPath)) {
-			//check if apk is in that folder, if yes, the file is already inlined.
+		if (Files.exists(inlinedAPKSPath)) {
+			// check if apk is in that folder, if yes, the file is already
+			// inlined.
 			String inlinedAPKName = FilenameUtils.removeExtension(apkInfo.getAPKFile().getName()) + "-inlined.apk";
 			Path inlinedAPKPath = Paths.get(inlinedAPKSPath.toString(), inlinedAPKName);
-			
-			if(Files.exists(inlinedAPKPath)) {
-				//File is already inlined
+
+			if (Files.exists(inlinedAPKPath)) {
+				// File is already inlined
 				apkInfo.setInliningStatus(InliningStatus.INLINED);
 			} else {
-				//File is not inlined
+				// File is not inlined
 				apkInfo.setInliningStatus(InliningStatus.NOT_INLINED);
 			}
 		}
@@ -159,9 +176,10 @@ public class DroidMateUser
 
 	/**
 	 * Gets .apks aapt informations.
+	 * 
 	 * @param aaptPath
 	 * @return List of .apks aapt informations
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 * @throws InterruptedException
 	 */
 	private List<AAPTInformation> getAAPTInformation(File aaptPath) throws IOException, InterruptedException {
@@ -179,6 +197,7 @@ public class DroidMateUser
 
 	/**
 	 * Gets found .apks files from given path's directory.
+	 * 
 	 * @param apksPath
 	 * @return List of all found .apks in the given directory
 	 */
@@ -204,14 +223,16 @@ public class DroidMateUser
 
 	/**
 	 * Gets the .apks informations.
+	 * 
 	 * @return List of .apks informations
 	 */
-	public Map<String,APKInformation> getAPKS() {
+	public Map<String, APKInformation> getAPKS() {
 		return apksInformation;
 	}
 
 	/**
 	 * Gets GUISettings.
+	 * 
 	 * @return The GUISettings
 	 */
 	public GUISettings getSettings() {
@@ -223,53 +244,53 @@ public class DroidMateUser
 	}
 
 	public boolean startInliner() throws IOException {
-		if(userStatus.getAndSet(UserStatus.INLINING) != UserStatus.IDLE) {
+		if (userStatus.getAndSet(UserStatus.INLINING) != UserStatus.IDLE) {
 			throw new IllegalStateException("Inliner can not be started in state " + userStatus.get().getName());
 		}
-		if(apksRootPath == null) {
+		if (apksRootPath == null) {
 			throw new IllegalArgumentException("APK Path has not been set.");
 		}
-		if(!apksRootPath.toFile().exists()) {
+		if (!apksRootPath.toFile().exists()) {
 			throw new FileNotFoundException("APK path does not exist.");
 		}
-		if(!apksRootPath.toFile().isDirectory()) {
+		if (!apksRootPath.toFile().isDirectory()) {
 			throw new IllegalArgumentException("APK path must be a directory");
 		}
-		
-		//set up apks to inline
+
+		// set up apks to inline
 		List<APKInformation> apksToInline = new LinkedList<>();
 		for (APKInformation apk : apksInformation.values()) {
 			if (apk.getInliningStatus() != InliningStatus.INLINED) {
 				apksToInline.add(apk);
 			}
 		}
-		
-		//if there are no apks to inline, no need to inline, return true
-		if(apksToInline.size() == 0) {
+
+		// if there are no apks to inline, no need to inline, return true
+		if (apksToInline.size() == 0) {
 			this.userStatus.set(UserStatus.IDLE);
 			return true;
 		}
-		
-		//if inliner was never used, create it
+
+		// if inliner was never used, create it
 		boolean inlineResult = false;
 		try {
-		if(inlinerProcess == null) {
-			//Get inliner path and otput path
-			Path inlinerPath = settings.getDroidMatePath();
-			Path outputPath = apksRootPath;
-			inlinerProcess = new InlinerProcess(inlinerPath.toFile(), outputPath.toFile());
-		}
-		
-		//start inliner
-		inlineResult = inlinerProcess.inlineAPKS(apksToInline);
+			if (inlinerProcess == null) {
+				// Get inliner path and otput path
+				Path inlinerPath = settings.getDroidMatePath();
+				Path outputPath = apksRootPath;
+				inlinerProcess = new InlinerProcess(inlinerPath.toFile(), outputPath.toFile());
+			}
+
+			// start inliner
+			inlineResult = inlinerProcess.inlineAPKS(apksToInline);
 		} catch (Exception e) {
-			//rethrow exception
+			// rethrow exception
 			throw e;
 		} finally {
-			//change user state
+			// change user state
 			this.userStatus.set(UserStatus.IDLE);
 		}
-		
+
 		return inlineResult;
 	}
 

@@ -31,7 +31,7 @@
 					<input class="form-control" id="input-apk-folder-selection"
 						name="apk-folder-selection" type="text"
 						placeholder="Select APK folder" />
-					<button class="btn btn-default" id="button-apk-folder-selection">Select
+					<button class="btn btn-default" id="button-apk-folder-selection" disabled>Select
 						APK folder</button>
 				</div>
 				<div style="display: none;" id="div-apk-folder-selection-result"></div>
