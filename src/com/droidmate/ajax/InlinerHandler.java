@@ -15,10 +15,12 @@ import org.slf4j.LoggerFactory;
 import com.droidmate.user.DroidMateUser;
 
 /**
- * Servlet implementation class InlinerHandler
+ * Instance of Servlet implementation: InlinerHandler. This class
+ * handles the inlining processes progress.
  */
 @WebServlet("/InlinerHandler")
-public class InlinerHandler extends HttpServlet {
+public class InlinerHandler extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
 
 	// request parameters
@@ -27,6 +29,8 @@ public class InlinerHandler extends HttpServlet {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	
 	/**
+	 * Creates a new instance of the InlinerHandler class.
+	 * 
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public InlinerHandler() {
@@ -34,7 +38,9 @@ public class InlinerHandler extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 * Handles the inlining process.
+	 * 
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

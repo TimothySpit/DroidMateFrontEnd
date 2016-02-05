@@ -17,11 +17,12 @@ import org.slf4j.LoggerFactory;
 import com.droidmate.user.DroidMateUser;
 
 /**
- * Instance of Servlet implementation: APKRootFolderHandler Sets and retrieves
+ * Instance of Servlet implementation: This class sets and retrieves
  * the root folder of the .apks to be explored.
  */
 @WebServlet("/APKRootFolderHandler")
-public class APKRootFolderHandler extends HttpServlet {
+public class APKRootFolderHandler extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
 
 	// request parameters
@@ -48,7 +49,6 @@ public class APKRootFolderHandler extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		logger.info("Serve {} page request.",request.getRequestURI());
-		
 		// return json
 		response.setContentType("application/json");
 		// Do not cache

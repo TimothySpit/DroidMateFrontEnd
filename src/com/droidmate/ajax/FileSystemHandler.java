@@ -18,10 +18,12 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Servlet implementation class FileSystem
+ * Instance of Servlet implementation: FileSystemHandler. This class represents a
+ * File-System browser. This is needed for choosing a directory with .apk files.
  */
 @WebServlet("/FileSystemHandler")
-public class FileSystemHandler extends HttpServlet {
+public class FileSystemHandler extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
 
 	//request parameters
@@ -30,7 +32,11 @@ public class FileSystemHandler extends HttpServlet {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	
-	private enum FileType {
+	/**
+	 * Enum for possible file types. Only directories are interesting.
+	 */
+	private enum FileType
+	{
 		UNKNOWN("unknowm"), DIRECTORY("directory"), ALL("all");
 
 		private final String name;
@@ -59,6 +65,8 @@ public class FileSystemHandler extends HttpServlet {
 
 	
 	/**
+	 * Creates a new instance of the FileSystemHandler class.
+	 * 
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public FileSystemHandler() {
@@ -66,6 +74,8 @@ public class FileSystemHandler extends HttpServlet {
 	}
 
 	/**
+	 * Gets a .json Object for a chosen file and investigates it.
+	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -93,7 +103,14 @@ public class FileSystemHandler extends HttpServlet {
 		response.getWriter().print(result);
 	}
 	
-	private JSONArray getFileData(FileType fileType, String path) {
+	/**
+	 * Investigate the chosen File.
+	 * @param fileType the FileType to investigate
+	 * @param path the path to investigate
+	 * @return
+	 */
+	private JSONArray getFileData(FileType fileType, String path)
+	{
 		File[] currentRoots;
 		if (path.equals("root")) {
 			currentRoots = File.listRoots();
