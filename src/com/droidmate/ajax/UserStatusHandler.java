@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.droidmate.user.DroidMateUser;
 
@@ -22,6 +24,8 @@ public class UserStatusHandler extends HttpServlet {
 	// request parameters
 	private static final String USER_STATUS_GET = "getUserStatus";
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -34,6 +38,8 @@ public class UserStatusHandler extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		logger.info("Serve {} page request.",request.getRequestURI());
+		
 		// return json
 		response.setContentType("application/json");
 		// Do not cache
@@ -47,6 +53,8 @@ public class UserStatusHandler extends HttpServlet {
 		// handle user status get
 		String getUserStatusString = request.getParameter(USER_STATUS_GET);
 		if (getUserStatusString != null) {
+			logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), USER_STATUS_GET,getUserStatusString);
+			
 			JSONResponseWrapper getUserStatusResult = new JSONResponseWrapper();
 			
 			//always return a status
@@ -58,6 +66,7 @@ public class UserStatusHandler extends HttpServlet {
 			result.put(USER_STATUS_GET, getUserStatusResult.toJSONObject());
 		}
 
+		logger.info("{}: Request result: {}",request.getRequestURI(),result);
 		response.getWriter().print(result);
 	}
 }

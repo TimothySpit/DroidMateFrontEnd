@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -27,6 +29,8 @@ public class FileSystemHandler extends HttpServlet
 	//request parameters
 	private final static String FILETYPE = "type";
 	private final static String PATH = "path";
+
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	
 	/**
 	 * Enum for possible file types. Only directories are interesting.
@@ -76,6 +80,8 @@ public class FileSystemHandler extends HttpServlet
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		logger.info("Serve {} page request.",request.getRequestURI());
+		
 		// return json
 		response.setContentType("application/json");
 		// Do not cache
@@ -87,9 +93,12 @@ public class FileSystemHandler extends HttpServlet
 		
 		String path = request.getParameter(PATH);
 		if (path != null && (path.equals("root") || (new File(path)).exists())) {
+			logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), PATH,path);
+			
 			result = getFileData(fileType, path);
 		}
 
+		logger.info("{}: Request result: {}",request.getRequestURI(),result);
 		response.getWriter().print(result);
 	}
 	

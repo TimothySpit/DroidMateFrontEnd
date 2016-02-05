@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.droidmate.user.DroidMateUser;
 
@@ -27,6 +29,8 @@ public class APKRootFolderHandler extends HttpServlet
 	private static final String APKS_ROOT_GET = "getAPKsRoot";
 	private static final String APKS_ROOT_SET = "setAPKsRoot";
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	
 	/**
 	 * Creates a new instance of the APKRootFolderHandler class
 	 * 
@@ -43,8 +47,8 @@ public class APKRootFolderHandler extends HttpServlet
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		logger.info("Serve {} page request.",request.getRequestURI());
 		// return json
 		response.setContentType("application/json");
 		// Do not cache
@@ -74,6 +78,8 @@ public class APKRootFolderHandler extends HttpServlet
 		// save apks root
 		String apkSaveRoot = request.getParameter(APKS_ROOT_SET);
 		if (apkSaveRoot != null) {
+			logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(), request.getMethod(), APKS_ROOT_SET,apkSaveRoot);
+			
 			JSONObject setAPKRootresult = new JSONObject();
 			try {
 				user.setAPKPath(Paths.get(apkSaveRoot));
@@ -89,6 +95,7 @@ public class APKRootFolderHandler extends HttpServlet
 			result.put(APKS_ROOT_SET, setAPKRootresult);
 		}
 
+		logger.info("{}: Request result: {}",request.getRequestURI(),result);
 		response.getWriter().print(result);
 	}
 

@@ -8,7 +8,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.droidmate.user.DroidMateUser;
+
+
 
 /**
  * Servlet implementation class Index
@@ -18,6 +23,8 @@ public class Index extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	
 	public Index() {
 		super();
 	}
@@ -32,6 +39,8 @@ public class Index extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		logger.info("Serve {} page request.",request.getRequestURI());
+		
 		if (request.getRequestURI().equals(request.getContextPath())) {
 			response.sendRedirect("Index");
 			return;

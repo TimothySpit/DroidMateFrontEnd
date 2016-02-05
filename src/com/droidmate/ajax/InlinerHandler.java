@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.droidmate.user.DroidMateUser;
 
@@ -24,6 +26,8 @@ public class InlinerHandler extends HttpServlet
 	// request parameters
 	private static final String START_INLINER = "startInlining";
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	
 	/**
 	 * Creates a new instance of the InlinerHandler class.
 	 * 
@@ -40,6 +44,8 @@ public class InlinerHandler extends HttpServlet
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		logger.info("Serve {} page request.",request.getRequestURI());
+		
 		// return json
 		response.setContentType("application/json");
 		// Do not cache
@@ -53,6 +59,8 @@ public class InlinerHandler extends HttpServlet
 		// handle inliner start
 		String startInliner = request.getParameter(START_INLINER);
 		if (startInliner != null) {
+			logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), START_INLINER,startInliner);
+			
 			JSONResponseWrapper startInliningResult = new JSONResponseWrapper();
 
 			// Inliner is already started, return
@@ -75,6 +83,7 @@ public class InlinerHandler extends HttpServlet
 			result.put(START_INLINER, startInliningResult.toJSONObject());
 		}
 
+		logger.info("{}: Request result: {}",request.getRequestURI(),result);
 		response.getWriter().print(result);
 	}
 
