@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.droidmate.user.DroidMateUser;
 
 /**
- * Servlet implementation class UserStatusHandler
+ * Instance of Servlet implementation: UserStatusHandler. Handles the user status.
  */
 @WebServlet("/UserStatusHandler")
 public class UserStatusHandler extends HttpServlet {
@@ -27,6 +27,8 @@ public class UserStatusHandler extends HttpServlet {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	
 	/**
+	 * Creates a new instance of the UserStatusHandler class.
+	 * 
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public UserStatusHandler() {
@@ -34,6 +36,7 @@ public class UserStatusHandler extends HttpServlet {
 	}
 
 	/**
+	 * Handles the user status.
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */

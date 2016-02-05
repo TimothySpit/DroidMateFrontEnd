@@ -20,10 +20,12 @@ import com.droidmate.user.DroidMateUser;
 import com.droidmate.user.UserStatus;
 
 /**
- * Servlet implementation class SaveSelectedAPKSHandler
+ * Instance of Servlet implementation: SaveSelectedAPKSHandler. This class
+ * recognizes the checked .apks and transmits them further.
  */
 @WebServlet("/SaveSelectedAPKSHandler")
-public class SaveSelectedAPKSHandler extends HttpServlet {
+public class SaveSelectedAPKSHandler extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
 
 	// request parameters
@@ -32,6 +34,8 @@ public class SaveSelectedAPKSHandler extends HttpServlet {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	
 	/**
+	 * Creates a new instance of the SaveSelectedAPKSHandler class.
+	 * 
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public SaveSelectedAPKSHandler() {
@@ -39,6 +43,8 @@ public class SaveSelectedAPKSHandler extends HttpServlet {
 	}
 
 	/**
+	 * Handles the .apk-Selection
+	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */

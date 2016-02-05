@@ -18,7 +18,8 @@ import org.slf4j.LoggerFactory;
 import com.droidmate.user.GUISettings;
 
 /**
- * Servlet implementation class SettingsHandler
+ * Instance of Servlet implementation: SettingsHandler. This class helps
+ * generating the change settings page.
  */
 @WebServlet("/SettingsHandler")
 public class SettingsHandler extends HttpServlet {
@@ -34,6 +35,8 @@ public class SettingsHandler extends HttpServlet {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	
 	/**
+	 * Creates a new instance of the SettingsHandler class.
+	 * 
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public SettingsHandler() {
@@ -41,6 +44,8 @@ public class SettingsHandler extends HttpServlet {
 	}
 
 	/**
+	 * Handling for Setting changes.
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */

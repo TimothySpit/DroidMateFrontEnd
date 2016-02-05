@@ -9,8 +9,7 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- * Application Lifecycle Listener implementation class LogListener
- *
+ * Logger for Events.
  */
 @WebListener
 public class LogListener implements ServletContextListener {
@@ -24,6 +23,7 @@ public class LogListener implements ServletContextListener {
     }
 
 	/**
+	 * Logs a destroyed context.
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      */
     public void contextDestroyed(ServletContextEvent servletContextEvent)  { 
@@ -31,6 +31,7 @@ public class LogListener implements ServletContextListener {
     }
 
 	/**
+	 * Logs an context initialization.
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent servletContextEvent)  { 
