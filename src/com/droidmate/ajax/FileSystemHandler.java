@@ -69,7 +69,7 @@ public class FileSystemHandler extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		logger.info("Serve {} page request.",request.getRequestURI());
 		
 		// return json
@@ -84,6 +84,7 @@ public class FileSystemHandler extends HttpServlet {
 		String path = request.getParameter(PATH);
 		if (path != null && (path.equals("root") || (new File(path)).exists())) {
 			logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), PATH,path);
+			logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), FILETYPE,fileType);
 			
 			result = getFileData(fileType, path);
 		}

@@ -42,10 +42,10 @@ public class APKInformationHandler extends HttpServlet {
 	/**
 	 * Sends back a .json object with all .apk information.
 	 * 
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		logger.info("Serve {} page request.",request.getRequestURI());
 		
 		// return json
