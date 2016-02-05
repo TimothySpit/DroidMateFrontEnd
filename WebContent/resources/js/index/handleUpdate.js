@@ -39,9 +39,8 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 		$.droidmate.ajax.getUserStatus(true, function(data) {
 			// check for error in data receiving
 			if (!data || !data.getUserStatus || !data.getUserStatus.result) {
-				$.droidmate.overlays.alert(
+				$.droidmate.overlays.danger(
 						"Could not parse server returned value.",
-						$.droidmate.overlays.alertTypes.DANGER,
 						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
 				return;
 			}

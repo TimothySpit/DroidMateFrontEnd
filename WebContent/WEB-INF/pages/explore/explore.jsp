@@ -21,7 +21,7 @@
 		</div>
 
 		<!-- top navi controls -->
-		<div class="row">
+		<div id="div-exploration-top-navigation" class="row" style="display: none;">
 			<div class="col-sm-4">
 				<button class="pull-left btn btn-default"
 					id="button-return-to-start">Return to start</button>
@@ -44,12 +44,12 @@
 
 		<!-- APK table containing exploration data -->
 		<div class="row">
-			<table id="table-apk-exploration-info">
+			<table style="display: none;" id="table-apk-exploration-info">
 			</table>
 		</div>
 
-		<!-- Open reports directory button group and label -->
-		<div class="row">
+		<!-- bottom navi controls -->
+		<div style="display: none;" class="row" id="div-exploration-bottom-navi">
 			<div class="col-sm-12">
 				<h3>
 					<button id="button-open-output-folder"
@@ -64,7 +64,7 @@
 		<!-- DroidMate console output -->
 		<div class="row">
 			<div class="col-sm-12">
-				<div class="panel panel-default" id="div-console-output"></div>
+				<div style="display: none;" class="panel panel-default" id="div-console-output"></div>
 			</div>
 		</div>
 		

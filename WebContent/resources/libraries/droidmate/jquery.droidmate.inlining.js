@@ -20,7 +20,7 @@ define([ 'jquery'], function(require) {
 		$.ajax({
 	        url:  "/DroidMate/InlinerHandler",
 	        async: async,
-	        type: 'GET',
+	        type: 'POST',
 	        dataType : "json",
 	        data: {startInlining : true},
 	        success: success

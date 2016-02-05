@@ -13,8 +13,23 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		
 		//set selected apks 
 		$.droidmate.ajax.setSelectedAPKS(selectedAPKS,true, function(data) {
-			//apks have been set, go to exploration page
-			//window.location = "Explore";
+			//check if server response could be parsed
+			if(!data || !data["setSelectedAPKS[]"]) {
+				$.droidmate.overlays.danger("Could not parse server returned value.", 
+						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+				return;
+			}
+			
+			//check if all apks could be selected
+			if(!data["setSelectedAPKS[]"].result) {
+				//not all apks could be selected
+				$.droidmate.overlays.danger(data["setSelectedAPKS[]"].message, 
+						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+				return;
+			}
+			
+			//all apks have been successfully selected, go to explore page
+			window.location = "Explore";
 		});
 	});
 	

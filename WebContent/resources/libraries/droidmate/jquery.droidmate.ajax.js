@@ -320,23 +320,6 @@ define([ 'jquery' ], function(require) {
 	ajax.saveDroidMateSettings = saveDroidMateSettings;
 	// ----------------------------------
 
-	function startDroidMate(success, error, complete) {
-		return $.ajax({
-			async : false,
-			cache : false,
-			url : "/DroidMate/APKExploreHandler",
-			method : "POST",
-			data : {
-				explore_start : true
-			},
-			success : success,
-			error : error,
-			complete : complete
-		});
-	}
-	ajax.startDroidMate = startDroidMate;
-	// -----------------------------------
-
 	function restartDroidMate() {
 		$.ajax({
 			async : false,

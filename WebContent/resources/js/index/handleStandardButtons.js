@@ -13,7 +13,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		function updateCallback(data) {
 			if(!data || !data.getAPKSData || !data.getAPKSData.result) {
 				//path could not been set, show error message
-				$.droidmate.overlays.alert("Could not retreive file size data from the server.", $.droidmate.overlays.alertTypes.DANGER, 
+				$.droidmate.overlays.danger("Could not retreive file size data from the server.", 
 						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
 				return;
 			}

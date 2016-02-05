@@ -62,9 +62,8 @@ define([ 'require', 'bootbox',
 		
 		//show error, if any
 		if(resultMessage) {
-			$.droidmate.overlays.alert(resultMessage,
-					$.droidmate.overlays.alertTypes.WARNING,
-					$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+			$.droidmate.overlays.warning(resultMessage,
+					$.droidmate.overlays.DANGER_MESSAGE_TIMEOUT);
 			return;
 		}
 		
@@ -74,19 +73,18 @@ define([ 'require', 'bootbox',
 			if(!data || !data.setSettings || !data.setSettings.result) {
 				//error in settings saving
 				if(data.setSettings.message) {
-				$.droidmate.overlays.alert(data.setSettings.message, $.droidmate.overlays.alertTypes.DANGER, 
-						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+				$.droidmate.overlays.danger(data.setSettings.message,
+						$.droidmate.overlays.DANGER_MESSAGE_TIMEOUT);
 				} else {
-					$.droidmate.overlays.alert("Could not parse server returned value.", $.droidmate.overlays.alertTypes.DANGER, 
-							$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+					$.droidmate.overlays.danger("Could not parse server returned value.", 
+							$.droidmate.overlays.DANGER_MESSAGE_TIMEOUT);
 				}
 				return;
 			}
 			
 			var saveResult = data.setSettings;
-			$.droidmate.overlays.alert(saveResult.message,
-					$.droidmate.overlays.alertTypes.SUCCESS,
-					$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+			$.droidmate.overlays.success(saveResult.message,
+					$.droidmate.overlays.DANGER_MESSAGE_TIMEOUT);
 		}
 		$.droidmate.ajax.saveDroidMateSettings(reportsOutputPath, droidmatePath, 
 				aaptPath, explorationTimeOut, true,callback);

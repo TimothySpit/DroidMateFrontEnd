@@ -69,7 +69,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 						updateAPKSTable(table);
 					} else {
 						//path could not been set, show error message
-						$.droidmate.overlays.alert(data.setAPKsRoot.message, $.droidmate.overlays.alertTypes.DANGER, 
+						$.droidmate.overlays.danger(data.setAPKsRoot.message, 
 								$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
 					}
 				});
@@ -77,6 +77,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 		});
 	});
 	
+	//handle startup
 	var path = $.droidmate.ajax.getAPKsRoot(true, function(data) {
 		if (data && data.getAPKsRoot && data.getAPKsRoot.result) {
 			var path = data.getAPKsRoot.payload.data;

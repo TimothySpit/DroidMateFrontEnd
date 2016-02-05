@@ -21,7 +21,7 @@
 		</div>
 
 		<!-- elements seen and screens explored charts -->
-		<div class="row">
+		<div class="row" id="div-charts-elements-seen-screens-explored" style="display: none;">
 			<div class="col-sm-6">
 				<div id="flot-gui-elements-seen"
 					style="width: 450px; height: 300px; margin: 0 auto"></div>
@@ -33,7 +33,7 @@
 		</div>
 
 		<!-- apk status and gui elements explored charts -->
-		<div class="row">
+		<div class="row" id="div-charts-apk-status-elements-explored" style="display: none;">
 			<div class="col-sm-6">
 				<div id="flot-apks-status"
 					style="width: 450px; height: 300px; margin: 0 auto"></div>
@@ -45,7 +45,7 @@
 		</div>
 
 		<!-- chart multiselect legend -->
-		<div class="row">
+		<div class="row" id="div-chart-multiselect" style="display: none;">
 			<div class="col-sm-12">
 				<fieldset id="legend">
 					<legend>APK chart selection</legend>
@@ -54,8 +54,8 @@
 			</div>
 		</div>
 
-		<!-- back button -->
-		<div class="row">
+		<!-- bottom navi controls -->
+		<div class="row" id="div-explorationcharts-bottom-navi" style="display: none;">
 			<div class="col-sm-12 text-center">
 				<button class="btn btn-default pull-left"
 					 id="button-back">Back</button>

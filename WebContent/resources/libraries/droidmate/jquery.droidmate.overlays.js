@@ -3,9 +3,15 @@ define([ 'jquery'], function(require) {
 	var droidmate = $.droidmate || {};
 	var overlays = {};
 	
-	var ERROR_MESSAGE_TIMEOUT = 5000; //milliseconds
+	var DANGER_MESSAGE_TIMEOUT = 8000; //milliseconds
+	var INFO_MESSAGE_TIMEOUT = 5000;
+	var WARNING_MESSAGE_TIMEOUT = 6000;
+	var SUCCESS_MESSAGE_TIMEOUT = 6000;
 	
-	overlays.ERROR_MESSAGE_TIMEOUT = ERROR_MESSAGE_TIMEOUT;
+	overlays.DANGER_MESSAGE_TIMEOUT = DANGER_MESSAGE_TIMEOUT;
+	overlays.INFO_MESSAGE_TIMEOUT = INFO_MESSAGE_TIMEOUT;
+	overlays.WARNING_MESSAGE_TIMEOUT = WARNING_MESSAGE_TIMEOUT;
+	overlays.SUCCESS_MESSAGE_TIMEOUT = SUCCESS_MESSAGE_TIMEOUT;
 	
 	//alert types
 	var alertTypes = {
@@ -14,8 +20,27 @@ define([ 'jquery'], function(require) {
 			WARNING	: "alert-warning",
 			DANGER	: "alert-danger"
 	};
-	overlays.alertTypes = alertTypes;
 	//-------------------------------------------------------------------------
+	
+	function success(message, timeout) {
+		alert(message,alertTypes.SUCCESS, timeout);
+	}
+	overlays.success = success;
+	
+	function info(message, timeout) {
+		alert(message,alertTypes.INFO, timeout);
+	}
+	overlays.info = info;
+	
+	function warning(message, timeout) {
+		alert(message,alertTypes.WARNING, timeout);
+	}
+	overlays.warning = warning;
+	
+	function danger(message, timeout) {
+		alert(message,alertTypes.DANGER, timeout);
+	}
+	overlays.danger = danger;
 	
 	//info window
 	function alert(message, alerttype, timeout) {
@@ -39,7 +64,6 @@ define([ 'jquery'], function(require) {
 		return res;
 	}
 	
-	overlays.alert = alert;
 	//-------------------------------------------------------------------------
 	
 	//removes all alerts
