@@ -15,12 +15,13 @@ import com.droidmate.user.APKInformation;
 import com.droidmate.user.DroidMateUser;
 
 /**
- * Instance of Servlet implementation: APKInformationHandler. This is
+ * Instance of Servlet implementation: APKInformationHandler. This class is
  * responsible for retrieving all .apk information e.g. used in the exploration
  * table.
  */
 @WebServlet("/APKInformationHandler")
-public class APKInformationHandler extends HttpServlet {
+public class APKInformationHandler extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
 
 	// request parameters
@@ -41,7 +42,8 @@ public class APKInformationHandler extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
 		// return json
 		response.setContentType("application/json");
 		// Do not cache

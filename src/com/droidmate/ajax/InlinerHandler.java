@@ -13,16 +13,20 @@ import org.json.JSONObject;
 import com.droidmate.user.DroidMateUser;
 
 /**
- * Servlet implementation class InlinerHandler
+ * Instance of Servlet implementation: InlinerHandler. This class
+ * handles the inlining processes progress.
  */
 @WebServlet("/InlinerHandler")
-public class InlinerHandler extends HttpServlet {
+public class InlinerHandler extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
 
 	// request parameters
 	private static final String START_INLINER = "startInlining";
 
 	/**
+	 * Creates a new instance of the InlinerHandler class.
+	 * 
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public InlinerHandler() {
@@ -30,6 +34,8 @@ public class InlinerHandler extends HttpServlet {
 	}
 
 	/**
+	 * Handles the inlining process.
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */

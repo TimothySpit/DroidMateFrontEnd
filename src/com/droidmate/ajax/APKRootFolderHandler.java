@@ -15,11 +15,12 @@ import org.json.JSONObject;
 import com.droidmate.user.DroidMateUser;
 
 /**
- * Instance of Servlet implementation: APKRootFolderHandler Sets and retrieves
+ * Instance of Servlet implementation: This class sets and retrieves
  * the root folder of the .apks to be explored.
  */
 @WebServlet("/APKRootFolderHandler")
-public class APKRootFolderHandler extends HttpServlet {
+public class APKRootFolderHandler extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
 
 	// request parameters
@@ -42,7 +43,8 @@ public class APKRootFolderHandler extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
 		// return json
 		response.setContentType("application/json");
 		// Do not cache
