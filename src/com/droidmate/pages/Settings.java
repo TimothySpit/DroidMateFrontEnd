@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Servlet implementation class Settings
+ * Instance of Servlet implementation: Settings. This class handles the Settings page.
  */
 @WebServlet("/Settings")
 public class Settings extends HttpServlet {
@@ -21,6 +21,7 @@ public class Settings extends HttpServlet {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	
     /**
+     * Creates a new instance of the Settings class.
      * @see HttpServlet#HttpServlet()
      */
     public Settings() {
@@ -28,6 +29,7 @@ public class Settings extends HttpServlet {
     }
 
 	/**
+	 * Handles the settings page.
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

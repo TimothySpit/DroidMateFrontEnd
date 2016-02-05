@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Servlet implementation class Explore
+ * Instance of Servlet implementation: Explore. This class handles the explore command.
  */
 @WebServlet("/Explore")
 public class Explore extends HttpServlet {
@@ -21,6 +21,7 @@ public class Explore extends HttpServlet {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	
     /**
+     * Creates a new instance of the Explore class.
      * @see HttpServlet#HttpServlet()
      */
     public Explore() {
@@ -28,6 +29,7 @@ public class Explore extends HttpServlet {
     }
 
 	/**
+	 * Handles the explore request.
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
