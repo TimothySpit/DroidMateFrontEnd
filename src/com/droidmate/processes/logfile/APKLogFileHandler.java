@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.io.FilenameUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -23,6 +24,8 @@ public class APKLogFileHandler extends APKLogFileObservable {
 
 	private final boolean waitForFileCreation;
 	private final AtomicBoolean stopProcessing = new AtomicBoolean(false);
+
+	private final ReentrantLock inputStreamLock = new ReentrantLock();
 
 	private ForeverFileInputStream inputFileStream = null;
 
@@ -71,7 +74,15 @@ public class APKLogFileHandler extends APKLogFileObservable {
 			factory = XmlPullParserFactory.newInstance();
 			factory.setNamespaceAware(true);
 			parser = factory.newPullParser();
-			inputFileStream = new ForeverFileInputStream(inputFileToParse);
+			inputStreamLock.lock();
+			try {
+				inputFileStream = new ForeverFileInputStream(inputFileToParse);
+			} finally {
+				inputStreamLock.unlock();
+			}
+			if (inputFileStream == null) {
+				return;
+			}
 			Reader reader = new InputStreamReader(inputFileStream, StandardCharsets.UTF_8);
 			parser.setInput(reader);
 			int eventType = parser.getEventType();
@@ -88,7 +99,7 @@ public class APKLogFileHandler extends APKLogFileObservable {
 					if (tagname.equalsIgnoreCase("exploration")) {
 						// DroidMate exploration started
 						notifyObservers(new APKExplorationStarted(System.currentTimeMillis()));
-					} 
+					}
 					break;
 
 				case XmlPullParser.TEXT:
@@ -103,14 +114,23 @@ public class APKLogFileHandler extends APKLogFileObservable {
 					} else if (tagname.equalsIgnoreCase("success")) {
 						notifyObservers(new APKEnded(currentAPKName, System.currentTimeMillis(), Boolean.parseBoolean(text)));
 					} else if (tagname.equalsIgnoreCase("widget_explored")) {
-						notifyObservers(new APKElementsExploredChanged(currentAPKName, 1)); // at the moment, we only print the name in gui.xml
-					}else if (tagname.equalsIgnoreCase("exploration")) {
+						notifyObservers(new APKElementsExploredChanged(currentAPKName, 1)); // at
+																							// the
+																							// moment,
+																							// we
+																							// only
+																							// print
+																							// the
+																							// name
+																							// in
+																							// gui.xml
+					} else if (tagname.equalsIgnoreCase("exploration")) {
 						notifyObservers(new APKExplorationEnded(System.currentTimeMillis()));
 					} else if (tagname.equalsIgnoreCase("name")) {
 						// new apk, remove inlined postfix
 						int inlinedIndex = text.lastIndexOf("-inlined.apk");
-						if(inlinedIndex >= 0) {
-							//apk name has inlined prefix, remove it
+						if (inlinedIndex >= 0) {
+							// apk name has inlined prefix, remove it
 							currentAPKName = text.substring(0, inlinedIndex) + ".apk";
 						}
 						notifyObservers(new APKStarted(currentAPKName, System.currentTimeMillis()));
@@ -126,10 +146,9 @@ public class APKLogFileHandler extends APKLogFileObservable {
 		} catch (XmlPullParserException e) {
 			e.printStackTrace();
 		} catch (EOFException e) {
-			//stream has been stopped
+			// stream has been stopped
 			return;
-		} 
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -137,8 +156,13 @@ public class APKLogFileHandler extends APKLogFileObservable {
 
 	public void stop() {
 		stopProcessing.set(true);
-		if(inputFileStream != null) {
-			inputFileStream.stop();
+		inputStreamLock.lock();
+		try {
+			if (inputFileStream != null) {
+				inputFileStream.stop();
+			}
+		} finally {
+			inputStreamLock.unlock();
 		}
 	}
 
