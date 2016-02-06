@@ -31,7 +31,9 @@ define([ 'require',
 				return;
 			}
 		
-		setTimeout(updateTableLoop, $.droidmate.explore.UPDATE_EXPLORE_INTERVAL);
+			updateTableData();
+			
+			setTimeout(updateTableLoop, $.droidmate.explore.UPDATE_EXPLORE_INTERVAL);
 		});
 	}
 	
