@@ -63,4 +63,19 @@ public class ForeverFileInputStream extends FileInputStream {
 			}
 		}
 	}
+	
+	@Override
+	public int read(byte[] b, int off, int len) throws IOException {
+		int value = super.read(b, off, len);
+		if (value == -1 && !stopFlag.get()) {
+			try {
+				Thread.sleep(REFRESH_INTERVAL);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return this.read(b, off, len);
+		} else {
+			return value;
+		}
+	}
 }
