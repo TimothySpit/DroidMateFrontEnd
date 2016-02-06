@@ -3,7 +3,7 @@ package com.droidmate.processes;
 public class DroidMateProcessEvent {
 
 	public enum EventType {
-		STARTED, FINISHED, ERROR 
+		EXPLORATION_STARTED, EXPLORATION_FINISHED, DROIDMATE_ERROR 
 	}
 
 	private final EventType event;

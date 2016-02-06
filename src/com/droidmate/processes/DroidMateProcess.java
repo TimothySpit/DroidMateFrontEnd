@@ -162,14 +162,12 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		// start DroidMate
 		try {
 			if (!tryStartDroidMateProcess(logReader, arguments)) {
-				notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.ERROR));
-			} else {
-				notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.FINISHED));
+				notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.DROIDMATE_ERROR));
 			}
 		} catch (InterruptedException e) {
-			notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.ERROR));
+			notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.DROIDMATE_ERROR));
 		} catch (IOException e) {
-			notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.ERROR));
+			notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.DROIDMATE_ERROR));
 			throw e;
 		}
 	}
@@ -229,12 +227,12 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	@Override
 	public void update(APKLogFileObservable o, APKExplorationStarted arg) {
 		//Exploration started
-		notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.STARTED));
+		notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.EXPLORATION_STARTED));
 	}
 	@Override
 	public void update(APKLogFileObservable o, APKExplorationEnded arg) {
 		//Exploration ended with no errors
-		notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.FINISHED));
+		notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.EXPLORATION_FINISHED));
 	}
 	
 	
