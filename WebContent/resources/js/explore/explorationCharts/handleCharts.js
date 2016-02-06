@@ -5,6 +5,7 @@ define(
 				'jquery.droidmate.ajax' ],
 		function(require) {
 
+			//creates and returns a pie chart with the correct labels
 			function createPieChart(divname) {
 				var dataSet = [ {
 					label : "Successful",
@@ -46,7 +47,8 @@ define(
 				};
 				return $.plot($(divname), dataSet, options);
 			}
-
+			
+			//creates and returns a graph chart
 			function createGraphChart(divname, xAxisLabel, yAxisLabel) {
 				var options = {
 					yaxis : {
@@ -75,7 +77,8 @@ define(
 				};
 				return $.plot(divname, [ 0, 0 ], options);
 			}
-
+			
+			//creates and returns the pie chart
 			function getAPKStatusInformation() {
 				var apkArray = $.droidmate.ajax.get.getExplorationInfo();
 				var selAPKSSize = $.droidmate.ajax.get.getSelectedAPKS()["info[]"].selApks.data.length;
@@ -100,6 +103,7 @@ define(
 				};
 			}
 
+			//returns the current data, based on the clicked checkboxes
 			function getData(choiceContainer) {
 				var elementsSeenHistory = [];
 				var widgetsExploredHistory = [];
@@ -136,7 +140,8 @@ define(
 					apkStatus : apkStatus
 				};
 			}
-
+			
+			//function called by getData to get data for every single apk
 			function getIndividualData(choiceContainer) {
 				var apkArray = $.droidmate.ajax.get.getExplorationInfo();
 				apkArray.sort(function(a, b) {
@@ -170,7 +175,8 @@ define(
 					screensSeenIndividual : screensSeenIndividual,
 				};
 			}
-
+			
+			//pulls new data and sets it to the given charts. Recalls itself if "repeat" is true
 			function updateCharts(charts, choiceContainer, repeat) {
 
 				var data = getData(choiceContainer);
