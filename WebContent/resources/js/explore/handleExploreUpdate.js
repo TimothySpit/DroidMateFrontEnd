@@ -9,37 +9,29 @@ define([ 'require',
 	var updateHelper = require('../explore/handleUpdate' );
 	
 	
-	//updates table data and chart data in the table
-	function startUpdateTable() {
-		
-		//continues updating filled table
-		function updateTableLoop() {
-			
-		}
-		
-		//get apk data for the first time
-		$.droidmate.ajax.getAPKSData(true,function(apkDataResult) {
-			//check result
-			if(!apkDataResult || !apkDataResult.getAPKSData || !apkDataResult.getAPKSData.result) {
-				//path could not been set, show error message
-				$.droidmate.overlays.danger("Could not parse server returned value. Is server running?", 
-						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+	//continues updating filled table
+	function updateTableLoop() {
+		updateHelper.updateUI(function(userState) {
+			if(!userState || !userState.getUserStatus || !userState.getUserStatus.result) {
+				//error in retrieving user state
 				return;
 			}
 			
-			if(!apkDataResult.getAPKSData.payload || !apkDataResult.getAPKSData.payload.data) {
-				//path could not been set, show error message
-				$.droidmate.overlays.danger("APK data could not be parsed.", 
-						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+			if(!userState.getUserStatus.payload || !userState.getUserStatus.payload.data ) {
+				//error, user state could not be parsed
 				return;
 			}
-				
-			//all data correct, fill in table for the first time
-			updateTableData(apkDataResult);
 			
-			
-			//start update table loop
-			setTimeout(updateTableLoop, $.droidmate.explore.UPDATE_EXPLORE_INTERVAL);
+			//if finished or error, show message
+			if(userState.getUserStatus.payload.data === "FINISHED") {
+				$.droidmate.dialogs.createOKTextDialog("DroidMate finished exploration", "DroidMate finished exploration.");
+				return;
+			} else if(userState.getUserStatus.payload.data === "ERROR") {
+				$.droidmate.dialogs.createOKTextDialog("DroidMate crashed unexpectedly", "DroidMate crashed while exploring.");
+				return;
+			}
+		
+		setTimeout(updateTableLoop, $.droidmate.explore.UPDATE_EXPLORE_INTERVAL);
 		});
 	}
 	
@@ -142,7 +134,7 @@ define([ 'require',
 				
 				//start updating table and charts
 				if(userState.getUserStatus.payload.data === "EXPLORING") {
-					startUpdateTableLoop();
+					updateTableLoop();
 					return; //break out of this loop
 				}
 				

@@ -102,7 +102,7 @@ public class APKLogFileHandler extends APKLogFileObservable {
 					} else if (tagname.equalsIgnoreCase("success")) {
 						notifyObservers(new APKEnded(currentAPKName, System.currentTimeMillis(), Boolean.parseBoolean(text)));
 					} else if (tagname.equalsIgnoreCase("widget_explored")) {
-						notifyObservers(new APKElementsExploredChanged(currentAPKName, Integer.parseInt(text)));
+						notifyObservers(new APKElementsExploredChanged(currentAPKName, 1)); // at the moment, we only print the name in gui.xml
 					}else if (tagname.equalsIgnoreCase("exploration")) {
 						notifyObservers(new APKExplorationEnded(System.currentTimeMillis()));
 					} else if (tagname.equalsIgnoreCase("name")) {
