@@ -246,6 +246,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		}
 		
 		this.currentAPK = apksToExplore.get(event.getName());
+		this.currentAPK.setExplorationStatus(ExplorationStatus.EXPLORING);
 		this.currentAPK.getExplorationInfo().setStartingTime(event.getStartTime());
 	}
 	@Override
@@ -257,6 +258,11 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		
 		long startTime = this.currentAPK.getExplorationInfo().getStartingTime();
 		this.currentAPK.getExplorationInfo().setEndTime(event.getEndTime() - startTime);
+		if(event.isSuccess()) {
+			this.currentAPK.setExplorationStatus(ExplorationStatus.SUCCESS);
+		} else {
+			this.currentAPK.setExplorationStatus(ExplorationStatus.ERROR);
+		}
 		this.currentAPK = null;
 	}
 

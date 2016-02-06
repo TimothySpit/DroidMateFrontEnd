@@ -44,6 +44,7 @@ define(
 				'searching' : false,
 				'paging' : false,
 				bAutoWidth:false,
+				'order' : [ [ 1, 'asc' ] ],
 				"columnDefs" : [
 						{
 							"targets" : 0,
@@ -64,6 +65,7 @@ define(
 						{
 							"targets" : 2,
 							"width" : "25%",
+							'orderable' : false,
 							"searchable" : false,
 							"render" : function(data, type, row) {
 								return '<span class="elements-seen">'
@@ -77,6 +79,7 @@ define(
 						{
 							"targets" : 3,
 							"width" : "10%",
+							'orderable' : false,
 							"searchable" : false,
 							"render" : function(data, type, row) {
 								return '<div class="state">'
