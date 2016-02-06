@@ -20,6 +20,10 @@ public class ForeverFileInputStream extends FileInputStream {
 
 	public static final long REFRESH_INTERVAL = 100;
 
+	public void stop() {
+		this.stopFlag.set(true);
+	}
+	
 	@Override
 	public int read() throws IOException {
 		if (stopFlag.get()) {

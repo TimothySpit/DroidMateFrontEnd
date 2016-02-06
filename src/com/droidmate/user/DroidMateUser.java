@@ -350,7 +350,7 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	}
 
 	@Override
-	public synchronized void update(Observable<DroidMateProcessEvent> o, DroidMateProcessEvent event) {
+	public void update(Observable<DroidMateProcessEvent> o, DroidMateProcessEvent event) {
 		switch (event.getEvent()) {
 		case STARTED: {
 			userStatus.set(UserStatus.EXPLORING);
@@ -362,8 +362,11 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			break;
 		}
 		case ERROR: {
+			if(userStatus.get() != UserStatus.STARTING) {
+				//apks were explored, report saving necessary
+				droidMateProcess.saveReport();
+			}
 			userStatus.set(UserStatus.ERROR);
-			droidMateProcess.saveReport();
 			break;
 		}
 		}

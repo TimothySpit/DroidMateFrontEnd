@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.commons.io.FilenameUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -86,11 +87,7 @@ public class APKLogFileHandler extends APKLogFileObservable {
 					if (tagname.equalsIgnoreCase("exploration")) {
 						// DroidMate exploration started
 						notifyObservers(new APKExplorationStarted(System.currentTimeMillis()));
-					} else if (tagname.equalsIgnoreCase("name")) {
-						// new apk
-						currentAPKName = tagname;
-						notifyObservers(new APKStarted(currentAPKName, System.currentTimeMillis()));
-					}
+					} 
 					break;
 
 				case XmlPullParser.TEXT:
@@ -108,6 +105,14 @@ public class APKLogFileHandler extends APKLogFileObservable {
 						notifyObservers(new APKElementsExploredChanged(currentAPKName, Integer.parseInt(text)));
 					}else if (tagname.equalsIgnoreCase("exploration")) {
 						notifyObservers(new APKExplorationEnded(System.currentTimeMillis()));
+					} else if (tagname.equalsIgnoreCase("name")) {
+						// new apk, remove inlined postfix
+						int inlinedIndex = text.lastIndexOf("-inlined.apk");
+						if(inlinedIndex >= 0) {
+							//apk name has inlined prefix, remove it
+							currentAPKName = text.substring(0, inlinedIndex) + ".apk";
+						}
+						notifyObservers(new APKStarted(currentAPKName, System.currentTimeMillis()));
 					}
 					break;
 
@@ -127,6 +132,9 @@ public class APKLogFileHandler extends APKLogFileObservable {
 
 	public void stop() {
 		stopProcessing.set(true);
+		if(inputFileStream != null) {
+			inputFileStream.stop();
+		}
 	}
 
 	public File getInputFileToParse() {

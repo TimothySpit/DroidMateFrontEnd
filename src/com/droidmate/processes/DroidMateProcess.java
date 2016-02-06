@@ -145,10 +145,14 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		}
 
 		// delete old DroidMate log file
-		droidMateOutputLogFile.delete();
+		if (droidMateOutputLogFile.exists() && !droidMateOutputLogFile.delete()) {
+			//logfile could not be deleted
+			throw new IOException(droidMateOutputLogFile + " could not be deleted.");
+		}
 
 		// create log reader in new thread and register events
 		APKLogFileHandler logReader = new APKLogFileHandler(droidMateOutputLogFile, true);
+		logReader.addObserver(this);
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -176,7 +180,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		// create inliner process
 		ProcessWrapper pbd = new ProcessWrapper(droidMatePath, arguments);
 		pbd.start();
-		
+		System.out.println(pbd.getInfos());
 		// DroidMate process finished, stop logreader
 		logReader.stop();
 
