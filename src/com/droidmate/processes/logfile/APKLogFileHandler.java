@@ -1,5 +1,6 @@
 package com.droidmate.processes.logfile;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -124,7 +125,11 @@ public class APKLogFileHandler extends APKLogFileObservable {
 
 		} catch (XmlPullParserException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (EOFException e) {
+			//stream has been stopped
+			return;
+		} 
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 
