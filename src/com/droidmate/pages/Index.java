@@ -22,7 +22,7 @@ public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-	
+
 	/**
 	 * Creates a new instance of the Index class.
 	 */
@@ -46,8 +46,8 @@ public class Index extends HttpServlet {
 	 * Creates the init page.
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Serve {} page request.",request.getRequestURI());
-		
+		logger.info("Serve {} page request.", request.getRequestURI());
+
 		if (request.getRequestURI().equals(request.getContextPath())) {
 			response.sendRedirect("Index");
 			return;

@@ -17,20 +17,18 @@ public class AAPTProcess {
 		if (!aaptPath.exists()) {
 			throw new FileNotFoundException("AAPT path " + aaptPath + " not found.");
 		}
-		if(!aaptPath.isDirectory()) {
+		if (!aaptPath.isDirectory()) {
 			throw new IllegalArgumentException("AAPT path " + aaptPath + " is no directory.");
 		}
 
 		this.aaptPath = aaptPath;
 	}
 
-
-	public List<AAPTInformation> loadInformation(List<File> apks) throws IOException
-	{
-		if(apks == null) {
+	public List<AAPTInformation> loadInformation(List<File> apks) throws IOException {
+		if (apks == null) {
 			throw new IllegalArgumentException("APKS list must not be null");
 		}
-		
+
 		// create Process arguments and start AAPT tool
 		List<String> arguments = new LinkedList<>();
 		arguments.add(aaptPath + "/aapt");
@@ -40,15 +38,18 @@ public class AAPTProcess {
 		return collectAAPTInformation(apks, arguments);
 	}
 
-	private List<AAPTInformation> collectAAPTInformation(List<File> apks, List<String> arguments) throws IOException
-	{
+	private List<AAPTInformation> collectAAPTInformation(List<File> apks, List<String> arguments) throws IOException {
 		List<AAPTInformation> result = new LinkedList<>();
 		for (File apk : apks) {
 			arguments.add(apk.getAbsolutePath());
 			// start process and collect data
 
 			ProcessWrapper pbd = new ProcessWrapper(aaptPath, arguments);
-			try {pbd.start();} catch (InterruptedException e) {/** do nothing*/}
+			try {
+				pbd.start();
+			} catch (InterruptedException e) {
+				/** do nothing */
+			}
 			if (pbd.getExitValue() != 0) {
 				// there was an intern error
 				continue;
@@ -75,7 +76,7 @@ public class AAPTProcess {
 
 		return output.substring(index, output.indexOf("'", index + 1));
 	}
-	
+
 	public File getAAPTPath() {
 		return aaptPath;
 	}

@@ -12,11 +12,9 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 	
 	//update APKS in table
 	function updateInlineAPKStatus() {
-		updateHelper.updateUI();
 		
 		//get user status
-		$.droidmate.ajax.getUserStatus(true, function(data) {
-			var inlinedFinished = false;
+		updateHelper.updateUI(function(data) {
 			
 			//check for error in data receiving
 			if(!data || !data.getUserStatus || !data.getUserStatus.result) {
@@ -29,11 +27,6 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 			
 			if(!statusData) {
 				return;
-			}
-			
-			//If status is inlining, then update, else return
-			if(statusData !== "INLINING") {
-				inlinedFinished = true;
 			}
 			
 			function updateAPKSCallback(data) {
@@ -74,9 +67,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 				});
 				
 				//update again if repeatUpdate is true
-				if(!inlinedFinished) {
-					setTimeout(function() {updateInlineAPKStatus()}, $.droidmate.inlining.WATCH_INLINER_INTERVAL);
-				}
+				setTimeout(function() {updateInlineAPKStatus()}, $.droidmate.inlining.WATCH_INLINER_INTERVAL);
 			}
 			
 			//get apks
@@ -114,8 +105,6 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 			
 			updateHelper.updateUI();
 		});
-		
-		updateInlineAPKStatus();
 	});
 	
 	//start update on page load

@@ -151,6 +151,24 @@ define([ 'require', 'jquery', 'bootbox', 'jquery.droidmate.ajax',
 	}
 	dialogs.createFileSizeHistogramDialog = createFileSizeHistogramDialog;
 
+	function createOKTextDialog(title, message, callback) {
+		var cb = callback || function() {
+		};
+		var buttons = {
+				label : "Close",
+				className : "btn-success",
+				callback : function() {
+				}
+			};
+		var settings = new standardModalSettings(title, buttons);
+		settings.className = 'ok-text-dialog';
+		settings.message = message; 
+		
+		var dialog = bootbox.dialog(settings);
+		dialog.modal('show');
+	}
+	dialogs.createOKTextDialog = createOKTextDialog;
+
 	droidmate.dialogs = dialogs;
 	$.droidmate = droidmate;
 })

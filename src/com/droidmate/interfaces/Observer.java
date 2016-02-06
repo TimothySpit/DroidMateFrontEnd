@@ -5,7 +5,6 @@ package com.droidmate.interfaces;
  *
  * @param <T>
  */
-public interface Observer<T>
-{
-  public void update( Observable<T> o, T arg );
+public interface Observer<T> {
+	public void update(Observable<T> o, T arg);
 }

@@ -157,7 +157,7 @@ public class DirectoryWatcher extends Observable<DirectoryWatcherEvent> {
 							registerAll(child);
 						}
 					} catch (IOException x) {
-						
+
 					}
 				}
 			}

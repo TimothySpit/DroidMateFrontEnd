@@ -12,10 +12,7 @@ import org.json.JSONObject;
 
 public class ExplorationInfo {
 
-	private AtomicBoolean success = new AtomicBoolean(false);
-	private AtomicBoolean finished = new AtomicBoolean(false);
-
-	private AtomicLong startingTime = new AtomicLong();
+	private AtomicLong startingTime = new AtomicLong(0);
 
 	private AtomicInteger elementsSeen = new AtomicInteger(0);
 	private AtomicInteger screensSeen = new AtomicInteger(0);
@@ -26,22 +23,25 @@ public class ExplorationInfo {
 	private ConcurrentSkipListMap<Long, Integer> widgetsExploredHistory;
 
 	public ExplorationInfo() {
-		startingTime.set(System.currentTimeMillis());
 
-		Comparator<Long> c = new Comparator<Long>() {
+		Comparator<Long> comparator = new Comparator<Long>() {
 			@Override
 			public int compare(Long arg0, Long arg1) {
 				return arg0.compareTo(arg1);
 			}
 		};
-		elementsSeenHistory = new ConcurrentSkipListMap<>(c);
-		screensSeenHistory = new ConcurrentSkipListMap<>(c);
-		widgetsExploredHistory = new ConcurrentSkipListMap<>(c);
+		elementsSeenHistory = new ConcurrentSkipListMap<>(comparator);
+		screensSeenHistory = new ConcurrentSkipListMap<>(comparator);
+		widgetsExploredHistory = new ConcurrentSkipListMap<>(comparator);
 		elementsSeenHistory.put(0l, 0);
 		screensSeenHistory.put(0l, 0);
 		widgetsExploredHistory.put(0l, 0);
 	}
 
+	
+	public void setStartingTime(long startingTime) {
+		this.startingTime.set(startingTime);
+	}
 	public long getStartingTime() {
 		return startingTime.get();
 	}
@@ -81,29 +81,11 @@ public class ExplorationInfo {
 		return screensSeenHistory;
 	}
 
-	public boolean isSuccess() {
-		return success.get();
-	}
-
-	public void setSuccess(boolean success) {
-		this.success.set(success);
-	}
-
-	public void setFinished(boolean finished) {
-		this.finished.set(finished);
-	}
-
-	public boolean isFinished() {
-		return finished.get();
-	}
-
 	public JSONObject toJSONObject() {
 		JSONObject json = new JSONObject();
-		json.put("success", isSuccess());
 		json.put("elementsSeen", getElementsSeen());
 		json.put("screensSeen", getScreensSeen());
 		json.put("widgetsExplored", getWidgetsExplored());
-		json.put("finished", isFinished());
 
 		JSONArray elementsHistory = new JSONArray();
 		for (Entry<Long, Integer> entry : getElementsSeenHistory().entrySet()) {

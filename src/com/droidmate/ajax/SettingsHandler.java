@@ -33,7 +33,7 @@ public class SettingsHandler extends HttpServlet {
 	private static final String SETTINGS_EXPLORATION_TIME = "time";
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-	
+
 	/**
 	 * Creates a new instance of the SettingsHandler class.
 	 * 
@@ -45,12 +45,13 @@ public class SettingsHandler extends HttpServlet {
 
 	/**
 	 * Handling for Setting changes.
+	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Serve {} page request.",request.getRequestURI());
-		
+		logger.info("Serve {} page request.", request.getRequestURI());
+
 		// return json
 		response.setContentType("application/json");
 		// Do not cache
@@ -63,13 +64,14 @@ public class SettingsHandler extends HttpServlet {
 		String settingsSet = request.getParameter(SETTINGS_SET);
 		boolean allSettingsCorrect = true;
 		if (settingsSet != null) {
-			logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), SETTINGS_SET,settingsSet);
-			
+			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_SET, settingsSet);
+
 			// check for reports path parameter
 			String settingsParameter = request.getParameter(SETTINGS_REPORTS_OUTPUT_PATH);
 			if (settingsParameter != null) {
-				logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), SETTINGS_REPORTS_OUTPUT_PATH,settingsParameter);
-				
+				logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_REPORTS_OUTPUT_PATH,
+						settingsParameter);
+
 				JSONObject reportsPathSetResult = new JSONObject();
 				// check reports path
 				Path reportsPath = Paths.get(settingsParameter);
@@ -95,8 +97,9 @@ public class SettingsHandler extends HttpServlet {
 			// check for DroidMate path parameter
 			settingsParameter = request.getParameter(SETTINGS_DROIDMATE_PATH);
 			if (settingsParameter != null) {
-				logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), SETTINGS_DROIDMATE_PATH,settingsParameter);
-				
+				logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_DROIDMATE_PATH,
+						settingsParameter);
+
 				JSONObject droidMatePathSetResult = new JSONObject();
 				// check DroidMate path
 				Path droidMatePath = Paths.get(settingsParameter);
@@ -122,8 +125,8 @@ public class SettingsHandler extends HttpServlet {
 			// check for AAPT path parameter
 			settingsParameter = request.getParameter(SETTINGS_AAPT_PATH);
 			if (settingsParameter != null) {
-				logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), SETTINGS_AAPT_PATH,settingsParameter);
-				
+				logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_AAPT_PATH, settingsParameter);
+
 				JSONObject aaptPathSetResult = new JSONObject();
 				// check DroidMate path
 				Path aaptPath = Paths.get(settingsParameter);
@@ -149,8 +152,9 @@ public class SettingsHandler extends HttpServlet {
 			// check for exploration time parameter
 			settingsParameter = request.getParameter(SETTINGS_EXPLORATION_TIME);
 			if (settingsParameter != null) {
-				logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), SETTINGS_EXPLORATION_TIME,settingsParameter);
-				
+				logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_EXPLORATION_TIME,
+						settingsParameter);
+
 				JSONObject explorationTimeSetResult = new JSONObject();
 				// check DroidMate path
 				if (!NumberUtils.isDigits(settingsParameter)) {
@@ -164,7 +168,7 @@ public class SettingsHandler extends HttpServlet {
 					int explorationTime = Integer.parseInt(settingsParameter);
 
 					if (explorationTime <= 0) {
-						//exploration time must be grater than zero
+						// exploration time must be grater than zero
 						explorationTimeSetResult.put("result", false);
 						explorationTimeSetResult.put("message", "Exploration time " + settingsParameter + " is negative.");
 						allSettingsCorrect = false;
@@ -185,14 +189,14 @@ public class SettingsHandler extends HttpServlet {
 
 		JSONObject settingsSetResult = new JSONObject();
 		settingsSetResult.put("result", allSettingsCorrect);
-		if(allSettingsCorrect) {
+		if (allSettingsCorrect) {
 			settingsSetResult.put("message", "All Settings have been saved successfully.");
 		} else {
 			settingsSetResult.put("message", "There were errors in saving the settings.");
 		}
 		result.put(SETTINGS_SET, settingsSetResult);
-		
-		logger.info("{}: Request result: {}",request.getRequestURI(),result);
+
+		logger.info("{}: Request result: {}", request.getRequestURI(), result);
 		response.getWriter().print(result);
 	}
 

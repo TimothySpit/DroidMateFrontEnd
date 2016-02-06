@@ -58,6 +58,9 @@ requirejs
 				},
 				'DataTables' : {
 					deps : [ 'jquery' ]
+				},
+				'Spinner' : {
+					deps : [ 'jquery' ]
 				}
 			},
 
@@ -82,5 +85,6 @@ requirejs
 				'jquery.droidmate.overlays' : 'droidmate/jquery.droidmate.overlays',
 				'jquery.droidmate.dialogs' : 'droidmate/jquery.droidmate.dialogs',
 				'DataTables' : 'datatables/media/js/jquery.dataTables.min',
+				'Spinner' : 'spin/spin.min',
 			}
 		});

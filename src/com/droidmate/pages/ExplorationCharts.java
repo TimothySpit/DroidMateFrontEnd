@@ -12,18 +12,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Instance of Servlet implementation: ExplorationCharts
- * Responsible for the page with the charts tracking the exploration progress.
+ * Instance of Servlet implementation: ExplorationCharts Responsible for the
+ * page with the charts tracking the exploration progress.
  */
 @WebServlet("/ExplorationCharts")
-public class ExplorationCharts extends HttpServlet
-{
+public class ExplorationCharts extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-	
+
 	/**
 	 * Creates a new instance of the ExplorationCharts class.
+	 * 
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public ExplorationCharts() {
@@ -32,12 +32,13 @@ public class ExplorationCharts extends HttpServlet
 
 	/**
 	 * Sends back the html-code for the page with the exploration charts.
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Serve {} page request.",request.getRequestURI());
-		
+		logger.info("Serve {} page request.", request.getRequestURI());
+
 		request.getRequestDispatcher("/WEB-INF/pages/explore/explorationCharts.jsp").forward(request, response);
 	}
 

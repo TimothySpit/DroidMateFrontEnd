@@ -39,10 +39,7 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 		$('#button-apk-folder-selection').prop("disabled", true);
 	}
 	
-	function updateUIControls() {
-		// disables all visible controls to disabled
-		disableUI();
-		
+	function updateUIControls(callback) {
 		// get current user status
 		$.droidmate.ajax.getUserStatus(true, function(data) {
 			// check for error in data receiving
@@ -50,12 +47,18 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 				$.droidmate.overlays.danger(
 						"Could not parse server returned value.",
 						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+				if(callback) {
+					callback(data);
+				}
 				return;
 			}
 
 			var statusData = data.getUserStatus.payload.data;
 
 			if (!statusData) {
+				if(callback) {
+					callback(data);
+				}
 				return;
 			}
 
@@ -78,6 +81,8 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 			var selectedRowsCount = selectedRows.length;
 			if (selectedRowsCount) {
 				enableUI();
+			} else {
+				disableUI();
 			}
 
 			// if apks are selected, which are not inlined, disable exploration
@@ -88,6 +93,7 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 				else
 					return true;
 			})
+			
 			if (notInlinedRows.length) {
 				$("#button-start-exploration").prop("disabled", true);
 			}
@@ -104,6 +110,10 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 				} else {
 					$("#button-inline-files").prop("disabled", false);
 				}
+			}
+			
+			if(callback) {
+				callback(data);
 			}
 		});
 	}

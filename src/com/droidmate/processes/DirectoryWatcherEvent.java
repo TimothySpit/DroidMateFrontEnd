@@ -7,15 +7,15 @@ public class DirectoryWatcherEvent {
 
 	private final WatchEvent<?> event;
 	private final Path changedPath;
-	
+
 	public DirectoryWatcherEvent(WatchEvent<?> event, Path changedPath) {
-		if(event == null) {
+		if (event == null) {
 			throw new IllegalArgumentException("Event must not be null.");
 		}
-		if(changedPath == null) {
+		if (changedPath == null) {
 			throw new IllegalArgumentException("Path must not be null.");
 		}
-		
+
 		this.event = event;
 		this.changedPath = changedPath;
 	}
@@ -27,5 +27,5 @@ public class DirectoryWatcherEvent {
 	public Path getChangedPath() {
 		return changedPath;
 	}
-	
+
 }

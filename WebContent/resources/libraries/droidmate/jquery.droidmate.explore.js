@@ -4,14 +4,14 @@ define([ 'jquery'], function(require) {
 	var explore = {};
 	
 	//constants
-	explore.UPDATE_EXPLORE_CHARTS_INTERVAL = 1000;
+	explore.UPDATE_EXPLORE_INTERVAL = 1000;
 	//--------------------------------------
 	
 	
 	function startExploration(async, success, error, complete) {
 		return $.ajax({
 			async : async,
-			url : "/DroidMate/APKExploreHandler",
+			url : "/DroidMate/ExploreHandler",
 			method : "POST",
 			data : {
 				startExploration : true

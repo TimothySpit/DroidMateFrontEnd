@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -17,16 +16,19 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.FilenameUtils;
 
+import com.droidmate.interfaces.Observable;
+import com.droidmate.interfaces.Observer;
 import com.droidmate.processes.AAPTInformation;
 import com.droidmate.processes.AAPTProcess;
+import com.droidmate.processes.DroidMateProcess;
+import com.droidmate.processes.DroidMateProcessEvent;
 import com.droidmate.processes.InlinerProcess;
-import com.droidmate.processes.LogReaderProcess;
 
 /**
  * Sets the path for the .apks to be explored and tracks the exploration status
  * for all .apks.
  */
-public class DroidMateUser {
+public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	private final static String INLINED_APKS_FOLDER_NAME = "inlined";
 
 	/** Path to the folder containing .apk files */
@@ -38,8 +40,6 @@ public class DroidMateUser {
 	/** Instance of GUISettings */
 	private final GUISettings settings;
 
-	private ExplorationInfo globalExplorationInfo;
-
 	/**
 	 * The current status the user is in.
 	 */
@@ -47,6 +47,7 @@ public class DroidMateUser {
 
 	// Processes the user can start
 	private InlinerProcess inlinerProcess = null;
+	private DroidMateProcess droidMateProcess = null;
 	// ----------------------------
 
 	/**
@@ -57,23 +58,12 @@ public class DroidMateUser {
 		this.settings = new GUISettings();
 	}
 
-	private LogReaderProcess getLogReader(File logFile) throws FileNotFoundException {
-		globalExplorationInfo = new ExplorationInfo();
-		Map<String, ExplorationInfo> apksMap = new ConcurrentHashMap<>();
-		for (APKInformation apk : getAPKS().values()) {
-			apk.setExplorationInfo(new ExplorationInfo());
-			apksMap.put(apk.getAPKName(), apk.getExplorationInfo());
-		}
-
-		return new LogReaderProcess(logFile, apksMap, globalExplorationInfo);
-	}
-
 	/**
 	 * Gets the .apks path.
 	 * 
 	 * @return The .apks path
 	 */
-	public synchronized Path getAPKPath() {
+	public Path getAPKPath() {
 		return apksRootPath;
 	}
 
@@ -98,10 +88,9 @@ public class DroidMateUser {
 		if (!(newPath.toFile().exists() && newPath.toFile().isDirectory())) {
 			throw new IllegalArgumentException("APK root path must exist and must be a directory.");
 		}
-		if(userStatus.get() != UserStatus.IDLE) {
+		if (userStatus.get() != UserStatus.IDLE) {
 			throw new IllegalStateException("User is not in IDLE state. Cannot set APK path now.");
 		}
-		
 
 		apksInformation.clear();
 		apksRootPath = newPath;
@@ -121,16 +110,16 @@ public class DroidMateUser {
 			List<AAPTInformation> aaptResult = getAAPTInformation(aaptPath.toFile());
 			// create APKInformation out of AAPT information
 			List<APKInformation> apksInfos = setUpAPKInformations(aaptResult);
-			//save all apks
+			// save all apks
 			for (APKInformation apkInfo : apksInfos) {
 				this.apksInformation.put(apkInfo.getAPKName(), apkInfo);
 			}
-			
+
 		} catch (IOException e) {
-			//error, reset apk path
+			// error, reset apk path
 			apksRootPath = null;
 			throw e;
-		} 
+		}
 
 	}
 
@@ -230,21 +219,12 @@ public class DroidMateUser {
 		return apksInformation;
 	}
 
-	/**
-	 * Gets GUISettings.
-	 * 
-	 * @return The GUISettings
-	 */
-	public GUISettings getSettings() {
-		return settings;
-	}
-
 	public boolean isInlinerStarted() {
 		return userStatus.get() == UserStatus.INLINING;
 	}
 
-	public boolean startInliner() throws IOException {
-		if (userStatus.getAndSet(UserStatus.INLINING) != UserStatus.IDLE) {
+	public synchronized boolean startInliner() throws IOException {
+		if (userStatus.get() != UserStatus.IDLE) {
 			throw new IllegalStateException("Inliner can not be started in state " + userStatus.get().getName());
 		}
 		if (apksRootPath == null) {
@@ -257,6 +237,9 @@ public class DroidMateUser {
 			throw new IllegalArgumentException("APK path must be a directory");
 		}
 
+		//change user state
+		userStatus.set(UserStatus.INLINING);
+		
 		// set up apks to inline
 		List<APKInformation> apksToInline = new LinkedList<>();
 		for (APKInformation apk : apksInformation.values()) {
@@ -296,5 +279,92 @@ public class DroidMateUser {
 
 	public UserStatus getStatus() {
 		return userStatus.get();
+	}
+
+	public boolean isExplorationStarted() {
+		UserStatus currentStatus = userStatus.get();
+		// exploratioin is currently running or was running, in both cases,
+		// exploration is (was) started and not reset to IDLE
+		return currentStatus == UserStatus.EXPLORING || currentStatus == UserStatus.FINISHED || currentStatus == UserStatus.ERROR;
+	}
+
+	public synchronized boolean startDroidMate() throws Exception {
+		if (userStatus.get() != UserStatus.IDLE) {
+			throw new IllegalStateException("DroidMate can not be started in state " + userStatus.get().getName());
+		}
+		if (apksRootPath == null) {
+			throw new IllegalArgumentException("APK Path has not been set.");
+		}
+		if (!apksRootPath.toFile().exists()) {
+			throw new FileNotFoundException("APK path does not exist.");
+		}
+		if (!apksRootPath.toFile().isDirectory()) {
+			throw new IllegalArgumentException("APK path must be a directory");
+		}
+
+		// get all APKs to explore
+		List<APKInformation> apksToExplore = new LinkedList<>();
+
+		// there are apks to explore, check if all selected APKs are inlined
+		for (APKInformation apk : apksInformation.values()) {
+			if (apk.isAPKSelected()) {
+				if (apk.getInliningStatus() != InliningStatus.INLINED) {
+					throw new IllegalStateException(
+							"APK " + apk.getAPKName() + " is selected for DroidMate, but not inlined yet. DroidMate can only be run on inlined APKs.");
+				} else {
+					apksToExplore.add(apk);
+				}
+			}
+		}
+
+		// check if there are apks to explore
+		if (apksToExplore.size() == 0) {
+			throw new IllegalStateException("No selected apks specified to explore. Please select a path with APKs and select a subset of them.");
+		}
+
+		// all APKs are inlined, change state and start DroidMate
+		userStatus.set(UserStatus.STARTING);
+
+		// start DroidMate
+		try {
+			if (droidMateProcess == null) {
+				// Get inliner path and otput path
+				Path droidMatePath = settings.getDroidMatePath();
+				Path logFilePath = Paths.get(droidMatePath.toString(), "/dev1/logs/gui.xml");
+				droidMateProcess = new DroidMateProcess(droidMatePath.toFile(), logFilePath.toFile());
+			}
+
+			// register observer to signal finished exploration
+			droidMateProcess.addObserver(this);
+
+			// start inliner
+			droidMateProcess.startExploration(apksToExplore);
+		} catch (Exception e) {
+			//error starting DroidMate
+			userStatus.set(UserStatus.ERROR);
+			throw e;
+		}
+
+		return true;
+	}
+
+	@Override
+	public synchronized void update(Observable<DroidMateProcessEvent> o, DroidMateProcessEvent event) {
+		switch (event.getEvent()) {
+		case STARTED: {
+			userStatus.set(UserStatus.EXPLORING);
+			break;
+		}
+		case FINISHED: {
+			userStatus.set(UserStatus.FINISHED);
+			droidMateProcess.saveReport();
+			break;
+		}
+		case ERROR: {
+			userStatus.set(UserStatus.ERROR);
+			droidMateProcess.saveReport();
+			break;
+		}
+		}
 	}
 }

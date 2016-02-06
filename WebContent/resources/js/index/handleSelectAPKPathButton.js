@@ -78,7 +78,7 @@ define([ 'require', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
 	});
 	
 	//handle startup
-	var path = $.droidmate.ajax.getAPKsRoot(true, function(data) {
+	$.droidmate.ajax.getAPKsRoot(true, function(data) {
 		if (data && data.getAPKsRoot && data.getAPKsRoot.result) {
 			var path = data.getAPKsRoot.payload.data;
 			$('#input-apk-folder-selection').val(path);

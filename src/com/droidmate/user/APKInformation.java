@@ -11,20 +11,23 @@ import com.droidmate.processes.AAPTInformation;
 
 /**
  * This class provides all information about all .apks (name, package name,
- * version code, etc...) and provides the inlining status of them. 
+ * version code, etc...) and provides the inlining status of them.
  */
 public class APKInformation {
 
 	/** The aapt information. */
 	private AAPTInformation aaptInfo;
 	/** The exploration info. */
-	private ExplorationInfo explorationInfo;
+	private ExplorationInfo explorationInfo = new ExplorationInfo();
 
-	private AtomicBoolean	isSelected = new AtomicBoolean(false);
-	
+	private AtomicBoolean isSelected = new AtomicBoolean(false);
+
 	/** The gui and InlinerProcess may access the status concurrently. */
-	private final AtomicReference<InliningStatus> inliningStatusReference = new AtomicReference<>();
+	private final AtomicReference<InliningStatus> inliningStatusReference = new AtomicReference<>(InliningStatus.NOT_INLINED);
 
+	private final AtomicReference<ExplorationStatus> explorationStatusReference = new AtomicReference<>(ExplorationStatus.NOT_RUNNING);
+
+	
 	/**
 	 * @param aaptInfo
 	 *            The AAPTInformation
@@ -51,17 +54,14 @@ public class APKInformation {
 		result.put("sizeByte", getAPKFileSizeInBytes());
 		result.put("sizeReadable", FileUtils.byteCountToDisplaySize(getAPKFile().length()));
 		result.put("inlineStatus", inliningStatusReference.get().getName());
-		result.put("explorationInfo", getExplorationInfo() == null ? null : getExplorationInfo().toJSONObject());
-		
+		result.put("explorationStatus", explorationStatusReference.get().getName());
+		result.put("explorationInfo", getExplorationInfo().toJSONObject());
+
 		return result;
 	}
 
 	public ExplorationInfo getExplorationInfo() {
 		return explorationInfo;
-	}
-
-	public void setExplorationInfo(ExplorationInfo explorationInfo) {
-		this.explorationInfo = explorationInfo;
 	}
 
 	/**
@@ -156,10 +156,27 @@ public class APKInformation {
 	}
 
 	public void setAPKSelected(boolean isSelected) {
-		if(inliningStatusReference.get() != InliningStatus.INLINED) {
+		if (inliningStatusReference.get() != InliningStatus.INLINED) {
 			throw new IllegalStateException("APK is not yet inlined and cannot be selected.");
+		}
+		if(explorationStatusReference.get() != ExplorationStatus.NOT_RUNNING) {
+			throw new IllegalStateException("APK is not in State NOT_RUNNING, so it cannot be selected for exploration.");
 		}
 		
 		this.isSelected.set(isSelected);
+	}
+
+	public ExplorationStatus getExplorationStatus() {
+		return explorationStatusReference.get();
+	}
+	
+	public void setExplorationStatus(ExplorationStatus explorationStatus) {
+		if (inliningStatusReference.get() == InliningStatus.INLINING && explorationStatus != ExplorationStatus.NOT_RUNNING) {
+			throw new IllegalStateException("APK is still inlining. Exploration state cannot be set to " + explorationStatus.getName());
+		}
+		if (inliningStatusReference.get() != InliningStatus.INLINED && explorationStatus != ExplorationStatus.NOT_RUNNING) {
+			throw new IllegalStateException("APK is not inlined. Exploration state cannot be set to " + explorationStatus.getName());
+		}
+		explorationStatusReference.set(explorationStatus);
 	}
 }

@@ -8,23 +8,24 @@ import org.apache.commons.io.FilenameUtils;
 public class AAPTInformation {
 
 	private final File apkFile;
-	
+
 	private final String packageName;
 	private final String packageVersionCode;
 	private final String packageVersionName;
 	private final String activityName;
-	
-	public AAPTInformation(File apk, String packageName, String packageVersionCode, String packageVersionName, String activityName) throws FileNotFoundException {
-		if(apk == null || packageName == null || packageVersionCode == null || packageVersionName == null || activityName == null) {
+
+	public AAPTInformation(File apk, String packageName, String packageVersionCode, String packageVersionName, String activityName)
+			throws FileNotFoundException {
+		if (apk == null || packageName == null || packageVersionCode == null || packageVersionName == null || activityName == null) {
 			throw new IllegalArgumentException("Arguments must be not null.");
 		}
-		if(!FilenameUtils.getExtension(apk.getName()).equals("apk")) {
+		if (!FilenameUtils.getExtension(apk.getName()).equals("apk")) {
 			throw new IllegalArgumentException("File 'apk' must be an .apk file.");
 		}
-		if(!apk.exists()) {
+		if (!apk.exists()) {
 			throw new FileNotFoundException("File " + apk + " does not exist.");
 		}
-		
+
 		this.apkFile = apk;
 		this.packageName = packageName;
 		this.packageVersionCode = packageVersionCode;
@@ -62,8 +63,8 @@ public class AAPTInformation {
 
 	@Override
 	public String toString() {
-		return "AAPTInformation [APK=" + getAPKName() + ", packageName=" + getAPKPackageName() + ", packageVersionCode=" + getAPKPackageVersionCode() + ", packageVersionName="
-				+ getAPKPackageVersionName() + ", activityName=" + getAPKActivityName() + "]";
+		return "AAPTInformation [APK=" + getAPKName() + ", packageName=" + getAPKPackageName() + ", packageVersionCode=" + getAPKPackageVersionCode()
+				+ ", packageVersionName=" + getAPKPackageVersionName() + ", activityName=" + getAPKActivityName() + "]";
 	}
 
 }

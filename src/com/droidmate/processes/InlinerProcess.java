@@ -60,11 +60,14 @@ public class InlinerProcess {
 		if (apks == null) {
 			throw new IllegalArgumentException("APKS list must not be null.");
 		}
+		if(apks.size() == 0) {
+			throw new IllegalArgumentException("No apks specified for inlining.");
+		}
 
 		// create Process arguments and start DroidMate inliner tool
 		List<String> arguments = new LinkedList<>();
 		arguments.add(inlinerPath.toString() + "/gradlew.bat"); // only support
-															// windows here
+		// windows here
 		if (printStackTrace) {
 			arguments.add("--stacktrace");
 		}
@@ -73,8 +76,8 @@ public class InlinerProcess {
 		return tryStartInlineAPKS(apks, arguments);
 	}
 
-	private boolean tryStartInlineAPKS(List<APKInformation> apks, List<String> arguments) throws IOException {
-		assert apks != null && arguments != null;
+	private boolean tryStartInlineAPKS(List<APKInformation> apksToInline, List<String> arguments) throws IOException {
+		assert apksToInline != null && arguments != null;
 
 		// get all needed droidmate paths and check for correctness
 		File inlinerDir = new File(this.inlinerPath, "/projects/apk-inliner/");
@@ -93,34 +96,42 @@ public class InlinerProcess {
 		clearAPKSFromDirectory(inlinerOutputAPKSPath);
 
 		// copy all apks to inliner input path
-		for (APKInformation apk : apks) {
+		for (APKInformation apk : apksToInline) {
 			File currentAPKFile = apk.getAPKFile();
 			Path destinationFile = Paths.get(inlinerInputAPKSPath.toString(), apk.getAPKFile().getName());
 			Files.copy(currentAPKFile.toPath(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
 		}
 
+		//check each apk´s status
+		for (APKInformation apk : apksToInline) {
+			if(apk.getInliningStatus() == InliningStatus.INLINING) {
+				//apk is still inlining
+				throw new IllegalStateException("APK " + apk.getAPKName() + " is still inlining.");
+			}
+		}
+		
 		try {
 			// register Observer for apk folder changes
-			DirectoryWatcher watcher = registerWatchOutputDirectory(apks, inlinerOutputAPKSPath, inlinedOutputPath);
+			DirectoryWatcher watcher = registerWatchOutputDirectory(apksToInline, inlinerOutputAPKSPath, inlinedOutputPath);
 
 			// set apk status to inlining
-			for (APKInformation apk : apks) {
+			for (APKInformation apk : apksToInline) {
 				apk.setInliningStatus(InliningStatus.INLINING);
 			}
 
 			// start the inliner
 			if (!startInliner(watcher, arguments)) {
 				// reset status of apks
-				resetAllAPKs(apks);
+				resetAllAPKs(apksToInline);
 				return false;
 			} else {
 				return true;
 			}
 		} catch (InterruptedException e) {
-			resetAllAPKs(apks);
+			resetAllAPKs(apksToInline);
 			return false;
 		} catch (Exception e) {
-			resetAllAPKs(apks);
+			resetAllAPKs(apksToInline);
 			throw e;
 		}
 	}
@@ -212,19 +223,19 @@ public class InlinerProcess {
 
 	private void checkInlinerDirectories(File inlinerDir, File inlinerInputAPKSPath, File inlinerOutputAPKSPath) throws IOException {
 		if (!inlinerInputAPKSPath.exists()) {
-			throw new IOException("APK inliner input path " + inlinerInputAPKSPath + " does not exist.");
+			throw new FileNotFoundException("APK inliner input path " + inlinerInputAPKSPath + " does not exist.");
 		}
 		if (!inlinerInputAPKSPath.isDirectory()) {
 			throw new IOException("APK inliner input path " + inlinerInputAPKSPath + " must be a directory.");
 		}
 		if (!inlinerDir.exists()) {
-			throw new IOException("APK inliner path " + inlinerDir + " does not exist.");
+			throw new FileNotFoundException("APK inliner path " + inlinerDir + " does not exist.");
 		}
 		if (!inlinerDir.isDirectory()) {
 			throw new IOException("APK inliner path " + inlinerDir + " must be a directory.");
 		}
 		if (!inlinerOutputAPKSPath.exists()) {
-			throw new IOException("APK inliner output path " + inlinerOutputAPKSPath + " does not exist.");
+			throw new FileNotFoundException("APK inliner output path " + inlinerOutputAPKSPath + " does not exist.");
 		}
 		if (!inlinerOutputAPKSPath.isDirectory()) {
 			throw new IOException("APK inliner output path " + inlinerOutputAPKSPath + " must be a directory.");

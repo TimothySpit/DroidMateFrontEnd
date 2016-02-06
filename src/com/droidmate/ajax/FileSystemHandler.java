@@ -16,27 +16,25 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
- * Instance of Servlet implementation: FileSystemHandler. This class represents a
- * File-System browser. This is needed for choosing a directory with .apk files.
+ * Instance of Servlet implementation: FileSystemHandler. This class represents
+ * a File-System browser. This is needed for choosing a directory with .apk
+ * files.
  */
 @WebServlet("/FileSystemHandler")
-public class FileSystemHandler extends HttpServlet
-{
+public class FileSystemHandler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	//request parameters
+	// request parameters
 	private final static String FILETYPE = "type";
 	private final static String PATH = "path";
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-	
+
 	/**
 	 * Enum for possible file types. Only directories are interesting.
 	 */
-	private enum FileType
-	{
+	private enum FileType {
 		UNKNOWN("unknowm"), DIRECTORY("directory"), ALL("all");
 
 		private final String name;
@@ -63,7 +61,6 @@ public class FileSystemHandler extends HttpServlet
 		}
 	}
 
-	
 	/**
 	 * Creates a new instance of the FileSystemHandler class.
 	 * 
@@ -80,37 +77,39 @@ public class FileSystemHandler extends HttpServlet
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Serve {} page request.",request.getRequestURI());
-		
+		logger.info("Serve {} page request.", request.getRequestURI());
+
 		// return json
 		response.setContentType("application/json");
 		// Do not cache
 		response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
 		response.setHeader("Pragma", "no-cache");
-		
+
 		JSONArray result = new JSONArray();
 		FileType fileType = FileType.fromString(request.getParameter(FILETYPE));
-		
+
 		String path = request.getParameter(PATH);
 		if (path != null && (path.equals("root") || (new File(path)).exists())) {
-			logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), PATH,path);
-			logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), FILETYPE,fileType);
-			
+			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), PATH, path);
+			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), FILETYPE, fileType);
+
 			result = getFileData(fileType, path);
 		}
 
-		logger.info("{}: Request result: {}",request.getRequestURI(),result);
+		logger.info("{}: Request result: {}", request.getRequestURI(), result);
 		response.getWriter().print(result);
 	}
-	
+
 	/**
 	 * Investigate the chosen File.
-	 * @param fileType the FileType to investigate
-	 * @param path the path to investigate
+	 * 
+	 * @param fileType
+	 *            the FileType to investigate
+	 * @param path
+	 *            the path to investigate
 	 * @return
 	 */
-	private JSONArray getFileData(FileType fileType, String path)
-	{
+	private JSONArray getFileData(FileType fileType, String path) {
 		File[] currentRoots;
 		if (path.equals("root")) {
 			currentRoots = File.listRoots();

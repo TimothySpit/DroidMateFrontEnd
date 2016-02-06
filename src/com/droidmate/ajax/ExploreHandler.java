@@ -15,30 +15,25 @@ import org.slf4j.LoggerFactory;
 import com.droidmate.user.DroidMateUser;
 
 /**
- * Instance of Servlet implementation: UserStatusHandler. Handles the user
- * status.
+ * Servlet implementation class ExploreHandler
  */
-@WebServlet("/UserStatusHandler")
-public class UserStatusHandler extends HttpServlet {
+@WebServlet("/ExploreHandler")
+public class ExploreHandler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	// request parameters
-	private static final String USER_STATUS_GET = "getUserStatus";
+	private static final String START_DROIDMATE = "startExploration";
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
-	 * Creates a new instance of the UserStatusHandler class.
-	 * 
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public UserStatusHandler() {
+	public ExploreHandler() {
 		super();
 	}
 
 	/**
-	 * Handles the user status.
-	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -55,23 +50,34 @@ public class UserStatusHandler extends HttpServlet {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute("user");
 		JSONObject result = new JSONObject();
 
-		// handle user status get
-		String getUserStatusString = request.getParameter(USER_STATUS_GET);
-		if (getUserStatusString != null) {
-			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), USER_STATUS_GET, getUserStatusString);
+		// handle SELECTED_APKS_SET request
+		String[] startDroidMateString = request.getParameterValues(START_DROIDMATE);
+		if (startDroidMateString != null) {
+			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), START_DROIDMATE, startDroidMateString);
 
-			JSONResponseWrapper getUserStatusResult = new JSONResponseWrapper();
+			JSONResponseWrapper startDroidMateResult = new JSONResponseWrapper();
 
-			// always return a status
-			getUserStatusResult = new JSONResponseWrapper(true, "Status successfully returned.");
-			// set payload
-			JSONObject payload = new JSONObject();
-			payload.put("data", user.getStatus().getName());
-			getUserStatusResult.setPayload(payload);
-			result.put(USER_STATUS_GET, getUserStatusResult.toJSONObject());
+			if (user.isExplorationStarted()) {
+				startDroidMateResult = new JSONResponseWrapper(false, "DroidMate was already started. Please start a new Exploration.");
+			} else {
+				//try start DroidMate
+				try {
+					boolean startResult = user.startDroidMate();
+					if (startResult) {
+						startDroidMateResult = new JSONResponseWrapper(startResult, "DroidMate successfully started.");
+					} else {
+						startDroidMateResult = new JSONResponseWrapper(startResult, "DroidMate had an intern error.");
+					}
+				} catch (Exception e) {
+					startDroidMateResult = new JSONResponseWrapper(false, e.getMessage());
+				}
+			}
+			
+			result.put(START_DROIDMATE, startDroidMateResult.toJSONObject());
 		}
 
 		logger.info("{}: Request result: {}", request.getRequestURI(), result);
 		response.getWriter().print(result);
 	}
+
 }

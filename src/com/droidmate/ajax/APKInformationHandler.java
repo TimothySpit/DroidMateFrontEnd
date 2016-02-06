@@ -22,15 +22,14 @@ import com.droidmate.user.DroidMateUser;
  * table.
  */
 @WebServlet("/APKInformationHandler")
-public class APKInformationHandler extends HttpServlet
-{
+public class APKInformationHandler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	// request parameters
 	private static final String APKS_DATA = "getAPKSData";
-	
+
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-	
+
 	/**
 	 * Creates a new instance of the ApkInformationHandler class
 	 * 
@@ -47,7 +46,7 @@ public class APKInformationHandler extends HttpServlet
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Serve {} page request.",request.getRequestURI());		
+		logger.info("Serve {} page request.", request.getRequestURI());
 		// return json
 		response.setContentType("application/json");
 		// Do not cache
@@ -62,8 +61,8 @@ public class APKInformationHandler extends HttpServlet
 		String apksData = request.getParameter(APKS_DATA);
 		JSONObject result = new JSONObject();
 		if (apksData != null) {
-			logger.info("{}: Handle {} parameter {} with value {}",request.getRequestURI(),request.getMethod(), APKS_DATA,apksData);
-			
+			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), APKS_DATA, apksData);
+
 			JSONResponseWrapper getAPKSDataResult = new JSONResponseWrapper();
 			getAPKSDataResult = new JSONResponseWrapper(true, "Data successfully get.");
 			// set payload
@@ -79,7 +78,7 @@ public class APKInformationHandler extends HttpServlet
 			result.put(APKS_DATA, getAPKSDataResult.toJSONObject());
 		}
 
-		logger.info("{}: Request result: {}",request.getRequestURI(),result);
+		logger.info("{}: Request result: {}", request.getRequestURI(), result);
 		response.getWriter().print(result);
 	}
 

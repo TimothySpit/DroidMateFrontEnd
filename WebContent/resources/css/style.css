@@ -72,3 +72,30 @@ input#folder_name {
     font-family:monospace;
     height: 70%;
 }
+
+
+/* explore loading indicator container*/
+#div-droidmate-starting-indicator-container {
+	height: 200px;
+}
+
+#div-droidmate-starting-indicator-container #div-starting-indicator{
+	position: relative;
+	height: 100px;
+}
+
+/* explore table images */
+td.details-control {
+    background: url('/DroidMate/resources/css/images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('/DroidMate/resources/css/images/details_close.png') no-repeat center center;
+}
+
+/* explore charts */
+.apk-chart-min {
+	float: left;
+	height: 250px;
+	width:  33%;
+}

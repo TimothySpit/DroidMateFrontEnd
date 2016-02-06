@@ -4,4 +4,5 @@ requirejs([ "./../common" ], function(util) {
 	
 	requirejs([ '../js/explore/handleUpdate' ]);
 	requirejs([ '../js/explore/handleStartup' ]);
+	requirejs([ '../js/explore/handleExploreUpdate' ]);
 });

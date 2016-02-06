@@ -11,27 +11,27 @@ import java.io.StringWriter;
 import java.util.List;
 
 public class ProcessWrapper {
-	
+
 	private ProcessBuilder processBuilder;
 	private StringWriter infoWriter = new StringWriter();
 	private StringWriter errorWriter = new StringWriter();
 	private int exitValue;
 
-	public ProcessWrapper(File directory, List<String> command) throws FileNotFoundException  {
-		if(directory == null || command == null) {
+	public ProcessWrapper(File directory, List<String> command) throws FileNotFoundException {
+		if (directory == null || command == null) {
 			throw new IllegalArgumentException("Arguments must not be null.");
 		}
-		if(!directory.exists()) {
+		if (!directory.exists()) {
 			throw new FileNotFoundException("The directory file does not exist.");
 		}
-		if(!directory.isDirectory()) {
+		if (!directory.isDirectory()) {
 			throw new IllegalArgumentException("Argument 'directory' must refer to an existing directory.");
 		}
-		
+
 		processBuilder = new ProcessBuilder(command);
 		processBuilder.directory(directory);
 	}
-	
+
 	public void start() throws InterruptedException, IOException {
 		Process process = processBuilder.start();
 		StreamBoozer seInfo = new StreamBoozer(process.getInputStream(), new PrintWriter(infoWriter, true));
