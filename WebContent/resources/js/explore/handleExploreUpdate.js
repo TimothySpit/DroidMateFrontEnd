@@ -47,6 +47,12 @@ define([ 'require',
 					return false;
 				}
 				
+				//show only selected apks
+				if(!value.isSelected) {
+					//apk is not selected
+					return;
+				}
+				
 				//collect data
 				var name = value.name;
 				var elementsSeen = explorationInfo.elementsSeen;

@@ -56,7 +56,8 @@ public class APKInformation {
 		result.put("inlineStatus", inliningStatusReference.get().getName());
 		result.put("explorationStatus", explorationStatusReference.get().getName());
 		result.put("explorationInfo", getExplorationInfo().toJSONObject());
-
+		result.put("isSelected", isSelected.get());
+		
 		return result;
 	}
 
