@@ -332,6 +332,7 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 				Path droidMatePath = settings.getDroidMatePath();
 				Path logFilePath = Paths.get(droidMatePath.toString(), "/dev1/logs/gui.xml");
 				droidMateProcess = new DroidMateProcess(droidMatePath.toFile(), logFilePath.toFile());
+				droidMateProcess.setPrintStackTrace(true);
 			}
 
 			// register observer to signal finished exploration

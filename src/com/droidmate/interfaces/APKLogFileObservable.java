@@ -6,6 +6,8 @@ import java.util.List;
 import com.droidmate.processes.logfile.APKElementsExploredChanged;
 import com.droidmate.processes.logfile.APKElementsSeenChanged;
 import com.droidmate.processes.logfile.APKEnded;
+import com.droidmate.processes.logfile.APKExplorationEnded;
+import com.droidmate.processes.logfile.APKExplorationStarted;
 import com.droidmate.processes.logfile.APKLogFileEvent;
 import com.droidmate.processes.logfile.APKScreensSeenChanged;
 import com.droidmate.processes.logfile.APKStarted;
@@ -41,6 +43,16 @@ public class APKLogFileObservable {
 	 * @param arg
 	 *            the change which happend
 	 */
+	public void notifyObservers(APKExplorationStarted arg) {
+		for (APKLogFileObserver observer : observers)
+			observer.update(this, arg);
+	}
+	public void notifyObservers(APKExplorationEnded arg) {
+		for (APKLogFileObserver observer : observers)
+			observer.update(this, arg);
+	}
+	
+	
 	public void notifyObservers(APKStarted arg) {
 		for (APKLogFileObserver observer : observers)
 			observer.update(this, arg);
@@ -49,6 +61,7 @@ public class APKLogFileObservable {
 		for (APKLogFileObserver observer : observers)
 			observer.update(this, arg);
 	}
+	
 	
 	public void notifyObservers(APKElementsSeenChanged arg) {
 		for (APKLogFileObserver observer : observers)

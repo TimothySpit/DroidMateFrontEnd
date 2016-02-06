@@ -56,12 +56,12 @@ public class APKLogFileHandler extends APKLogFileObservable {
 			// wait until input file is created
 			waitForFileCreation();
 		}
-		
-		if(!inputFileToParse.exists()) {
-			//process was stopped
+
+		if (!inputFileToParse.exists()) {
+			// process was stopped
 			return;
 		}
-		
+
 		// start parsing
 		XmlPullParserFactory factory = null;
 		XmlPullParser parser = null;
@@ -73,17 +73,20 @@ public class APKLogFileHandler extends APKLogFileObservable {
 			Reader reader = new InputStreamReader(inputFileStream, StandardCharsets.UTF_8);
 			parser.setInput(reader);
 			int eventType = parser.getEventType();
-			
-			//info variables
+
+			// info variables
 			String currentAPKName = "";
 			String text = "";
-			//--------------
-			
+			// --------------
+
 			while (eventType != XmlPullParser.END_DOCUMENT) {
 				String tagname = parser.getName();
 				switch (eventType) {
 				case XmlPullParser.START_TAG:
-					if (tagname.equalsIgnoreCase("name")) {
+					if (tagname.equalsIgnoreCase("exploration")) {
+						// DroidMate exploration started
+						notifyObservers(new APKExplorationStarted(System.currentTimeMillis()));
+					} else if (tagname.equalsIgnoreCase("name")) {
 						// new apk
 						currentAPKName = tagname;
 						notifyObservers(new APKStarted(currentAPKName, System.currentTimeMillis()));
@@ -95,7 +98,7 @@ public class APKLogFileHandler extends APKLogFileObservable {
 					break;
 
 				case XmlPullParser.END_TAG:
-					if (tagname.equalsIgnoreCase("gui_screens_seen")) {				
+					if (tagname.equalsIgnoreCase("gui_screens_seen")) {
 						notifyObservers(new APKScreensSeenChanged(currentAPKName, Integer.parseInt(text)));
 					} else if (tagname.equalsIgnoreCase("elements_seen")) {
 						notifyObservers(new APKElementsSeenChanged(currentAPKName, Integer.parseInt(text)));
@@ -103,6 +106,8 @@ public class APKLogFileHandler extends APKLogFileObservable {
 						notifyObservers(new APKEnded(currentAPKName, System.currentTimeMillis(), Boolean.parseBoolean(text)));
 					} else if (tagname.equalsIgnoreCase("widget_explored")) {
 						notifyObservers(new APKElementsExploredChanged(currentAPKName, Integer.parseInt(text)));
+					}else if (tagname.equalsIgnoreCase("exploration")) {
+						notifyObservers(new APKExplorationEnded(System.currentTimeMillis()));
 					}
 					break;
 

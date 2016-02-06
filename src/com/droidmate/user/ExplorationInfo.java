@@ -13,7 +13,8 @@ import org.json.JSONObject;
 public class ExplorationInfo {
 
 	private AtomicLong startingTime = new AtomicLong(0);
-
+	private AtomicLong endTime = new AtomicLong(0);
+	
 	private AtomicInteger elementsSeen = new AtomicInteger(0);
 	private AtomicInteger screensSeen = new AtomicInteger(0);
 	private AtomicInteger widgetsExplored = new AtomicInteger(0);
@@ -46,6 +47,13 @@ public class ExplorationInfo {
 		return startingTime.get();
 	}
 
+	public void setEndTime(long endTime) {
+		this.endTime.set(endTime);
+	}
+	public long getEndTime() {
+		return endTime.get();
+	}
+	
 	public int getElementsSeen() {
 		return elementsSeen.get();
 	}
@@ -58,7 +66,7 @@ public class ExplorationInfo {
 		return widgetsExplored.get();
 	}
 
-	public void addWidgetsExplored(int newExplored) {
+	public void addElementsExplored(int newExplored) {
 		widgetsExplored.addAndGet(newExplored);
 		widgetsExploredHistory.put(System.currentTimeMillis() - getStartingTime(), getWidgetsExplored());
 	}
@@ -123,4 +131,5 @@ public class ExplorationInfo {
 	public ConcurrentSkipListMap<Long, Integer> getWidgetsExploredHistory() {
 		return widgetsExploredHistory;
 	}
+
 }

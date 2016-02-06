@@ -8,25 +8,41 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 
+import com.droidmate.interfaces.APKLogFileObservable;
+import com.droidmate.interfaces.APKLogFileObserver;
 import com.droidmate.interfaces.Observable;
+import com.droidmate.processes.logfile.APKElementsExploredChanged;
+import com.droidmate.processes.logfile.APKElementsSeenChanged;
+import com.droidmate.processes.logfile.APKEnded;
+import com.droidmate.processes.logfile.APKExplorationEnded;
+import com.droidmate.processes.logfile.APKExplorationStarted;
 import com.droidmate.processes.logfile.APKLogFileHandler;
+import com.droidmate.processes.logfile.APKScreensSeenChanged;
+import com.droidmate.processes.logfile.APKStarted;
 import com.droidmate.user.APKInformation;
 import com.droidmate.user.ExplorationStatus;
 import com.droidmate.user.InliningStatus;
 
-public class DroidMateProcess extends Observable<DroidMateProcessEvent> {
+public class DroidMateProcess extends Observable<DroidMateProcessEvent> implements APKLogFileObserver {
 
 	private final File droidMatePath;
 	private final File logFilePath;
 	private boolean printStackTrace;
 
-	private List<APKInformation> apksToExplore;
+	private Map<String, APKInformation> apksToExplore = new HashMap<>();
 
+	
+	//exploration variables
+	private APKInformation currentAPK = null;
+	//---------------------
+	
 	public DroidMateProcess(File droidMatePath, File logFilePath) throws FileNotFoundException {
 		if (droidMatePath == null) {
 			throw new IllegalArgumentException("DroidMate path must not be null");
@@ -77,7 +93,9 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> {
 		arguments.add(":projects:core:run");
 
 		// set apks to explore
-		this.apksToExplore = apksToExplore;
+		for (APKInformation apk : apksToExplore) {
+			this.apksToExplore.put(apk.getAPKName(), apk);
+		}
 
 		tryStartDroidMate(arguments);
 	}
@@ -102,7 +120,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> {
 
 		// copy all inlined and selected apks from /inlined folder to DroidMate
 		// input directory
-		for (APKInformation apk : apksToExplore) {
+		for (APKInformation apk : apksToExplore.values()) {
 			if (!apk.isAPKSelected()) {
 				continue;
 			}
@@ -158,8 +176,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> {
 		// create inliner process
 		ProcessWrapper pbd = new ProcessWrapper(droidMatePath, arguments);
 		pbd.start();
-		System.out.println(pbd.getInfos());
-
+		
 		// DroidMate process finished, stop logreader
 		logReader.stop();
 
@@ -202,6 +219,64 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> {
 
 	public void setPrintStackTrace(boolean printStackTrace) {
 		this.printStackTrace = printStackTrace;
+	}
+
+	//APKLogFileObservable interface methods
+	@Override
+	public void update(APKLogFileObservable o, APKExplorationStarted arg) {
+		//Exploration started
+		notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.STARTED));
+	}
+	@Override
+	public void update(APKLogFileObservable o, APKExplorationEnded arg) {
+		//Exploration ended with no errors
+		notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.FINISHED));
+	}
+	
+	
+	@Override
+	public void update(APKLogFileObservable o, APKStarted event) {
+		//set up currently explored apk
+		if(!apksToExplore.containsKey(event.getName())) {
+			throw new IllegalStateException("APK " + event.getName() + " was not selected for Exploration");
+		}
+		
+		this.currentAPK = apksToExplore.get(event.getName());
+		this.currentAPK.getExplorationInfo().setStartingTime(event.getStartTime());
+	}
+	@Override
+	public void update(APKLogFileObservable o, APKEnded event) {
+		if(currentAPK == null) {
+			throw new IllegalStateException("APKEnded tag before  APKStarted tag.");
+		}
+		//set time
+		
+		long startTime = this.currentAPK.getExplorationInfo().getStartingTime();
+		this.currentAPK.getExplorationInfo().setEndTime(event.getEndTime() - startTime);
+		this.currentAPK = null;
+	}
+
+	
+	@Override
+	public void update(APKLogFileObservable o, APKElementsExploredChanged event) {
+		if(currentAPK == null) {
+			throw new IllegalStateException("APKElementsExploredChanged tag before  APKStarted tag.");
+		}
+		this.currentAPK.getExplorationInfo().addElementsExplored(event.getChangeInElementsExplored());
+	}
+	@Override
+	public void update(APKLogFileObservable o, APKElementsSeenChanged arg) {
+		if(currentAPK == null) {
+			throw new IllegalStateException("APKElementsSeenChanged tag before  APKStarted tag.");
+		}
+		this.currentAPK.getExplorationInfo().addElementsSeen(arg.getChangeInElementsSeen());
+	}
+	@Override
+	public void update(APKLogFileObservable o, APKScreensSeenChanged arg) {
+		if(currentAPK == null) {
+			throw new IllegalStateException("APKScreensSeenChanged tag before  APKStarted tag.");
+		}
+		this.currentAPK.getExplorationInfo().addScreensSeen(arg.getChangeInScreensSeen());
 	}
 
 }
