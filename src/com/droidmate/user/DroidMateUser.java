@@ -385,6 +385,11 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 					return;
 				}
 
+				if(userStatus.get() == UserStatus.IDLE) {
+					//user got already cleared
+					return;
+				}
+				
 				if (userStatus.get() != UserStatus.STARTING) {
 					// apks were explored, report saving necessary
 					saveReport();

@@ -132,7 +132,12 @@ public class ProcessWrapper extends ProcessStreamObservable {
 		if(process != null) {
 			killAdb();
 			
-			process.destroyForcibly();
+			try {
+				process.destroyForcibly().waitFor();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
