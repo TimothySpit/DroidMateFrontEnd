@@ -117,6 +117,14 @@ public class ProcessWrapper extends ProcessStreamObservable {
 
 	public void stop() {
 		if(process != null) {
+			try {
+				process.getErrorStream().close();
+				process.getInputStream().close();
+				process.getOutputStream().close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 			process.destroyForcibly();
 		}
 	}
