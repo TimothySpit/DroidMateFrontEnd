@@ -27,7 +27,7 @@ public class ForeverFileInputStream extends FileInputStream {
 	@Override
 	public int read() throws IOException {
 		if (stopFlag.get()) {
-			return -1;
+			return super.read();
 		} else {
 			int value = super.read();
 			if (value == -1) {
@@ -47,7 +47,7 @@ public class ForeverFileInputStream extends FileInputStream {
 	@Override
 	public int read(byte[] b) throws IOException {
 		if (stopFlag.get()) {
-			return -1;
+			return super.read(b);
 		} else {
 			int value = super.read(b);
 			if (value == -1) {

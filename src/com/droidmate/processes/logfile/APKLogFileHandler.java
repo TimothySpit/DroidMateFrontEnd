@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.io.FilenameUtils;
@@ -26,6 +27,8 @@ public class APKLogFileHandler extends APKLogFileObservable {
 	private final AtomicBoolean stopProcessing = new AtomicBoolean(false);
 
 	private final ReentrantLock inputStreamLock = new ReentrantLock();
+	private final Condition messagesLeft = inputStreamLock.newCondition();
+	private boolean messagesLeftFlag = true;
 
 	private ForeverFileInputStream inputFileStream = null;
 
@@ -150,8 +153,15 @@ public class APKLogFileHandler extends APKLogFileObservable {
 			return;
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			// all messages read, signal
+			inputStreamLock.lock();
+			try {
+				messagesLeft.signalAll();
+			} finally {
+				inputStreamLock.unlock();
+			}
 		}
-
 	}
 
 	public void stop() {
@@ -160,7 +170,13 @@ public class APKLogFileHandler extends APKLogFileObservable {
 		try {
 			if (inputFileStream != null) {
 				inputFileStream.stop();
+
+				// read all remaining messages
+				while (messagesLeftFlag)
+					messagesLeft.await();
 			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		} finally {
 			inputStreamLock.unlock();
 		}
