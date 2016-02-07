@@ -71,6 +71,10 @@ define(
 							"targets" : 2,
 							"searchable" : false,
 							"orderable" : false,
+							"render" : function(data, type, row) {
+								return '<span class="apk-time">' + data
+										+ '</span>';
+							}
 						},
 						{
 							"targets" : 3,
@@ -117,6 +121,9 @@ define(
 				return {
 					getName : function() {
 						return rowNode.data()[1];
+					},
+					getTime : function() {
+						return rowNode.data()[2];
 					},
 					getElementsSeen : function() {
 						return rowNode.data()[3].elementsSeen;
@@ -173,6 +180,9 @@ define(
 					},
 					updateName : function(name) {
 						$(rowNode.node()).find('.apk-name').text(name);
+					},
+					updateTime : function(time) {
+						$(rowNode.node()).find('.apk-time').text(time);
 					},
 					updateElementsSeen : function(elementsSeen) {
 					$(rowNode.node()).find('.elements-seen').text(elementsSeen);

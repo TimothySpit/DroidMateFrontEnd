@@ -96,6 +96,7 @@ define([ 'require',
 				var row = table.getRowByName(name);
 				if(row) {
 					//row is already initialized
+					row.updateTime((timeMillis / 1000) + "s");
 					row.updateElementsSeen(elementsSeen);
 					row.updateScreensSeen(screensSeen);
 					row.updateWidgetsClicked(widgetsClicked);
