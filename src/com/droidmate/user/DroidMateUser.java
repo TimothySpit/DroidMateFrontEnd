@@ -451,10 +451,10 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		}
 		
 		StringBuilder dataString = new StringBuilder();
+		dataString.append("$(function() {");
 		dataString.append("var APKData = " + collectAPKData().toString() + ";");
 		dataString.append("$.APKData = APKData;");
 		dataString.append("$.APK_CONSOLE_DATA = \"" + consoleOutputString + "\";");
-		dataString.append("$(function() {");
 		dataString.append("});");
 		
 		//save file
