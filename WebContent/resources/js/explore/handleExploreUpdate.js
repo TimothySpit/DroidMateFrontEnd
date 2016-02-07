@@ -1,13 +1,17 @@
 define([ 'require',
 		'jquery.droidmate.overlays','jquery.droidmate.explore','jquery.droidmate.ajax',
-		'../explore/apkExplorationTable', 'jquery.droidmate.dialogs'], function(require) {
+		'../explore/apkExplorationTable', 'jquery.droidmate.dialogs', '../explore/Console'], function(require) {
 
 	//get current apks exploration info table
 	var tableCreator = require('../explore/apkExplorationTable');
 	var table = tableCreator.initModul($('#table-apk-exploration-info'));
 	//get ui updater
 	var updateHelper = require('../explore/handleUpdate' );
-	
+	//create console
+	var consoleCreator = require('../explore/Console');
+	var console = consoleCreator.initModul($('#div-console-output'));
+	console.addClassNamesForHeading('panel-heading');
+	console.addClassNamesForContent('panel-body');
 	
 	//continues updating filled table
 	function updateTableLoop() {
@@ -35,6 +39,8 @@ define([ 'require',
 		
 			updateTableData();
 			
+			updateConsoleData();
+			
 			setTimeout(updateTableLoop, $.droidmate.explore.UPDATE_EXPLORE_INTERVAL);
 		});
 	}
@@ -42,6 +48,26 @@ define([ 'require',
 	table.on("row:open", function(e) {
 		updateTableData();
 	});
+	
+	function updateConsoleData() {
+		//get console data
+		$.droidmate.ajax.getConsoleOutput(true, 0, function(data) {
+			if(!data || !data.getConsoleOutput || !data.getConsoleOutput.result) {
+				//could not get console data
+				return;
+			}
+			
+			if(!data.getConsoleOutput.payload || !data.getConsoleOutput.payload.data) {
+				//could get result data, but no console data
+				return;
+			}
+			
+			var consoleData = data.getConsoleOutput.payload.data;
+			
+			//set console data and parse new request index
+			console.setText(consoleData);
+		});
+	}
 	
 	function updateTableData(apkData) {
 		function updateTable(apkDataResult) {
@@ -133,6 +159,8 @@ define([ 'require',
 				
 				//init table data
 				updateTableData();
+				//init console data
+				updateConsoleData();
 				
 				//continue updating
 				if(userState.getUserStatus.payload.data === "IDLE" || userState.getUserStatus.payload.data === "STARTING" || userState.getUserStatus.payload.data === "EXPLORING") {

@@ -8,20 +8,6 @@ define([ 'jquery' ], function(require) {
 	ajax.UPDATE_CONSOLE_OUTPUT_INTERVAL = 1000;
 	// --------------------------------------
 
-	function getDroidMateSettings(async,success) {
-		$.ajax({
-			url : "/DroidMate/Settings",
-			async : async,
-			type : 'POST',
-			data : {
-				get : [ "outputPath", "droidmatePath", "aaptPath", "time" ],
-			},
-			success : success
-		});
-	}
-	ajax.getDroidMateSettings = getDroidMateSettings;
-	// ----------------------------------
-
 	function getAPKsRoot(async,success) {
 		var result = "";
 		$.ajax({
@@ -52,172 +38,21 @@ define([ 'jquery' ], function(require) {
 	ajax.getUserStatus = getUserStatus;
 	// ----------------------------------
 
-	function getGlobalStartingTime() {
-		var result = [];
-		$.ajax({
-			url : "/DroidMate/APKExploreHandler",
-			async : false,
-			type : 'GET',
-			data : {
-				explore_get_global_starting_time : true
-			},
-			success : function(data) {
-				if (data.status == "ok") {
-					result = data.timestamp;
-				} else {
-					result = null;
-				}
-			}
-		});
-		return result;
-	}
-	ajax.getGlobalStartingTime = getGlobalStartingTime;
-
-	// ----------------------------------
-
-	function getConsoleOutput(startLine, async, success) {
-		if (startLine == null)
+	function getConsoleOutput(async, startLine, success) {
+		if (startLine == null || startLine < 0)
 			startLine = 0;
 		$.ajax({
-			url : "/DroidMate/ConsoleOutput",
-			async : false,
+			url : "/DroidMate/ConsoleOutputHandler",
+			async : async,
 			dataType : "json",
-			type : 'GET',
+			type : 'POST',
 			data : {
-				get : startLine.toString()
+				getConsoleOutput : startLine.toString()
 			},
 			success : success
 		});
 	}
 	ajax.getConsoleOutput = getConsoleOutput;
-	// ----------------------------------
-
-	function getGlobalElementsSeen(async, success) {
-		$.ajax({
-			url : "/DroidMate/APKExploreHandler",
-			async : async,
-			type : 'GET',
-			data : {
-				explore_get_global_elements_seen : true
-			},
-			success : success
-		});
-	}
-	ajax.getGlobalElementsSeen = getGlobalElementsSeen;
-	// ----------------------------------
-
-	function getGlobalElementsSeenHistory() {
-		var result = [];
-		$.ajax({
-			url : "/DroidMate/APKExploreHandler",
-			async : false,
-			type : 'GET',
-			dataType : "json",
-			data : {
-				explore_get_global_elements_seen_history : true
-			},
-			success : function(data) {
-				result = data;
-			}
-		});
-		return result;
-	}
-	ajax.getGlobalElementsSeenHistory = getGlobalElementsSeenHistory;
-	// ----------------------------------
-
-	function getGlobalWidgetsExplored() {
-		var result = [];
-		$.ajax({
-			url : "/DroidMate/APKExploreHandler",
-			async : false,
-			type : 'GET',
-			data : {
-				explore_get_global_widgets_explored : true
-			},
-			success : function(data) {
-				result = data;
-			}
-		});
-		return result;
-	}
-	ajax.getGlobalWidgetsExplored = getGlobalWidgetsExplored;
-	// ----------------------------------
-
-	function getGlobalWidgetsExploredHistory() {
-		var result = null;
-		$.ajax({
-			url : "/DroidMate/APKExploreHandler",
-			async : false,
-			type : 'GET',
-			dataType : "json",
-			data : {
-				explore_get_global_widgets_explored_history : true
-			},
-			success : function(data) {
-				result = data;
-			}
-		});
-		return result;
-	}
-	ajax.getGlobalWidgetsExploredHistory = getGlobalWidgetsExploredHistory;
-	// ----------------------------------
-
-	function getGlobalScreensSeen() {
-		var result = null;
-		$.ajax({
-			url : "/DroidMate/APKExploreHandler",
-			async : false,
-			type : 'GET',
-			data : {
-				explore_get_global_screens_seen : true
-			},
-			success : function(data) {
-				result = data;
-			}
-		});
-		return result;
-	}
-	ajax.getGlobalScreensSeen = getGlobalScreensSeen;
-	// ----------------------------------
-
-	function getGlobalScreensSeenHistory() {
-		var result = null;
-		$.ajax({
-			url : "/DroidMate/APKExploreHandler",
-			async : false,
-			type : 'GET',
-			dataType : "json",
-			data : {
-				explore_get_global_screens_seen_history : true
-			},
-			success : function(data) {
-				result = data;
-			}
-		});
-		return result;
-	}
-	ajax.getGlobalScreensSeenHistory = getGlobalScreensSeenHistory;
-	// ----------------------------------
-
-	function getExplorationInfo(apkname) {
-		var result = null;
-		$.ajax({
-			url : "/DroidMate/APKExploreHandler",
-			async : false,
-			type : 'GET',
-			dataType : "json",
-			data : {
-				explore_get_info : true,
-				explore_get_info_apkname : apkname
-			},
-			success : function(data) {
-				result = data;
-			}
-		});
-		return result;
-	}
-	ajax.getExplorationInfo = getExplorationInfo;
-
 	// ----------------------------------
 
 	function getAPKSData(async, success) {
@@ -319,51 +154,6 @@ define([ 'jquery' ], function(require) {
 	}
 	ajax.saveDroidMateSettings = saveDroidMateSettings;
 	// ----------------------------------
-
-	function restartDroidMate() {
-		$.ajax({
-			async : false,
-			url : "/DroidMate/APKExploreHandler",
-			method : "POST",
-			data : {
-				explore_restart : true
-			}
-		});
-	}
-	ajax.restartDroidMate = restartDroidMate;
-	// -----------------------------------
-
-	function stopDroidMate(success, error, complete) {
-		$.ajax({
-			async : false,
-			url : "/DroidMate/APKExploreHandler",
-			method : "POST",
-			data : {
-				explore_stop : true
-			},
-			success : success,
-			error : error,
-			complete : complete
-		});
-	}
-	ajax.stopDroidMate = stopDroidMate;
-	// -----------------------------------
-
-	function returnToIndex(success, error, complete) {
-		$.ajax({
-			async : false,
-			url : "/DroidMate/APKExploreHandler",
-			method : "POST",
-			data : {
-				return_to_index : true
-			},
-			success : success,
-			error : error,
-			complete : complete
-		});
-	}
-	ajax.returnToIndex = returnToIndex;
-	// -----------------------------------
 
 	droidmate.ajax = ajax;
 	$.droidmate = droidmate;

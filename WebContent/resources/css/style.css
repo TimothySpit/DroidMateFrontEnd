@@ -99,3 +99,28 @@ tr.shown td.details-control {
 	height: 250px;
 	width:  33%;
 }
+
+/* explore console output */
+#div-console-output {
+	margin-top: 50px;
+}
+
+#div-console-output .panel-heading {
+	overflow: auto;
+}
+
+#div-console-output .console-cb {
+	float:right;
+	margin-top:0; 
+	margin-bottom:0;
+	 font-weight: normal !important; 
+}
+
+#div-console-output .console-cb .scroll-text {
+	margin: 10px;
+}
+
+#div-console-output .console-cb input[type=checkbox] {
+	vertical-align: middle;
+	margin-top: 0; !important
+}

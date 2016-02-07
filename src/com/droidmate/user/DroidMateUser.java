@@ -41,7 +41,7 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	private final GUISettings settings;
 
 	private List<String> consoleOutput = new LinkedList<>();
-	
+
 	/**
 	 * The current status the user is in.
 	 */
@@ -239,9 +239,9 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			throw new IllegalArgumentException("APK path must be a directory");
 		}
 
-		//change user state
+		// change user state
 		userStatus.set(UserStatus.INLINING);
-		
+
 		// set up apks to inline
 		List<APKInformation> apksToInline = new LinkedList<>();
 		for (APKInformation apk : apksInformation.values()) {
@@ -339,12 +339,12 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 
 			// register observer to signal finished exploration
 			droidMateProcess.addObserver(this);
-			
+
 			// start inliner
 			droidMateProcess.startExploration(apksToExplore);
 		} catch (Exception e) {
-			//error in DroidMate
-			//if exploration was already finished, dont change state
+			// error in DroidMate
+			// if exploration was already finished, dont change state
 			if (userStatus.get() != UserStatus.FINISHED) {
 				userStatus.set(UserStatus.ERROR);
 			}
@@ -367,26 +367,50 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			break;
 		}
 		case DROIDMATE_ERROR: {
-			//if not exploring, ignore error, because exploration is already finished or aborted
-			if(userStatus.get() == UserStatus.FINISHED || userStatus.get() == UserStatus.ERROR) {
+			// if not exploring, ignore error, because exploration is already
+			// finished or aborted
+			if (userStatus.get() == UserStatus.FINISHED || userStatus.get() == UserStatus.ERROR) {
 				return;
 			}
-			
-			if(userStatus.get() != UserStatus.STARTING) {
-				//apks were explored, report saving necessary
+
+			if (userStatus.get() != UserStatus.STARTING) {
+				// apks were explored, report saving necessary
 				droidMateProcess.saveReport();
 			}
 			userStatus.set(UserStatus.ERROR);
 			break;
 		}
 		case CONSOLE_OUTPUT_STDOUT:
-			consoleOutput.add(event.getMessage());
+			synchronized (consoleOutput) {
+				consoleOutput.add(event.getMessage());
+			}
 			break;
 		case CONSOLE_OUTPUT_ERROR:
-			consoleOutput.add(event.getMessage());
+			synchronized (consoleOutput) {
+				consoleOutput.add(event.getMessage());
+			}
 			break;
 		default:
 			break;
 		}
+	}
+	
+	//get console output
+	public int getConsoleOutputSize() {
+		int size = 0;
+		synchronized (consoleOutput) {
+			size = consoleOutput.size();
+		}
+		return size;
+	}
+	
+	public List<String> getConsoleOutput(int from, int to) {
+		List<String> copyList = new LinkedList<>();
+		synchronized (consoleOutput) {
+			for (int i = from; i < to; i++) {
+				copyList.add(consoleOutput.get(i));
+			}
+		}
+		return copyList;
 	}
 }
