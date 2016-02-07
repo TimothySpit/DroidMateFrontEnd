@@ -448,7 +448,7 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		List<String> consoleOutputList = this.getConsoleOutput(0, getConsoleOutputSize());
 		String consoleOutputString = "";
 		for (String string : consoleOutputList) {
-			consoleOutputString += string + "\\n";
+			consoleOutputString += string;
 		}
 
 		StringBuilder dataString = new StringBuilder();
