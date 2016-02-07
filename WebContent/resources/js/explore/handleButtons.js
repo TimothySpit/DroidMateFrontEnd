@@ -48,7 +48,7 @@ define([ 'require',
 			
 			//reset state
 			$.droidmate.ajax.clearUser(true, function(result) {
-				
+				window.location = "Index";
 			});
 		});
 	});

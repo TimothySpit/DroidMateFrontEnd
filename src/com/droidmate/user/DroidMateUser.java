@@ -377,17 +377,20 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			break;
 		}
 		case DROIDMATE_ERROR: {
-			// if not exploring, ignore error, because exploration is already
-			// finished or aborted
-			if (userStatus.get() == UserStatus.FINISHED || userStatus.get() == UserStatus.ERROR) {
-				return;
-			}
+			synchronized (userStatus) {
+				// if not exploring, ignore error, because exploration is
+				// already
+				// finished or aborted
+				if (userStatus.get() == UserStatus.FINISHED || userStatus.get() == UserStatus.ERROR) {
+					return;
+				}
 
-			if (userStatus.get() != UserStatus.STARTING) {
-				// apks were explored, report saving necessary
-				saveReport();
+				if (userStatus.get() != UserStatus.STARTING) {
+					// apks were explored, report saving necessary
+					saveReport();
+				}
+				userStatus.set(UserStatus.ERROR);
 			}
-			userStatus.set(UserStatus.ERROR);
 			break;
 		}
 		case CONSOLE_OUTPUT_STDOUT:
@@ -518,27 +521,27 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			if (userStatus.get() != UserStatus.EXPLORING) {
 				return;
 			}
-			
-			//check for errors
-			if(droidMateProcess == null) {
+
+			// check for errors
+			if (droidMateProcess == null) {
 				throw new IllegalStateException("DroidMate is not running.");
 			}
-			
-			//stop exploration
+
+			// stop exploration
 			droidMateProcess.stopExploration();
-			
+
 			userStatus.set(UserStatus.FINISHED);
 		}
 	}
 
 	public void clear() {
 		synchronized (userStatus) {
-			if(userStatus.get() == UserStatus.EXPLORING) {
-				//DroidMate still running
+			if (userStatus.get() == UserStatus.EXPLORING) {
+				// DroidMate still running
 				throw new IllegalStateException("DroidMate is still running. Please stop it first.");
 			}
-			
-			//clear user
+
+			// clear user
 			inlinerProcess = null;
 			droidMateProcess = null;
 			apksRootPath = null;

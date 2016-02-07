@@ -175,6 +175,12 @@ public class APKLogFileHandler extends APKLogFileObservable {
 				// read all remaining messages
 				while (messagesLeftFlag)
 					messagesLeft.await();
+				
+				try {
+					inputFileStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
