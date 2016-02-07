@@ -161,21 +161,6 @@ define([ 'jquery' ], function(require) {
 	ajax.saveDroidMateSettings = saveDroidMateSettings;
 	// ----------------------------------
 
-	function stopExploration(async, success) {
-		$.ajax({
-			url : "/DroidMate/StopExplorationHandler",
-			async : async,
-			dataType : "json",
-			type : 'POST',
-			data : {
-				stopExploration : true
-			},
-			success : success
-		});
-	}
-	ajax.stopExploration = stopExploration;
-	// ----------------------------------
-	
 	function clearUser(async, success) {
 		$.ajax({
 			url : "/DroidMate/ClearUserHandler",

@@ -157,6 +157,7 @@ public class APKLogFileHandler extends APKLogFileObservable {
 			// all messages read, signal
 			inputStreamLock.lock();
 			try {
+				messagesLeftFlag = false;
 				messagesLeft.signalAll();
 			} finally {
 				inputStreamLock.unlock();

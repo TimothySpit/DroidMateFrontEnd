@@ -34,7 +34,7 @@ define([ 'require',
 	//handle stop all button
 	$('#button-stop-all').click(function() {
 		//disable stop button
-		this.prop("disable",true);
+		$('#button-stop-all').prop("disabled",true);
 		//send stop request
 		$.droidmate.explore.stopExploration(true,function(data) {
 			
@@ -47,7 +47,9 @@ define([ 'require',
 		$.droidmate.explore.stopExploration(true,function(data) {
 			
 			//reset state
-			
+			$.droidmate.ajax.clearUser(true, function(result) {
+				
+			});
 		});
 	});
 	

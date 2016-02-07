@@ -181,8 +181,8 @@ define([ 'require',
 				//start updating table and charts
 				if(userState.getUserStatus.payload.data === "EXPLORING") {
 					//enable all needed buttons
-					$('#button-stop-all').prop("disable",false);
-					$('#button-return-to-start').prop("disable",false);
+					$('#button-stop-all').prop("disabled",false);
+					$('#button-return-to-start').prop("disabled",false);
 					
 					updateTableLoop();
 					return; //break out of this loop
