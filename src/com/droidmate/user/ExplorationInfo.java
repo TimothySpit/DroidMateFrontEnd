@@ -14,7 +14,7 @@ public class ExplorationInfo {
 
 	private AtomicLong startingTime = new AtomicLong(0);
 	private AtomicLong endTime = new AtomicLong(0);
-	
+
 	private AtomicInteger elementsSeen = new AtomicInteger(0);
 	private AtomicInteger screensSeen = new AtomicInteger(0);
 	private AtomicInteger widgetsExplored = new AtomicInteger(0);
@@ -39,10 +39,10 @@ public class ExplorationInfo {
 		widgetsExploredHistory.put(0l, 0);
 	}
 
-	
 	public synchronized void setStartingTime(long startingTime) {
 		this.startingTime.set(startingTime);
 	}
+
 	public synchronized long getStartingTime() {
 		return startingTime.get();
 	}
@@ -50,10 +50,11 @@ public class ExplorationInfo {
 	public synchronized void setEndTime(long endTime) {
 		this.endTime.set(endTime);
 	}
+
 	public synchronized long getEndTime() {
 		return endTime.get();
 	}
-	
+
 	public synchronized int getElementsSeen() {
 		return elementsSeen.get();
 	}
@@ -125,9 +126,14 @@ public class ExplorationInfo {
 		}
 		json.put("historyWidgets", widgetsHistory);
 
-		long timeMilli = endTime.get() - startingTime.get();
-		json.put("time", timeMilli > 0 ? timeMilli : 0);
-		
+		synchronized (endTime) {
+			synchronized (startingTime) {
+				long endTime = this.endTime.get() != 0 ? this.endTime.get() : System.currentTimeMillis();
+				long timeMilli = endTime - startingTime.get();
+				json.put("time", timeMilli > 0 ? timeMilli : 0);
+			}
+		}
+
 		return json;
 	}
 
