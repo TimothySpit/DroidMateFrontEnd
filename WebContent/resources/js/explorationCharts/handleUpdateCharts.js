@@ -60,7 +60,8 @@ define([ 'require',
 				axisLabelFontFamily : 'Arial',
 				panRange : false,
 				minTickSize : 1,
-				min : 0,
+				min : -0.5,
+				position : "left"
 			},
 			xaxis : {
 				labelHeight : 30,
@@ -69,7 +70,7 @@ define([ 'require',
 				axisLabelFontSizePixels : 15,
 				axisLabelFontFamily : 'Arial',
 				panRange : [ 0, null ],
-				min : 0,
+				min : -0.5,
 				minTickSize : 1
 			},
 			pan : {

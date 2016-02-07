@@ -382,10 +382,10 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			if (userStatus.get() == UserStatus.FINISHED || userStatus.get() == UserStatus.ERROR) {
 				return;
 			}
-			saveReport();
 
 			if (userStatus.get() != UserStatus.STARTING) {
 				// apks were explored, report saving necessary
+				saveReport();
 			}
 			userStatus.set(UserStatus.ERROR);
 			break;
