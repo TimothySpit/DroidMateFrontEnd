@@ -5,6 +5,9 @@ import java.util.List;
 
 import com.droidmate.processes.ProcessWrapper;
 
+/**
+ *	Class which enables another classes (process stream) to be observed
+ */
 public class ProcessStreamObservable {
 
 	private final List<ProcessStreamObserver> observers = new ArrayList<ProcessStreamObserver>();

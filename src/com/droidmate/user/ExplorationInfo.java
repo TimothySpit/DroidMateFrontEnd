@@ -3,13 +3,17 @@ package com.droidmate.user;
 import java.util.Comparator;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ *	Class which provides information (real-time) while exploring the apks
+ * 	for example the number of seen elements, screens, the explored widgets
+ * 	and the start time and end time of the exploration.
+ */
 public class ExplorationInfo {
 
 	private AtomicLong startingTime = new AtomicLong(0);
@@ -23,6 +27,9 @@ public class ExplorationInfo {
 	private ConcurrentSkipListMap<Long, Integer> screensSeenHistory;
 	private ConcurrentSkipListMap<Long, Integer> widgetsExploredHistory;
 
+	/**
+	 * Creates an instance of ExplorationInfo class.
+	 */
 	public ExplorationInfo() {
 
 		Comparator<Long> comparator = new Comparator<Long>() {
