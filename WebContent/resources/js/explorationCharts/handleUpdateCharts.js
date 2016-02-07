@@ -176,7 +176,7 @@ define([ 'require',
 
 		var individualData = getIndividualData(choiceContainer);
 		elementsSeenHistory = [ elementsSeenHistory ]
-				.concat([ individualData.elementsSeenIndividual ]);
+				.concat(individualData.elementsSeenIndividual);
 		widgetsExploredHistory = [ widgetsExploredHistory ]
 				.concat(individualData.widgetsExploredIndividual);
 		screensSeenHistory = [ screensSeenHistory ]

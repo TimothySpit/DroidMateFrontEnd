@@ -129,12 +129,12 @@ public class ExplorationInfo {
 		synchronized (endTime) {
 			synchronized (startingTime) {
 				if (startingTime.get() != 0 && endTime.get() != 0) {
-					json.put("timeMillis", endTime.get() - startingTime.get());
+					json.put("timeSeconds", (endTime.get() - startingTime.get()) / 1000);
 				} else if(startingTime.get() != 0){
 					long endTime = System.currentTimeMillis();
-					json.put("timeMillis", endTime - startingTime.get());
+					json.put("timeSeconds", (endTime - startingTime.get()) / 1000);
 				} else {
-					json.put("timeMillis",0);
+					json.put("timeSeconds",0);
 				}
 			}
 		}

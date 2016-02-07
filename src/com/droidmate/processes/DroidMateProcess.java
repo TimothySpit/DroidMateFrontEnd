@@ -270,8 +270,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		}
 		// set time
 
-		long startTime = this.currentAPK.getExplorationInfo().getStartingTime();
-		this.currentAPK.getExplorationInfo().setEndTime(event.getEndTime() - startTime);
+		this.currentAPK.getExplorationInfo().setEndTime(event.getEndTime());
 		if (event.isSuccess()) {
 			this.currentAPK.setExplorationStatus(ExplorationStatus.SUCCESS);
 		} else {
