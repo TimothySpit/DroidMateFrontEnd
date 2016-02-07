@@ -240,15 +240,19 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	
 	// APKLogFileObservable interface methods
 	@Override
-	public void update(APKLogFileObservable o, APKExplorationStarted arg) {
+	public void update(APKLogFileObservable o, APKExplorationStarted event) {
 		// Exploration started
 		notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.EXPLORATION_STARTED));
+		
+		this.globalExplorationInfo.setStartingTime(event.getStartTime());
 	}
 
 	@Override
-	public void update(APKLogFileObservable o, APKExplorationEnded arg) {
+	public void update(APKLogFileObservable o, APKExplorationEnded event) {
 		// Exploration ended with no errors
 		notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.EXPLORATION_FINISHED));
+		
+		this.globalExplorationInfo.setEndTime(event.getEndTime());
 	}
 
 	@Override
