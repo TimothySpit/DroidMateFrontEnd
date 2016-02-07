@@ -395,6 +395,15 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		}
 	}
 	
+	//get global exploration info
+	public ExplorationInfo getGloblExplorationInfo() {
+		if(droidMateProcess == null) {
+			throw new IllegalStateException("DroidMate was never started.");
+		}
+		
+		return droidMateProcess.getGlobalExplorationInfo();
+	}
+	
 	//get console output
 	public int getConsoleOutputSize() {
 		int size = 0;

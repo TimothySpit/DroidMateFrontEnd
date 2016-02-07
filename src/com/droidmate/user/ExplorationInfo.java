@@ -40,43 +40,43 @@ public class ExplorationInfo {
 	}
 
 	
-	public void setStartingTime(long startingTime) {
+	public synchronized void setStartingTime(long startingTime) {
 		this.startingTime.set(startingTime);
 	}
-	public long getStartingTime() {
+	public synchronized long getStartingTime() {
 		return startingTime.get();
 	}
 
-	public void setEndTime(long endTime) {
+	public synchronized void setEndTime(long endTime) {
 		this.endTime.set(endTime);
 	}
-	public long getEndTime() {
+	public synchronized long getEndTime() {
 		return endTime.get();
 	}
 	
-	public int getElementsSeen() {
+	public synchronized int getElementsSeen() {
 		return elementsSeen.get();
 	}
 
-	public int getScreensSeen() {
+	public synchronized int getScreensSeen() {
 		return screensSeen.get();
 	}
 
-	public int getWidgetsExplored() {
+	public synchronized int getWidgetsExplored() {
 		return widgetsExplored.get();
 	}
 
-	public void addElementsExplored(int newExplored) {
+	public synchronized void addElementsExplored(int newExplored) {
 		widgetsExplored.addAndGet(newExplored);
 		widgetsExploredHistory.put(System.currentTimeMillis() - getStartingTime(), getWidgetsExplored());
 	}
 
-	public void addElementsSeen(int newElements) {
+	public synchronized void addElementsSeen(int newElements) {
 		elementsSeen.addAndGet(newElements);
 		elementsSeenHistory.put(System.currentTimeMillis() - getStartingTime(), getElementsSeen());
 	}
 
-	public void addScreensSeen(int newScreens) {
+	public synchronized void addScreensSeen(int newScreens) {
 		screensSeen.addAndGet(newScreens);
 		screensSeenHistory.put(System.currentTimeMillis() - getStartingTime(), getScreensSeen());
 	}
@@ -85,11 +85,11 @@ public class ExplorationInfo {
 		return elementsSeenHistory;
 	}
 
-	public ConcurrentSkipListMap<Long, Integer> getScreensSeenHistory() {
+	public synchronized ConcurrentSkipListMap<Long, Integer> getScreensSeenHistory() {
 		return screensSeenHistory;
 	}
 
-	public JSONObject toJSONObject() {
+	public synchronized JSONObject toJSONObject() {
 		JSONObject json = new JSONObject();
 		json.put("elementsSeen", getElementsSeen());
 		json.put("screensSeen", getScreensSeen());
@@ -125,10 +125,13 @@ public class ExplorationInfo {
 		}
 		json.put("historyWidgets", widgetsHistory);
 
+		long timeMilli = endTime.get() - startingTime.get();
+		json.put("time", timeMilli > 0 ? timeMilli : 0);
+		
 		return json;
 	}
 
-	public ConcurrentSkipListMap<Long, Integer> getWidgetsExploredHistory() {
+	public synchronized ConcurrentSkipListMap<Long, Integer> getWidgetsExploredHistory() {
 		return widgetsExploredHistory;
 	}
 

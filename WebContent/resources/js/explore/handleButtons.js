@@ -26,4 +26,8 @@ define([ 'require',
 		});
 	});
 
+	//handle show details for apks button
+	$('#button-show-apk-details-dynamic').click(function() {
+		window.location = "ExplorationCharts";
+	});
 });

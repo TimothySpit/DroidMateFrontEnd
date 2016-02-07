@@ -38,9 +38,14 @@ define(
 					title : ''
 				}, {
 					title : "Name"
-				}, {
+				},{
+					title : "Time"
+				},{
 					title : "Elements seen / Screens seen / Widgets clicked"
-				} ],
+				},
+				{
+					title : "Status"
+				}],
 				'searching' : false,
 				'paging' : false,
 				bAutoWidth:false,
@@ -64,6 +69,11 @@ define(
 						},
 						{
 							"targets" : 2,
+							"searchable" : false,
+							"orderable" : false,
+						},
+						{
+							"targets" : 3,
 							"width" : "25%",
 							'orderable' : false,
 							"searchable" : false,
@@ -77,7 +87,7 @@ define(
 							}
 						},
 						{
-							"targets" : 3,
+							"targets" : 4,
 							"width" : "10%",
 							'orderable' : false,
 							"searchable" : false,
@@ -109,13 +119,13 @@ define(
 						return rowNode.data()[1];
 					},
 					getElementsSeen : function() {
-						return rowNode.data()[2].elementsSeen;
+						return rowNode.data()[3].elementsSeen;
 					},
 					getScreensSeen : function() {
-						return rowNode.data()[2].screensSeen;
+						return rowNode.data()[3].screensSeen;
 					},
 					getWidgetsClicked : function() {
-						return rowNode.data()[2].widgetsClicked;
+						return rowNode.data()[3].widgetsClicked;
 					},
 					getStatus : function() {
 						if (labelContainer.hasClass('glyphicon-success')) {
@@ -340,9 +350,9 @@ define(
 				};
 
 				// add new apk to table
-				modul.addAPKData = function(name, elementsSeen, screensSeen,
+				modul.addAPKData = function(name, time, elementsSeen, screensSeen,
 						widgetsClicked, status) {
-					var tableRow = table.row.add([ "", name, {
+					var tableRow = table.row.add([ "", name, time, {
 						elementsSeen : elementsSeen,
 						screensSeen : screensSeen,
 						widgetsClicked : widgetsClicked
