@@ -87,7 +87,7 @@ define([ 'require',
 				
 				//collect data
 				var name = value.name;
-				var timeMillis = value.explorationInfo.timeMillis;
+				var timeSeconds = value.explorationInfo.timeSeconds;
 				var elementsSeen = explorationInfo.elementsSeen;
 				var screensSeen = explorationInfo.screensSeen;
 				var widgetsClicked = explorationInfo.widgetsExplored;
@@ -96,14 +96,14 @@ define([ 'require',
 				var row = table.getRowByName(name);
 				if(row) {
 					//row is already initialized
-					row.updateTime((timeMillis / 1000) + "s");
+					row.updateTime(timeSeconds + "s");
 					row.updateElementsSeen(elementsSeen);
 					row.updateScreensSeen(screensSeen);
 					row.updateWidgetsClicked(widgetsClicked);
 					row.updateStatus(status);
 				} else {
 					//row need to be initialized
-					row = table.addAPKData(name, (timeMillis / 1000) + "s", elementsSeen, screensSeen,
+					row = table.addAPKData(name, timeSeconds + "s", elementsSeen, screensSeen,
 							widgetsClicked, status);
 					table.redraw();
 				}
