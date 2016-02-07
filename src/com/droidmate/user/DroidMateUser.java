@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -449,12 +450,12 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		for (String string : consoleOutputList) {
 			consoleOutputString += string + "\\n";
 		}
-		
+
 		StringBuilder dataString = new StringBuilder();
 		dataString.append("$(function() {");
 		dataString.append("var APKData = " + collectAPKData().toString() + ";");
 		dataString.append("$.APKData = APKData;");
-		dataString.append("$.APK_CONSOLE_DATA = \"" + consoleOutputString + "\";");
+		dataString.append("$.APK_CONSOLE_DATA = '" + StringEscapeUtils.escapeHtml(consoleOutputString) + "';");
 		dataString.append("});");
 		
 		//save file
