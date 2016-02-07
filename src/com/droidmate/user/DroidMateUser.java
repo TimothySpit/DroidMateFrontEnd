@@ -382,10 +382,10 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			if (userStatus.get() == UserStatus.FINISHED || userStatus.get() == UserStatus.ERROR) {
 				return;
 			}
+			saveReport();
 
 			if (userStatus.get() != UserStatus.STARTING) {
 				// apks were explored, report saving necessary
-				saveReport();
 			}
 			userStatus.set(UserStatus.ERROR);
 			break;
@@ -448,14 +448,14 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		List<String> consoleOutputList = this.getConsoleOutput(0, getConsoleOutputSize());
 		String consoleOutputString = "";
 		for (String string : consoleOutputList) {
-			consoleOutputString += string;
+			consoleOutputString += string + "\\n";
 		}
 
 		StringBuilder dataString = new StringBuilder();
 		dataString.append("$(function() {");
 		dataString.append("var APKData = " + collectAPKData().toString() + ";");
 		dataString.append("$.APKData = APKData;");
-		dataString.append("$.APK_CONSOLE_DATA = '" + StringEscapeUtils.escapeHtml(consoleOutputString) + "';");
+		dataString.append("$.APK_CONSOLE_DATA = \"" + StringEscapeUtils.escapeHtml(consoleOutputString) + "\";");
 		dataString.append("});");
 		
 		//save file
