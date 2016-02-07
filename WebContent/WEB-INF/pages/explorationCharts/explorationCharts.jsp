@@ -1,11 +1,8 @@
 <jsp:include page="../../partials/header.jsp" />
 
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/explore/style.css">
-
 <!-- requirejs -->
 <script
-	data-main="${pageContext.request.contextPath}/resources/js/explore/explorationCharts/explorationCharts.js"
+	data-main="${pageContext.request.contextPath}/resources/js/explorationCharts/explorationCharts.js"
 	src="${pageContext.request.contextPath}/resources/libraries/requirejs/require.js"></script>
 
 </head>

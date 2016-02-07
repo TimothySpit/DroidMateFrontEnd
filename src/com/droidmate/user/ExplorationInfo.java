@@ -18,7 +18,7 @@ public class ExplorationInfo {
 
 	private AtomicLong startingTime = new AtomicLong(0);
 	private AtomicLong endTime = new AtomicLong(0);
-	
+
 	private AtomicInteger elementsSeen = new AtomicInteger(0);
 	private AtomicInteger screensSeen = new AtomicInteger(0);
 	private AtomicInteger widgetsExplored = new AtomicInteger(0);
@@ -46,44 +46,45 @@ public class ExplorationInfo {
 		widgetsExploredHistory.put(0l, 0);
 	}
 
-	
-	public void setStartingTime(long startingTime) {
+	public synchronized void setStartingTime(long startingTime) {
 		this.startingTime.set(startingTime);
 	}
-	public long getStartingTime() {
+
+	public synchronized long getStartingTime() {
 		return startingTime.get();
 	}
 
-	public void setEndTime(long endTime) {
+	public synchronized void setEndTime(long endTime) {
 		this.endTime.set(endTime);
 	}
-	public long getEndTime() {
+
+	public synchronized long getEndTime() {
 		return endTime.get();
 	}
-	
-	public int getElementsSeen() {
+
+	public synchronized int getElementsSeen() {
 		return elementsSeen.get();
 	}
 
-	public int getScreensSeen() {
+	public synchronized int getScreensSeen() {
 		return screensSeen.get();
 	}
 
-	public int getWidgetsExplored() {
+	public synchronized int getWidgetsExplored() {
 		return widgetsExplored.get();
 	}
 
-	public void addElementsExplored(int newExplored) {
+	public synchronized void addElementsExplored(int newExplored) {
 		widgetsExplored.addAndGet(newExplored);
 		widgetsExploredHistory.put(System.currentTimeMillis() - getStartingTime(), getWidgetsExplored());
 	}
 
-	public void addElementsSeen(int newElements) {
+	public synchronized void addElementsSeen(int newElements) {
 		elementsSeen.addAndGet(newElements);
 		elementsSeenHistory.put(System.currentTimeMillis() - getStartingTime(), getElementsSeen());
 	}
 
-	public void addScreensSeen(int newScreens) {
+	public synchronized void addScreensSeen(int newScreens) {
 		screensSeen.addAndGet(newScreens);
 		screensSeenHistory.put(System.currentTimeMillis() - getStartingTime(), getScreensSeen());
 	}
@@ -92,11 +93,11 @@ public class ExplorationInfo {
 		return elementsSeenHistory;
 	}
 
-	public ConcurrentSkipListMap<Long, Integer> getScreensSeenHistory() {
+	public synchronized ConcurrentSkipListMap<Long, Integer> getScreensSeenHistory() {
 		return screensSeenHistory;
 	}
 
-	public JSONObject toJSONObject() {
+	public synchronized JSONObject toJSONObject() {
 		JSONObject json = new JSONObject();
 		json.put("elementsSeen", getElementsSeen());
 		json.put("screensSeen", getScreensSeen());
@@ -132,10 +133,23 @@ public class ExplorationInfo {
 		}
 		json.put("historyWidgets", widgetsHistory);
 
+		synchronized (endTime) {
+			synchronized (startingTime) {
+				if (startingTime.get() != 0 && endTime.get() != 0) {
+					json.put("timeSeconds", (endTime.get() - startingTime.get()) / 1000);
+				} else if(startingTime.get() != 0){
+					long endTime = System.currentTimeMillis();
+					json.put("timeSeconds", (endTime - startingTime.get()) / 1000);
+				} else {
+					json.put("timeSeconds",0);
+				}
+			}
+		}
+
 		return json;
 	}
 
-	public ConcurrentSkipListMap<Long, Integer> getWidgetsExploredHistory() {
+	public synchronized ConcurrentSkipListMap<Long, Integer> getWidgetsExploredHistory() {
 		return widgetsExploredHistory;
 	}
 

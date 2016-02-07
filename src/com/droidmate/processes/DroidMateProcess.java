@@ -31,6 +31,7 @@ import com.droidmate.processes.logfile.APKLogFileHandler;
 import com.droidmate.processes.logfile.APKScreensSeenChanged;
 import com.droidmate.processes.logfile.APKStarted;
 import com.droidmate.user.APKInformation;
+import com.droidmate.user.ExplorationInfo;
 import com.droidmate.user.ExplorationStatus;
 import com.droidmate.user.InliningStatus;
 
@@ -46,6 +47,10 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	private APKInformation currentAPK = null;
 	// ---------------------
 
+	//global exploration info of all apks
+	private ExplorationInfo globalExplorationInfo = new ExplorationInfo();
+	//----------------------
+	
 	public DroidMateProcess(File droidMatePath, File logFilePath) throws FileNotFoundException {
 		if (droidMatePath == null) {
 			throw new IllegalArgumentException("DroidMate path must not be null");
@@ -213,10 +218,6 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		}
 	}
 
-	public void saveReport() {
-
-	}
-
 	public File getDroidMatePath() {
 		return droidMatePath;
 	}
@@ -229,17 +230,25 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		this.printStackTrace = printStackTrace;
 	}
 
+	public ExplorationInfo getGlobalExplorationInfo() {
+		return globalExplorationInfo;
+	}
+	
 	// APKLogFileObservable interface methods
 	@Override
-	public void update(APKLogFileObservable o, APKExplorationStarted arg) {
+	public void update(APKLogFileObservable o, APKExplorationStarted event) {
 		// Exploration started
 		notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.EXPLORATION_STARTED));
+		
+		this.globalExplorationInfo.setStartingTime(event.getStartTime());
 	}
 
 	@Override
-	public void update(APKLogFileObservable o, APKExplorationEnded arg) {
+	public void update(APKLogFileObservable o, APKExplorationEnded event) {
 		// Exploration ended with no errors
 		notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.EXPLORATION_FINISHED));
+		
+		this.globalExplorationInfo.setEndTime(event.getEndTime());
 	}
 
 	@Override
@@ -261,8 +270,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		}
 		// set time
 
-		long startTime = this.currentAPK.getExplorationInfo().getStartingTime();
-		this.currentAPK.getExplorationInfo().setEndTime(event.getEndTime() - startTime);
+		this.currentAPK.getExplorationInfo().setEndTime(event.getEndTime());
 		if (event.isSuccess()) {
 			this.currentAPK.setExplorationStatus(ExplorationStatus.SUCCESS);
 		} else {
@@ -277,22 +285,25 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 			throw new IllegalStateException("APKElementsExploredChanged tag before  APKStarted tag.");
 		}
 		this.currentAPK.getExplorationInfo().addElementsExplored(event.getChangeInElementsExplored());
+		this.globalExplorationInfo.addElementsExplored(event.getChangeInElementsExplored());
 	}
 
 	@Override
-	public void update(APKLogFileObservable o, APKElementsSeenChanged arg) {
+	public void update(APKLogFileObservable o, APKElementsSeenChanged event) {
 		if (currentAPK == null) {
 			throw new IllegalStateException("APKElementsSeenChanged tag before  APKStarted tag.");
 		}
-		this.currentAPK.getExplorationInfo().addElementsSeen(arg.getChangeInElementsSeen());
+		this.currentAPK.getExplorationInfo().addElementsSeen(event.getChangeInElementsSeen());
+		this.globalExplorationInfo.addElementsSeen(event.getChangeInElementsSeen());
 	}
 
 	@Override
-	public void update(APKLogFileObservable o, APKScreensSeenChanged arg) {
+	public void update(APKLogFileObservable o, APKScreensSeenChanged event) {
 		if (currentAPK == null) {
 			throw new IllegalStateException("APKScreensSeenChanged tag before  APKStarted tag.");
 		}
-		this.currentAPK.getExplorationInfo().addScreensSeen(arg.getChangeInScreensSeen());
+		this.currentAPK.getExplorationInfo().addScreensSeen(event.getChangeInScreensSeen());
+		this.globalExplorationInfo.addScreensSeen(event.getChangeInScreensSeen());
 	}
 
 	// Process stream observer methods

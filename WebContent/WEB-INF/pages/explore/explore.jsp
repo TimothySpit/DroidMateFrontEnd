@@ -26,10 +26,7 @@
 			<div class="col-sm-4">
 				<button class="pull-left btn btn-default" id="button-return-to-start">Return to start</button>
 			</div>
-			<div class="col-sm-2 text-center">
-				Exploration time: <span class="label label-default" id="timeLabel">Not started</span>
-			</div>
-			<div class="col-sm-2 text-center">
+			<div class="col-sm-4 text-center">
 				<button class="btn btn-default" id="button-show-apk-details-dynamic">Show details for APKs</button>
 			</div>
 			<div class="col-sm-4">

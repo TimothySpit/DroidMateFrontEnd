@@ -124,3 +124,33 @@ tr.shown td.details-control {
 	vertical-align: middle;
 	margin-top: 0; !important
 }
+
+/* ExplorationCharts*/
+#legend {
+	margin: 3em;
+	padding: 0.5em;
+	border: 2px solid #C5D8E1; 
+	border-radius: 6px;
+}
+
+#legend legend {
+    color: #000;
+    padding: 1px 1px ;
+    border-radius: 5px;
+    box-shadow: 0 0 0 2px #ddd;
+    margin-left: 20px;
+}
+
+#apks-charts-legend {
+   overflow:hidden;
+   
+}
+#apks-charts-legend label {
+	float:left;
+	 width: 33%;
+}
+#apks-charts-legend label input[type=checkbox] {
+   display:inline-block;
+    margin:-1px 4px 0 0;
+    vertical-align:middle;
+}
