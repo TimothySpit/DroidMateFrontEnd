@@ -4,10 +4,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +22,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.FilenameUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.droidmate.interfaces.Observable;
 import com.droidmate.interfaces.Observer;
@@ -363,7 +372,7 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		}
 		case EXPLORATION_FINISHED: {
 			userStatus.set(UserStatus.FINISHED);
-			droidMateProcess.saveReport();
+			saveReport();
 			break;
 		}
 		case DROIDMATE_ERROR: {
@@ -375,7 +384,7 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 
 			if (userStatus.get() != UserStatus.STARTING) {
 				// apks were explored, report saving necessary
-				droidMateProcess.saveReport();
+				saveReport();
 			}
 			userStatus.set(UserStatus.ERROR);
 			break;
@@ -394,17 +403,93 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			break;
 		}
 	}
-	
-	//get global exploration info
-	public ExplorationInfo getGloblExplorationInfo() {
-		if(droidMateProcess == null) {
-			throw new IllegalStateException("DroidMate was never started.");
+
+	private void saveReport() {
+		// get report output path
+		Path outputFolder = settings.getOutputFolder();
+
+		// check if path exists
+		if (!outputFolder.toFile().exists()) {
+			return;
+		}
+
+		// get resource path to report template
+		URL url = getClass().getResource("/../reportTemplate");
+
+		// create report output folder
+		String reportTimestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+		Path reportOutputFolder = Paths.get(outputFolder.toString(), "Report_" + reportTimestamp);
+		reportOutputFolder.toFile().mkdir();
+
+		// copy it to output folder
+		try {
+			Path walkPath = (new File(url.toURI())).toPath();
+			Files.walk(walkPath).forEach(path -> {
+				if (!walkPath.equals(path)) {
+					try {
+						Path dst = Paths.get(reportOutputFolder.toString(), path.toString().replace(walkPath.toString(), ""));
+						Files.copy(path, dst);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		//get data.js and insert data
+		Path dataPath = Paths.get(reportOutputFolder.toString(), "resources/js/data.js");
+		
+		List<String> consoleOutputList = this.getConsoleOutput(0, getConsoleOutputSize());
+		String consoleOutputString = "";
+		for (String string : consoleOutputList) {
+			consoleOutputString += string + "\\n";
 		}
 		
+		StringBuilder dataString = new StringBuilder();
+		dataString.append("var APKData = " + collectAPKData().toString() + ";");
+		dataString.append("$.APKData = APKData;");
+		dataString.append("$.APK_CONSOLE_DATA = \"" + consoleOutputString + "\";");
+		dataString.append("$(function() {");
+		dataString.append("});");
+		
+		//save file
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(dataPath.toString(), "UTF-8");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		writer.print(dataString.toString());
+		writer.close();
+	}
+
+	private JSONArray collectAPKData() {
+		JSONArray apkInfoString = new JSONArray();
+		for (APKInformation apk : apksInformation.values()) {
+			if(apk.isAPKSelected()) {
+				apkInfoString.put(apk.toJSONObject());
+			}
+		}
+		return apkInfoString;
+	}
+
+	// get global exploration info
+	public ExplorationInfo getGloblExplorationInfo() {
+		if (droidMateProcess == null) {
+			throw new IllegalStateException("DroidMate was never started.");
+		}
+
 		return droidMateProcess.getGlobalExplorationInfo();
 	}
-	
-	//get console output
+
+	// get console output
 	public int getConsoleOutputSize() {
 		int size = 0;
 		synchronized (consoleOutput) {
@@ -412,7 +497,7 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		}
 		return size;
 	}
-	
+
 	public List<String> getConsoleOutput(int from, int to) {
 		List<String> copyList = new LinkedList<>();
 		synchronized (consoleOutput) {

@@ -218,10 +218,6 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		}
 	}
 
-	public void saveReport() {
-
-	}
-
 	public File getDroidMatePath() {
 		return droidMatePath;
 	}

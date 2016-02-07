@@ -1,0 +1,119 @@
+body {
+	padding-top: 60px;
+	min-height: 100%;
+}
+
+body .container {
+	width: 90%; !important	
+}
+
+.main-heading {
+	padding-bottom: 60px; !important
+}
+
+.main_start, .folder-select {
+	padding-top:30px;
+}
+
+.apk-data {
+	padding-top:30px;
+	padding-bottom:30px;
+}
+
+main {
+	    padding-bottom: 100px;
+	    position: relative;
+}
+
+input#folder_name {
+    cursor: default;
+}
+
+.bottom-navi {
+	padding-top:10em;	
+}
+
+.input-row {
+	padding-top: 1em;
+}
+
+.button-settings-container #button-settings {
+	position: absolute;
+	top: 2em;
+	right: 2em;
+	z-index: 2;
+}
+
+#droidMate-alert-container {
+	left:50%;
+	top: 2%;
+	position: absolute;
+}
+
+#droidMate-alert-container .alert{
+	position: relative;
+    z-index: 2;
+    left: -50%;
+}
+
+/*scrollbars for dialogs*/
+.file-dialog  .modal-dialog .modal-body {
+    max-height:calc(100vh - 150px);
+    overflow-y:auto;
+    overflow-x:auto;
+    white-space:pre;
+    font-family:monospace;
+    height: 70%;
+}
+
+
+/* explore loading indicator container*/
+#div-droidmate-starting-indicator-container {
+	height: 200px;
+}
+
+#div-droidmate-starting-indicator-container #div-starting-indicator{
+	position: relative;
+	height: 100px;
+}
+
+/* explore table images */
+td.details-control {
+    background: url('images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('images/details_close.png') no-repeat center center;
+}
+
+/* explore charts */
+.apk-chart-min {
+	float: left;
+	height: 250px;
+	width:  33%;
+}
+
+/* explore console output */
+#div-console-output {
+	margin-top: 50px;
+}
+
+#div-console-output .panel-heading {
+	overflow: auto;
+}
+
+#div-console-output .console-cb {
+	float:right;
+	margin-top:0; 
+	margin-bottom:0;
+	 font-weight: normal !important; 
+}
+
+#div-console-output .console-cb .scroll-text {
+	margin: 10px;
+}
+
+#div-console-output .console-cb input[type=checkbox] {
+	vertical-align: middle;
+	margin-top: 0; !important
+}
