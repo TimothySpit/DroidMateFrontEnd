@@ -6,10 +6,20 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ *	Class which creates a aapt process.
+ */
 public class AAPTProcess {
 
 	private final File aaptPath;
 
+	/**
+	 * Creates a new instance of the AAPTProcess class.
+	 * 
+	 * @param aaptPath
+	 * 			the aapt path.
+	 * @throws FileNotFoundException
+	 */
 	public AAPTProcess(File aaptPath) throws FileNotFoundException {
 		if (aaptPath == null) {
 			throw new IllegalArgumentException("AAPT path must not be null.");

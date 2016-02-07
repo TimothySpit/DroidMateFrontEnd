@@ -8,10 +8,12 @@ import com.droidmate.processes.logfile.APKElementsSeenChanged;
 import com.droidmate.processes.logfile.APKEnded;
 import com.droidmate.processes.logfile.APKExplorationEnded;
 import com.droidmate.processes.logfile.APKExplorationStarted;
-import com.droidmate.processes.logfile.APKLogFileEvent;
 import com.droidmate.processes.logfile.APKScreensSeenChanged;
 import com.droidmate.processes.logfile.APKStarted;
 
+/**
+ *	Class which enables another classes (apks log files) to be observed
+ */
 public class APKLogFileObservable {
 	
 	private final List<APKLogFileObserver> observers = new ArrayList<APKLogFileObserver>();
