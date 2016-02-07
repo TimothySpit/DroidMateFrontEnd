@@ -10,7 +10,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 
-public class ProcessWrapper {
+import com.droidmate.interfaces.ProcessStreamObservable;
+
+public class ProcessWrapper extends ProcessStreamObservable {
 
 	private ProcessBuilder processBuilder;
 	private StringWriter infoWriter = new StringWriter();
@@ -34,8 +36,8 @@ public class ProcessWrapper {
 
 	public void start() throws InterruptedException, IOException {
 		Process process = processBuilder.start();
-		StreamBoozer seInfo = new StreamBoozer(process.getInputStream(), new PrintWriter(infoWriter, true));
-		StreamBoozer seError = new StreamBoozer(process.getErrorStream(), new PrintWriter(errorWriter, true));
+		StreamBoozer seInfo = new StreamBoozer(process.getInputStream(), new PrintWriter(infoWriter, true),StreamCallbackType.STDOUT);
+		StreamBoozer seError = new StreamBoozer(process.getErrorStream(), new PrintWriter(errorWriter, true),StreamCallbackType.ERROR);
 		seInfo.start();
 		seError.start();
 		exitValue = process.waitFor();
@@ -55,13 +57,39 @@ public class ProcessWrapper {
 		return exitValue;
 	}
 
+	public enum StreamCallbackType {
+		ERROR,
+		STDOUT
+	}
+	
+	public class ProcessStreamEvent {
+		private final StreamCallbackType type;
+		private final String message;
+
+		public ProcessStreamEvent(StreamCallbackType type, String message) {
+			this.type = type;
+			this.message = message;
+		}
+
+		public StreamCallbackType getType() {
+			return type;
+		}
+
+		public String getMessage() {
+			return message;
+		}
+	}
+	
 	private class StreamBoozer extends Thread {
 		private InputStream in;
 		private PrintWriter pw;
+		private final StreamCallbackType cbt;
 
-		StreamBoozer(InputStream in, PrintWriter pw) {
+		StreamBoozer(InputStream in, PrintWriter pw, StreamCallbackType callbackType) {
 			this.in = in;
 			this.pw = pw;
+			
+			this.cbt = callbackType;
 		}
 
 		@Override
@@ -72,6 +100,7 @@ public class ProcessWrapper {
 				String line = null;
 				while ((line = br.readLine()) != null) {
 					pw.println(line);
+					notifyStreamObservers(new ProcessStreamEvent(cbt,line));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

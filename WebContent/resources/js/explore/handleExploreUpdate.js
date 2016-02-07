@@ -25,9 +25,11 @@ define([ 'require',
 			//if finished or error, show message
 			if(userState.getUserStatus.payload.data === "FINISHED") {
 				$.droidmate.dialogs.createOKTextDialog("DroidMate finished exploration", "DroidMate finished exploration.");
+			
 				return;
 			} else if(userState.getUserStatus.payload.data === "ERROR") {
 				$.droidmate.dialogs.createOKTextDialog("DroidMate crashed unexpectedly", "DroidMate crashed while exploring.");
+				
 				return;
 			}
 		
@@ -36,6 +38,10 @@ define([ 'require',
 			setTimeout(updateTableLoop, $.droidmate.explore.UPDATE_EXPLORE_INTERVAL);
 		});
 	}
+	
+	table.on("row:open", function(e) {
+		updateTableData();
+	});
 	
 	function updateTableData(apkData) {
 		function updateTable(apkDataResult) {

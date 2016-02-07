@@ -40,6 +40,8 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	/** Instance of GUISettings */
 	private final GUISettings settings;
 
+	private List<String> consoleOutput = new LinkedList<>();
+	
 	/**
 	 * The current status the user is in.
 	 */
@@ -337,7 +339,7 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 
 			// register observer to signal finished exploration
 			droidMateProcess.addObserver(this);
-
+			
 			// start inliner
 			droidMateProcess.startExploration(apksToExplore);
 		} catch (Exception e) {
@@ -377,6 +379,14 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			userStatus.set(UserStatus.ERROR);
 			break;
 		}
+		case CONSOLE_OUTPUT_STDOUT:
+			consoleOutput.add(event.getMessage());
+			break;
+		case CONSOLE_OUTPUT_ERROR:
+			consoleOutput.add(event.getMessage());
+			break;
+		default:
+			break;
 		}
 	}
 }
