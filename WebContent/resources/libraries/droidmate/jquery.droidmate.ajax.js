@@ -111,27 +111,19 @@ define([ 'jquery' ], function(require) {
 	ajax.setAPKsRoot = setAPKsRoot;
 	// ----------------------------------
 
-	function openReportFolder(async) {
-		var status = false;
+	function openOutputFolder(async, success) {
 		$.ajax({
 			type : 'POST',
-			url : "/DroidMate/APKExploreHandler",
+			url : "/DroidMate/OutputFolderHandler",
 			async : async,
 			data : {
-				explore_open_report_folder : true
+				openOutputFolder : true
 			},
 			dataType : "json",
-			success : function(data) {
-				status = data.status == "success";
-			},
-			error : function(data) {
-				status = false;
-			}
+			success : success
 		});
-
-		return status;
 	}
-	ajax.openReportFolder = openReportFolder;
+	ajax.openOutputFolder = openOutputFolder;
 	// ----------------------------------
 
 	function saveDroidMateSettings(outputPath, dmPath, aaptPath,

@@ -1,3 +1,4 @@
+<%@page import="com.droidmate.user.GUISettings"%>
 <jsp:include page="../../partials/header.jsp" />
 
 <!-- requirejs -->
@@ -5,6 +6,10 @@
 	src="${pageContext.request.contextPath}/resources/libraries/requirejs/require.js"></script>
 
 </head>
+
+<%
+	GUISettings settings = new GUISettings();
+%>
 
 <body>
 	<div class="container">
@@ -51,7 +56,7 @@
 			<div class="col-sm-12">
 				<h3>
 					<button id="button-open-output-folder" class="btn btn-default pull-left">Open output folder</button>
-					<span class="label label-default" id="span-output-folder-path">Loading directory...</span>
+					<span class="label label-default" id="span-output-folder-path"><%=settings.getOutputFolder()%></span>
 				</h3>
 			</div>
 		</div>

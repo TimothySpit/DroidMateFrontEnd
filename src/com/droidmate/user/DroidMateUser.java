@@ -413,4 +413,8 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		}
 		return copyList;
 	}
+
+	public GUISettings getSettings() {
+		return settings;
+	}
 }
