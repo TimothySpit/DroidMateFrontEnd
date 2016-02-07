@@ -30,4 +30,25 @@ define([ 'require',
 	$('#button-show-apk-details-dynamic').click(function() {
 		window.location = "ExplorationCharts";
 	});
+	
+	//handle stop all button
+	$('#button-stop-all').click(function() {
+		//disable stop button
+		this.prop("disable",true);
+		//send stop request
+		$.droidmate.explore.stopExploration(true,function(data) {
+			
+		});
+	});
+	
+	//handle return to start button
+	$('#button-return-to-start').click(function() {
+		//stop droidmate
+		$.droidmate.explore.stopExploration(true,function(data) {
+			
+			//reset state
+			
+		});
+	});
+	
 });

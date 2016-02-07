@@ -79,7 +79,15 @@ define([ 'require', 'Spinner',
 			}
 		});
 	}
+	
+	function stopExplorationStart() {
+		
+	}
 
+	function stopExplorationEnd() {
+		
+	}
+	
 	return {
 		updateUI : updateUIControls
 	};

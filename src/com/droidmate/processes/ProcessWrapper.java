@@ -18,6 +18,7 @@ public class ProcessWrapper extends ProcessStreamObservable {
 	private StringWriter infoWriter = new StringWriter();
 	private StringWriter errorWriter = new StringWriter();
 	private int exitValue;
+	private Process process = null;
 
 	public ProcessWrapper(File directory, List<String> command) throws FileNotFoundException {
 		if (directory == null || command == null) {
@@ -35,7 +36,7 @@ public class ProcessWrapper extends ProcessStreamObservable {
 	}
 
 	public void start() throws InterruptedException, IOException {
-		Process process = processBuilder.start();
+		process  = processBuilder.start();
 		StreamBoozer seInfo = new StreamBoozer(process.getInputStream(), new PrintWriter(infoWriter, true),StreamCallbackType.STDOUT);
 		StreamBoozer seError = new StreamBoozer(process.getErrorStream(), new PrintWriter(errorWriter, true),StreamCallbackType.ERROR);
 		seInfo.start();
@@ -111,6 +112,12 @@ public class ProcessWrapper extends ProcessStreamObservable {
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+
+	public void stop() {
+		if(process != null) {
+			process.destroyForcibly();
 		}
 	}
 }

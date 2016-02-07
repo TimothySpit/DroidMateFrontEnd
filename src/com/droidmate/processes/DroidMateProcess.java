@@ -50,6 +50,8 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	//global exploration info of all apks
 	private ExplorationInfo globalExplorationInfo = new ExplorationInfo();
 	//----------------------
+	private ProcessWrapper droidMateProcess = null;
+	private APKLogFileHandler logReader = null;
 	
 	public DroidMateProcess(File droidMatePath, File logFilePath) throws FileNotFoundException {
 		if (droidMatePath == null) {
@@ -159,7 +161,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		}
 
 		// create log reader in new thread and register events
-		APKLogFileHandler logReader = new APKLogFileHandler(droidMateOutputLogFile, true);
+		logReader  = new APKLogFileHandler(droidMateOutputLogFile, true);
 		logReader.addObserver(this);
 		new Thread(new Runnable() {
 			@Override
@@ -184,16 +186,16 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		assert apksToExplore != null && apksToExplore.size() > 0;
 
 		// create inliner process
-		ProcessWrapper pbd = new ProcessWrapper(droidMatePath, arguments);
+		droidMateProcess  = new ProcessWrapper(droidMatePath, arguments);
 		// register console observer
-		pbd.addStreamObserver(this);
+		droidMateProcess.addStreamObserver(this);
 
-		pbd.start();
+		droidMateProcess.start();
 
 		// DroidMate process finished, stop logreader
 		logReader.stop();
 
-		if (pbd.getExitValue() != 0) {
+		if (droidMateProcess.getExitValue() != 0) {
 			// there was an intern error
 			return false;
 		}
@@ -314,6 +316,15 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 			notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.CONSOLE_OUTPUT_STDOUT, arg.getMessage()));
 		} else if(arg.getType() == StreamCallbackType.ERROR){
 			notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.CONSOLE_OUTPUT_ERROR, arg.getMessage()));
+		}
+	}
+
+	public void stopExploration() {
+		if(droidMateProcess != null) {
+			droidMateProcess.stop();
+		}
+		if(logReader != null) {
+			logReader.stop();
 		}
 	}
 }

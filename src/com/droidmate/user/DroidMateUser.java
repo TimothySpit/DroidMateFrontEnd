@@ -442,9 +442,9 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			e1.printStackTrace();
 		}
 
-		//get data.js and insert data
+		// get data.js and insert data
 		Path dataPath = Paths.get(reportOutputFolder.toString(), "resources/js/data.js");
-		
+
 		List<String> consoleOutputList = this.getConsoleOutput(0, getConsoleOutputSize());
 		String consoleOutputString = "";
 		for (String string : consoleOutputList) {
@@ -457,8 +457,8 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		dataString.append("$.APKData = APKData;");
 		dataString.append("$.APK_CONSOLE_DATA = \"" + StringEscapeUtils.escapeHtml(consoleOutputString) + "\";");
 		dataString.append("});");
-		
-		//save file
+
+		// save file
 		PrintWriter writer = null;
 		try {
 			writer = new PrintWriter(dataPath.toString(), "UTF-8");
@@ -474,7 +474,7 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	private JSONArray collectAPKData() {
 		JSONArray apkInfoString = new JSONArray();
 		for (APKInformation apk : apksInformation.values()) {
-			if(apk.isAPKSelected()) {
+			if (apk.isAPKSelected()) {
 				apkInfoString.put(apk.toJSONObject());
 			}
 		}
@@ -511,5 +511,40 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 
 	public GUISettings getSettings() {
 		return settings;
+	}
+
+	public void stopExploration() {
+		synchronized (userStatus) {
+			if (userStatus.get() != UserStatus.EXPLORING) {
+				return;
+			}
+			
+			//check for errors
+			if(droidMateProcess == null) {
+				throw new IllegalStateException("DroidMate is not running.");
+			}
+			
+			//stop exploration
+			droidMateProcess.stopExploration();
+			
+			userStatus.set(UserStatus.FINISHED);
+		}
+	}
+
+	public void clear() {
+		synchronized (userStatus) {
+			if(userStatus.get() == UserStatus.EXPLORING) {
+				//DroidMate still running
+				throw new IllegalStateException("DroidMate is still running. Please stop it first.");
+			}
+			
+			//clear user
+			inlinerProcess = null;
+			droidMateProcess = null;
+			apksRootPath = null;
+			apksInformation = new ConcurrentHashMap<>();
+			consoleOutput.clear();
+			userStatus.set(UserStatus.IDLE);
+		}
 	}
 }
