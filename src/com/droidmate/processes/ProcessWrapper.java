@@ -115,15 +115,22 @@ public class ProcessWrapper extends ProcessStreamObservable {
 		}
 	}
 
+	private void killAdb() {
+		System.out.println("Killing adb process...");
+		Runtime rt = Runtime.getRuntime();
+		try {
+			if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1)
+				rt.exec("taskkill /F /IM " + "adb.exe");
+			else
+				rt.exec("kill -9 " + "adb");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void stop() {
 		if(process != null) {
-			try {
-				process.getErrorStream().close();
-				process.getInputStream().close();
-				process.getOutputStream().close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			killAdb();
 			
 			process.destroyForcibly();
 		}
