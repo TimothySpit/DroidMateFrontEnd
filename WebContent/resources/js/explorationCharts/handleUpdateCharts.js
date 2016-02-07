@@ -374,7 +374,7 @@ define([ 'require',
 			choiceContainer.find('[id="cb-total"]').parent().css(
 					'background-color', series[0].color);
 			for (var i = 1; i < series.length; ++i) { // no total checkbox
-				var apk = apks[i - 1];
+				var apk = selectedAPKS[i - 1];
 				if (apk)
 					choiceContainer.find('[id="cb-' + apk.name + '"]').parent()
 							.css('background-color', series[i].color);
