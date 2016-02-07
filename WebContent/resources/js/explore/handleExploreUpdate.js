@@ -87,7 +87,7 @@ define([ 'require',
 				
 				//collect data
 				var name = value.name;
-				var time = value.explorationInfo.time;
+				var timeMillis = value.explorationInfo.timeMillis;
 				var elementsSeen = explorationInfo.elementsSeen;
 				var screensSeen = explorationInfo.screensSeen;
 				var widgetsClicked = explorationInfo.widgetsExplored;
@@ -102,7 +102,7 @@ define([ 'require',
 					row.updateStatus(status);
 				} else {
 					//row need to be initialized
-					row = table.addAPKData(name, time, elementsSeen, screensSeen,
+					row = table.addAPKData(name, (timeMillis / 1000) + "s", elementsSeen, screensSeen,
 							widgetsClicked, status);
 					table.redraw();
 				}

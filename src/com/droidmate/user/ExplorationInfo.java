@@ -130,7 +130,7 @@ public class ExplorationInfo {
 			synchronized (startingTime) {
 				long endTime = this.endTime.get() != 0 ? this.endTime.get() : System.currentTimeMillis();
 				long timeMilli = endTime - startingTime.get();
-				json.put("time", timeMilli > 0 ? timeMilli : 0);
+				json.put("timeMillis", timeMilli > 0 ? timeMilli : 0);
 			}
 		}
 
