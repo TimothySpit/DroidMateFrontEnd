@@ -87,6 +87,7 @@ define([ 'require',
 				
 				//collect data
 				var name = value.name;
+				var timeMillis = value.explorationInfo.timeMillis;
 				var elementsSeen = explorationInfo.elementsSeen;
 				var screensSeen = explorationInfo.screensSeen;
 				var widgetsClicked = explorationInfo.widgetsExplored;
@@ -95,13 +96,14 @@ define([ 'require',
 				var row = table.getRowByName(name);
 				if(row) {
 					//row is already initialized
+					row.updateTime((timeMillis / 1000) + "s");
 					row.updateElementsSeen(elementsSeen);
 					row.updateScreensSeen(screensSeen);
 					row.updateWidgetsClicked(widgetsClicked);
 					row.updateStatus(status);
 				} else {
 					//row need to be initialized
-					row = table.addAPKData(name, elementsSeen, screensSeen,
+					row = table.addAPKData(name, (timeMillis / 1000) + "s", elementsSeen, screensSeen,
 							widgetsClicked, status);
 					table.redraw();
 				}
@@ -167,13 +169,15 @@ define([ 'require',
 					continueLoop = true;
 				}
 				
-				//if finished or error, show message
-				if(userState.getUserStatus.payload.data === "FINISHED") {
-					$.droidmate.dialogs.createOKTextDialog("DroidMate finished exploration", "DroidMate finished exploration.");
-				} else if(userState.getUserStatus.payload.data === "ERROR") {
-					$.droidmate.dialogs.createOKTextDialog("DroidMate crashed unexpectedly", "DroidMate crashed while exploring.");
+				//if finished or error, show message only when user was not visiting charts page
+				var contextPath = document.referrer.split('/');
+				if(!contextPath[4] || contextPath[4] !== "ExplorationCharts") {
+					if(userState.getUserStatus.payload.data === "FINISHED") {
+						$.droidmate.dialogs.createOKTextDialog("DroidMate finished exploration", "DroidMate finished exploration.");
+					} else if(userState.getUserStatus.payload.data === "ERROR") {
+						$.droidmate.dialogs.createOKTextDialog("DroidMate crashed unexpectedly", "DroidMate crashed while exploring.");
+					}
 				}
-				
 				//start updating table and charts
 				if(userState.getUserStatus.payload.data === "EXPLORING") {
 					updateTableLoop();

@@ -39,7 +39,7 @@ public class ExplorationCharts extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		logger.info("Serve {} page request.", request.getRequestURI());
 
-		request.getRequestDispatcher("/WEB-INF/pages/explore/explorationCharts.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/pages/explorationCharts/explorationCharts.jsp").forward(request, response);
 	}
 
 }

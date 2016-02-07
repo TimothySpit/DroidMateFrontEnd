@@ -51,6 +51,12 @@ define([ 'require',
 			//user is still exploring, but has refreshed the page
 			$.droidmate.overlays.info("DroidMate is still exploring...", 
 					$.droidmate.overlays.INFO_MESSAGE_TIMEOUT);
+		} else if(data.getUserStatus.payload.data === "FINISHED") {
+			$.droidmate.overlays.success("DroidMate finished exploration.", 
+					$.droidmate.overlays.SUCCESS_MESSAGE_TIMEOUT);
+		} else if(data.getUserStatus.payload.data === "ERROR") {
+			$.droidmate.overlays.danger("DroidMate crashed while exploring.", 
+					$.droidmate.overlays.DANGER_MESSAGE_TIMEOUT);
 		}
 		
 		//start update loop

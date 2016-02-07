@@ -55,6 +55,21 @@ define([ 'jquery' ], function(require) {
 	ajax.getConsoleOutput = getConsoleOutput;
 	// ----------------------------------
 
+	function getGlobalExploration(async, success) {
+		$.ajax({
+			url : "/DroidMate/GlobalExploreHandler",
+			async : async,
+			dataType : "json",
+			type : 'POST',
+			data : {
+				getGlobalExploration : true
+			},
+			success : success
+		});
+	}
+	ajax.getGlobalExploration = getGlobalExploration;
+	// ----------------------------------
+	
 	function getAPKSData(async, success) {
 		$.ajax({
 			// Wait for the server to finish apk list and request the table data
