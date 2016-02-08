@@ -7,6 +7,8 @@ define([ 'require', 'Spinner',
 	var spinner = new Spinner().spin()
 	var spinnerContainerParent = $('#div-droidmate-starting-indicator-container');
 	var spinnerContainer = $('#div-starting-indicator');
+	var spinnerText = $('#div-starting-indicator-text');
+	spinnerText.val = "DroidMate is starting..."
 	
 	function showControls() {
 		$('#div-exploration-top-navigation').show();
@@ -22,6 +24,14 @@ define([ 'require', 'Spinner',
 		$('#div-exploration-bottom-navi').hide();
 		$('#div-console-output').hide();
 		$('#div-apk-exploration-table-container').hide();
+	}
+	
+	function showReturnIndicator() {
+		hideControls();
+		spinnerContainerParent.show();
+		spinnerText.text("Stopping...");
+		spinner = new Spinner().spin()
+		spinnerContainer.append(spinner.el);
 	}
 	
 	function updateUIControls(callback) {
@@ -89,6 +99,7 @@ define([ 'require', 'Spinner',
 	}
 	
 	return {
-		updateUI : updateUIControls
+		updateUI : updateUIControls,
+		showReturnIndicator : showReturnIndicator
 	};
 });

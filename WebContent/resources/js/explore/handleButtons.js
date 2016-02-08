@@ -31,26 +31,4 @@ define([ 'require',
 		window.location = "ExplorationCharts";
 	});
 	
-	//handle stop all button
-	$('#button-stop-all').click(function() {
-		//disable stop button
-		$('#button-stop-all').prop("disabled",true);
-		//send stop request
-		$.droidmate.explore.stopExploration(true,function(data) {
-			
-		});
-	});
-	
-	//handle return to start button
-	$('#button-return-to-start').click(function() {
-		//stop droidmate
-		$.droidmate.explore.stopExploration(true,function(data) {
-			
-			//reset state
-			$.droidmate.ajax.clearUser(true, function(result) {
-				window.location = "Index";
-			});
-		});
-	});
-	
 });

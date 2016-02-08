@@ -13,8 +13,17 @@ define([ 'require',
 	console.addClassNamesForHeading('panel-heading');
 	console.addClassNamesForContent('panel-body');
 	
+	var stopLoopFlag = false;
+	
+	function stopLoop() {
+		stopLoopFlag = true;
+	}
+	
 	//continues updating filled table
 	function updateTableLoop() {
+		if(stopLoopFlag) {
+			return;
+		}
 		updateHelper.updateUI(function(userState) {
 			if(!userState || !userState.getUserStatus || !userState.getUserStatus.result) {
 				//error in retrieving user state
@@ -71,6 +80,9 @@ define([ 'require',
 	
 	function updateTableData(apkData) {
 		function updateTable(apkDataResult) {
+			if(stopLoopFlag) {
+				return;
+			}
 			$.each(apkDataResult.getAPKSData.payload.data, function(index,value) {
 				//get exploration info
 				var explorationInfo = value.explorationInfo;
@@ -145,6 +157,10 @@ define([ 'require',
 	function startUpdateLoop() {
 		//updates table and reflects user state changes
 		function updateLoop() {
+			if(stopLoopFlag) {
+				return;
+			}
+			
 			//flag is loop should continue
 			var continueLoop = false;
 
@@ -199,6 +215,7 @@ define([ 'require',
 	}
 
 	return {
-		startUpdateLoop : startUpdateLoop
+		startUpdateLoop : startUpdateLoop,
+		stopLoop : stopLoop
 	};
 });

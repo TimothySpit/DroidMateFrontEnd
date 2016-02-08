@@ -62,6 +62,7 @@ public class AAPTProcess {
 			}
 			if (pbd.getExitValue() != 0) {
 				// there was an intern error
+				arguments.remove(arguments.size() - 1);
 				continue;
 			}
 			result.add(collectInformationFromResultingStream(apk, pbd.getInfos()));

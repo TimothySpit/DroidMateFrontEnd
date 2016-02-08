@@ -63,4 +63,34 @@ define([ 'require',
 		explorationUpdater.startUpdateLoop();
 	});
 
+	//handle return to start button
+	$('#button-return-to-start').click(function() {
+		//disable loop
+		explorationUpdater.stopLoop();
+		updateHelper.showReturnIndicator();
+		
+		//stop droidmate
+		$.droidmate.explore.stopExploration(true,function(data) {
+			
+			//reset state
+			$.droidmate.ajax.clearUser(true, function(result) {
+				window.location = "Index";
+			});
+		});
+	});
+	
+	//handle stop all button
+	$('#button-stop-all').click(function() {
+		//disable stop button
+		$('#button-stop-all').prop("disabled",true);
+		$('#button-return-to-start').prop("disabled",true);
+		$('#button-show-apk-details-dynamic').prop("disabled",true);
+		//send stop request
+		$.droidmate.explore.stopExploration(true,function(data) {
+			$('#button-return-to-start').prop("disabled",false);
+			//disable loop
+			explorationUpdater.stopLoop();
+			
+		});
+	});
 });
