@@ -88,9 +88,6 @@ define([ 'require',
 		//send stop request
 		$.droidmate.explore.stopExploration(true,function(data) {
 			$('#button-return-to-start').prop("disabled",false);
-			//disable loop
-			explorationUpdater.stopLoop();
-			
 		});
 	});
 });

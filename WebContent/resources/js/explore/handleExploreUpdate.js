@@ -19,6 +19,20 @@ define([ 'require',
 		stopLoopFlag = true;
 	}
 	
+	function startUpdateOnce() {
+		updateTableData();
+		
+		updateConsoleData();
+	}
+	
+	function continueUpdateOnly() {
+		updateTableData();
+		
+		updateConsoleData();
+		
+		setTimeout(continueUpdateOnly,5000);
+	}
+	
 	//continues updating filled table
 	function updateTableLoop() {
 		if(stopLoopFlag) {
@@ -38,11 +52,11 @@ define([ 'require',
 			//if finished or error, show message
 			if(userState.getUserStatus.payload.data === "FINISHED") {
 				$.droidmate.dialogs.createOKTextDialog("DroidMate finished exploration", "DroidMate finished exploration.");
-			
+				continueUpdateOnly();
 				return;
 			} else if(userState.getUserStatus.payload.data === "ERROR") {
 				$.droidmate.dialogs.createOKTextDialog("DroidMate crashed unexpectedly", "DroidMate crashed while exploring.");
-				
+				continueUpdateOnly();
 				return;
 			}
 		
@@ -80,9 +94,6 @@ define([ 'require',
 	
 	function updateTableData(apkData) {
 		function updateTable(apkDataResult) {
-			if(stopLoopFlag) {
-				return;
-			}
 			$.each(apkDataResult.getAPKSData.payload.data, function(index,value) {
 				//get exploration info
 				var explorationInfo = value.explorationInfo;
@@ -216,6 +227,7 @@ define([ 'require',
 
 	return {
 		startUpdateLoop : startUpdateLoop,
-		stopLoop : stopLoop
+		stopLoop : stopLoop,
+		startUpdateOnce : startUpdateOnce
 	};
 });

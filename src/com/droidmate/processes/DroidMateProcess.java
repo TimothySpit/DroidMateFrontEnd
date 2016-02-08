@@ -260,6 +260,11 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 			throw new IllegalStateException("APK " + event.getName() + " was not selected for Exploration");
 		}
 
+		if(this.currentAPK != null && this.currentAPK.getExplorationStatus() == ExplorationStatus.EXPLORING) {
+			this.currentAPK.setExplorationStatus(ExplorationStatus.ERROR);
+			this.currentAPK.getExplorationInfo().setEndTime(event.getStartTime());
+		}
+		
 		this.currentAPK = apksToExplore.get(event.getName());
 		this.currentAPK.setExplorationStatus(ExplorationStatus.EXPLORING);
 		this.currentAPK.getExplorationInfo().setStartingTime(event.getStartTime());
@@ -320,11 +325,18 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	}
 
 	public void stopExploration() {
-		if(droidMateProcess != null) {
-			droidMateProcess.stop();
-		}
 		if(logReader != null) {
+			logReader.deleteObserver(this);
+			if(this.currentAPK != null && this.currentAPK.getExplorationStatus() == ExplorationStatus.EXPLORING) {
+				this.currentAPK.setExplorationStatus(ExplorationStatus.ERROR);
+				this.currentAPK.getExplorationInfo().setEndTime(System.currentTimeMillis());
+			}
 			logReader.stop();
+		}
+
+		if(droidMateProcess != null) {
+			droidMateProcess.deleteStreamObserver(this);
+			droidMateProcess.stop();
 		}
 	}
 }

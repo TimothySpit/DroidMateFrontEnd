@@ -19,8 +19,8 @@ public class ProcessWrapper extends ProcessStreamObservable {
 	private StringWriter errorWriter = new StringWriter();
 	private int exitValue;
 	private Process process = null;
-	private StreamBoozer seInfo= null;
-	private StreamBoozer seError= null;
+	private StreamBoozer seInfo = null;
+	private StreamBoozer seError = null;
 
 	public ProcessWrapper(File directory, List<String> command) throws FileNotFoundException {
 		if (directory == null || command == null) {
@@ -38,9 +38,9 @@ public class ProcessWrapper extends ProcessStreamObservable {
 	}
 
 	public void start() throws InterruptedException, IOException {
-		process  = processBuilder.start();
-		seInfo = new StreamBoozer(process.getInputStream(), new PrintWriter(infoWriter, true),StreamCallbackType.STDOUT);
-		seError = new StreamBoozer(process.getErrorStream(), new PrintWriter(errorWriter, true),StreamCallbackType.ERROR);
+		process = processBuilder.start();
+		seInfo = new StreamBoozer(process.getInputStream(), new PrintWriter(infoWriter, true), StreamCallbackType.STDOUT);
+		seError = new StreamBoozer(process.getErrorStream(), new PrintWriter(errorWriter, true), StreamCallbackType.ERROR);
 		seInfo.start();
 		seError.start();
 		exitValue = process.waitFor();
@@ -61,10 +61,9 @@ public class ProcessWrapper extends ProcessStreamObservable {
 	}
 
 	public enum StreamCallbackType {
-		ERROR,
-		STDOUT
+		ERROR, STDOUT
 	}
-	
+
 	public class ProcessStreamEvent {
 		private final StreamCallbackType type;
 		private final String message;
@@ -82,17 +81,23 @@ public class ProcessWrapper extends ProcessStreamObservable {
 			return message;
 		}
 	}
-	
+
 	private class StreamBoozer extends Thread {
 		private InputStream in;
 		private PrintWriter pw;
 		private final StreamCallbackType cbt;
 
+		private boolean isRunning = false;
+
 		StreamBoozer(InputStream in, PrintWriter pw, StreamCallbackType callbackType) {
 			this.in = in;
 			this.pw = pw;
-			
+
 			this.cbt = callbackType;
+		}
+
+		public synchronized boolean isRunning() {
+			return isRunning;
 		}
 
 		@Override
@@ -102,8 +107,9 @@ public class ProcessWrapper extends ProcessStreamObservable {
 				br = new BufferedReader(new InputStreamReader(in));
 				String line = null;
 				while ((line = br.readLine()) != null) {
+					isRunning = true;
 					pw.println(line);
-					notifyStreamObservers(new ProcessStreamEvent(cbt,line));
+					notifyStreamObservers(new ProcessStreamEvent(cbt, line));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -113,6 +119,7 @@ public class ProcessWrapper extends ProcessStreamObservable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				isRunning = false;
 			}
 		}
 	}
@@ -129,14 +136,20 @@ public class ProcessWrapper extends ProcessStreamObservable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void stop() {
-		if(process != null) {
+		if (process != null) {
 			killAdb();
-			
+
 			try {
 				process.destroyForcibly().waitFor();
+				while (seInfo.isRunning()) {
+					killAdb();
+				}
 				seInfo.join();
+				while (seInfo.isRunning()) {
+					killAdb();
+				}
 				seError.join();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

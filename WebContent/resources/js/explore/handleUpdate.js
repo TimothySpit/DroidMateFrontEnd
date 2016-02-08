@@ -8,7 +8,7 @@ define([ 'require', 'Spinner',
 	var spinnerContainerParent = $('#div-droidmate-starting-indicator-container');
 	var spinnerContainer = $('#div-starting-indicator');
 	var spinnerText = $('#div-starting-indicator-text');
-	spinnerText.val = "DroidMate is starting..."
+	spinnerText.text("DroidMate is starting...");
 	
 	function showControls() {
 		$('#div-exploration-top-navigation').show();
@@ -80,8 +80,6 @@ define([ 'require', 'Spinner',
 			//disable stop button
 			if(statusData === "FINISHED" || statusData === "ERROR") {
 				$('#button-stop-all').prop("disabled", true);
-			} else {
-				$('#button-stop-all').prop("disabled", false);
 			}
 			
 			if(callback) {
