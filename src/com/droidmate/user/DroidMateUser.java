@@ -536,6 +536,7 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			droidMateProcess.stopExploration();
 
 			userStatus.set(UserStatus.FINISHED);
+			saveReport();
 		}
 	}
 

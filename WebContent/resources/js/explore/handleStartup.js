@@ -81,6 +81,8 @@ define([ 'require',
 	
 	//handle stop all button
 	$('#button-stop-all').click(function() {
+		$.droidmate.overlays.info("Stopping DroidMate... This could take a while.", 
+				$.droidmate.overlays.INFO_MESSAGE_TIMEOUT);
 		//disable stop button
 		$('#button-stop-all').prop("disabled",true);
 		$('#button-return-to-start').prop("disabled",true);
@@ -88,6 +90,8 @@ define([ 'require',
 		//send stop request
 		$.droidmate.explore.stopExploration(true,function(data) {
 			$('#button-return-to-start').prop("disabled",false);
+			$.droidmate.overlays.info("DroidMate stopped.", 
+					$.droidmate.overlays.INFO_MESSAGE_TIMEOUT);
 		});
 	});
 });
