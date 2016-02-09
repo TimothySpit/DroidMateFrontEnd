@@ -82,15 +82,11 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	/**
 	 * Sets the path for the users given .apks.
 	 * 
-	 * @param newPath
-	 *            the path for the apks
-	 * @throws NullPointerException
-	 *             if the given path ist null
-	 * @throws IllegalArgumentException
-	 *             if the given path not a directory or does not exist
-	 * @throws IOException
-	 *             if a IO Error occured
-	 * @throws InterruptedException
+	 * @param newPath the path for the apks
+	 * @throws NullPointerException if the given path ist null
+	 * @throws IllegalArgumentException if the given path not a directory or does not exist
+	 * @throws IOException if a IO Error occured
+	 * @throws InterruptedException in crazy thread stuff
 	 */
 	public synchronized void setAPKPath(Path newPath) throws IOException, InterruptedException {
 		// exception handling
@@ -154,6 +150,11 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		return apksInfos;
 	}
 
+	/**
+	 * Sets the .apks information and checks whether it is inlined or not.
+	 * 
+	 * @param apkInfo the information to be set
+	 */
 	private void setAPKInlinedInformation(APKInformation apkInfo) {
 		assert apkInfo != null;
 
@@ -231,10 +232,20 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		return apksInformation;
 	}
 
+	/**
+	 * Returns whether the inliner is started.
+	 * 
+	 * @return true if the inliner is started
+	 */
 	public boolean isInlinerStarted() {
 		return userStatus.get() == UserStatus.INLINING;
 	}
 
+	/**
+	 * Starts the inliner.
+	 * @return true if the inliner was successfully started
+	 * @throws IOException
+	 */
 	public synchronized boolean startInliner() throws IOException {
 		if (userStatus.get() != UserStatus.IDLE) {
 			throw new IllegalStateException("Inliner can not be started in state " + userStatus.get().getName());
@@ -289,6 +300,10 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		return inlineResult;
 	}
 
+	/**
+	 * Returns the users status
+	 * @return the users status
+	 */
 	public UserStatus getStatus() {
 		return userStatus.get();
 	}
