@@ -16,9 +16,8 @@ public class AAPTProcess {
 	/**
 	 * Creates a new instance of the AAPTProcess class.
 	 * 
-	 * @param aaptPath
-	 * 			the aapt path.
-	 * @throws FileNotFoundException
+	 * @param aaptPath the aapt path.
+	 * @throws FileNotFoundException if the aapt path does not exist
 	 */
 	public AAPTProcess(File aaptPath) throws FileNotFoundException {
 		if (aaptPath == null) {

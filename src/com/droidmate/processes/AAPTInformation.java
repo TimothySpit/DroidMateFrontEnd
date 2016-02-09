@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import org.apache.commons.io.FilenameUtils;
 
 /**
- *	Class which provides all get-at-able information about an apk (package name,
+ *	Class which provides all getable information about an apk (package name,
  *	version code, version name, etc...). 
  */
 public class AAPTInformation {
@@ -20,16 +20,11 @@ public class AAPTInformation {
 	/**
 	 * Creates a new instance of the AAPTInformation class.
 	 * 
-	 * @param apk
-	 * 			apk file
-	 * @param packageName
-	 * 			the apk's package name
-	 * @param packageVersionCode
-	 * 			the apk's package version code
-	 * @param packageVersionName
-	 * 			the apk's package version name
-	 * @param activityName
-	 * 			the apk's activity name
+	 * @param apk apk file
+	 * @param packageName the apk's package name
+	 * @param packageVersionCode the apk's package version code
+	 * @param packageVersionName the apk's package version name
+	 * @param activityName the apk's activity name
 	 * @throws FileNotFoundException
 	 */
 	public AAPTInformation(File apk, String packageName, String packageVersionCode, String packageVersionName, String activityName)
