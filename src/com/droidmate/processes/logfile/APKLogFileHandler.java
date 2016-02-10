@@ -19,6 +19,11 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import com.droidmate.interfaces.APKLogFileObservable;
 
+/**
+ * Handler for the APK log file
+ * @author timospeith
+ *
+ */
 public class APKLogFileHandler extends APKLogFileObservable {
 
 	private final File inputFileToParse;
@@ -32,6 +37,12 @@ public class APKLogFileHandler extends APKLogFileObservable {
 
 	private ForeverFileInputStream inputFileStream = null;
 
+	/**
+	 * Creates an ew instance of the APKLogFileHandler
+	 * @param inputFileToParse the file to parse the log out
+	 * @param waitForFileCreation boolean indicating whether it should be waited for the file creation
+	 * @throws FileNotFoundException if the input file was not found
+	 */
 	public APKLogFileHandler(File inputFileToParse, boolean waitForFileCreation) throws FileNotFoundException {
 		this.waitForFileCreation = waitForFileCreation;
 		if (!waitForFileCreation) {
@@ -49,6 +60,9 @@ public class APKLogFileHandler extends APKLogFileObservable {
 		this.inputFileToParse = inputFileToParse;
 	}
 
+	/**
+	 * Help method to wait for file creation
+	 */
 	private void waitForFileCreation() {
 		while (!inputFileToParse.exists() && !stopProcessing.get()) {
 			try {
@@ -59,6 +73,9 @@ public class APKLogFileHandler extends APKLogFileObservable {
 		}
 	}
 
+	/**
+	 * Starts Parsing
+	 */
 	public void start() {
 		if (waitForFileCreation) {
 			// wait until input file is created
@@ -93,6 +110,7 @@ public class APKLogFileHandler extends APKLogFileObservable {
 			// info variables
 			String currentAPKName = "";
 			String text = "";
+			List<String> exploredElements = new ArrayList<String>();
 			// --------------
 
 			while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -117,16 +135,11 @@ public class APKLogFileHandler extends APKLogFileObservable {
 					} else if (tagname.equalsIgnoreCase("success")) {
 						notifyObservers(new APKEnded(currentAPKName, System.currentTimeMillis(), Boolean.parseBoolean(text)));
 					} else if (tagname.equalsIgnoreCase("widget_explored")) {
-						notifyObservers(new APKElementsExploredChanged(currentAPKName, 1)); // at
-																							// the
-																							// moment,
-																							// we
-																							// only
-																							// print
-																							// the
-																							// name
-																							// in
-																							// gui.xml
+						if (!exploredElements.contains(text))
+						{
+							exploredElements.add(text);
+							notifyObservers(new APKElementsExploredChanged(currentAPKName, 1));
+						}
 					} else if (tagname.equalsIgnoreCase("exploration")) {
 						notifyObservers(new APKExplorationEnded(System.currentTimeMillis()));
 					} else if (tagname.equalsIgnoreCase("name")) {
@@ -136,6 +149,7 @@ public class APKLogFileHandler extends APKLogFileObservable {
 							// apk name has inlined prefix, remove it
 							currentAPKName = text.substring(0, inlinedIndex) + ".apk";
 						}
+						exploredElements = new ArrayList<String>();
 						notifyObservers(new APKStarted(currentAPKName, System.currentTimeMillis()));
 					}
 					break;
@@ -165,6 +179,9 @@ public class APKLogFileHandler extends APKLogFileObservable {
 		}
 	}
 
+	/**
+	 * Stops parsing
+	 */
 	public void stop() {
 		stopProcessing.set(true);
 		inputStreamLock.lock();

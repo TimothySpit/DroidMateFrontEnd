@@ -1,4 +1,6 @@
 package com.droidmate.processes.logfile;
 
-public abstract class APKLogFileEvent {
-}
+/**
+ * Most useful class ever
+ */
+public abstract class APKLogFileEvent {}
