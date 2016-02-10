@@ -8,7 +8,10 @@ import java.nio.file.WatchEvent;
  */
 public class DirectoryWatcherEvent {
 
+	/**	An event or a repeated event for an object that is registered with a WatchService	*/
 	private final WatchEvent<?> event;
+	
+	/**	The changed path	*/
 	private final Path changedPath;
 
 	/**

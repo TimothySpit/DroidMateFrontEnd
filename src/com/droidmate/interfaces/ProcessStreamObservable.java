@@ -10,6 +10,7 @@ import com.droidmate.processes.ProcessWrapper;
  */
 public class ProcessStreamObservable {
 
+	/**	List of observers	*/
 	private final List<ProcessStreamObserver> observers = new ArrayList<ProcessStreamObserver>();
 
 	/**

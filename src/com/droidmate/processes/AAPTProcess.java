@@ -7,10 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Class which creates an aapt process.
+ * Class which creates a aapt-process.
  */
 public class AAPTProcess {
 
+	/**	The aapt path	*/
 	private final File aaptPath;
 
 	/**

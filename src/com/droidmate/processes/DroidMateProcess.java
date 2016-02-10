@@ -41,20 +41,30 @@ import com.droidmate.user.InliningStatus;
  */
 public class DroidMateProcess extends Observable<DroidMateProcessEvent> implements APKLogFileObserver, ProcessStreamObserver {
 
+	/**	The droidMate path	*/
 	private final File droidMatePath;
+	
+	/**	The log file path	*/
 	private final File logFilePath;
+	
+	/**	Allows the print stacktrace	*/
 	private boolean printStackTrace;
 
+	/**	Map String to APKInformation	*/
 	private Map<String, APKInformation> apksToExplore = new HashMap<>();
 
-	// exploration variables
+	/**	Exploration variables	*/
 	private APKInformation currentAPK = null;
+	
 	// ---------------------
-
-	// global exploration info of all apks
+	/**	Global exploration info of all apks	*/
 	private ExplorationInfo globalExplorationInfo = new ExplorationInfo();
 	// ----------------------
+	
+	/**	An instance of ProcessWrapper	*/
 	private ProcessWrapper droidMateProcess = null;
+	
+	/**	An instance of APKLogFileHandler	*/
 	private APKLogFileHandler logReader = null;
 
 	/**

@@ -21,6 +21,7 @@ public class Index extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**

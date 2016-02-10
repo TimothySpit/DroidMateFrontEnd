@@ -11,10 +11,19 @@ import org.apache.commons.io.FilenameUtils;
  */
 public class AAPTInformation {
 
+	/**	The file which contents .apks	*/
 	private final File apkFile;
+	
+	/**	The apk's package name	*/
 	private final String packageName;
+	
+	/**	The apk's package version code	*/
 	private final String packageVersionCode;
+	
+	/**	The apk's package version name	*/
 	private final String packageVersionName;
+	
+	/**	The apk's activity name	*/
 	private final String activityName;
 
 	/**

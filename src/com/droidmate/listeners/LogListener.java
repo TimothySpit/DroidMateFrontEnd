@@ -13,7 +13,8 @@ import org.slf4j.Logger;
  */
 @WebListener
 public class LogListener implements ServletContextListener {
-
+	
+	/**	The logger which is useful for debugging.	*/
 	Logger logger = null;
 
 	/**
