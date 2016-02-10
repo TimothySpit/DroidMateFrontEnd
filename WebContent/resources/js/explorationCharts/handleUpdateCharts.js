@@ -60,7 +60,8 @@ define([ 'require',
 				axisLabelFontFamily : 'Arial',
 				panRange : false,
 				minTickSize : 1,
-				min : 0,
+				min : -0.5,
+				position : "left"
 			},
 			xaxis : {
 				labelHeight : 30,
@@ -69,7 +70,7 @@ define([ 'require',
 				axisLabelFontSizePixels : 15,
 				axisLabelFontFamily : 'Arial',
 				panRange : [ 0, null ],
-				min : 0,
+				min : -0.5,
 				minTickSize : 1
 			},
 			pan : {
@@ -176,7 +177,7 @@ define([ 'require',
 
 		var individualData = getIndividualData(choiceContainer);
 		elementsSeenHistory = [ elementsSeenHistory ]
-				.concat([ individualData.elementsSeenIndividual ]);
+				.concat(individualData.elementsSeenIndividual);
 		widgetsExploredHistory = [ widgetsExploredHistory ]
 				.concat(individualData.widgetsExploredIndividual);
 		screensSeenHistory = [ screensSeenHistory ]
@@ -374,7 +375,7 @@ define([ 'require',
 			choiceContainer.find('[id="cb-total"]').parent().css(
 					'background-color', series[0].color);
 			for (var i = 1; i < series.length; ++i) { // no total checkbox
-				var apk = apks[i - 1];
+				var apk = selectedAPKS[i - 1];
 				if (apk)
 					choiceContainer.find('[id="cb-' + apk.name + '"]').parent()
 							.css('background-color', series[i].color);

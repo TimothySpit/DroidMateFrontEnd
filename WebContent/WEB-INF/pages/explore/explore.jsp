@@ -39,7 +39,7 @@
 		<!-- starting indicator for DroidMate STARTING state -->
 		<div id="div-droidmate-starting-indicator-container" class="text-center row" style="display: none;">
 			<div id="div-starting-indicator"></div>
-			<p>DroidMate is starting...</p>
+			<p id="div-starting-indicator-text"></p>
 		</div>
 
 		<!-- APK table containing exploration data -->

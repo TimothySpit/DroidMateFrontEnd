@@ -77,7 +77,7 @@ public class FileSystemHandler extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Serve {} page request.", request.getRequestURI());
+		logger.debug("Serve {} page request.", request.getRequestURI());
 
 		// return json
 		response.setContentType("application/json");
@@ -90,13 +90,13 @@ public class FileSystemHandler extends HttpServlet {
 
 		String path = request.getParameter(PATH);
 		if (path != null && (path.equals("root") || (new File(path)).exists())) {
-			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), PATH, path);
-			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), FILETYPE, fileType);
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), PATH, path);
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), FILETYPE, fileType);
 
 			result = getFileData(fileType, path);
 		}
 
-		logger.info("{}: Request result: {}", request.getRequestURI(), result);
+		logger.debug("{}: Request result: {}", request.getRequestURI(), result);
 		response.getWriter().print(result);
 	}
 

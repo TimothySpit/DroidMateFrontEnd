@@ -13,8 +13,31 @@ define([ 'require',
 	console.addClassNamesForHeading('panel-heading');
 	console.addClassNamesForContent('panel-body');
 	
+	var stopLoopFlag = false;
+	
+	function stopLoop() {
+		stopLoopFlag = true;
+	}
+	
+	function startUpdateOnce() {
+		updateTableData();
+		
+		updateConsoleData();
+	}
+	
+	function continueUpdateOnly() {
+		updateTableData();
+		
+		updateConsoleData();
+		
+		setTimeout(continueUpdateOnly,5000);
+	}
+	
 	//continues updating filled table
 	function updateTableLoop() {
+		if(stopLoopFlag) {
+			return;
+		}
 		updateHelper.updateUI(function(userState) {
 			if(!userState || !userState.getUserStatus || !userState.getUserStatus.result) {
 				//error in retrieving user state
@@ -29,11 +52,11 @@ define([ 'require',
 			//if finished or error, show message
 			if(userState.getUserStatus.payload.data === "FINISHED") {
 				$.droidmate.dialogs.createOKTextDialog("DroidMate finished exploration", "DroidMate finished exploration.");
-			
+				continueUpdateOnly();
 				return;
 			} else if(userState.getUserStatus.payload.data === "ERROR") {
 				$.droidmate.dialogs.createOKTextDialog("DroidMate crashed unexpectedly", "DroidMate crashed while exploring.");
-				
+				continueUpdateOnly();
 				return;
 			}
 		
@@ -87,7 +110,7 @@ define([ 'require',
 				
 				//collect data
 				var name = value.name;
-				var timeMillis = value.explorationInfo.timeMillis;
+				var timeSeconds = value.explorationInfo.timeSeconds;
 				var elementsSeen = explorationInfo.elementsSeen;
 				var screensSeen = explorationInfo.screensSeen;
 				var widgetsClicked = explorationInfo.widgetsExplored;
@@ -96,14 +119,14 @@ define([ 'require',
 				var row = table.getRowByName(name);
 				if(row) {
 					//row is already initialized
-					row.updateTime((timeMillis / 1000) + "s");
+					row.updateTime(timeSeconds + "s");
 					row.updateElementsSeen(elementsSeen);
 					row.updateScreensSeen(screensSeen);
 					row.updateWidgetsClicked(widgetsClicked);
 					row.updateStatus(status);
 				} else {
 					//row need to be initialized
-					row = table.addAPKData(name, (timeMillis / 1000) + "s", elementsSeen, screensSeen,
+					row = table.addAPKData(name, timeSeconds + "s", elementsSeen, screensSeen,
 							widgetsClicked, status);
 					table.redraw();
 				}
@@ -145,6 +168,10 @@ define([ 'require',
 	function startUpdateLoop() {
 		//updates table and reflects user state changes
 		function updateLoop() {
+			if(stopLoopFlag) {
+				return;
+			}
+			
 			//flag is loop should continue
 			var continueLoop = false;
 
@@ -180,6 +207,10 @@ define([ 'require',
 				}
 				//start updating table and charts
 				if(userState.getUserStatus.payload.data === "EXPLORING") {
+					//enable all needed buttons
+					$('#button-stop-all').prop("disabled",false);
+					$('#button-return-to-start').prop("disabled",false);
+					
 					updateTableLoop();
 					return; //break out of this loop
 				}
@@ -195,6 +226,8 @@ define([ 'require',
 	}
 
 	return {
-		startUpdateLoop : startUpdateLoop
+		startUpdateLoop : startUpdateLoop,
+		stopLoop : stopLoop,
+		startUpdateOnce : startUpdateOnce
 	};
 });

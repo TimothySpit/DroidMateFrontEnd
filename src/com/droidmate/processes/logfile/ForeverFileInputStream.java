@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Behaves exactly like FileInputStream, but never returns EOF until stop()
- * is called.
+ * Behaves exactly like FileInputStream, but never returns EOF until stop() is
+ * called.
  */
 public class ForeverFileInputStream extends FileInputStream {
 
@@ -23,7 +23,7 @@ public class ForeverFileInputStream extends FileInputStream {
 	public void stop() {
 		this.stopFlag.set(true);
 	}
-	
+
 	@Override
 	public int read() throws IOException {
 		if (stopFlag.get()) {
@@ -63,7 +63,7 @@ public class ForeverFileInputStream extends FileInputStream {
 			}
 		}
 	}
-	
+
 	@Override
 	public int read(byte[] b, int off, int len) throws IOException {
 		int value = super.read(b, off, len);

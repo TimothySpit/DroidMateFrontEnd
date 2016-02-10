@@ -30,4 +30,5 @@ define([ 'require',
 	$('#button-show-apk-details-dynamic').click(function() {
 		window.location = "ExplorationCharts";
 	});
+	
 });

@@ -38,7 +38,7 @@ public class ExploreHandler extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Serve {} page request.", request.getRequestURI());
+		logger.debug("Serve {} page request.", request.getRequestURI());
 
 		// return json
 		response.setContentType("application/json");
@@ -53,7 +53,7 @@ public class ExploreHandler extends HttpServlet {
 		// handle SELECTED_APKS_SET request
 		String[] startDroidMateString = request.getParameterValues(START_DROIDMATE);
 		if (startDroidMateString != null) {
-			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), START_DROIDMATE, startDroidMateString);
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), START_DROIDMATE, startDroidMateString);
 
 			JSONResponseWrapper startDroidMateResult = new JSONResponseWrapper();
 
@@ -76,7 +76,7 @@ public class ExploreHandler extends HttpServlet {
 			result.put(START_DROIDMATE, startDroidMateResult.toJSONObject());
 		}
 
-		logger.info("{}: Request result: {}", request.getRequestURI(), result);
+		logger.debug("{}: Request result: {}", request.getRequestURI(), result);
 		response.getWriter().print(result);
 	}
 

@@ -24,6 +24,21 @@ define([ 'jquery'], function(require) {
 	explore.startExploration = startExploration;
 	// -----------------------------------
 	
+	function stopExploration(async, success) {
+		$.ajax({
+			url : "/DroidMate/StopExplorationHandler",
+			async : async,
+			dataType : "json",
+			type : 'POST',
+			data : {
+				stopExploration : true
+			},
+			success : success
+		});
+	}
+	explore.stopExploration = stopExploration;
+	// ----------------------------------
+	
 	droidmate.explore = explore;
 	$.droidmate = droidmate;
 	

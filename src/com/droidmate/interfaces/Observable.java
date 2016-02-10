@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Interface for classes which can be observed.
+ * Class which enables another classes to be observed.
  *
  * @param <T>
  */

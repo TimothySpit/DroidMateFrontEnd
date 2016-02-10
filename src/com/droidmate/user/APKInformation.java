@@ -29,8 +29,9 @@ public class APKInformation {
 
 	
 	/**
-	 * @param aaptInfo
-	 *            The AAPTInformation
+	 * Creates a new instance of the APKInformation class.
+	 * 
+	 * @param aaptInfo The AAPTInformation
 	 */
 	public APKInformation(AAPTInformation aaptInfo) {
 		if (aaptInfo == null) {
@@ -42,6 +43,8 @@ public class APKInformation {
 	}
 
 	/**
+	 * Creates a JSON Object with all apk's information.
+	 * 
 	 * @return JSONObject with all apk's information
 	 */
 	public JSONObject toJSONObject() {
@@ -61,6 +64,11 @@ public class APKInformation {
 		return result;
 	}
 
+	/**
+	 * Returns the exploration info.
+	 * 
+	 * @return the Exploration info
+	 */
 	public ExplorationInfo getExplorationInfo() {
 		return explorationInfo;
 	}
@@ -75,10 +83,9 @@ public class APKInformation {
 	}
 
 	/**
-	 * Sets inlining status for
+	 * Sets inlining status for the last .apk.
 	 * 
-	 * @param inliningStatus
-	 *            The inling status
+	 * @param inliningStatus The inling status
 	 */
 	public void setInliningStatus(InliningStatus inliningStatus) {
 		inliningStatusReference.set(inliningStatus);
@@ -152,10 +159,20 @@ public class APKInformation {
 		return "APKInformation [APK-Name: " + getAPKName() + ", " + "Path: " + getAPKFile().getAbsolutePath() + "]";
 	}
 
+	/**
+	 * Return whether the last .apk is selected.
+	 * 
+	 * @return true if the last .apk is selected
+	 */
 	public boolean isAPKSelected() {
 		return isSelected.get();
 	}
 
+	/**
+	 * Sets whether the last .apk is selected.
+	 * 
+	 * @param isSelected the status the last apk should be set to
+	 */
 	public void setAPKSelected(boolean isSelected) {
 		if (inliningStatusReference.get() != InliningStatus.INLINED) {
 			throw new IllegalStateException("APK is not yet inlined and cannot be selected.");
@@ -167,10 +184,20 @@ public class APKInformation {
 		this.isSelected.set(isSelected);
 	}
 
+	/**
+	 * Returns the exploration status.
+	 * 
+	 * @return the exploration status
+	 */
 	public ExplorationStatus getExplorationStatus() {
 		return explorationStatusReference.get();
 	}
 	
+	/**
+	 * Sets the exploration status.
+	 * 
+	 * @param explorationStatus the new exploration status
+	 */
 	public void setExplorationStatus(ExplorationStatus explorationStatus) {
 		if (inliningStatusReference.get() == InliningStatus.INLINING && explorationStatus != ExplorationStatus.NOT_RUNNING) {
 			throw new IllegalStateException("APK is still inlining. Exploration state cannot be set to " + explorationStatus.getName());

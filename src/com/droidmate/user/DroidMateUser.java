@@ -4,10 +4,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.json.JSONArray;
 
 import com.droidmate.interfaces.Observable;
 import com.droidmate.interfaces.Observer;
@@ -72,15 +80,11 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	/**
 	 * Sets the path for the users given .apks.
 	 * 
-	 * @param newPath
-	 *            the path for the apks
-	 * @throws NullPointerException
-	 *             if the given path ist null
-	 * @throws IllegalArgumentException
-	 *             if the given path not a directory or does not exist
-	 * @throws IOException
-	 *             if a IO Error occured
-	 * @throws InterruptedException
+	 * @param newPath the path for the apks
+	 * @throws NullPointerException if the given path ist null
+	 * @throws IllegalArgumentException if the given path not a directory or does not exist
+	 * @throws IOException if a IO Error occured
+	 * @throws InterruptedException in crazy thread stuff
 	 */
 	public synchronized void setAPKPath(Path newPath) throws IOException, InterruptedException {
 		// exception handling
@@ -144,6 +148,11 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		return apksInfos;
 	}
 
+	/**
+	 * Sets the .apks information and checks whether it is inlined or not.
+	 * 
+	 * @param apkInfo the information to be set
+	 */
 	private void setAPKInlinedInformation(APKInformation apkInfo) {
 		assert apkInfo != null;
 
@@ -221,10 +230,21 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		return apksInformation;
 	}
 
+	/**
+	 * Returns whether the inliner is started.
+	 * 
+	 * @return true if the inliner is started
+	 */
 	public boolean isInlinerStarted() {
 		return userStatus.get() == UserStatus.INLINING;
 	}
 
+	/**
+	 * Starts the inliner.
+	 * 
+	 * @return true if the inliner was successfully started
+	 * @throws IOException if an IO error occured
+	 */
 	public synchronized boolean startInliner() throws IOException {
 		if (userStatus.get() != UserStatus.IDLE) {
 			throw new IllegalStateException("Inliner can not be started in state " + userStatus.get().getName());
@@ -279,10 +299,20 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		return inlineResult;
 	}
 
+	/**
+	 * Returns the users status
+	 * 
+	 * @return the users status
+	 */
 	public UserStatus getStatus() {
 		return userStatus.get();
 	}
 
+	/**
+	 * Says whether the exploration is started
+	 * 
+	 * @return tru if the exploration is started, false otherwise
+	 */
 	public boolean isExplorationStarted() {
 		UserStatus currentStatus = userStatus.get();
 		// exploratioin is currently running or was running, in both cases,
@@ -290,6 +320,12 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		return currentStatus == UserStatus.EXPLORING || currentStatus == UserStatus.FINISHED || currentStatus == UserStatus.ERROR;
 	}
 
+	/**
+	 * Starts DroidMate and eo ipso the exploration
+	 * 
+	 * @return true if DroidMate started the exploration
+	 * @throws Exception if something went wrong
+	 */
 	public synchronized boolean startDroidMate() throws Exception {
 		if (userStatus.get() != UserStatus.IDLE) {
 			throw new IllegalStateException("DroidMate can not be started in state " + userStatus.get().getName());
@@ -363,21 +399,29 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		}
 		case EXPLORATION_FINISHED: {
 			userStatus.set(UserStatus.FINISHED);
-			droidMateProcess.saveReport();
+			saveReport();
 			break;
 		}
 		case DROIDMATE_ERROR: {
-			// if not exploring, ignore error, because exploration is already
-			// finished or aborted
-			if (userStatus.get() == UserStatus.FINISHED || userStatus.get() == UserStatus.ERROR) {
-				return;
-			}
+			synchronized (userStatus) {
+				// if not exploring, ignore error, because exploration is
+				// already
+				// finished or aborted
+				if (userStatus.get() == UserStatus.FINISHED || userStatus.get() == UserStatus.ERROR) {
+					return;
+				}
 
-			if (userStatus.get() != UserStatus.STARTING) {
-				// apks were explored, report saving necessary
-				droidMateProcess.saveReport();
+				if(userStatus.get() == UserStatus.IDLE) {
+					//user got already cleared
+					return;
+				}
+				
+				if (userStatus.get() != UserStatus.STARTING) {
+					// apks were explored, report saving necessary
+					saveReport();
+				}
+				userStatus.set(UserStatus.ERROR);
 			}
-			userStatus.set(UserStatus.ERROR);
 			break;
 		}
 		case CONSOLE_OUTPUT_STDOUT:
@@ -394,17 +438,110 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			break;
 		}
 	}
-	
-	//get global exploration info
+
+	/**
+	 * Saves the exploration report
+	 */
+	private void saveReport() {
+		// get report output path
+		Path outputFolder = settings.getOutputFolder();
+
+		// check if path exists
+		if (!outputFolder.toFile().exists()) {
+			return;
+		}
+
+		// get resource path to report template
+		URL url = getClass().getResource("/../reportTemplate");
+
+		// create report output folder
+		String reportTimestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+		Path reportOutputFolder = Paths.get(outputFolder.toString(), "Report_" + reportTimestamp);
+		reportOutputFolder.toFile().mkdir();
+
+		// copy it to output folder
+		try {
+			Path walkPath = (new File(url.toURI())).toPath();
+			Files.walk(walkPath).forEach(path -> {
+				if (!walkPath.equals(path)) {
+					try {
+						Path dst = Paths.get(reportOutputFolder.toString(), path.toString().replace(walkPath.toString(), ""));
+						Files.copy(path, dst);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		// get data.js and insert data
+		Path dataPath = Paths.get(reportOutputFolder.toString(), "resources/js/data.js");
+
+		List<String> consoleOutputList = this.getConsoleOutput(0, getConsoleOutputSize());
+		String consoleOutputString = "";
+		for (String string : consoleOutputList) {
+			consoleOutputString += string + "\\n";
+		}
+
+		StringBuilder dataString = new StringBuilder();
+		dataString.append("$(function() {");
+		dataString.append("var APKData = " + collectAPKData().toString() + ";");
+		dataString.append("$.APKData = APKData;");
+		dataString.append("$.APK_CONSOLE_DATA = \"" + StringEscapeUtils.escapeHtml(consoleOutputString) + "\";");
+		dataString.append("});");
+
+		// save file
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(dataPath.toString(), "UTF-8");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		writer.print(dataString.toString());
+		writer.close();
+	}
+
+	/**
+	 * Returns the overall apk data as a JSON object
+	 * 
+	 * @return the overall apk data as a JSON object
+	 */
+	private JSONArray collectAPKData() {
+		JSONArray apkInfoString = new JSONArray();
+		for (APKInformation apk : apksInformation.values()) {
+			if (apk.isAPKSelected()) {
+				apkInfoString.put(apk.toJSONObject());
+			}
+		}
+		return apkInfoString;
+	}
+
+	/**
+	 * Returns the global exploration info
+	 * 
+	 * @return the global exploration info
+	 */
 	public ExplorationInfo getGloblExplorationInfo() {
-		if(droidMateProcess == null) {
+		if (droidMateProcess == null) {
 			throw new IllegalStateException("DroidMate was never started.");
 		}
-		
+
 		return droidMateProcess.getGlobalExplorationInfo();
 	}
+
 	
-	//get console output
+	/**
+	 * Returns the console output's size
+	 * 
+	 * @return the console output's size
+	 */
 	public int getConsoleOutputSize() {
 		int size = 0;
 		synchronized (consoleOutput) {
@@ -412,7 +549,14 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		}
 		return size;
 	}
-	
+
+	/**
+	 * Retrieves a specified subset of the console output.
+	 * 
+	 * @param from the line the subset should start
+	 * @param to the line the subset shuld end
+	 * @return the specified console output's subset
+	 */
 	public List<String> getConsoleOutput(int from, int to) {
 		List<String> copyList = new LinkedList<>();
 		synchronized (consoleOutput) {
@@ -425,5 +569,47 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 
 	public GUISettings getSettings() {
 		return settings;
+	}
+
+	/**
+	 * Stops the exploration
+	 */
+	public void stopExploration() {
+		synchronized (userStatus) {
+			if (userStatus.get() != UserStatus.EXPLORING) {
+				return;
+			}
+
+			// check for errors
+			if (droidMateProcess == null) {
+				throw new IllegalStateException("DroidMate is not running.");
+			}
+
+			// stop exploration
+			droidMateProcess.stopExploration();
+
+			userStatus.set(UserStatus.FINISHED);
+			saveReport();
+		}
+	}
+
+	/**
+	 * Resets the web-front-end.
+	 */
+	public void clear() {
+		synchronized (userStatus) {
+			if (userStatus.get() == UserStatus.EXPLORING) {
+				// DroidMate still running
+				throw new IllegalStateException("DroidMate is still running. Please stop it first.");
+			}
+
+			// clear user
+			inlinerProcess = null;
+			droidMateProcess = null;
+			apksRootPath = null;
+			apksInformation = new ConcurrentHashMap<>();
+			consoleOutput.clear();
+			userStatus.set(UserStatus.IDLE);
+		}
 	}
 }

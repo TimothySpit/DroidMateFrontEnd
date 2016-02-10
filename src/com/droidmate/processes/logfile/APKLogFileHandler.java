@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -96,7 +94,6 @@ public class APKLogFileHandler extends APKLogFileObservable {
 			String currentAPKName = "";
 			String text = "";
 			List<String> exploredElements = new ArrayList<String>();
-			
 			// --------------
 
 			while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -126,7 +123,6 @@ public class APKLogFileHandler extends APKLogFileObservable {
 							exploredElements.add(text);
 							notifyObservers(new APKElementsExploredChanged(currentAPKName, 1));
 						}
-						
 					} else if (tagname.equalsIgnoreCase("exploration")) {
 						notifyObservers(new APKExplorationEnded(System.currentTimeMillis()));
 					} else if (tagname.equalsIgnoreCase("name")) {
@@ -158,6 +154,7 @@ public class APKLogFileHandler extends APKLogFileObservable {
 			// all messages read, signal
 			inputStreamLock.lock();
 			try {
+				messagesLeftFlag = false;
 				messagesLeft.signalAll();
 			} finally {
 				inputStreamLock.unlock();
@@ -175,6 +172,12 @@ public class APKLogFileHandler extends APKLogFileObservable {
 				// read all remaining messages
 				while (messagesLeftFlag)
 					messagesLeft.await();
+				
+				try {
+					inputFileStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
