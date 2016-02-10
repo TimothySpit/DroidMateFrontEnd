@@ -11,7 +11,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -24,7 +23,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.droidmate.interfaces.Observable;
 import com.droidmate.interfaces.Observer;
@@ -243,8 +241,9 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 
 	/**
 	 * Starts the inliner.
+	 * 
 	 * @return true if the inliner was successfully started
-	 * @throws IOException
+	 * @throws IOException if an IO error occured
 	 */
 	public synchronized boolean startInliner() throws IOException {
 		if (userStatus.get() != UserStatus.IDLE) {
@@ -302,12 +301,18 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 
 	/**
 	 * Returns the users status
+	 * 
 	 * @return the users status
 	 */
 	public UserStatus getStatus() {
 		return userStatus.get();
 	}
 
+	/**
+	 * Says whether the exploration is started
+	 * 
+	 * @return tru if the exploration is started, false otherwise
+	 */
 	public boolean isExplorationStarted() {
 		UserStatus currentStatus = userStatus.get();
 		// exploratioin is currently running or was running, in both cases,
@@ -315,6 +320,12 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		return currentStatus == UserStatus.EXPLORING || currentStatus == UserStatus.FINISHED || currentStatus == UserStatus.ERROR;
 	}
 
+	/**
+	 * Starts DroidMate and eo ipso the exploration
+	 * 
+	 * @return true if DroidMate started the exploration
+	 * @throws Exception if something went wrong
+	 */
 	public synchronized boolean startDroidMate() throws Exception {
 		if (userStatus.get() != UserStatus.IDLE) {
 			throw new IllegalStateException("DroidMate can not be started in state " + userStatus.get().getName());
@@ -428,6 +439,9 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		}
 	}
 
+	/**
+	 * Saves the exploration report
+	 */
 	private void saveReport() {
 		// get report output path
 		Path outputFolder = settings.getOutputFolder();
@@ -494,6 +508,11 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		writer.close();
 	}
 
+	/**
+	 * Returns the overall apk data as a JSON object
+	 * 
+	 * @return the overall apk data as a JSON object
+	 */
 	private JSONArray collectAPKData() {
 		JSONArray apkInfoString = new JSONArray();
 		for (APKInformation apk : apksInformation.values()) {
@@ -504,7 +523,11 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		return apkInfoString;
 	}
 
-	// get global exploration info
+	/**
+	 * Returns the global exploration info
+	 * 
+	 * @return the global exploration info
+	 */
 	public ExplorationInfo getGloblExplorationInfo() {
 		if (droidMateProcess == null) {
 			throw new IllegalStateException("DroidMate was never started.");
@@ -513,7 +536,12 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		return droidMateProcess.getGlobalExplorationInfo();
 	}
 
-	// get console output
+	
+	/**
+	 * Returns the console output's size
+	 * 
+	 * @return the console output's size
+	 */
 	public int getConsoleOutputSize() {
 		int size = 0;
 		synchronized (consoleOutput) {
@@ -522,6 +550,13 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		return size;
 	}
 
+	/**
+	 * Retrieves a specified subset of the console output.
+	 * 
+	 * @param from the line the subset should start
+	 * @param to the line the subset shuld end
+	 * @return the specified console output's subset
+	 */
 	public List<String> getConsoleOutput(int from, int to) {
 		List<String> copyList = new LinkedList<>();
 		synchronized (consoleOutput) {
@@ -536,6 +571,9 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		return settings;
 	}
 
+	/**
+	 * Stops the exploration
+	 */
 	public void stopExploration() {
 		synchronized (userStatus) {
 			if (userStatus.get() != UserStatus.EXPLORING) {
@@ -555,6 +593,9 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		}
 	}
 
+	/**
+	 * Resets the web-front-end.
+	 */
 	public void clear() {
 		synchronized (userStatus) {
 			if (userStatus.get() == UserStatus.EXPLORING) {

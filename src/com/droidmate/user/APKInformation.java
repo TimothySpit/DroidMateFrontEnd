@@ -29,6 +29,8 @@ public class APKInformation {
 
 	
 	/**
+	 * Creates a new instance of the APKInformation class.
+	 * 
 	 * @param aaptInfo The AAPTInformation
 	 */
 	public APKInformation(AAPTInformation aaptInfo) {
@@ -41,6 +43,8 @@ public class APKInformation {
 	}
 
 	/**
+	 * Creates a JSON Object with all apk's information.
+	 * 
 	 * @return JSONObject with all apk's information
 	 */
 	public JSONObject toJSONObject() {
@@ -60,6 +64,11 @@ public class APKInformation {
 		return result;
 	}
 
+	/**
+	 * Returns the exploration info.
+	 * 
+	 * @return the Exploration info
+	 */
 	public ExplorationInfo getExplorationInfo() {
 		return explorationInfo;
 	}
@@ -152,6 +161,7 @@ public class APKInformation {
 
 	/**
 	 * Return whether the last .apk is selected.
+	 * 
 	 * @return true if the last .apk is selected
 	 */
 	public boolean isAPKSelected() {
@@ -160,6 +170,7 @@ public class APKInformation {
 
 	/**
 	 * Sets whether the last .apk is selected.
+	 * 
 	 * @param isSelected the status the last apk should be set to
 	 */
 	public void setAPKSelected(boolean isSelected) {
@@ -175,6 +186,7 @@ public class APKInformation {
 
 	/**
 	 * Returns the exploration status.
+	 * 
 	 * @return the exploration status
 	 */
 	public ExplorationStatus getExplorationStatus() {
@@ -182,7 +194,8 @@ public class APKInformation {
 	}
 	
 	/**
-	 * Sets the exploration status
+	 * Sets the exploration status.
+	 * 
 	 * @param explorationStatus the new exploration status
 	 */
 	public void setExplorationStatus(ExplorationStatus explorationStatus) {
