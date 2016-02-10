@@ -35,6 +35,10 @@ import com.droidmate.user.ExplorationInfo;
 import com.droidmate.user.ExplorationStatus;
 import com.droidmate.user.InliningStatus;
 
+/**
+ * Observable for DroidMate processes.
+ *
+ */
 public class DroidMateProcess extends Observable<DroidMateProcessEvent> implements APKLogFileObserver, ProcessStreamObserver {
 
 	private final File droidMatePath;
@@ -53,6 +57,13 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	private ProcessWrapper droidMateProcess = null;
 	private APKLogFileHandler logReader = null;
 	
+	/**
+	 * Creates a new instance of the DroidMateProcess class.
+	 * 
+	 * @param droidMatePath the path leading to DroidMate
+	 * @param logFilePath the path leading to the log file
+	 * @throws FileNotFoundException if one of the paths is not found.
+	 */
 	public DroidMateProcess(File droidMatePath, File logFilePath) throws FileNotFoundException {
 		if (droidMatePath == null) {
 			throw new IllegalArgumentException("DroidMate path must not be null");
@@ -78,12 +89,25 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		this.logFilePath = logFilePath;
 	}
 
+	/**
+	 * Creates a new instance of the DroidMateProcess class.
+	 * 
+	 * @param droidMatePath the path leading to DroidMate
+	 * @param logFilePath the path leading to the log file
+	 * @param printStackTrace boolean indicating whther everything should be logged
+	 * @throws FileNotFoundException if one of the paths is not found.
+	 */
 	public DroidMateProcess(File droidMatePath, File logFilePath, boolean printStackTrace) throws FileNotFoundException {
 		this(droidMatePath, logFilePath);
 
 		this.setPrintStackTrace(printStackTrace);
 	}
 
+	/**
+	 * Starts the exploration for the given list of apks.
+	 * @param apksToExplore the apks to be explored
+	 * @throws IOException if an IO error occured
+	 */
 	public void startExploration(List<APKInformation> apksToExplore) throws IOException {
 		if (apksToExplore == null) {
 			throw new IllegalArgumentException("APKS list must not be null.");
@@ -110,6 +134,12 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		tryStartDroidMate(arguments);
 	}
 
+	/**
+	 * Tries to start DroidMate
+	 * 
+	 * @param arguments the arguments with which DroidMAte should be started
+	 * @throws IOException if an IO error occured
+	 */
 	private void tryStartDroidMate(List<String> arguments) throws IOException {
 		assert apksToExplore != null && arguments != null;
 
@@ -182,6 +212,15 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		}
 	}
 
+	/**
+	 * Tries to start the DroidMate process.
+	 * 
+	 * @param logReader the logreader to be used
+	 * @param arguments the arguments to be used
+	 * @return true if starting DroidMate was successful
+	 * @throws InterruptedException threadstuff
+	 * @throws IOException if an IO error occured
+	 */
 	private boolean tryStartDroidMateProcess(APKLogFileHandler logReader, List<String> arguments) throws InterruptedException, IOException {
 		assert apksToExplore != null && apksToExplore.size() > 0;
 
@@ -241,6 +280,11 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		return true;
 	}
 
+	/**
+	 * Deletes all apks from the given path
+	 * 
+	 * @param path the path all apks should be deleted of.
+	 */
 	private void clearAPKSFromDirectory(File path) {
 		assert path != null && path.exists();
 
@@ -259,18 +303,39 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		}
 	}
 
+	/**
+	 * Returns the DroidMatePath as a file.
+	 * 
+	 * @return the DroidMatePath as a file
+	 */
 	public File getDroidMatePath() {
 		return droidMatePath;
 	}
 
+	/**
+	 * Returns the LogFilePath as a file.
+	 * 
+	 * @return the LogFilePath as a file
+	 */
 	public File getLogFilePath() {
 		return logFilePath;
 	}
 
+	
+	/**
+	 * Sets whether the stacktrace should be printed.
+	 * 
+	 * @param printStackTrace boolean indicating whether the stacktrace should be printed.
+	 */
 	public void setPrintStackTrace(boolean printStackTrace) {
 		this.printStackTrace = printStackTrace;
 	}
 
+	/**
+	 * Returns the global exploration info.
+	 * 
+	 * @return the global exploration info
+	 */
 	public ExplorationInfo getGlobalExplorationInfo() {
 		return globalExplorationInfo;
 	}
