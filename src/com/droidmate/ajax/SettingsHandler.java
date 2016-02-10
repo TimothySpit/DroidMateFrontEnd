@@ -50,7 +50,7 @@ public class SettingsHandler extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Serve {} page request.", request.getRequestURI());
+		logger.debug("Serve {} page request.", request.getRequestURI());
 
 		// return json
 		response.setContentType("application/json");
@@ -64,12 +64,12 @@ public class SettingsHandler extends HttpServlet {
 		String settingsSet = request.getParameter(SETTINGS_SET);
 		boolean allSettingsCorrect = true;
 		if (settingsSet != null) {
-			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_SET, settingsSet);
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_SET, settingsSet);
 
 			// check for reports path parameter
 			String settingsParameter = request.getParameter(SETTINGS_REPORTS_OUTPUT_PATH);
 			if (settingsParameter != null) {
-				logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_REPORTS_OUTPUT_PATH,
+				logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_REPORTS_OUTPUT_PATH,
 						settingsParameter);
 
 				JSONObject reportsPathSetResult = new JSONObject();
@@ -97,7 +97,7 @@ public class SettingsHandler extends HttpServlet {
 			// check for DroidMate path parameter
 			settingsParameter = request.getParameter(SETTINGS_DROIDMATE_PATH);
 			if (settingsParameter != null) {
-				logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_DROIDMATE_PATH,
+				logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_DROIDMATE_PATH,
 						settingsParameter);
 
 				JSONObject droidMatePathSetResult = new JSONObject();
@@ -125,7 +125,7 @@ public class SettingsHandler extends HttpServlet {
 			// check for AAPT path parameter
 			settingsParameter = request.getParameter(SETTINGS_AAPT_PATH);
 			if (settingsParameter != null) {
-				logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_AAPT_PATH, settingsParameter);
+				logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_AAPT_PATH, settingsParameter);
 
 				JSONObject aaptPathSetResult = new JSONObject();
 				// check DroidMate path
@@ -152,7 +152,7 @@ public class SettingsHandler extends HttpServlet {
 			// check for exploration time parameter
 			settingsParameter = request.getParameter(SETTINGS_EXPLORATION_TIME);
 			if (settingsParameter != null) {
-				logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_EXPLORATION_TIME,
+				logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_EXPLORATION_TIME,
 						settingsParameter);
 
 				JSONObject explorationTimeSetResult = new JSONObject();
@@ -196,7 +196,7 @@ public class SettingsHandler extends HttpServlet {
 		}
 		result.put(SETTINGS_SET, settingsSetResult);
 
-		logger.info("{}: Request result: {}", request.getRequestURI(), result);
+		logger.debug("{}: Request result: {}", request.getRequestURI(), result);
 		response.getWriter().print(result);
 	}
 

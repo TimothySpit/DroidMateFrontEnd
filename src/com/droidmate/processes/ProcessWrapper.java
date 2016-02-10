@@ -10,6 +10,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.droidmate.interfaces.ProcessStreamObservable;
 
 public class ProcessWrapper extends ProcessStreamObservable {
@@ -18,10 +21,12 @@ public class ProcessWrapper extends ProcessStreamObservable {
 	private StringWriter infoWriter = new StringWriter();
 	private StringWriter errorWriter = new StringWriter();
 	private int exitValue;
-	private Process process = null;
-	private StreamBoozer seInfo = null;
-	private StreamBoozer seError = null;
+	protected Process process = null;
+	protected StreamBoozer seInfo = null;
+	protected StreamBoozer seError = null;
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	
 	public ProcessWrapper(File directory, List<String> command) throws FileNotFoundException {
 		if (directory == null || command == null) {
 			throw new IllegalArgumentException("Arguments must not be null.");
@@ -82,7 +87,7 @@ public class ProcessWrapper extends ProcessStreamObservable {
 		}
 	}
 
-	private class StreamBoozer extends Thread {
+	protected class StreamBoozer extends Thread {
 		private InputStream in;
 		private PrintWriter pw;
 		private final StreamCallbackType cbt;
@@ -110,6 +115,7 @@ public class ProcessWrapper extends ProcessStreamObservable {
 					isRunning = true;
 					pw.println(line);
 					notifyStreamObservers(new ProcessStreamEvent(cbt, line));
+					logger.info("{}", line);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -124,35 +130,13 @@ public class ProcessWrapper extends ProcessStreamObservable {
 		}
 	}
 
-	private void killAdb() {
-		System.out.println("Killing adb process...");
-		Runtime rt = Runtime.getRuntime();
-		try {
-			if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1)
-				rt.exec("taskkill /F /IM " + "adb.exe");
-			else
-				rt.exec("kill -9 " + "adb");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void stop() {
 		if (process != null) {
-			killAdb();
-
 			try {
 				process.destroyForcibly().waitFor();
-				while (seInfo.isRunning()) {
-					killAdb();
-				}
 				seInfo.join();
-				while (seInfo.isRunning()) {
-					killAdb();
-				}
 				seError.join();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

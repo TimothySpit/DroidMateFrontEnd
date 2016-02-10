@@ -185,8 +185,44 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	private boolean tryStartDroidMateProcess(APKLogFileHandler logReader, List<String> arguments) throws InterruptedException, IOException {
 		assert apksToExplore != null && apksToExplore.size() > 0;
 
-		// create inliner process
-		droidMateProcess  = new ProcessWrapper(droidMatePath, arguments);
+		// create inliner process, add fix for adb destruction
+		droidMateProcess  = new ProcessWrapper(droidMatePath, arguments) {
+			
+			private void killAdb() {
+				System.out.println("Killing adb process...");
+				Runtime rt = Runtime.getRuntime();
+				try {
+					if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1)
+						rt.exec("taskkill /F /IM " + "adb.exe");
+					else
+						rt.exec("kill -9 " + "adb");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			@Override
+			public void stop() {
+				if (process != null) {
+					killAdb();
+
+					try {
+						process.destroyForcibly().waitFor();
+						while (seInfo.isRunning()) {
+							killAdb();
+						}
+						seInfo.join();
+						while (seInfo.isRunning()) {
+							killAdb();
+						}
+						seError.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		
 		// register console observer
 		droidMateProcess.addStreamObserver(this);
 
@@ -195,6 +231,9 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		// DroidMate process finished, stop logreader
 		logReader.stop();
 
+		//remove observer
+		droidMateProcess.deleteStreamObserver(this);
+		
 		if (droidMateProcess.getExitValue() != 0) {
 			// there was an intern error
 			return false;

@@ -43,7 +43,7 @@ public class InlinerHandler extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Serve {} page request.", request.getRequestURI());
+		logger.debug("Serve {} page request.", request.getRequestURI());
 
 		// return json
 		response.setContentType("application/json");
@@ -58,7 +58,7 @@ public class InlinerHandler extends HttpServlet {
 		// handle inliner start
 		String startInliner = request.getParameter(START_INLINER);
 		if (startInliner != null) {
-			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), START_INLINER, startInliner);
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), START_INLINER, startInliner);
 
 			JSONResponseWrapper startInliningResult = new JSONResponseWrapper();
 
@@ -82,7 +82,7 @@ public class InlinerHandler extends HttpServlet {
 			result.put(START_INLINER, startInliningResult.toJSONObject());
 		}
 
-		logger.info("{}: Request result: {}", request.getRequestURI(), result);
+		logger.debug("{}: Request result: {}", request.getRequestURI(), result);
 		response.getWriter().print(result);
 	}
 
