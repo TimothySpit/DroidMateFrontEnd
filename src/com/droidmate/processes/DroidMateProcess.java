@@ -47,10 +47,10 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	/**	The log file path	*/
 	private final File logFilePath;
 	
-	/**	Allows the print stacktrace	*/
+	/**	Allows the print stacktrace (everything are logged)	*/
 	private boolean printStackTrace;
 
-	/**	Map String to APKInformation	*/
+	/**	Map String to APKInformation to be explored	*/
 	private Map<String, APKInformation> apksToExplore = new HashMap<>();
 
 	/**	Exploration variables	*/
@@ -110,7 +110,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	 * @param logFilePath
 	 *            the path leading to the log file
 	 * @param printStackTrace
-	 *            boolean indicating whther everything should be logged
+	 *            boolean indicating whether everything should be logged
 	 * @throws FileNotFoundException
 	 *             if one of the paths is not found.
 	 */

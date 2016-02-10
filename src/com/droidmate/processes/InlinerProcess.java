@@ -25,8 +25,13 @@ import com.droidmate.user.InliningStatus;
  */
 public class InlinerProcess {
 
+	/**	The path of output	*/
 	private final File outputPath;
+	
+	/**	The path of inliner	*/
 	private final File inlinerPath;
+	
+	/**	Allows the print stacktrace (everything are logged)	*/
 	private boolean printStackTrace = false;
 
 	/**
