@@ -46,30 +46,64 @@ public class AAPTInformation {
 		this.activityName = activityName;
 	}
 
+	/**
+	 * Returns the apk's name.
+	 * 
+	 * @return the apk's name
+	 */
 	public String getAPKName() {
 		return apkFile.getName();
 	}
 
+	/**
+	 * Returns the apk's package name.
+	 * 
+	 * @return the apk's package name
+	 */
 	public String getAPKPackageName() {
 		return packageName;
 	}
 
+	/**
+	 * Returns the apk's package version code.
+	 * 
+	 * @return the apk's package version code.
+	 */
 	public String getAPKPackageVersionCode() {
 		return packageVersionCode;
 	}
 
+	/**
+	 * Returns the apk's package version name.
+	 * 
+	 * @return the apk's package version name.
+	 */
 	public String getAPKPackageVersionName() {
 		return packageVersionName;
 	}
 
+	/**
+	 * Returns the apk's main activity name.
+	 * 
+	 * @return the apk's main activity name.
+	 */
 	public String getAPKActivityName() {
 		return activityName;
 	}
 
+	/**
+	 * Returns the apk's file size in bytes.
+	 * 
+	 * @return the apk's file size in bytes.
+	 */
 	public long getAPKFileSizeInBytes() {
 		return apkFile.length();
 	}
 
+	/**
+	 * Returns the apk for which the information are held
+	 * @return the apk for which the information are held
+	 */
 	public File getAPKFile() {
 		return apkFile;
 	}
