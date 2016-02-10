@@ -93,6 +93,7 @@ public class APKLogFileHandler extends APKLogFileObservable {
 			// info variables
 			String currentAPKName = "";
 			String text = "";
+			List<String> exploredElements = new ArrayList<String>();
 			// --------------
 
 			while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -117,16 +118,11 @@ public class APKLogFileHandler extends APKLogFileObservable {
 					} else if (tagname.equalsIgnoreCase("success")) {
 						notifyObservers(new APKEnded(currentAPKName, System.currentTimeMillis(), Boolean.parseBoolean(text)));
 					} else if (tagname.equalsIgnoreCase("widget_explored")) {
-						notifyObservers(new APKElementsExploredChanged(currentAPKName, 1)); // at
-																							// the
-																							// moment,
-																							// we
-																							// only
-																							// print
-																							// the
-																							// name
-																							// in
-																							// gui.xml
+						if (!exploredElements.contains(text))
+						{
+							exploredElements.add(text);
+							notifyObservers(new APKElementsExploredChanged(currentAPKName, 1));
+						}
 					} else if (tagname.equalsIgnoreCase("exploration")) {
 						notifyObservers(new APKExplorationEnded(System.currentTimeMillis()));
 					} else if (tagname.equalsIgnoreCase("name")) {
@@ -136,6 +132,7 @@ public class APKLogFileHandler extends APKLogFileObservable {
 							// apk name has inlined prefix, remove it
 							currentAPKName = text.substring(0, inlinedIndex) + ".apk";
 						}
+						exploredElements = new ArrayList<String>();
 						notifyObservers(new APKStarted(currentAPKName, System.currentTimeMillis()));
 					}
 					break;
