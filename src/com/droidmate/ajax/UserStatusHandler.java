@@ -43,7 +43,7 @@ public class UserStatusHandler extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Serve {} page request.", request.getRequestURI());
+		logger.debug("Serve {} page request.", request.getRequestURI());
 
 		// return json
 		response.setContentType("application/json");
@@ -58,7 +58,7 @@ public class UserStatusHandler extends HttpServlet {
 		// handle user status get
 		String getUserStatusString = request.getParameter(USER_STATUS_GET);
 		if (getUserStatusString != null) {
-			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), USER_STATUS_GET, getUserStatusString);
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), USER_STATUS_GET, getUserStatusString);
 
 			JSONResponseWrapper getUserStatusResult = new JSONResponseWrapper();
 
@@ -71,7 +71,7 @@ public class UserStatusHandler extends HttpServlet {
 			result.put(USER_STATUS_GET, getUserStatusResult.toJSONObject());
 		}
 
-		logger.info("{}: Request result: {}", request.getRequestURI(), result);
+		logger.debug("{}: Request result: {}", request.getRequestURI(), result);
 		response.getWriter().print(result);
 	}
 }

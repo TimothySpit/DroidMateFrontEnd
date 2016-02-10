@@ -10,6 +10,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.droidmate.interfaces.ProcessStreamObservable;
 
 public class ProcessWrapper extends ProcessStreamObservable {
@@ -22,6 +25,8 @@ public class ProcessWrapper extends ProcessStreamObservable {
 	protected StreamBoozer seInfo = null;
 	protected StreamBoozer seError = null;
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	
 	public ProcessWrapper(File directory, List<String> command) throws FileNotFoundException {
 		if (directory == null || command == null) {
 			throw new IllegalArgumentException("Arguments must not be null.");
@@ -110,6 +115,7 @@ public class ProcessWrapper extends ProcessStreamObservable {
 					isRunning = true;
 					pw.println(line);
 					notifyStreamObservers(new ProcessStreamEvent(cbt, line));
+					logger.info("{}", line);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

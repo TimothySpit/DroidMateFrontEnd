@@ -40,7 +40,7 @@ public class ClearUserHandler extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Serve {} page request.", request.getRequestURI());
+		logger.debug("Serve {} page request.", request.getRequestURI());
 		// return json
 		response.setContentType("application/json");
 		// Do not cache
@@ -67,7 +67,7 @@ public class ClearUserHandler extends HttpServlet {
 			result.put(CLEAR_USER, clearUserResult.toJSONObject());
 		}
 
-		logger.info("{}: Request result: {}", request.getRequestURI(), result);
+		logger.debug("{}: Request result: {}", request.getRequestURI(), result);
 		response.getWriter().print(result);
 	}
 

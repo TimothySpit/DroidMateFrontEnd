@@ -38,7 +38,7 @@ public class GlobalExploreHandler extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Serve {} page request.", request.getRequestURI());
+		logger.debug("Serve {} page request.", request.getRequestURI());
 
 		// return json
 		response.setContentType("application/json");
@@ -53,7 +53,7 @@ public class GlobalExploreHandler extends HttpServlet {
 		// handle SELECTED_APKS_SET request
 		String[] getGlobalInformationString = request.getParameterValues(GLOBAL_INFORMATION_GET);
 		if (getGlobalInformationString != null) {
-			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), GLOBAL_INFORMATION_GET, getGlobalInformationString);
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), GLOBAL_INFORMATION_GET, getGlobalInformationString);
 
 			JSONResponseWrapper getGlobalInformationResult = new JSONResponseWrapper();
 			
@@ -72,7 +72,7 @@ public class GlobalExploreHandler extends HttpServlet {
 			result.put(GLOBAL_INFORMATION_GET, getGlobalInformationResult.toJSONObject());
 		}
 
-		logger.info("{}: Request result: {}", request.getRequestURI(), result);
+		logger.debug("{}: Request result: {}", request.getRequestURI(), result);
 		response.getWriter().print(result);
 	}
 

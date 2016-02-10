@@ -48,7 +48,7 @@ public class SaveSelectedAPKSHandler extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Serve {} page request.", request.getRequestURI());
+		logger.debug("Serve {} page request.", request.getRequestURI());
 
 		// return json
 		response.setContentType("application/json");
@@ -63,7 +63,7 @@ public class SaveSelectedAPKSHandler extends HttpServlet {
 		// handle SELECTED_APKS_SET request
 		String[] setSelectedAPKSString = request.getParameterValues(SELECTED_APKS_SET);
 		if (setSelectedAPKSString != null) {
-			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SELECTED_APKS_SET, setSelectedAPKSString);
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SELECTED_APKS_SET, setSelectedAPKSString);
 
 			JSONResponseWrapper setSelectedAPKSResult = new JSONResponseWrapper();
 
@@ -103,7 +103,7 @@ public class SaveSelectedAPKSHandler extends HttpServlet {
 			result.put(SELECTED_APKS_SET, setSelectedAPKSResult.toJSONObject());
 		}
 
-		logger.info("{}: Request result: {}", request.getRequestURI(), result);
+		logger.debug("{}: Request result: {}", request.getRequestURI(), result);
 		response.getWriter().print(result);
 	}
 
