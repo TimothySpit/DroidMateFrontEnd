@@ -228,7 +228,6 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		droidMateProcess  = new ProcessWrapper(droidMatePath, arguments) {
 			
 			private void killAdb() {
-				System.out.println("Killing adb process...");
 				Runtime rt = Runtime.getRuntime();
 				try {
 					if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1)
