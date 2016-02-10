@@ -41,7 +41,8 @@ public class DirectoryWatcher extends Observable<DirectoryWatcherEvent> {
 	/**
 	 * Casts a WatchEvent to this type of WatchEvent
 	 * 
-	 * @param event the event to be casted
+	 * @param event
+	 *            the event to be casted
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -52,9 +53,12 @@ public class DirectoryWatcher extends Observable<DirectoryWatcherEvent> {
 	/**
 	 * Creates an new instance of the directory watcher class.
 	 * 
-	 * @param dirToWatch the directory to watch
-	 * @param recursive boolean indicating whether subfolders should be watched, too
-	 * @throws IOException if an IO error occured
+	 * @param dirToWatch
+	 *            the directory to watch
+	 * @param recursive
+	 *            boolean indicating whether subfolders should be watched, too
+	 * @throws IOException
+	 *             if an IO error occured
 	 */
 	public DirectoryWatcher(Path dirToWatch, boolean recursive) throws IOException {
 		if (dirToWatch == null) {
@@ -82,7 +86,8 @@ public class DirectoryWatcher extends Observable<DirectoryWatcherEvent> {
 	/**
 	 * Registers all subdirectories of the given directory
 	 * 
-	 * @param startDirectory the directory to be started with
+	 * @param startDirectory
+	 *            the directory to be started with
 	 * @throws IOException
 	 */
 	private void registerAll(final Path startDirectory) throws IOException {
@@ -99,8 +104,10 @@ public class DirectoryWatcher extends Observable<DirectoryWatcherEvent> {
 	/**
 	 * Registers a specific path for watching
 	 * 
-	 * @param dir the dirctory path
-	 * @throws IOException if an IO error occurs.
+	 * @param dir
+	 *            the dirctory path
+	 * @throws IOException
+	 *             if an IO error occurs.
 	 */
 	private void register(Path dir) throws IOException {
 		WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
@@ -123,8 +130,10 @@ public class DirectoryWatcher extends Observable<DirectoryWatcherEvent> {
 	/**
 	 * Processes Events happening in the watched folders
 	 * 
-	 * @throws FileNotFoundException if one watched folder does not exist
-	 * @throws InterruptedException threadstuff
+	 * @throws FileNotFoundException
+	 *             if one watched folder does not exist
+	 * @throws InterruptedException
+	 *             threadstuff
 	 */
 	void processEvents() throws FileNotFoundException, InterruptedException {
 		if (isWatchingEvents.get()) {

@@ -31,9 +31,13 @@ public class InlinerProcess {
 
 	/**
 	 * Creates a new instance of the InlinerProcess class
-	 * @param inlinerPath the path to the inliner
-	 * @param outputPath the path to be outputted to
-	 * @throws FileNotFoundException if one of the paths does not exist
+	 * 
+	 * @param inlinerPath
+	 *            the path to the inliner
+	 * @param outputPath
+	 *            the path to be outputted to
+	 * @throws FileNotFoundException
+	 *             if one of the paths does not exist
 	 */
 	public InlinerProcess(File inlinerPath, File outputPath) throws FileNotFoundException {
 		if (inlinerPath == null) {
@@ -62,10 +66,14 @@ public class InlinerProcess {
 	/**
 	 * Creates a new instance of the InlinerProcess class
 	 * 
-	 * @param inlinerPath the path to the inliner
-	 * @param outputPath the path to be outputted to
-	 * @param printStackTrace boolean indicating whether the stack trace should be printed
-	 * @throws FileNotFoundException if one of the paths does not exist
+	 * @param inlinerPath
+	 *            the path to the inliner
+	 * @param outputPath
+	 *            the path to be outputted to
+	 * @param printStackTrace
+	 *            boolean indicating whether the stack trace should be printed
+	 * @throws FileNotFoundException
+	 *             if one of the paths does not exist
 	 */
 	public InlinerProcess(File inlinerPath, File outputPath, boolean printStackTrace) throws FileNotFoundException {
 		this(inlinerPath, outputPath);
@@ -75,15 +83,18 @@ public class InlinerProcess {
 
 	/**
 	 * Inlines the given apks.
-	 * @param apks the apks to be inlined
+	 * 
+	 * @param apks
+	 *            the apks to be inlined
 	 * @return true if the inlining was successful
-	 * @throws IOException if an IO error occured
+	 * @throws IOException
+	 *             if an IO error occured
 	 */
 	public boolean inlineAPKS(List<APKInformation> apks) throws IOException {
 		if (apks == null) {
 			throw new IllegalArgumentException("APKS list must not be null.");
 		}
-		if(apks.size() == 0) {
+		if (apks.size() == 0) {
 			throw new IllegalArgumentException("No apks specified for inlining.");
 		}
 
@@ -102,10 +113,13 @@ public class InlinerProcess {
 	/**
 	 * Inlines the given apks with the given arguments
 	 * 
-	 * @param apksToInline the apks to be onlined
-	 * @param arguments the arguments to be used
+	 * @param apksToInline
+	 *            the apks to be onlined
+	 * @param arguments
+	 *            the arguments to be used
 	 * @return true if the inlining was successful
-	 * @throws IOException if an IO error occured
+	 * @throws IOException
+	 *             if an IO error occured
 	 */
 	private boolean tryStartInlineAPKS(List<APKInformation> apksToInline, List<String> arguments) throws IOException {
 		assert apksToInline != null && arguments != null;
@@ -133,14 +147,14 @@ public class InlinerProcess {
 			Files.copy(currentAPKFile.toPath(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
 		}
 
-		//check each apk�s status
+		// check each apk�s status
 		for (APKInformation apk : apksToInline) {
-			if(apk.getInliningStatus() == InliningStatus.INLINING) {
-				//apk is still inlining
+			if (apk.getInliningStatus() == InliningStatus.INLINING) {
+				// apk is still inlining
 				throw new IllegalStateException("APK " + apk.getAPKName() + " is still inlining.");
 			}
 		}
-		
+
 		try {
 			// register Observer for apk folder changes
 			DirectoryWatcher watcher = registerWatchOutputDirectory(apksToInline, inlinerOutputAPKSPath, inlinedOutputPath);
@@ -169,6 +183,7 @@ public class InlinerProcess {
 
 	/**
 	 * Resets all given apk's inlining status to not inined
+	 * 
 	 * @param apks
 	 */
 	private void resetAllAPKs(List<APKInformation> apks) {
@@ -179,11 +194,16 @@ public class InlinerProcess {
 
 	/**
 	 * Strats the inlining process.
-	 * @param watcher the watcher for the changed directories,
-	 * @param arguments the arguments to be used
+	 * 
+	 * @param watcher
+	 *            the watcher for the changed directories,
+	 * @param arguments
+	 *            the arguments to be used
 	 * @return true if the starting was successful
-	 * @throws IOException if an IO error occured
-	 * @throws InterruptedException threadstuff
+	 * @throws IOException
+	 *             if an IO error occured
+	 * @throws InterruptedException
+	 *             threadstuff
 	 */
 	private boolean startInliner(DirectoryWatcher watcher, List<String> arguments) throws IOException, InterruptedException {
 		// create inliner process
@@ -217,12 +237,18 @@ public class InlinerProcess {
 
 	/**
 	 * Registers a DirectoryWatcher for the given apks
-	 * @param apks the apks to be watched
-	 * @param inlinerOutputAPKSPath the apks output folder
-	 * @param inlinedOutputPath the output path
+	 * 
+	 * @param apks
+	 *            the apks to be watched
+	 * @param inlinerOutputAPKSPath
+	 *            the apks output folder
+	 * @param inlinedOutputPath
+	 *            the output path
 	 * @return a directoryWatcher
-	 * @throws IOException if an IO error occured
-	 * @throws InterruptedException threadstuff
+	 * @throws IOException
+	 *             if an IO error occured
+	 * @throws InterruptedException
+	 *             threadstuff
 	 */
 	private DirectoryWatcher registerWatchOutputDirectory(List<APKInformation> apks, File inlinerOutputAPKSPath, File inlinedOutputPath)
 			throws IOException, InterruptedException {
@@ -257,8 +283,11 @@ public class InlinerProcess {
 
 			/**
 			 * Gets the APKInformation from a list of apks and a path
-			 * @param apks the apks containing the crucial one
-			 * @param filePath the path t the crucial one
+			 * 
+			 * @param apks
+			 *            the apks containing the crucial one
+			 * @param filePath
+			 *            the path t the crucial one
 			 * @return the APKInformation for the crucial apk
 			 */
 			private APKInformation getCorrespondingAPK(List<APKInformation> apks, Path filePath) {
@@ -287,10 +316,14 @@ public class InlinerProcess {
 	/**
 	 * Checks the given directories.
 	 * 
-	 * @param inlinerDir the directory with the inliner
-	 * @param inlinerInputAPKSPath the directory with the apks
-	 * @param inlinerOutputAPKSPath the output directory
-	 * @throws IOException if an IO Error occurs
+	 * @param inlinerDir
+	 *            the directory with the inliner
+	 * @param inlinerInputAPKSPath
+	 *            the directory with the apks
+	 * @param inlinerOutputAPKSPath
+	 *            the output directory
+	 * @throws IOException
+	 *             if an IO Error occurs
 	 */
 	private void checkInlinerDirectories(File inlinerDir, File inlinerInputAPKSPath, File inlinerOutputAPKSPath) throws IOException {
 		if (!inlinerInputAPKSPath.exists()) {
@@ -315,7 +348,9 @@ public class InlinerProcess {
 
 	/**
 	 * Deletes all apks from the given directory.
-	 * @param path the directory in which all apks should be deleted
+	 * 
+	 * @param path
+	 *            the directory in which all apks should be deleted
 	 */
 	private void clearAPKSFromDirectory(File path) {
 		assert path != null && path.exists();
@@ -337,6 +372,7 @@ public class InlinerProcess {
 
 	/**
 	 * Returns the inliner path.
+	 * 
 	 * @return the inliner path
 	 */
 	public File getInlinerPath() {
@@ -345,6 +381,7 @@ public class InlinerProcess {
 
 	/**
 	 * Returns whether the stack trace is printed.
+	 * 
 	 * @return whether the stack trace is printed
 	 */
 	public boolean isPrintStackTrace() {
@@ -353,7 +390,9 @@ public class InlinerProcess {
 
 	/**
 	 * Sets whether the stack trace is printed.
-	 * @param printStackTrace boolean indcating whether the stack trace is printed
+	 * 
+	 * @param printStackTrace
+	 *            boolean indcating whether the stack trace is printed
 	 */
 	public void setPrintStackTrace(boolean printStackTrace) {
 		this.printStackTrace = printStackTrace;
@@ -361,6 +400,7 @@ public class InlinerProcess {
 
 	/**
 	 * Returns the output path.
+	 * 
 	 * @return the output path
 	 */
 	public File getOutputPath() {

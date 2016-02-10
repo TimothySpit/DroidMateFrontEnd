@@ -10,21 +10,25 @@ public class APKElementsExploredChanged extends APKLogFileEvent {
 
 	/**
 	 * Creates an ew instance of the APKElementsExploredChanged class.
-	 * @param name the name
-	 * @param changeInElementsExplored the change in the apks explored
+	 * 
+	 * @param name
+	 *            the name
+	 * @param changeInElementsExplored
+	 *            the change in the apks explored
 	 */
 	public APKElementsExploredChanged(String name, int changeInElementsExplored) {
-		if(name == null) {
+		if (name == null) {
 			throw new IllegalArgumentException("APK name must be not null.");
 		}
-		
+
 		this.name = name;
 		this.changeInElementsExplored = changeInElementsExplored;
-		
+
 	}
 
 	/**
 	 * Returns the name.
+	 * 
 	 * @return the name
 	 */
 	public String getName() {
@@ -33,6 +37,7 @@ public class APKElementsExploredChanged extends APKLogFileEvent {
 
 	/**
 	 * Returns the change in the elements explored.
+	 * 
 	 * @return the change in the elements explored
 	 */
 	public int getChangeInElementsExplored() {

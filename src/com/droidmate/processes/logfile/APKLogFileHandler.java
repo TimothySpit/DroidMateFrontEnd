@@ -4,7 +4,6 @@ import java.io.EOFException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -14,7 +13,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.commons.io.FilenameUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -23,6 +21,7 @@ import com.droidmate.interfaces.APKLogFileObservable;
 
 /**
  * Handler for the APK log file
+ * 
  * @author timospeith
  *
  */
@@ -41,9 +40,14 @@ public class APKLogFileHandler extends APKLogFileObservable {
 
 	/**
 	 * Creates an ew instance of the APKLogFileHandler
-	 * @param inputFileToParse the file to parse the log out
-	 * @param waitForFileCreation boolean indicating whether it should be waited for the file creation
-	 * @throws FileNotFoundException if the input file was not found
+	 * 
+	 * @param inputFileToParse
+	 *            the file to parse the log out
+	 * @param waitForFileCreation
+	 *            boolean indicating whether it should be waited for the file
+	 *            creation
+	 * @throws FileNotFoundException
+	 *             if the input file was not found
 	 */
 	public APKLogFileHandler(File inputFileToParse, boolean waitForFileCreation) throws FileNotFoundException {
 		this.waitForFileCreation = waitForFileCreation;
@@ -137,8 +141,7 @@ public class APKLogFileHandler extends APKLogFileObservable {
 					} else if (tagname.equalsIgnoreCase("success")) {
 						notifyObservers(new APKEnded(currentAPKName, System.currentTimeMillis(), Boolean.parseBoolean(text)));
 					} else if (tagname.equalsIgnoreCase("widget_explored")) {
-						if (!exploredElements.contains(text))
-						{
+						if (!exploredElements.contains(text)) {
 							exploredElements.add(text);
 							notifyObservers(new APKElementsExploredChanged(currentAPKName, 1));
 						}
@@ -194,7 +197,7 @@ public class APKLogFileHandler extends APKLogFileObservable {
 				// read all remaining messages
 				while (messagesLeftFlag)
 					messagesLeft.await();
-				
+
 				try {
 					inputFileStream.close();
 				} catch (IOException e) {

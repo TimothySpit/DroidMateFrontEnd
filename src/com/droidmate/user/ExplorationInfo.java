@@ -10,9 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- *	Class which provides information (real-time) while exploring the apks
- * 	for example the number of seen elements, screens, the explored widgets
- * 	and the start time and end time of the exploration.
+ * Class which provides information (real-time) while exploring the apks for
+ * example the number of seen elements, screens, the explored widgets and the
+ * start time and end time of the exploration.
  */
 public class ExplorationInfo {
 
@@ -49,7 +49,8 @@ public class ExplorationInfo {
 	/**
 	 * Sets the stariong time.
 	 * 
-	 * @param startingTime the new starting time
+	 * @param startingTime
+	 *            the new starting time
 	 */
 	public synchronized void setStartingTime(long startingTime) {
 		this.startingTime.set(startingTime);
@@ -67,7 +68,8 @@ public class ExplorationInfo {
 	/**
 	 * Sets the end time.
 	 * 
-	 * @param endTime the new end time
+	 * @param endTime
+	 *            the new end time
 	 */
 	public synchronized void setEndTime(long endTime) {
 		this.endTime.set(endTime);
@@ -112,7 +114,8 @@ public class ExplorationInfo {
 	/**
 	 * Sets the number of explored elements.
 	 * 
-	 * @param newExplored the new number of explored elements
+	 * @param newExplored
+	 *            the new number of explored elements
 	 */
 	public synchronized void addElementsExplored(int newExplored) {
 		widgetsExplored.addAndGet(newExplored);
@@ -122,7 +125,8 @@ public class ExplorationInfo {
 	/**
 	 * Sets the number of seen elements.
 	 * 
-	 * @param newElements the new number of elements seen
+	 * @param newElements
+	 *            the new number of elements seen
 	 */
 	public synchronized void addElementsSeen(int newElements) {
 		elementsSeen.addAndGet(newElements);
@@ -132,7 +136,8 @@ public class ExplorationInfo {
 	/**
 	 * Sets the number of screens seen.
 	 * 
-	 * @param newScreens the new number of screens seen
+	 * @param newScreens
+	 *            the new number of screens seen
 	 */
 	public synchronized void addScreensSeen(int newScreens) {
 		screensSeen.addAndGet(newScreens);
@@ -156,7 +161,6 @@ public class ExplorationInfo {
 	public synchronized ConcurrentSkipListMap<Long, Integer> getScreensSeenHistory() {
 		return screensSeenHistory;
 	}
-	
 
 	/**
 	 * Returns the history of widgets explored.
@@ -212,11 +216,11 @@ public class ExplorationInfo {
 			synchronized (startingTime) {
 				if (startingTime.get() != 0 && endTime.get() != 0) {
 					json.put("timeSeconds", (endTime.get() - startingTime.get()) / 1000);
-				} else if(startingTime.get() != 0){
+				} else if (startingTime.get() != 0) {
 					long endTime = System.currentTimeMillis();
 					json.put("timeSeconds", (endTime - startingTime.get()) / 1000);
 				} else {
-					json.put("timeSeconds",0);
+					json.put("timeSeconds", 0);
 				}
 			}
 		}

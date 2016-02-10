@@ -9,33 +9,31 @@ public class DroidMateProcessEvent {
 	/**
 	 * Enum for possible EventTypes. The names are self-explaining
 	 */
-	public enum EventType
-	{
-		EXPLORATION_STARTED,
-		EXPLORATION_FINISHED,
-		DROIDMATE_ERROR,
-		CONSOLE_OUTPUT_STDOUT, 
-		CONSOLE_OUTPUT_ERROR 
+	public enum EventType {
+		EXPLORATION_STARTED, EXPLORATION_FINISHED, DROIDMATE_ERROR, CONSOLE_OUTPUT_STDOUT, CONSOLE_OUTPUT_ERROR
 	}
 
 	private final EventType event;
 	private final String message;
-	
+
 	/**
 	 * Creates a new instance of the DroidMateProcessEvent class.
 	 * 
-	 * @param event the event type for this event
+	 * @param event
+	 *            the event type for this event
 	 */
 	public DroidMateProcessEvent(EventType event) {
 		this.event = event;
 		this.message = "";
 	}
-	
+
 	/**
 	 * Creates a new instance of the DroidMateProcessEvent class.
 	 * 
-	 * @param event the event type for this event
-	 * @param message the message for this event
+	 * @param event
+	 *            the event type for this event
+	 * @param message
+	 *            the message for this event
 	 */
 	public DroidMateProcessEvent(EventType event, String message) {
 		this.event = event;
@@ -59,5 +57,5 @@ public class DroidMateProcessEvent {
 	public String getMessage() {
 		return message;
 	}
-	
+
 }

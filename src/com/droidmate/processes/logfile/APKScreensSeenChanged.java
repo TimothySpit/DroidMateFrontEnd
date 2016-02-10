@@ -9,21 +9,25 @@ public class APKScreensSeenChanged extends APKLogFileEvent {
 
 	/**
 	 * Creates a new instance of the APKScreensSeen class
-	 * @param name the name
-	 * @param changeInScreensSeen the change in the screens seen
+	 * 
+	 * @param name
+	 *            the name
+	 * @param changeInScreensSeen
+	 *            the change in the screens seen
 	 */
 	public APKScreensSeenChanged(String name, int changeInScreensSeen) {
-		if(name == null) {
+		if (name == null) {
 			throw new IllegalArgumentException("APK name must be not null.");
 		}
-		
+
 		this.name = name;
 		this.changeInScreensSeen = changeInScreensSeen;
-		
+
 	}
 
 	/**
 	 * Returns the name.
+	 * 
 	 * @return the name
 	 */
 	public String getName() {
@@ -32,6 +36,7 @@ public class APKScreensSeenChanged extends APKLogFileEvent {
 
 	/**
 	 * Returns the change in the screens seen.
+	 * 
 	 * @return the change in the screens seen
 	 */
 	public int getChangeInScreensSeen() {

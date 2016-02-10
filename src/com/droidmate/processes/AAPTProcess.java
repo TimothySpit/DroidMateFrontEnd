@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *	Class which creates an aapt process.
+ * Class which creates an aapt process.
  */
 public class AAPTProcess {
 
@@ -16,8 +16,10 @@ public class AAPTProcess {
 	/**
 	 * Creates a new instance of the AAPTProcess class.
 	 * 
-	 * @param aaptPath the aapt path.
-	 * @throws FileNotFoundException if the aapt path does not exist
+	 * @param aaptPath
+	 *            the aapt path.
+	 * @throws FileNotFoundException
+	 *             if the aapt path does not exist
 	 */
 	public AAPTProcess(File aaptPath) throws FileNotFoundException {
 		if (aaptPath == null) {
@@ -34,11 +36,15 @@ public class AAPTProcess {
 	}
 
 	/**
-	 * Creates a list of aapt information corresponding to the list of given apks.
+	 * Creates a list of aapt information corresponding to the list of given
+	 * apks.
 	 * 
-	 * @param apks the apks for which information should be generated.
-	 * @return a list of aapt information corresponding to the list of given apks
-	 * @throws IOException if an IO error occured
+	 * @param apks
+	 *            the apks for which information should be generated.
+	 * @return a list of aapt information corresponding to the list of given
+	 *         apks
+	 * @throws IOException
+	 *             if an IO error occured
 	 */
 	public List<AAPTInformation> loadInformation(List<File> apks) throws IOException {
 		if (apks == null) {
@@ -55,12 +61,17 @@ public class AAPTProcess {
 	}
 
 	/**
-	 * Creates a list of aapt information corresponding to the list of given apks and arguments.
+	 * Creates a list of aapt information corresponding to the list of given
+	 * apks and arguments.
 	 * 
-	 * @param apks the apks for which information should be generated.
-	 * @param arguments the arguments for which the information should be collected
-	 * @return a list of aapt information corresponding to the list of given apks and arguments
-	 * @throws IOException if an IO error occured
+	 * @param apks
+	 *            the apks for which information should be generated.
+	 * @param arguments
+	 *            the arguments for which the information should be collected
+	 * @return a list of aapt information corresponding to the list of given
+	 *         apks and arguments
+	 * @throws IOException
+	 *             if an IO error occured
 	 */
 	private List<AAPTInformation> collectAAPTInformation(List<File> apks, List<String> arguments) throws IOException {
 		List<AAPTInformation> result = new LinkedList<>();
@@ -86,10 +97,13 @@ public class AAPTProcess {
 	}
 
 	/**
-	 * Creates an AAPTInformation object from the given apk under the given infos
+	 * Creates an AAPTInformation object from the given apk under the given
+	 * infos
 	 * 
-	 * @param apk the apk an aapt information should be created for
-	 * @param infos the infos for the aapt information creation
+	 * @param apk
+	 *            the apk an aapt information should be created for
+	 * @param infos
+	 *            the infos for the aapt information creation
 	 * @return an AAPTInformation object corresponding to the given parameters
 	 * @throws FileNotFoundException
 	 */
@@ -105,8 +119,10 @@ public class AAPTProcess {
 	/**
 	 * Searches in a string for a specific output value.
 	 * 
-	 * @param output the aapt ouput to be searched
-	 * @param value the value to be searched for
+	 * @param output
+	 *            the aapt ouput to be searched
+	 * @param value
+	 *            the value to be searched for
 	 * @return
 	 */
 	private String getValueFromAaptOutput(String output, String value) {
@@ -119,6 +135,7 @@ public class AAPTProcess {
 
 	/**
 	 * Returns the AAPT path as a file.
+	 * 
 	 * @return the AAPT path as a file
 	 */
 	public File getAAPTPath() {

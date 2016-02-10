@@ -1,7 +1,6 @@
 package com.droidmate.ajax;
 
 import java.io.IOException;
-import java.nio.file.Path;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.droidmate.user.DroidMateUser;
-import com.droidmate.user.GUISettings;
 
 /**
  * Servlet implementation class StopExplorationHandler
@@ -58,7 +56,7 @@ public class StopExplorationHandler extends HttpServlet {
 
 			try {
 				user.stopExploration();
-				
+
 				stopExplorationResult = new JSONResponseWrapper(true, "DroidMate stopped.");
 			} catch (Exception e) {
 				stopExplorationResult = new JSONResponseWrapper(false, e.getMessage());

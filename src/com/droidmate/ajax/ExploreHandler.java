@@ -60,7 +60,7 @@ public class ExploreHandler extends HttpServlet {
 			if (user.isExplorationStarted()) {
 				startDroidMateResult = new JSONResponseWrapper(false, "DroidMate was already started. Please start a new Exploration.");
 			} else {
-				//try start DroidMate
+				// try start DroidMate
 				try {
 					boolean startResult = user.startDroidMate();
 					if (startResult) {
@@ -72,7 +72,7 @@ public class ExploreHandler extends HttpServlet {
 					startDroidMateResult = new JSONResponseWrapper(false, e.getMessage());
 				}
 			}
-			
+
 			result.put(START_DROIDMATE, startDroidMateResult.toJSONObject());
 		}
 

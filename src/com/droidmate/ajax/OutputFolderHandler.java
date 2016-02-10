@@ -57,18 +57,18 @@ public class OutputFolderHandler extends HttpServlet {
 		if (openOutputFolderString != null) {
 			JSONResponseWrapper openOutputFolderResult = new JSONResponseWrapper();
 
-			//get output folder path
+			// get output folder path
 			GUISettings settings = user.getSettings();
 			Path outputFolderPath = settings.getOutputFolder();
-			
-			//open explorer
+
+			// open explorer
 			if (openExplorerWindow(outputFolderPath)) {
-				//explorer could be opened
-				openOutputFolderResult = new JSONResponseWrapper(true,"Explorer opened at path " + outputFolderPath + ".");
+				// explorer could be opened
+				openOutputFolderResult = new JSONResponseWrapper(true, "Explorer opened at path " + outputFolderPath + ".");
 			} else {
-				openOutputFolderResult = new JSONResponseWrapper(false,"Explorer could not be opened at path " + outputFolderPath + ".");
+				openOutputFolderResult = new JSONResponseWrapper(false, "Explorer could not be opened at path " + outputFolderPath + ".");
 			}
-			
+
 			result.put(OPEN_OUTPUT_FOLDER_EXPLORER, openOutputFolderResult.toJSONObject());
 		}
 
@@ -88,5 +88,5 @@ public class OutputFolderHandler extends HttpServlet {
 		}
 		return false;
 	}
-	
+
 }

@@ -13,8 +13,11 @@ public class DirectoryWatcherEvent {
 
 	/**
 	 * Creates a new instance of the DirectoryWatcherEvent class
-	 * @param event the happened WatchEvent
-	 * @param changedPath the changed path
+	 * 
+	 * @param event
+	 *            the happened WatchEvent
+	 * @param changedPath
+	 *            the changed path
 	 */
 	public DirectoryWatcherEvent(WatchEvent<?> event, Path changedPath) {
 		if (event == null) {
@@ -30,6 +33,7 @@ public class DirectoryWatcherEvent {
 
 	/**
 	 * Returns the happened event.
+	 * 
 	 * @return the happened event
 	 */
 	public WatchEvent<?> getEvent() {
@@ -38,6 +42,7 @@ public class DirectoryWatcherEvent {
 
 	/**
 	 * Returns the changed path.
+	 * 
 	 * @return the changed path
 	 */
 	public Path getChangedPath() {

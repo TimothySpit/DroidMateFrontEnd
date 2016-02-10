@@ -9,19 +9,22 @@ import com.droidmate.processes.logfile.APKScreensSeenChanged;
 import com.droidmate.processes.logfile.APKStarted;
 
 /**
- *	Interface for classes which observe a apk log file .
+ * Interface for classes which observe a apk log file .
  */
 public interface APKLogFileObserver {
-	
-	
+
 	public void update(APKLogFileObservable o, APKExplorationStarted arg);
+
 	public void update(APKLogFileObservable o, APKExplorationEnded arg);
-	
+
 	public void update(APKLogFileObservable o, APKStarted arg);
+
 	public void update(APKLogFileObservable o, APKEnded arg);
-	
+
 	public void update(APKLogFileObservable o, APKElementsExploredChanged arg);
+
 	public void update(APKLogFileObservable o, APKElementsSeenChanged arg);
+
 	public void update(APKLogFileObservable o, APKScreensSeenChanged arg);
-	
+
 }

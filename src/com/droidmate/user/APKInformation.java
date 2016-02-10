@@ -27,11 +27,11 @@ public class APKInformation {
 
 	private final AtomicReference<ExplorationStatus> explorationStatusReference = new AtomicReference<>(ExplorationStatus.NOT_RUNNING);
 
-	
 	/**
 	 * Creates a new instance of the APKInformation class.
 	 * 
-	 * @param aaptInfo The AAPTInformation
+	 * @param aaptInfo
+	 *            The AAPTInformation
 	 */
 	public APKInformation(AAPTInformation aaptInfo) {
 		if (aaptInfo == null) {
@@ -60,7 +60,7 @@ public class APKInformation {
 		result.put("explorationStatus", explorationStatusReference.get().getName());
 		result.put("explorationInfo", getExplorationInfo().toJSONObject());
 		result.put("isSelected", isSelected.get());
-		
+
 		return result;
 	}
 
@@ -85,7 +85,8 @@ public class APKInformation {
 	/**
 	 * Sets inlining status for the last .apk.
 	 * 
-	 * @param inliningStatus The inling status
+	 * @param inliningStatus
+	 *            The inling status
 	 */
 	public void setInliningStatus(InliningStatus inliningStatus) {
 		inliningStatusReference.set(inliningStatus);
@@ -171,16 +172,17 @@ public class APKInformation {
 	/**
 	 * Sets whether the last .apk is selected.
 	 * 
-	 * @param isSelected the status the last apk should be set to
+	 * @param isSelected
+	 *            the status the last apk should be set to
 	 */
 	public void setAPKSelected(boolean isSelected) {
 		if (inliningStatusReference.get() != InliningStatus.INLINED) {
 			throw new IllegalStateException("APK is not yet inlined and cannot be selected.");
 		}
-		if(explorationStatusReference.get() != ExplorationStatus.NOT_RUNNING) {
+		if (explorationStatusReference.get() != ExplorationStatus.NOT_RUNNING) {
 			throw new IllegalStateException("APK is not in State NOT_RUNNING, so it cannot be selected for exploration.");
 		}
-		
+
 		this.isSelected.set(isSelected);
 	}
 
@@ -192,11 +194,12 @@ public class APKInformation {
 	public ExplorationStatus getExplorationStatus() {
 		return explorationStatusReference.get();
 	}
-	
+
 	/**
 	 * Sets the exploration status.
 	 * 
-	 * @param explorationStatus the new exploration status
+	 * @param explorationStatus
+	 *            the new exploration status
 	 */
 	public void setExplorationStatus(ExplorationStatus explorationStatus) {
 		if (inliningStatusReference.get() == InliningStatus.INLINING && explorationStatus != ExplorationStatus.NOT_RUNNING) {

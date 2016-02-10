@@ -51,18 +51,21 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	private APKInformation currentAPK = null;
 	// ---------------------
 
-	//global exploration info of all apks
+	// global exploration info of all apks
 	private ExplorationInfo globalExplorationInfo = new ExplorationInfo();
-	//----------------------
+	// ----------------------
 	private ProcessWrapper droidMateProcess = null;
 	private APKLogFileHandler logReader = null;
-	
+
 	/**
 	 * Creates a new instance of the DroidMateProcess class.
 	 * 
-	 * @param droidMatePath the path leading to DroidMate
-	 * @param logFilePath the path leading to the log file
-	 * @throws FileNotFoundException if one of the paths is not found.
+	 * @param droidMatePath
+	 *            the path leading to DroidMate
+	 * @param logFilePath
+	 *            the path leading to the log file
+	 * @throws FileNotFoundException
+	 *             if one of the paths is not found.
 	 */
 	public DroidMateProcess(File droidMatePath, File logFilePath) throws FileNotFoundException {
 		if (droidMatePath == null) {
@@ -92,10 +95,14 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	/**
 	 * Creates a new instance of the DroidMateProcess class.
 	 * 
-	 * @param droidMatePath the path leading to DroidMate
-	 * @param logFilePath the path leading to the log file
-	 * @param printStackTrace boolean indicating whther everything should be logged
-	 * @throws FileNotFoundException if one of the paths is not found.
+	 * @param droidMatePath
+	 *            the path leading to DroidMate
+	 * @param logFilePath
+	 *            the path leading to the log file
+	 * @param printStackTrace
+	 *            boolean indicating whther everything should be logged
+	 * @throws FileNotFoundException
+	 *             if one of the paths is not found.
 	 */
 	public DroidMateProcess(File droidMatePath, File logFilePath, boolean printStackTrace) throws FileNotFoundException {
 		this(droidMatePath, logFilePath);
@@ -105,8 +112,11 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 
 	/**
 	 * Starts the exploration for the given list of apks.
-	 * @param apksToExplore the apks to be explored
-	 * @throws IOException if an IO error occured
+	 * 
+	 * @param apksToExplore
+	 *            the apks to be explored
+	 * @throws IOException
+	 *             if an IO error occured
 	 */
 	public void startExploration(List<APKInformation> apksToExplore) throws IOException {
 		if (apksToExplore == null) {
@@ -137,8 +147,10 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	/**
 	 * Tries to start DroidMate
 	 * 
-	 * @param arguments the arguments with which DroidMAte should be started
-	 * @throws IOException if an IO error occured
+	 * @param arguments
+	 *            the arguments with which DroidMAte should be started
+	 * @throws IOException
+	 *             if an IO error occured
 	 */
 	private void tryStartDroidMate(List<String> arguments) throws IOException {
 		assert apksToExplore != null && arguments != null;
@@ -191,7 +203,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		}
 
 		// create log reader in new thread and register events
-		logReader  = new APKLogFileHandler(droidMateOutputLogFile, true);
+		logReader = new APKLogFileHandler(droidMateOutputLogFile, true);
 		logReader.addObserver(this);
 		new Thread(new Runnable() {
 			@Override
@@ -215,18 +227,22 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	/**
 	 * Tries to start the DroidMate process.
 	 * 
-	 * @param logReader the logreader to be used
-	 * @param arguments the arguments to be used
+	 * @param logReader
+	 *            the logreader to be used
+	 * @param arguments
+	 *            the arguments to be used
 	 * @return true if starting DroidMate was successful
-	 * @throws InterruptedException threadstuff
-	 * @throws IOException if an IO error occured
+	 * @throws InterruptedException
+	 *             threadstuff
+	 * @throws IOException
+	 *             if an IO error occured
 	 */
 	private boolean tryStartDroidMateProcess(APKLogFileHandler logReader, List<String> arguments) throws InterruptedException, IOException {
 		assert apksToExplore != null && apksToExplore.size() > 0;
 
 		// create inliner process, add fix for adb destruction
-		droidMateProcess  = new ProcessWrapper(droidMatePath, arguments) {
-			
+		droidMateProcess = new ProcessWrapper(droidMatePath, arguments) {
+
 			private void killAdb() {
 				Runtime rt = Runtime.getRuntime();
 				try {
@@ -238,7 +254,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 					e.printStackTrace();
 				}
 			}
-			
+
 			@Override
 			public void stop() {
 				if (process != null) {
@@ -248,12 +264,14 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 						process.destroyForcibly().waitFor();
 						while (seInfo.isRunning()) {
 							killAdb();
-							Thread.sleep(500); //just wait a little bit for the next try
+							Thread.sleep(500); // just wait a little bit for the
+												// next try
 						}
 						seInfo.join();
 						while (seInfo.isRunning()) {
 							killAdb();
-							Thread.sleep(500); //just wait a little bit for the next try
+							Thread.sleep(500); // just wait a little bit for the
+												// next try
 						}
 						seError.join();
 					} catch (InterruptedException e) {
@@ -262,7 +280,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 				}
 			}
 		};
-		
+
 		// register console observer
 		droidMateProcess.addStreamObserver(this);
 
@@ -271,9 +289,9 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		// DroidMate process finished, stop logreader
 		logReader.stop();
 
-		//remove observer
+		// remove observer
 		droidMateProcess.deleteStreamObserver(this);
-		
+
 		if (droidMateProcess.getExitValue() != 0) {
 			// there was an intern error
 			return false;
@@ -284,7 +302,8 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	/**
 	 * Deletes all apks from the given path
 	 * 
-	 * @param path the path all apks should be deleted of.
+	 * @param path
+	 *            the path all apks should be deleted of.
 	 */
 	private void clearAPKSFromDirectory(File path) {
 		assert path != null && path.exists();
@@ -322,11 +341,11 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		return logFilePath;
 	}
 
-	
 	/**
 	 * Sets whether the stacktrace should be printed.
 	 * 
-	 * @param printStackTrace boolean indicating whether the stacktrace should be printed.
+	 * @param printStackTrace
+	 *            boolean indicating whether the stacktrace should be printed.
 	 */
 	public void setPrintStackTrace(boolean printStackTrace) {
 		this.printStackTrace = printStackTrace;
@@ -340,13 +359,13 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	public ExplorationInfo getGlobalExplorationInfo() {
 		return globalExplorationInfo;
 	}
-	
+
 	// APKLogFileObservable interface methods
 	@Override
 	public void update(APKLogFileObservable o, APKExplorationStarted event) {
 		// Exploration started
 		notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.EXPLORATION_STARTED));
-		
+
 		this.globalExplorationInfo.setStartingTime(event.getStartTime());
 	}
 
@@ -354,7 +373,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	public void update(APKLogFileObservable o, APKExplorationEnded event) {
 		// Exploration ended with no errors
 		notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.EXPLORATION_FINISHED));
-		
+
 		this.globalExplorationInfo.setEndTime(event.getEndTime());
 	}
 
@@ -365,11 +384,11 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 			throw new IllegalStateException("APK " + event.getName() + " was not selected for Exploration");
 		}
 
-		if(this.currentAPK != null && this.currentAPK.getExplorationStatus() == ExplorationStatus.EXPLORING) {
+		if (this.currentAPK != null && this.currentAPK.getExplorationStatus() == ExplorationStatus.EXPLORING) {
 			this.currentAPK.setExplorationStatus(ExplorationStatus.ERROR);
 			this.currentAPK.getExplorationInfo().setEndTime(event.getStartTime());
 		}
-		
+
 		this.currentAPK = apksToExplore.get(event.getName());
 		this.currentAPK.setExplorationStatus(ExplorationStatus.EXPLORING);
 		this.currentAPK.getExplorationInfo().setStartingTime(event.getStartTime());
@@ -424,22 +443,22 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	public void update(ProcessStreamObservable o, ProcessStreamEvent arg) {
 		if (arg.getType() == StreamCallbackType.STDOUT) {
 			notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.CONSOLE_OUTPUT_STDOUT, arg.getMessage()));
-		} else if(arg.getType() == StreamCallbackType.ERROR){
+		} else if (arg.getType() == StreamCallbackType.ERROR) {
 			notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.CONSOLE_OUTPUT_ERROR, arg.getMessage()));
 		}
 	}
 
 	public void stopExploration() {
-		if(logReader != null) {
+		if (logReader != null) {
 			logReader.deleteObserver(this);
-			if(this.currentAPK != null && this.currentAPK.getExplorationStatus() == ExplorationStatus.EXPLORING) {
+			if (this.currentAPK != null && this.currentAPK.getExplorationStatus() == ExplorationStatus.EXPLORING) {
 				this.currentAPK.setExplorationStatus(ExplorationStatus.ERROR);
 				this.currentAPK.getExplorationInfo().setEndTime(System.currentTimeMillis());
 			}
 			logReader.stop();
 		}
 
-		if(droidMateProcess != null) {
+		if (droidMateProcess != null) {
 			droidMateProcess.deleteStreamObserver(this);
 			droidMateProcess.stop();
 		}

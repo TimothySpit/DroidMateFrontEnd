@@ -49,8 +49,10 @@ public class GUISettings {
 	/**
 	 * Sets the exploration timeout to the provided value.
 	 * 
-	 * @param newTimeout the new timeout to be used
-	 * @throws IllegalArgumentException if timeout is less zero.
+	 * @param newTimeout
+	 *            the new timeout to be used
+	 * @throws IllegalArgumentException
+	 *             if timeout is less zero.
 	 */
 	public void setExplorationTimeout(int newTimeout) {
 		if (newTimeout <= 0) {
@@ -82,8 +84,10 @@ public class GUISettings {
 	/**
 	 * Sets the output folder to the provided value.
 	 * 
-	 * @param outputFolder the new output folder to be used
-	 * @throws IllegalArgumentException if the path is null
+	 * @param outputFolder
+	 *            the new output folder to be used
+	 * @throws IllegalArgumentException
+	 *             if the path is null
 	 */
 	public void setOutputFolder(Path outputFolder) {
 		if (outputFolder == null) {
@@ -116,8 +120,10 @@ public class GUISettings {
 	/**
 	 * Sets the DroidMate path to the provided value.
 	 * 
-	 * @param outputFolder the new DroidMate path to be used.
-	 * @throws IllegalArgumentException if the path is null
+	 * @param outputFolder
+	 *            the new DroidMate path to be used.
+	 * @throws IllegalArgumentException
+	 *             if the path is null
 	 */
 	public void setDroidMatePath(Path droidMatePath) {
 		if (droidMatePath == null) {
@@ -149,8 +155,10 @@ public class GUISettings {
 	/**
 	 * Sets the AAPT-Tool path to the provided value.
 	 * 
-	 * @param outputFolder the new AAPT-Tool path to be used.
-	 * @throws IllegalArgumentException if the path is null
+	 * @param outputFolder
+	 *            the new AAPT-Tool path to be used.
+	 * @throws IllegalArgumentException
+	 *             if the path is null
 	 */
 	public void setAaptToolPath(Path aaptToolPath) {
 		if (aaptToolPath == null) {

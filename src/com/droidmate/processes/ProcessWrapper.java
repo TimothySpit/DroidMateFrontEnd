@@ -30,12 +30,14 @@ public class ProcessWrapper extends ProcessStreamObservable {
 	protected StreamBoozer seError = null;
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-	
+
 	/**
 	 * Creates a new instance of the ProcessWrapper class
 	 * 
-	 * @param directory the directory
-	 * @param command the processes commands
+	 * @param directory
+	 *            the directory
+	 * @param command
+	 *            the processes commands
 	 * @throws FileNotFoundException
 	 */
 	public ProcessWrapper(File directory, List<String> command) throws FileNotFoundException {
@@ -55,8 +57,11 @@ public class ProcessWrapper extends ProcessStreamObservable {
 
 	/**
 	 * Starts the process.
-	 * @throws InterruptedException threadstuff
-	 * @throws IOException if an IO error occured
+	 * 
+	 * @throws InterruptedException
+	 *             threadstuff
+	 * @throws IOException
+	 *             if an IO error occured
 	 */
 	public void start() throws InterruptedException, IOException {
 		process = processBuilder.start();
@@ -71,6 +76,7 @@ public class ProcessWrapper extends ProcessStreamObservable {
 
 	/**
 	 * Returns the errors.
+	 * 
 	 * @return the errors
 	 */
 	public String getErrors() {
@@ -79,6 +85,7 @@ public class ProcessWrapper extends ProcessStreamObservable {
 
 	/**
 	 * Returns the info writers infos.
+	 * 
 	 * @return the info writers infos.
 	 */
 	public String getInfos() {
@@ -87,6 +94,7 @@ public class ProcessWrapper extends ProcessStreamObservable {
 
 	/**
 	 * Returns the exit value.
+	 * 
 	 * @return the exit value
 	 */
 	public int getExitValue() {
@@ -107,8 +115,11 @@ public class ProcessWrapper extends ProcessStreamObservable {
 
 		/**
 		 * Creates a new instance of the ProcessStreamEvent class.
-		 * @param type the callback type
-		 * @param message the message
+		 * 
+		 * @param type
+		 *            the callback type
+		 * @param message
+		 *            the message
 		 */
 		public ProcessStreamEvent(StreamCallbackType type, String message) {
 			this.type = type;
@@ -117,6 +128,7 @@ public class ProcessWrapper extends ProcessStreamObservable {
 
 		/**
 		 * Returns the stream callback type.
+		 * 
 		 * @return the stream callback type
 		 */
 		public StreamCallbackType getType() {
@@ -125,6 +137,7 @@ public class ProcessWrapper extends ProcessStreamObservable {
 
 		/**
 		 * Returns the message.
+		 * 
 		 * @return the message.
 		 */
 		public String getMessage() {
@@ -145,9 +158,12 @@ public class ProcessWrapper extends ProcessStreamObservable {
 		/**
 		 * Creates a new instance of the StreamBoozer class.
 		 * 
-		 * @param in the input stream
-		 * @param pw the print writer
-		 * @param callbackType the callback type
+		 * @param in
+		 *            the input stream
+		 * @param pw
+		 *            the print writer
+		 * @param callbackType
+		 *            the callback type
 		 */
 		StreamBoozer(InputStream in, PrintWriter pw, StreamCallbackType callbackType) {
 			this.in = in;
@@ -155,9 +171,10 @@ public class ProcessWrapper extends ProcessStreamObservable {
 
 			this.cbt = callbackType;
 		}
-		
+
 		/**
 		 * Returns whether the underlying process is running.
+		 * 
 		 * @return whether the underlying process is running
 		 */
 		public synchronized boolean isRunning() {

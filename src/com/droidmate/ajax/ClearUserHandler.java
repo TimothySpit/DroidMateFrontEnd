@@ -1,7 +1,6 @@
 package com.droidmate.ajax;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +56,7 @@ public class ClearUserHandler extends HttpServlet {
 
 			try {
 				user.clear();
-				
+
 				clearUserResult = new JSONResponseWrapper(true, "User resetted.");
 			} catch (Exception e) {
 				clearUserResult = new JSONResponseWrapper(false, e.getMessage());

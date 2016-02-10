@@ -80,11 +80,16 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	/**
 	 * Sets the path for the users given .apks.
 	 * 
-	 * @param newPath the path for the apks
-	 * @throws NullPointerException if the given path ist null
-	 * @throws IllegalArgumentException if the given path not a directory or does not exist
-	 * @throws IOException if a IO Error occured
-	 * @throws InterruptedException in crazy thread stuff
+	 * @param newPath
+	 *            the path for the apks
+	 * @throws NullPointerException
+	 *             if the given path ist null
+	 * @throws IllegalArgumentException
+	 *             if the given path not a directory or does not exist
+	 * @throws IOException
+	 *             if a IO Error occured
+	 * @throws InterruptedException
+	 *             in crazy thread stuff
 	 */
 	public synchronized void setAPKPath(Path newPath) throws IOException, InterruptedException {
 		// exception handling
@@ -151,7 +156,8 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	/**
 	 * Sets the .apks information and checks whether it is inlined or not.
 	 * 
-	 * @param apkInfo the information to be set
+	 * @param apkInfo
+	 *            the information to be set
 	 */
 	private void setAPKInlinedInformation(APKInformation apkInfo) {
 		assert apkInfo != null;
@@ -243,7 +249,8 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	 * Starts the inliner.
 	 * 
 	 * @return true if the inliner was successfully started
-	 * @throws IOException if an IO error occured
+	 * @throws IOException
+	 *             if an IO error occured
 	 */
 	public synchronized boolean startInliner() throws IOException {
 		if (userStatus.get() != UserStatus.IDLE) {
@@ -324,7 +331,8 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	 * Starts DroidMate and eo ipso the exploration
 	 * 
 	 * @return true if DroidMate started the exploration
-	 * @throws Exception if something went wrong
+	 * @throws Exception
+	 *             if something went wrong
 	 */
 	public synchronized boolean startDroidMate() throws Exception {
 		if (userStatus.get() != UserStatus.IDLE) {
@@ -411,11 +419,11 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 					return;
 				}
 
-				if(userStatus.get() == UserStatus.IDLE) {
-					//user got already cleared
+				if (userStatus.get() == UserStatus.IDLE) {
+					// user got already cleared
 					return;
 				}
-				
+
 				if (userStatus.get() != UserStatus.STARTING) {
 					// apks were explored, report saving necessary
 					saveReport();
@@ -536,7 +544,6 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 		return droidMateProcess.getGlobalExplorationInfo();
 	}
 
-	
 	/**
 	 * Returns the console output's size
 	 * 
@@ -553,8 +560,10 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	/**
 	 * Retrieves a specified subset of the console output.
 	 * 
-	 * @param from the line the subset should start
-	 * @param to the line the subset shuld end
+	 * @param from
+	 *            the line the subset should start
+	 * @param to
+	 *            the line the subset shuld end
 	 * @return the specified console output's subset
 	 */
 	public List<String> getConsoleOutput(int from, int to) {

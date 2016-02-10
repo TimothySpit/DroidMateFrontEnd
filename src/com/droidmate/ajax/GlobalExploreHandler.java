@@ -1,6 +1,7 @@
 package com.droidmate.ajax;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -53,13 +54,14 @@ public class GlobalExploreHandler extends HttpServlet {
 		// handle SELECTED_APKS_SET request
 		String[] getGlobalInformationString = request.getParameterValues(GLOBAL_INFORMATION_GET);
 		if (getGlobalInformationString != null) {
-			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), GLOBAL_INFORMATION_GET, getGlobalInformationString);
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), GLOBAL_INFORMATION_GET,
+					getGlobalInformationString);
 
 			JSONResponseWrapper getGlobalInformationResult = new JSONResponseWrapper();
-			
+
 			try {
 				ExplorationInfo explorationInfo = user.getGloblExplorationInfo();
-				
+
 				// set payload
 				JSONObject payload = new JSONObject();
 				payload.put("data", explorationInfo.toJSONObject());
@@ -68,7 +70,7 @@ public class GlobalExploreHandler extends HttpServlet {
 			} catch (Exception e) {
 				getGlobalInformationResult = new JSONResponseWrapper(false, e.getMessage());
 			}
-			
+
 			result.put(GLOBAL_INFORMATION_GET, getGlobalInformationResult.toJSONObject());
 		}
 

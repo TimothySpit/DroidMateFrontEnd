@@ -11,26 +11,31 @@ public class APKEnded extends APKLogFileEvent {
 
 	/**
 	 * Creates a new instance of the APKEnded class
-	 * @param name the name
-	 * @param time the ending time
-	 * @param success boolean indicating the success
+	 * 
+	 * @param name
+	 *            the name
+	 * @param time
+	 *            the ending time
+	 * @param success
+	 *            boolean indicating the success
 	 */
 	public APKEnded(String name, long time, boolean success) {
-		if(name == null) {
+		if (name == null) {
 			throw new IllegalArgumentException("APK name must be not null.");
 		}
-		if(time < 0) {
+		if (time < 0) {
 			throw new IllegalArgumentException("Time " + time + " must be non negative.");
 		}
-		
+
 		this.name = name;
 		this.endTime = time;
 		this.success = success;
-		
+
 	}
 
 	/**
 	 * Returns the name.
+	 * 
 	 * @return the name
 	 */
 	public String getName() {
@@ -39,6 +44,7 @@ public class APKEnded extends APKLogFileEvent {
 
 	/**
 	 * Returns the end time.
+	 * 
 	 * @return the end time
 	 */
 	public long getEndTime() {
@@ -47,10 +53,11 @@ public class APKEnded extends APKLogFileEvent {
 
 	/**
 	 * Returns whether this apk ended successfully.
+	 * 
 	 * @return whether this apk ended successfully
 	 */
 	public boolean isSuccess() {
 		return success;
 	}
-	
+
 }
