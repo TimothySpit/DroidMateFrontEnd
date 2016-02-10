@@ -3,6 +3,9 @@ package com.droidmate.ajax;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ * Wraps a JSON Object for better usability.
+ */
 public class JSONResponseWrapper {
 
 	private JSONObject object = new JSONObject();

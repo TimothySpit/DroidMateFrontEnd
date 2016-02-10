@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import org.apache.commons.io.FilenameUtils;
 
 /**
- *	Class which provides all get-at-able information about an apk (package name,
+ *	Class which provides all getable information about an apk (package name,
  *	version code, version name, etc...). 
  */
 public class AAPTInformation {
@@ -20,16 +20,11 @@ public class AAPTInformation {
 	/**
 	 * Creates a new instance of the AAPTInformation class.
 	 * 
-	 * @param apk
-	 * 			apk file
-	 * @param packageName
-	 * 			the apk's package name
-	 * @param packageVersionCode
-	 * 			the apk's package version code
-	 * @param packageVersionName
-	 * 			the apk's package version name
-	 * @param activityName
-	 * 			the apk's activity name
+	 * @param apk apk file
+	 * @param packageName the apk's package name
+	 * @param packageVersionCode the apk's package version code
+	 * @param packageVersionName the apk's package version name
+	 * @param activityName the apk's activity name
 	 * @throws FileNotFoundException
 	 */
 	public AAPTInformation(File apk, String packageName, String packageVersionCode, String packageVersionName, String activityName)
@@ -51,30 +46,64 @@ public class AAPTInformation {
 		this.activityName = activityName;
 	}
 
+	/**
+	 * Returns the apk's name.
+	 * 
+	 * @return the apk's name
+	 */
 	public String getAPKName() {
 		return apkFile.getName();
 	}
 
+	/**
+	 * Returns the apk's package name.
+	 * 
+	 * @return the apk's package name
+	 */
 	public String getAPKPackageName() {
 		return packageName;
 	}
 
+	/**
+	 * Returns the apk's package version code.
+	 * 
+	 * @return the apk's package version code.
+	 */
 	public String getAPKPackageVersionCode() {
 		return packageVersionCode;
 	}
 
+	/**
+	 * Returns the apk's package version name.
+	 * 
+	 * @return the apk's package version name.
+	 */
 	public String getAPKPackageVersionName() {
 		return packageVersionName;
 	}
 
+	/**
+	 * Returns the apk's main activity name.
+	 * 
+	 * @return the apk's main activity name.
+	 */
 	public String getAPKActivityName() {
 		return activityName;
 	}
 
+	/**
+	 * Returns the apk's file size in bytes.
+	 * 
+	 * @return the apk's file size in bytes.
+	 */
 	public long getAPKFileSizeInBytes() {
 		return apkFile.length();
 	}
 
+	/**
+	 * Returns the apk for which the information are held
+	 * @return the apk for which the information are held
+	 */
 	public File getAPKFile() {
 		return apkFile;
 	}

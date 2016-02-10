@@ -15,8 +15,7 @@ public class ProcessStreamObservable {
 	/**
 	 * Registers an observer at this observable.
 	 * 
-	 * @param observer
-	 *            the Observer to be added
+	 * @param observer the Observer to be added
 	 */
 	public void addStreamObserver(ProcessStreamObserver observer) {
 		if (!observers.contains(observer))
@@ -26,8 +25,7 @@ public class ProcessStreamObservable {
 	/**
 	 * Removes an observer from this observable
 	 * 
-	 * @param observer
-	 *            the observer to be removed
+	 * @param observer the observer to be removed
 	 */
 	public void deleteStreamObserver(ProcessStreamObserver observer) {
 		observers.remove(observer);
@@ -36,8 +34,7 @@ public class ProcessStreamObservable {
 	/**
 	 * Notifies all observers that a change happened
 	 * 
-	 * @param arg
-	 *            the change which happend
+	 * @param arg the change which happend
 	 */
 	public void notifyStreamObservers(ProcessWrapper.ProcessStreamEvent arg) {
 		for (ProcessStreamObserver observer : observers)
