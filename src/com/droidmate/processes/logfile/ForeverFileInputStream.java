@@ -20,6 +20,9 @@ public class ForeverFileInputStream extends FileInputStream {
 
 	public static final long REFRESH_INTERVAL = 100;
 
+	/**
+	 * Sets the EOF.
+	 */
 	public void stop() {
 		this.stopFlag.set(true);
 	}
