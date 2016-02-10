@@ -32,6 +32,7 @@ public class SettingsHandler extends HttpServlet {
 	private static final String SETTINGS_AAPT_PATH = "aaptPath";
 	private static final String SETTINGS_EXPLORATION_TIME = "time";
 
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -61,6 +62,8 @@ public class SettingsHandler extends HttpServlet {
 		GUISettings settings = new GUISettings();
 
 		JSONObject result = new JSONObject();
+		
+		// handle SETTINGS_SET request
 		String settingsSet = request.getParameter(SETTINGS_SET);
 		boolean allSettingsCorrect = true;
 		if (settingsSet != null) {

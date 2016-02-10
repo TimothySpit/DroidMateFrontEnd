@@ -27,6 +27,7 @@ public class OutputFolderHandler extends HttpServlet {
 	// request parameters
 	private static final String OPEN_OUTPUT_FOLDER_EXPLORER = "openOutputFolder";
 
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -52,7 +53,7 @@ public class OutputFolderHandler extends HttpServlet {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute("user");
 		JSONObject result = new JSONObject();
 
-		// get apks root
+		// handle OPEN_OUTPUT_FOLDER_EXPLORER request
 		String openOutputFolderString = request.getParameter(OPEN_OUTPUT_FOLDER_EXPLORER);
 		if (openOutputFolderString != null) {
 			JSONResponseWrapper openOutputFolderResult = new JSONResponseWrapper();

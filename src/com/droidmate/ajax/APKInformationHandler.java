@@ -25,9 +25,10 @@ import com.droidmate.user.DroidMateUser;
 public class APKInformationHandler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	// request parameters
+	/**	Request parameters	*/
 	private static final String APKS_DATA = "getAPKSData";
-
+	
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -42,7 +43,7 @@ public class APKInformationHandler extends HttpServlet {
 	/**
 	 * Sends back a .json object with all .apk information.
 	 * 
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 * @see HttpServletdoPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,9 +56,10 @@ public class APKInformationHandler extends HttpServlet {
 		// HTTP 1.0
 		response.setHeader("Pragma", "no-cache");
 
-		// serve request
+		// server request
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute("user");
 
+		// handle APKS_DATA request
 		String apksData = request.getParameter(APKS_DATA);
 		JSONObject result = new JSONObject();
 		if (apksData != null) {

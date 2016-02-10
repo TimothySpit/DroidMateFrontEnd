@@ -8,6 +8,7 @@ import org.json.JSONObject;
  */
 public class JSONResponseWrapper {
 
+	/**	The JSONObject to wrap*/
 	private JSONObject object = new JSONObject();
 
 	/**

@@ -28,6 +28,7 @@ public class APKRootFolderHandler extends HttpServlet {
 	private static final String APKS_ROOT_GET = "getAPKsRoot";
 	private static final String APKS_ROOT_SET = "setAPKsRoot";
 
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -58,7 +59,7 @@ public class APKRootFolderHandler extends HttpServlet {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute("user");
 		JSONObject result = new JSONObject();
 
-		// get apks root
+		// handle APKS_ROOT_GET request
 		String apkGetRoot = request.getParameter(APKS_ROOT_GET);
 		if (apkGetRoot != null) {
 			JSONResponseWrapper apkGetRootResult = new JSONResponseWrapper();
@@ -74,7 +75,7 @@ public class APKRootFolderHandler extends HttpServlet {
 			result.put(APKS_ROOT_GET, apkGetRootResult.toJSONObject());
 		}
 
-		// save apks root
+		// handle APKS_ROOT_SET request
 		String apkSaveRoot = request.getParameter(APKS_ROOT_SET);
 		if (apkSaveRoot != null) {
 			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), APKS_ROOT_SET, apkSaveRoot);

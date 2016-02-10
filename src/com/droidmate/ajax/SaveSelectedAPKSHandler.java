@@ -30,6 +30,7 @@ public class SaveSelectedAPKSHandler extends HttpServlet {
 	// request parameters
 	private static final String SELECTED_APKS_SET = "setSelectedAPKS[]";
 
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**

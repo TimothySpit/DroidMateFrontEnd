@@ -29,6 +29,7 @@ public class FileSystemHandler extends HttpServlet {
 	private final static String FILETYPE = "type";
 	private final static String PATH = "path";
 
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**

@@ -25,7 +25,8 @@ public class ConsoleOutputHandler extends HttpServlet {
 
 	// request parameters
 	private static final String CONSOLE_OUTPUT_GET = "getConsoleOutput";
-
+	
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -51,7 +52,7 @@ public class ConsoleOutputHandler extends HttpServlet {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute("user");
 		JSONObject result = new JSONObject();
 
-		// get apks root
+		// handle CONSOLE_OUTPUT_GET request
 		String getConsoleOutputString = request.getParameter(CONSOLE_OUTPUT_GET);
 		if (getConsoleOutputString != null) {
 			JSONResponseWrapper getConsoleOutputResult = new JSONResponseWrapper();

@@ -25,6 +25,7 @@ public class UserStatusHandler extends HttpServlet {
 	// request parameters
 	private static final String USER_STATUS_GET = "getUserStatus";
 
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -55,7 +56,7 @@ public class UserStatusHandler extends HttpServlet {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute("user");
 		JSONObject result = new JSONObject();
 
-		// handle user status get
+		// handle USER_STATUS_GET request
 		String getUserStatusString = request.getParameter(USER_STATUS_GET);
 		if (getUserStatusString != null) {
 			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), USER_STATUS_GET, getUserStatusString);

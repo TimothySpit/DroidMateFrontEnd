@@ -25,6 +25,7 @@ public class InlinerHandler extends HttpServlet {
 	// request parameters
 	private static final String START_INLINER = "startInlining";
 
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -55,7 +56,7 @@ public class InlinerHandler extends HttpServlet {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute("user");
 		JSONObject result = new JSONObject();
 
-		// handle inliner start
+		// handle START_INLINER request
 		String startInliner = request.getParameter(START_INLINER);
 		if (startInliner != null) {
 			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), START_INLINER, startInliner);

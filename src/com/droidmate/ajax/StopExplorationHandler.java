@@ -24,6 +24,7 @@ public class StopExplorationHandler extends HttpServlet {
 	// request parameters
 	private static final String STOP_EXPLORATION = "stopExploration";
 
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -49,7 +50,7 @@ public class StopExplorationHandler extends HttpServlet {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute("user");
 		JSONObject result = new JSONObject();
 
-		// get apks root
+		// handle STOP_EXPLORATION request
 		String stopExplorationString = request.getParameter(STOP_EXPLORATION);
 		if (stopExplorationString != null) {
 			JSONResponseWrapper stopExplorationResult = new JSONResponseWrapper();

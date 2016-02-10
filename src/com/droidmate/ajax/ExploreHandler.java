@@ -24,6 +24,7 @@ public class ExploreHandler extends HttpServlet {
 	// request parameters
 	private static final String START_DROIDMATE = "startExploration";
 
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**

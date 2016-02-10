@@ -23,7 +23,8 @@ public class ClearUserHandler extends HttpServlet {
 
 	// request parameters
 	private static final String CLEAR_USER = "clearUser";
-
+	
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**

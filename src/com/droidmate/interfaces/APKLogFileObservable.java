@@ -16,6 +16,7 @@ import com.droidmate.processes.logfile.APKStarted;
  */
 public class APKLogFileObservable {
 
+	/**	List of observers*/
 	private final List<APKLogFileObserver> observers = new ArrayList<APKLogFileObserver>();
 
 	/**

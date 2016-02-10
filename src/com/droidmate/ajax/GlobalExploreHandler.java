@@ -25,6 +25,7 @@ public class GlobalExploreHandler extends HttpServlet {
 	// request parameters
 	private static final String GLOBAL_INFORMATION_GET = "getGlobalExploration";
 
+	/**	The logger which is useful for debugging.	*/
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -51,7 +52,7 @@ public class GlobalExploreHandler extends HttpServlet {
 		DroidMateUser user = (DroidMateUser) getServletContext().getAttribute("user");
 		JSONObject result = new JSONObject();
 
-		// handle SELECTED_APKS_SET request
+		// handle GLOBAL_INFORMATION_GET request
 		String[] getGlobalInformationString = request.getParameterValues(GLOBAL_INFORMATION_GET);
 		if (getGlobalInformationString != null) {
 			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), GLOBAL_INFORMATION_GET,
