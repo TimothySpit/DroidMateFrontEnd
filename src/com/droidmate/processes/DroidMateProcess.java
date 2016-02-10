@@ -209,10 +209,12 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 						process.destroyForcibly().waitFor();
 						while (seInfo.isRunning()) {
 							killAdb();
+							Thread.sleep(500); //just wait a little bit for the next try
 						}
 						seInfo.join();
 						while (seInfo.isRunning()) {
 							killAdb();
+							Thread.sleep(500); //just wait a little bit for the next try
 						}
 						seError.join();
 					} catch (InterruptedException e) {

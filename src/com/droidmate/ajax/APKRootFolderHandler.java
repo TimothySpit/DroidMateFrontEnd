@@ -77,7 +77,7 @@ public class APKRootFolderHandler extends HttpServlet {
 		// save apks root
 		String apkSaveRoot = request.getParameter(APKS_ROOT_SET);
 		if (apkSaveRoot != null) {
-			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), APKS_ROOT_SET, apkSaveRoot);
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), APKS_ROOT_SET, apkSaveRoot);
 
 			JSONObject setAPKRootresult = new JSONObject();
 			try {

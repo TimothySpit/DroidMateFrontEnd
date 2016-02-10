@@ -61,7 +61,7 @@ public class APKInformationHandler extends HttpServlet {
 		String apksData = request.getParameter(APKS_DATA);
 		JSONObject result = new JSONObject();
 		if (apksData != null) {
-			logger.info("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), APKS_DATA, apksData);
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), APKS_DATA, apksData);
 
 			JSONResponseWrapper getAPKSDataResult = new JSONResponseWrapper();
 			getAPKSDataResult = new JSONResponseWrapper(true, "Data successfully get.");
