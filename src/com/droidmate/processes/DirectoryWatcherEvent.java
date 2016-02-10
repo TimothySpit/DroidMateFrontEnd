@@ -3,11 +3,19 @@ package com.droidmate.processes;
 import java.nio.file.Path;
 import java.nio.file.WatchEvent;
 
+/**
+ * Event for the DirectoryWatcher
+ */
 public class DirectoryWatcherEvent {
 
 	private final WatchEvent<?> event;
 	private final Path changedPath;
 
+	/**
+	 * Creates a new instance of the DirectoryWatcherEvent class
+	 * @param event the happened WatchEvent
+	 * @param changedPath the changed path
+	 */
 	public DirectoryWatcherEvent(WatchEvent<?> event, Path changedPath) {
 		if (event == null) {
 			throw new IllegalArgumentException("Event must not be null.");
@@ -20,10 +28,18 @@ public class DirectoryWatcherEvent {
 		this.changedPath = changedPath;
 	}
 
+	/**
+	 * Returns the happened event.
+	 * @return the happened event
+	 */
 	public WatchEvent<?> getEvent() {
 		return event;
 	}
 
+	/**
+	 * Returns the changed path.
+	 * @return the changed path
+	 */
 	public Path getChangedPath() {
 		return changedPath;
 	}
