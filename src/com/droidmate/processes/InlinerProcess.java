@@ -20,12 +20,21 @@ import com.droidmate.interfaces.Observer;
 import com.droidmate.user.APKInformation;
 import com.droidmate.user.InliningStatus;
 
+/**
+ * Class responsible for inlining the apks.
+ */
 public class InlinerProcess {
 
 	private final File outputPath;
 	private final File inlinerPath;
 	private boolean printStackTrace = false;
 
+	/**
+	 * Creates a new instance of the InlinerProcess class
+	 * @param inlinerPath the path to the inliner
+	 * @param outputPath the path to be outputted to
+	 * @throws FileNotFoundException if one of the paths does not exist
+	 */
 	public InlinerProcess(File inlinerPath, File outputPath) throws FileNotFoundException {
 		if (inlinerPath == null) {
 			throw new IllegalArgumentException("Inline path must not be null");
@@ -50,12 +59,26 @@ public class InlinerProcess {
 		this.outputPath = outputPath;
 	}
 
+	/**
+	 * Creates a new instance of the InlinerProcess class
+	 * 
+	 * @param inlinerPath the path to the inliner
+	 * @param outputPath the path to be outputted to
+	 * @param printStackTrace boolean indicating whether the stack trace should be printed
+	 * @throws FileNotFoundException if one of the paths does not exist
+	 */
 	public InlinerProcess(File inlinerPath, File outputPath, boolean printStackTrace) throws FileNotFoundException {
 		this(inlinerPath, outputPath);
 
 		this.setPrintStackTrace(printStackTrace);
 	}
 
+	/**
+	 * Inlines the given apks.
+	 * @param apks the apks to be inlined
+	 * @return true if the inlining was successful
+	 * @throws IOException if an IO error occured
+	 */
 	public boolean inlineAPKS(List<APKInformation> apks) throws IOException {
 		if (apks == null) {
 			throw new IllegalArgumentException("APKS list must not be null.");
@@ -76,6 +99,14 @@ public class InlinerProcess {
 		return tryStartInlineAPKS(apks, arguments);
 	}
 
+	/**
+	 * Inlines the given apks with the given arguments
+	 * 
+	 * @param apksToInline the apks to be onlined
+	 * @param arguments the arguments to be used
+	 * @return true if the inlining was successful
+	 * @throws IOException if an IO error occured
+	 */
 	private boolean tryStartInlineAPKS(List<APKInformation> apksToInline, List<String> arguments) throws IOException {
 		assert apksToInline != null && arguments != null;
 
@@ -102,7 +133,7 @@ public class InlinerProcess {
 			Files.copy(currentAPKFile.toPath(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
 		}
 
-		//check each apk´s status
+		//check each apkï¿½s status
 		for (APKInformation apk : apksToInline) {
 			if(apk.getInliningStatus() == InliningStatus.INLINING) {
 				//apk is still inlining
@@ -136,12 +167,24 @@ public class InlinerProcess {
 		}
 	}
 
+	/**
+	 * Resets all given apk's inlining status to not inined
+	 * @param apks
+	 */
 	private void resetAllAPKs(List<APKInformation> apks) {
 		for (APKInformation apkInformation : apks) {
 			apkInformation.setInliningStatus(InliningStatus.NOT_INLINED);
 		}
 	}
 
+	/**
+	 * Strats the inlining process.
+	 * @param watcher the watcher for the changed directories,
+	 * @param arguments the arguments to be used
+	 * @return true if the starting was successful
+	 * @throws IOException if an IO error occured
+	 * @throws InterruptedException threadstuff
+	 */
 	private boolean startInliner(DirectoryWatcher watcher, List<String> arguments) throws IOException, InterruptedException {
 		// create inliner process
 		ProcessWrapper pbd = new ProcessWrapper(inlinerPath, arguments);
@@ -158,6 +201,11 @@ public class InlinerProcess {
 		return true;
 	}
 
+	/**
+	 * Creates a folder where all inlined apk are moved into.
+	 * 
+	 * @return the created folder as a file
+	 */
 	private File createInlinedOutputFolder() {
 		File inlinedOutputPath = new File(outputPath, "/inlined/");
 		if (!inlinedOutputPath.exists()) {
@@ -167,6 +215,15 @@ public class InlinerProcess {
 		return inlinedOutputPath;
 	}
 
+	/**
+	 * Registers a DirectoryWatcher for the given apks
+	 * @param apks the apks to be watched
+	 * @param inlinerOutputAPKSPath the apks output folder
+	 * @param inlinedOutputPath the output path
+	 * @return a directoryWatcher
+	 * @throws IOException if an IO error occured
+	 * @throws InterruptedException threadstuff
+	 */
 	private DirectoryWatcher registerWatchOutputDirectory(List<APKInformation> apks, File inlinerOutputAPKSPath, File inlinedOutputPath)
 			throws IOException, InterruptedException {
 		DirectoryWatcher inlinedFilesWatcher = new DirectoryWatcher(inlinerOutputAPKSPath.toPath(), false);
@@ -198,6 +255,12 @@ public class InlinerProcess {
 				}
 			}
 
+			/**
+			 * Gets the APKInformation from a list of apks and a path
+			 * @param apks the apks containing the crucial one
+			 * @param filePath the path t the crucial one
+			 * @return the APKInformation for the crucial apk
+			 */
 			private APKInformation getCorrespondingAPK(List<APKInformation> apks, Path filePath) {
 				for (APKInformation apk : apks) {
 					// get -inlined postfix
@@ -221,6 +284,14 @@ public class InlinerProcess {
 		return inlinedFilesWatcher;
 	}
 
+	/**
+	 * Checks the given directories.
+	 * 
+	 * @param inlinerDir the directory with the inliner
+	 * @param inlinerInputAPKSPath the directory with the apks
+	 * @param inlinerOutputAPKSPath the output directory
+	 * @throws IOException if an IO Error occurs
+	 */
 	private void checkInlinerDirectories(File inlinerDir, File inlinerInputAPKSPath, File inlinerOutputAPKSPath) throws IOException {
 		if (!inlinerInputAPKSPath.exists()) {
 			throw new FileNotFoundException("APK inliner input path " + inlinerInputAPKSPath + " does not exist.");
@@ -242,6 +313,10 @@ public class InlinerProcess {
 		}
 	}
 
+	/**
+	 * Deletes all apks from the given directory.
+	 * @param path the directory in which all apks should be deleted
+	 */
 	private void clearAPKSFromDirectory(File path) {
 		assert path != null && path.exists();
 
@@ -260,18 +335,34 @@ public class InlinerProcess {
 		}
 	}
 
+	/**
+	 * Returns the inliner path.
+	 * @return the inliner path
+	 */
 	public File getInlinerPath() {
 		return inlinerPath;
 	}
 
+	/**
+	 * Returns whether the stack trace is printed.
+	 * @return whether the stack trace is printed
+	 */
 	public boolean isPrintStackTrace() {
 		return printStackTrace;
 	}
 
+	/**
+	 * Sets whether the stack trace is printed.
+	 * @param printStackTrace boolean indcating whether the stack trace is printed
+	 */
 	public void setPrintStackTrace(boolean printStackTrace) {
 		this.printStackTrace = printStackTrace;
 	}
 
+	/**
+	 * Returns the output path.
+	 * @return the output path
+	 */
 	public File getOutputPath() {
 		return outputPath;
 	}
