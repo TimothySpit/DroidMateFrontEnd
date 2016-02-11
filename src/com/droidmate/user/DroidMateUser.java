@@ -385,7 +385,7 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			droidMateProcess.addObserver(this);
 
 			// start inliner
-			droidMateProcess.startExploration(apksToExplore);
+			droidMateProcess.startExploration(apksToExplore, settings.getExplorationTimeout());
 		} catch (Exception e) {
 			// error in DroidMate
 			// if exploration was already finished, dont change state

@@ -125,10 +125,12 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	 * 
 	 * @param apksToExplore
 	 *            the apks to be explored
+	 * @param explorationTimeout
+	 * 		Will be passed to DroidMate as argument 'timeLimit'
 	 * @throws IOException
 	 *             if an IO error occured
 	 */
-	public void startExploration(List<APKInformation> apksToExplore) throws IOException {
+	public void startExploration(List<APKInformation> apksToExplore, int explorationTimeout) throws IOException {
 		if (apksToExplore == null) {
 			throw new IllegalArgumentException("APKS list must not be null.");
 		}
@@ -144,7 +146,9 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		if (printStackTrace) {
 			arguments.add("--stacktrace");
 		}
-		arguments.add(":projects:core:run");
+		arguments.add(":projects:command:run");
+		arguments.add("--project-prop");
+		arguments.add("timeLimit=" + explorationTimeout);
 
 		// set apks to explore
 		for (APKInformation apk : apksToExplore) {
