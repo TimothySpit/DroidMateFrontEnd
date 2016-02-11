@@ -21,9 +21,17 @@ public class GUISettings {
 	private Preferences prefs;
 
 	// current values
+	
+	/**	The exploration timeout	*/
 	private int explorationTimeout;
+	
+	/**	The output folder path	*/
 	private Path outputFolder;
+	
+	/**	The droidMate path	*/
 	private Path droidMatePath;
+	
+	/**	the aapt tool path	*/
 	private Path aaptToolPath;
 
 	/**

@@ -5,7 +5,10 @@ package com.droidmate.processes.logfile;
  */
 public class APKStarted extends APKLogFileEvent {
 
+	/**	The apk's name	*/
 	private final String name;
+	
+	/**	The starting time	*/
 	private final long startTime;
 
 	/**

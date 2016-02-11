@@ -21,12 +21,10 @@ import com.droidmate.interfaces.APKLogFileObservable;
 
 /**
  * Handler for the APK log file
- * 
- * @author timospeith
- *
  */
 public class APKLogFileHandler extends APKLogFileObservable {
 
+	
 	private final File inputFileToParse;
 
 	private final boolean waitForFileCreation;
@@ -39,7 +37,7 @@ public class APKLogFileHandler extends APKLogFileObservable {
 	private ForeverFileInputStream inputFileStream = null;
 
 	/**
-	 * Creates an ew instance of the APKLogFileHandler
+	 * Creates an instance of the APKLogFileHandler
 	 * 
 	 * @param inputFileToParse
 	 *            the file to parse the log out
