@@ -9,6 +9,8 @@ define([ 'require', 'Spinner',
 	var spinnerContainer = $('#div-starting-indicator');
 	var spinnerText = $('#div-starting-indicator-text');
 	spinnerText.text("DroidMate is starting...");
+	//show console
+	$('#div-console-output').show();
 	
 	function showControls() {
 		$('#div-exploration-top-navigation').show();
