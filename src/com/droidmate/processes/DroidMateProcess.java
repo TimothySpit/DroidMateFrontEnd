@@ -472,11 +472,11 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	public void stopExploration() {
 		if (logReader != null) {
 			logReader.deleteObserver(this);
+			logReader.stop();
 			if (this.currentAPK != null && this.currentAPK.getExplorationStatus() == ExplorationStatus.EXPLORING) {
 				this.currentAPK.setExplorationStatus(ExplorationStatus.ABORTED);
 				this.currentAPK.getExplorationInfo().setEndTime(System.currentTimeMillis());
 			}
-			logReader.stop();
 		}
 
 		if (droidMateProcess != null) {

@@ -25,7 +25,7 @@ public class APKLogFileObservable {
 	 * @param observer
 	 *            the Observer to be added
 	 */
-	public void addObserver(APKLogFileObserver observer) {
+	public synchronized void addObserver(APKLogFileObserver observer) {
 		if (!observers.contains(observer))
 			observers.add(observer);
 	}
@@ -36,7 +36,7 @@ public class APKLogFileObservable {
 	 * @param observer
 	 *            the observer to be removed
 	 */
-	public void deleteObserver(APKLogFileObserver observer) {
+	public synchronized void deleteObserver(APKLogFileObserver observer) {
 		observers.remove(observer);
 	}
 
@@ -46,7 +46,7 @@ public class APKLogFileObservable {
 	 * @param arg
 	 *            the exploration that started
 	 */
-	public void notifyObservers(APKExplorationStarted arg) {
+	public synchronized void notifyObservers(APKExplorationStarted arg) {
 		for (APKLogFileObserver observer : observers)
 			observer.update(this, arg);
 	}
@@ -57,7 +57,7 @@ public class APKLogFileObservable {
 	 * @param arg
 	 *            the exploration that started
 	 */
-	public void notifyObservers(APKExplorationEnded arg) {
+	public synchronized void notifyObservers(APKExplorationEnded arg) {
 		for (APKLogFileObserver observer : observers)
 			observer.update(this, arg);
 	}

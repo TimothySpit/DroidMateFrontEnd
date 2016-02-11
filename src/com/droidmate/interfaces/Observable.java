@@ -19,7 +19,7 @@ public class Observable<T> {
 	 * @param observer
 	 *            the Observer to be added
 	 */
-	public void addObserver(Observer<T> observer) {
+	public synchronized void addObserver(Observer<T> observer) {
 		if (!observers.contains(observer))
 			observers.add(observer);
 	}
@@ -30,7 +30,7 @@ public class Observable<T> {
 	 * @param observer
 	 *            the observer to be removed
 	 */
-	public void deleteObserver(Observer<?> observer) {
+	public synchronized void deleteObserver(Observer<?> observer) {
 		observers.remove(observer);
 	}
 
@@ -40,7 +40,7 @@ public class Observable<T> {
 	 * @param arg
 	 *            the change which happend
 	 */
-	public void notifyObservers(T arg) {
+	public synchronized void notifyObservers(T arg) {
 		for (Observer<T> observer : observers)
 			observer.update(this, arg);
 	}

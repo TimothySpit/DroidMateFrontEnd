@@ -19,7 +19,7 @@ public class ProcessStreamObservable {
 	 * @param observer
 	 *            the Observer to be added
 	 */
-	public void addStreamObserver(ProcessStreamObserver observer) {
+	public synchronized void addStreamObserver(ProcessStreamObserver observer) {
 		if (!observers.contains(observer))
 			observers.add(observer);
 	}
@@ -30,7 +30,7 @@ public class ProcessStreamObservable {
 	 * @param observer
 	 *            the observer to be removed
 	 */
-	public void deleteStreamObserver(ProcessStreamObserver observer) {
+	public synchronized void deleteStreamObserver(ProcessStreamObserver observer) {
 		observers.remove(observer);
 	}
 
@@ -40,7 +40,7 @@ public class ProcessStreamObservable {
 	 * @param arg
 	 *            the change which happend
 	 */
-	public void notifyStreamObservers(ProcessWrapper.ProcessStreamEvent arg) {
+	public synchronized void notifyStreamObservers(ProcessWrapper.ProcessStreamEvent arg) {
 		for (ProcessStreamObserver observer : observers)
 			observer.update(this, arg);
 	}
