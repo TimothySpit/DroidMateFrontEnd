@@ -90,6 +90,7 @@ define([ 'require',
 		//send stop request
 		$.droidmate.explore.stopExploration(true,function(data) {
 			$('#button-return-to-start').prop("disabled",false);
+			$('#button-show-apk-details-dynamic').prop("disabled",false);
 			$.droidmate.overlays.info("DroidMate stopped.", 
 					$.droidmate.overlays.INFO_MESSAGE_TIMEOUT);
 		});

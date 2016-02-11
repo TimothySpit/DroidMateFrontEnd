@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.SystemUtils;
 
 import com.droidmate.interfaces.APKLogFileObservable;
 import com.droidmate.interfaces.APKLogFileObserver;
@@ -41,30 +42,30 @@ import com.droidmate.user.InliningStatus;
  */
 public class DroidMateProcess extends Observable<DroidMateProcessEvent> implements APKLogFileObserver, ProcessStreamObserver {
 
-	/**	The droidMate path	*/
+	/** The droidMate path */
 	private final File droidMatePath;
-	
-	/**	The log file path	*/
+
+	/** The log file path */
 	private final File logFilePath;
-	
-	/**	Allows the print stacktrace (everything are logged)	*/
+
+	/** Allows the print stacktrace (everything are logged) */
 	private boolean printStackTrace;
 
-	/**	Map String to APKInformation to be explored	*/
+	/** Map String to APKInformation to be explored */
 	private Map<String, APKInformation> apksToExplore = new HashMap<>();
 
-	/**	Exploration variables	*/
+	/** Exploration variables */
 	private APKInformation currentAPK = null;
-	
+
 	// ---------------------
-	/**	Global exploration info of all apks	*/
+	/** Global exploration info of all apks */
 	private ExplorationInfo globalExplorationInfo = new ExplorationInfo();
 	// ----------------------
-	
-	/**	An instance of ProcessWrapper	*/
+
+	/** An instance of ProcessWrapper */
 	private ProcessWrapper droidMateProcess = null;
-	
-	/**	An instance of APKLogFileHandler	*/
+
+	/** An instance of APKLogFileHandler */
 	private APKLogFileHandler logReader = null;
 
 	/**
@@ -126,7 +127,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 	 * @param apksToExplore
 	 *            the apks to be explored
 	 * @param explorationTimeout
-	 * 		Will be passed to DroidMate as argument 'timeLimit'
+	 *            Will be passed to DroidMate as argument 'timeLimit'
 	 * @throws IOException
 	 *             if an IO error occured
 	 */
@@ -140,9 +141,15 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 
 		// create Process arguments and start DroidMate
 		List<String> arguments = new LinkedList<>();
-		arguments.add(droidMatePath.toString() + "/gradlew.bat"); // only
-																	// support
-		// windows here
+
+		// standard linux/mac ending
+		String executableEnding = "";
+		if (SystemUtils.IS_OS_WINDOWS) {
+			// windows ending
+			executableEnding = ".bat";
+		}
+
+		arguments.add(droidMatePath.toString() + "/gradlew" + executableEnding);
 		if (printStackTrace) {
 			arguments.add("--stacktrace");
 		}
@@ -458,7 +465,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		if (arg.getType() == StreamCallbackType.STDOUT) {
 			notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.CONSOLE_OUTPUT_STDOUT, arg.getMessage()));
 		} else if (arg.getType() == StreamCallbackType.ERROR) {
-			notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.CONSOLE_OUTPUT_ERROR, arg.getMessage()));
+			notifyObservers(new DroidMateProcessEvent(DroidMateProcessEvent.EventType.CONSOLE_OUTPUT_STDERR, arg.getMessage()));
 		}
 	}
 
@@ -466,7 +473,7 @@ public class DroidMateProcess extends Observable<DroidMateProcessEvent> implemen
 		if (logReader != null) {
 			logReader.deleteObserver(this);
 			if (this.currentAPK != null && this.currentAPK.getExplorationStatus() == ExplorationStatus.EXPLORING) {
-				this.currentAPK.setExplorationStatus(ExplorationStatus.ERROR);
+				this.currentAPK.setExplorationStatus(ExplorationStatus.ABORTED);
 				this.currentAPK.getExplorationInfo().setEndTime(System.currentTimeMillis());
 			}
 			logReader.stop();

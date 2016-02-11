@@ -7,7 +7,7 @@ $(function() {
 	console.addClassNamesForContent('panel-body');
 
 	// fill table
-	$.each($.APKData, function(index, value) {
+	$.each($.APKData.apks, function(index, value) {
 		// collect data
 		var explorationInfo = value.explorationInfo
 
@@ -28,6 +28,11 @@ $(function() {
 		row.setWidgetsExploredChartData(explorationInfo.historyWidgets);
 
 		table.redraw();
+	});
+
+	// handle show details for all apks button
+	$('#button-show-apk-details-dynamic').click(function() {
+		window.location = "resources/pages/explorationCharts.html";
 	});
 
 	// set console output

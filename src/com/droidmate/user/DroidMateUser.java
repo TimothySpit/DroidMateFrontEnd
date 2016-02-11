@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.droidmate.interfaces.Observable;
 import com.droidmate.interfaces.Observer;
@@ -437,7 +438,7 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 				consoleOutput.add(event.getMessage());
 			}
 			break;
-		case CONSOLE_OUTPUT_ERROR:
+		case CONSOLE_OUTPUT_STDERR:
 			synchronized (consoleOutput) {
 				consoleOutput.add(event.getMessage());
 			}
@@ -521,14 +522,21 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	 * 
 	 * @return the overall apk data as a JSON object
 	 */
-	private JSONArray collectAPKData() {
+	private JSONObject collectAPKData() {
+		JSONObject result = new JSONObject();
+		//per apk data
 		JSONArray apkInfoString = new JSONArray();
 		for (APKInformation apk : apksInformation.values()) {
 			if (apk.isAPKSelected()) {
 				apkInfoString.put(apk.toJSONObject());
 			}
 		}
-		return apkInfoString;
+		result.put("apks", apkInfoString);
+		
+		//global data
+		result.put("globalExploration", getGloblExplorationInfo().toJSONObject());
+		
+		return result;
 	}
 
 	/**

@@ -147,6 +147,9 @@ define(
 						if (labelContainer.hasClass('glyphicon-play')) {
 							return modul.apkStatus.EXPLORING;
 						}
+						if (labelContainer.hasClass('glyphicon-stop')) {
+							return modul.apkStatus.ABORTED;
+						}
 					},
 					setElementsSeenChartData : function(data) {
 						if (!activeChartDivs[rowNode.data()[1]])
@@ -207,6 +210,8 @@ define(
 							labelContainer.addClass('glyphicon-remove');
 						} else if (status === modul.apkStatus.EXPLORING) {
 							labelContainer.addClass('glyphicon-play');
+						} else if (status === modul.apkStatus.ABORTED) {
+							labelContainer.addClass('glyphicon-stop');
 						}
 					},
 				}

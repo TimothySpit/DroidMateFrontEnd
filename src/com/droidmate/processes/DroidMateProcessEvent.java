@@ -10,7 +10,7 @@ public class DroidMateProcessEvent {
 	 * Enum for possible EventTypes. The names are self-explaining
 	 */
 	public enum EventType {
-		EXPLORATION_STARTED, EXPLORATION_FINISHED, DROIDMATE_ERROR, CONSOLE_OUTPUT_STDOUT, CONSOLE_OUTPUT_ERROR
+		EXPLORATION_STARTED, EXPLORATION_FINISHED, DROIDMATE_ERROR, CONSOLE_OUTPUT_STDOUT, CONSOLE_OUTPUT_STDERR
 	}
 
 	/**	The event type for this event	*/

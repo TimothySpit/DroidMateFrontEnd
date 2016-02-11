@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.SystemUtils;
 
 import com.droidmate.interfaces.Observable;
 import com.droidmate.interfaces.Observer;
@@ -25,13 +26,13 @@ import com.droidmate.user.InliningStatus;
  */
 public class InlinerProcess {
 
-	/**	The path of output	*/
+	/** The path of output */
 	private final File outputPath;
-	
-	/**	The path of inliner	*/
+
+	/** The path of inliner */
 	private final File inlinerPath;
-	
-	/**	Allows the print stacktrace (everything are logged)	*/
+
+	/** Allows the print stacktrace (everything are logged) */
 	private boolean printStackTrace = false;
 
 	/**
@@ -105,8 +106,15 @@ public class InlinerProcess {
 
 		// create Process arguments and start DroidMate inliner tool
 		List<String> arguments = new LinkedList<>();
-		arguments.add(inlinerPath.toString() + "/gradlew.bat"); // only support
-		// windows here
+
+		// standard linux/mac ending
+		String executableEnding = "";
+		if (SystemUtils.IS_OS_WINDOWS) {
+			// windows ending
+			executableEnding = ".bat";
+		}
+
+		arguments.add(inlinerPath.toString() + "/gradlew" + executableEnding);
 		if (printStackTrace) {
 			arguments.add("--stacktrace");
 		}

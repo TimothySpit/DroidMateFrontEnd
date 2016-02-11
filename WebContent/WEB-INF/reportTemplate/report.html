@@ -4,14 +4,15 @@
 
 <meta charset="UTF-8">
 
-<title>DroidMate GUI- Report</title>
+<title>DroidMate GUI - Report</title>
 
 <!-- styles -->
 <link rel="stylesheet" href="resources/css/style.css">
-<link rel="stylesheet" href="resources/js/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="resources/js/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet"
 	href="resources/js/datatables/media/css/jquery.dataTables.min.css">
-	
+
 <!-- libs -->
 <script src="resources/js/jquery/jquery-1.12.0.min.js"></script>
 <script src="resources/js/bootstrap/js/bootstrap.min.js"></script>
@@ -19,14 +20,15 @@
 <script src="resources/js/flot/jquery.flot.min.js"></script>
 <script src="resources/js/flot/jquery.flot.canvas.min.js"></script>
 <script src="resources/js/flot/jquery.flot.symbol.min.js"></script>
-<script src="resources/js/flot/flot-axislabels/jquery.flot.axislabels.js"></script>
+<script
+	src="resources/js/flot/flot-axislabels/jquery.flot.axislabels.js"></script>
 <script src="resources/js/flot/jquery.flot.navigate.js"></script>
 
 <!-- data -->
 <script src="resources/js/apkExplorationTable.js"></script>
 <script src="resources/js/console.js"></script>
 <script src="resources/js/data.js"></script>
-<script src="resources/js/events.js"></script>
+<script src="resources/js/eventsReport.js"></script>
 
 </head>
 
@@ -38,6 +40,16 @@
 			<div class="col-md-12 main-heading">
 				<h1 class="text-center">DroidMate</h1>
 			</div>
+		</div>
+
+		<!-- top navi controls -->
+		<div id="div-exploration-top-navigation" class="row">
+			<div class="col-sm-4"></div>
+			<div class="col-sm-4 text-center">
+				<button class="btn btn-default" id="button-show-apk-details-dynamic">Show
+					details for APKs</button>
+			</div>
+			<div class="col-sm-4"></div>
 		</div>
 
 		<!-- APK table containing exploration data -->

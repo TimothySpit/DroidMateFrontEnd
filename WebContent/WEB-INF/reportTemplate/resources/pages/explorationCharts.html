@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<title>DroidMate GUI - Report</title>
+
+<!-- styles -->
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet"
+	href="../js/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="../js/datatables/media/css/jquery.dataTables.min.css">
+
+<!-- libs -->
+<script src="../js/jquery/jquery-1.12.0.min.js"></script>
+<script src="../js/bootstrap/js/bootstrap.min.js"></script>
+<script src="../js/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="../js/flot/jquery.flot.min.js"></script>
+<script src="../js/flot/jquery.flot.canvas.min.js"></script>
+<script src="../js/flot/jquery.flot.symbol.min.js"></script>
+<script src="../js/flot/jquery.flot.pie.min.js"></script>
+<script
+	src="../js/flot/flot-axislabels/jquery.flot.axislabels.js"></script>
+<script src="../js/flot/jquery.flot.navigate.js"></script>
+
+<!-- data -->
+<script src="../js/data.js"></script>
+<script src="../js/eventsExplorationCharts.js"></script>
+
+</head>
+
+<body>
+	<div class="container">
+
+		<!-- DroidMate heading -->
+		<div class="row">
+			<div class="col-md-12 main-heading">
+				<h1 class="text-center">APKs Information</h1>
+			</div>
+		</div>
+
+		<!-- elements seen and screens explored charts -->
+		<div class="row" id="div-charts-elements-seen-screens-explored">
+			<div class="col-sm-6">
+				<div id="flot-gui-elements-seen"
+					style="width: 450px; height: 300px; margin: 0 auto"></div>
+			</div>
+			<div class="col-sm-6">
+				<div id="flot-gui-screens-explored"
+					style="width: 450px; height: 300px; margin: 0 auto"></div>
+			</div>
+		</div>
+
+		<!-- apk status and gui elements explored charts -->
+		<div class="row" id="div-charts-apk-status-elements-explored">
+			<div class="col-sm-6">
+				<div id="flot-apks-status"
+					style="width: 450px; height: 300px; margin: 0 auto"></div>
+			</div>
+			<div class="col-sm-6">
+				<div id="flot-gui-elements-explored"
+					style="width: 450px; height: 300px; margin: 0 auto"></div>
+			</div>
+		</div>
+
+		<!-- chart multiselect legend -->
+		<div class="row" id="div-chart-multiselect">
+			<div class="col-sm-12">
+				<fieldset id="legend">
+					<legend>APK chart selection</legend>
+					<div id="apks-charts-legend"></div>
+				</fieldset>
+			</div>
+		</div>
+
+		<!-- bottom navi controls -->
+		<div class="row" id="div-explorationcharts-bottom-navi">
+			<div class="col-sm-12 text-center">
+				<button class="btn btn-default pull-left"
+					 id="button-back">Back</button>
+			</div>
+		</div>
+
+	</div>
+</body>
+
+<jsp:include page="../../partials/footer.jsp" />
