@@ -1,6 +1,6 @@
 define(
-		[ 'jquery', 'jstree', 'jquery.droidmate.ajax', 'DataTables' ],
-		function(require) {
+		[ 'require', 'jquery', 'DataTables' ],
+		function(require, jquery, DataTables) {
 
 			var rows_selected = [];
 			var tableID = null;
@@ -62,17 +62,17 @@ define(
 
 					// If row ID is in the list of selected
 					// row IDs
-					if ($.inArray(rowId, rows_selected) !== -1) {
-						$(row).find('input[type="checkbox"]').prop('checked',
+					if (jquery.inArray(rowId, rows_selected) !== -1) {
+						jquery(row).find('input[type="checkbox"]').prop('checked',
 								true);
-						$(row).addClass('selected');
+						jquery(row).addClass('selected');
 					}
 				}
 			};
 
 			var row = function(rowNode, modul) {
 				var inlineSpan = rowNode.node();
-				var labelContainer = $(inlineSpan).find(
+				var labelContainer = jquery(inlineSpan).find(
 						'.dt-body-center .inline-label');
 				return {
 					getName : function() {
@@ -143,22 +143,22 @@ define(
 			}
 
 			function updateDataTableSelectAllCtrl(table) {
-				var $table = table.table().node();
-				var $chkbox_all = $('tbody input[type="checkbox"]', $table);
-				var $chkbox_checked = $('tbody input[type="checkbox"]:checked',
-						$table);
-				var chkbox_select_all = $('thead input[name="select_all"]',
-						$table).get(0);
+				var jquerytable = table.table().node();
+				var jquerychkbox_all = jquery('tbody input[type="checkbox"]', jquerytable);
+				var jquerychkbox_checked = jquery('tbody input[type="checkbox"]:checked',
+						jquerytable);
+				var chkbox_select_all = jquery('thead input[name="select_all"]',
+						jquerytable).get(0);
 
 				// If none of the checkboxes are checked
-				if ($chkbox_checked.length === 0) {
+				if (jquerychkbox_checked.length === 0) {
 					chkbox_select_all.checked = false;
 					if ('indeterminate' in chkbox_select_all) {
 						chkbox_select_all.indeterminate = false;
 					}
 
 					// If all of the checkboxes are checked
-				} else if ($chkbox_checked.length === $chkbox_all.length) {
+				} else if (jquerychkbox_checked.length === jquerychkbox_all.length) {
 					chkbox_select_all.checked = true;
 					if ('indeterminate' in chkbox_select_all) {
 						chkbox_select_all.indeterminate = false;
@@ -174,17 +174,17 @@ define(
 			}
 
 			function selectAll(e) {
-				var $row = $(this).closest('tr');
+				var jqueryrow = jquery(this).closest('tr');
 
 				// Get row data
-				var data = table.row($row).data();
+				var data = table.row(jqueryrow).data();
 
 				// Get row ID
 				var rowId = data[1];
 
 				// Determine whether row ID is in the list of selected row
 				// IDs
-				var index = $.inArray(rowId, rows_selected);
+				var index = jquery.inArray(rowId, rows_selected);
 
 				// If checkbox is checked and row ID is not in list of
 				// selected row IDs
@@ -198,9 +198,9 @@ define(
 				}
 
 				if (this.checked) {
-					$row.addClass('selected');
+					jqueryrow.addClass('selected');
 				} else {
-					$row.removeClass('selected');
+					jqueryrow.removeClass('selected');
 				}
 
 				// Update state of "Select all" control
@@ -224,10 +224,10 @@ define(
 				// add event listener to table
 				tableID.find('tbody').on('click',
 						'input[type="checkbox"]', function(e) {
-							var $row = $(this).closest('tr');
+							var jqueryrow = jquery(this).closest('tr');
 
 							// Get row data
-							var data = table.row($row).data();
+							var data = table.row(jqueryrow).data();
 
 							// Get row ID
 							var rowId = data[1];
@@ -235,7 +235,7 @@ define(
 							// Determine whether row ID is in the list of
 							// selected row
 							// IDs
-							var index = $.inArray(rowId, rows_selected);
+							var index = jquery.inArray(rowId, rows_selected);
 
 							// If checkbox is checked and row ID is not in list
 							// of
@@ -251,9 +251,9 @@ define(
 							}
 
 							if (this.checked) {
-								$row.addClass('selected');
+								jqueryrow.addClass('selected');
 							} else {
-								$row.removeClass('selected');
+								jqueryrow.removeClass('selected');
 							}
 
 							// Update state of "Select all" control
@@ -272,7 +272,7 @@ define(
 						'click',
 						'tbody td, thead tr:first-child',
 						function(e) {
-							$(this).parent().find('input[type="checkbox"]')
+							jquery(this).parent().find('input[type="checkbox"]')
 									.trigger('click');
 						});
 
@@ -319,7 +319,7 @@ define(
 			function addRowSelectionEvent(table, modul, callback) {
 				table.on("row:select", function() {
 					var rows = [];
-					$.each(rows_selected, function(index, value) {
+					jquery.each(rows_selected, function(index, value) {
 						rows.push(modul.getRowByName(value));
 					});
 					callback(rows);
@@ -376,7 +376,7 @@ define(
 					var rowAdded = table.row.add(
 							[ "", name, size, activityName, packageInfo, version, "" ])
 							;
-					var labelContainer = $(rowAdded.node()).find(
+					var labelContainer = jquery(rowAdded.node()).find(
 							'.dt-body-center .inline-label').parent();
 
 					switch (inlinedStatus) {
@@ -456,7 +456,7 @@ define(
 					var rows = [];
 					table.rows().every(function(rowIdx, tableLoop, rowLoop) {
 						var node = this.node();
-						var cbs = $('input[type="checkbox"]:checked',
+						var cbs = jquery('input[type="checkbox"]:checked',
 								node);
 						if (cbs.length === 0)
 							return;
@@ -495,10 +495,10 @@ define(
 				// create new table
 				tableID = tableIDentifier;
 				var table = null;
-				if ($.fn.DataTable.isDataTable(tableID)) {
-					table = $(tableID).DataTable();
+				if (DataTables.isDataTable(tableID)) {
+					table = jquery(tableID).DataTable();
 				} else {
-					table = $(tableID).DataTable(options);
+					table = jquery(tableID).DataTable(options);
 				}
 
 				return modul(table);

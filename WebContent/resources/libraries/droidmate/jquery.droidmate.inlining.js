@@ -1,6 +1,6 @@
-define([ 'jquery'], function(require) {
+define([ 'require', 'jquery'], function(require, jquery) {
 	//ajax object
-	var droidmate = $.droidmate || {};
+	var droidmate = jquery.droidmate || {};
 	var inlining = {};
 	
 	//constants
@@ -17,7 +17,7 @@ define([ 'jquery'], function(require) {
 	//--------------------------------------
 	
 	function startInlining(async, success) {
-		$.ajax({
+		jquery.ajax({
 	        url:  "/DroidMate/InlinerHandler",
 	        async: async,
 	        type: 'POST',
@@ -30,6 +30,12 @@ define([ 'jquery'], function(require) {
 	//--------------------------------------
 	
 	droidmate.inlining = inlining;
-	$.droidmate = droidmate;
+	jquery.droidmate = droidmate;
+	
+	return {
+		WATCH_INLINER_INTERVAL: inlining.WATCH_INLINER_INTERVAL,
+		inliningStatus : inlining.inliningStatus,
+		startInlining : inlining.startInlining,
+	};
 	
 });

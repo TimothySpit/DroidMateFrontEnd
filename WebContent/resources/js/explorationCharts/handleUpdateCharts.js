@@ -1,13 +1,11 @@
-define([ 'require',
+define([ 'require', 'jquery',
          'jquery.flot', 'jquery.flot.axislabels',
 			'jquery.flot.canvas', 'jquery.flot.navigate',
 			'jquery.flot.symbol', 'jquery.flot.pie', 
-			'jquery.droidmate.ajax', 'jquery.droidmate.dialogs',
-		'jquery.droidmate.overlays','../explorationCharts/handleUpdate' ], function(require,Spinner) {
+			'jquery.droidmate.ajax','../explorationCharts/handleUpdate' ], 
+		function(require, jquery, flot, flotAxisLabels, flotCanvas, flotNav, flotSymbol, flotPie,
+				DMAjax, updateHelper) {
 
-	//get ui updater
-	var updateHelper = require('../explorationCharts/handleUpdate');
-	
 	function createPieChart(divname) {
 		var dataSet = [ {
 			label : "Successful",
@@ -47,7 +45,7 @@ define([ 'require',
 				show : false
 			}
 		};
-		return $.plot($(divname), dataSet, options);
+		return jquery.plot(jquery(divname), dataSet, options);
 	}
 
 	function createGraphChart(divname, xAxisLabel, yAxisLabel) {
@@ -77,7 +75,7 @@ define([ 'require',
 				interactive : true
 			}
 		};
-		return $.plot(divname, [ 0, 0 ], options);
+		return jquery.plot(divname, [ 0, 0 ], options);
 	}
 	
 	function initCharts() {
@@ -103,7 +101,7 @@ define([ 'require',
 		var successfulAPKs = 0;
 		var failedAPKs = 0;
 		var remainingAPKs = 0;
-		$.droidmate.ajax.getAPKSData(false,function(data) {
+		DMAjax.getAPKSData(false,function(data) {
 			if(!data || !data.getAPKSData) {
 				//server response error
 				return;
@@ -122,7 +120,7 @@ define([ 'require',
 			var apks = data.getAPKSData.payload.data;
 			
 			//get selected APks
-			selectedAPKS = $.map(apks,function(value,index) {
+			selectedAPKS = jquery.map(apks,function(value,index) {
 				if(value.isSelected) {
 					return value;
 				}
@@ -160,13 +158,13 @@ define([ 'require',
 		var screensSeenHistory = [];
 		var getTotal = false;
 		choiceContainer.find("input:checked").each(function() {
-			if ($(this).attr("id") == "cb-total")
+			if (jquery(this).attr("id") == "cb-total")
 				getTotal = true;
 		});
 
 		if (getTotal) // check if the "total" checkbox is checked
 		{
-			$.droidmate.ajax.getGlobalExploration(false, function(result) {
+			DMAjax.getGlobalExploration(false, function(result) {
 				var data = result.getGlobalExploration.payload.data;
 				elementsSeenHistory = data.historyElements;
 				widgetsExploredHistory = data.historyWidgets;
@@ -195,7 +193,7 @@ define([ 'require',
 		var elementsSeenIndividual = [];
 		var widgetsExploredIndividual = [];
 		var screensSeenIndividual = [];
-		$.droidmate.ajax.getAPKSData(false,function(data) {
+		DMAjax.getAPKSData(false,function(data) {
 			if(!data || !data.getAPKSData) {
 				//server response error
 				return;
@@ -214,7 +212,7 @@ define([ 'require',
 			var apks = data.getAPKSData.payload.data;
 			
 			//get selected APks
-			selectedAPKS = $.map(apks,function(value,index) {
+			selectedAPKS = jquery.map(apks,function(value,index) {
 				if(value.isSelected) {
 					return value;
 				}
@@ -237,7 +235,7 @@ define([ 'require',
 				
 				var cb = checkBoxes.filter('[id="cb-' + apk.name
 						+ '"]');
-				if ($(cb).prop('checked')) {
+				if (jquery(cb).prop('checked')) {
 					elementsSeenIndividual.push(explorationInfo.historyElements);
 					widgetsExploredIndividual.push(explorationInfo.historyWidgets);
 					screensSeenIndividual.push(explorationInfo.historyScreens);
@@ -307,14 +305,14 @@ define([ 'require',
 			
 			if(repeat) {
 				setTimeout(function() {updateCharts(charts, choiceContainer, true);
-				}, $.droidmate.ajax.UPDATE_EXPLORATION_INFO_INTERVAL);
+				}, DMAjax.UPDATE_EXPLORATION_INFO_INTERVAL);
 			}
 		});
 	}
 
 	
 	//get all selected apks
-	$.droidmate.ajax.getAPKSData(true,function(data) {
+	DMAjax.getAPKSData(true,function(data) {
 		if(!data || !data.getAPKSData) {
 			//server response error
 			return;
@@ -333,7 +331,7 @@ define([ 'require',
 		var apks = data.getAPKSData.payload.data;
 		
 		//get selected APks
-		selectedAPKS = $.map(apks,function(value,index) {
+		selectedAPKS = jquery.map(apks,function(value,index) {
 			if(value.isSelected) {
 				return value;
 			}
@@ -348,7 +346,7 @@ define([ 'require',
 		
 		// insert checkboxes
 		var checkboxes;
-		var choiceContainer = $("#apks-charts-legend");
+		var choiceContainer = jquery("#apks-charts-legend");
 		choiceContainer
 				.append('<label><input type="checkbox" name="Show all" checked="checked" id="cb-total">Show all</label>');
 		
@@ -369,7 +367,7 @@ define([ 'require',
 		// update once for empty data
 		updateCharts(charts, choiceContainer, false);
 		// set checkbox colors
-		$.each(charts, function(index, value) {
+		jquery.each(charts, function(index, value) {
 			var plot = value;
 			var series = plot.getData();
 			choiceContainer.find('[id="cb-total"]').parent().css(

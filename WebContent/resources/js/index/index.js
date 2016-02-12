@@ -1,6 +1,5 @@
 requirejs([ "./../common" ], function(util) {
 	requirejs([ 'bootstrap' ]);
-	requirejs([ 'bootbox' ]);
 	
 	requirejs([ '../js/index/handleStandardButtons' ]);
 	requirejs([ '../js/index/handleInlineButton' ]);

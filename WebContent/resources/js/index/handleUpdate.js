@@ -1,52 +1,50 @@
-define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
+define([ 'require', 'jquery', '../index/apkFileInfoTable',
 		'jquery.droidmate.ajax',
-		'jquery.droidmate.inlining', 'DataTables', 'jquery.droidmate.dialogs',
-		'jquery.droidmate.overlays' ], function(require) {
+		'jquery.droidmate.overlays' ], function(require,jquery, tableCreator, DMAjax, DMOverlays) {
 
-	var tableCreator = require('../index/apkFileInfoTable');
-	var table = tableCreator.initModul($('#table-apk-static-information'));
+	var table = tableCreator.initModul(jquery('#table-apk-static-information'));
 
 	// set up event handler
 	function disableUI() {
-		$("#button-start-exploration").prop("disabled", true);
-		$('#button-inline-files').prop("disabled", true);
+		jquery("#button-start-exploration").prop("disabled", true);
+		jquery('#button-inline-files').prop("disabled", true);
 	}
 
 	function enableUI() {
-		$("#button-start-exploration").prop("disabled", false);
-		$('#button-inline-files').prop("disabled", false);
+		jquery("#button-start-exploration").prop("disabled", false);
+		jquery('#button-inline-files').prop("disabled", false);
 	}
 
 	function showControls() {
-		$('#div-apk-static-information-container').show();
-		$('#div-apk-folder-selection-result').show();
-		$('#button-show-static-information').show();
-		$('#buttons-start-inline').show();
+		jquery('#div-apk-static-information-container').show();
+		jquery('#div-apk-folder-selection-result').show();
+		jquery('#button-show-static-information').show();
+		jquery('#buttons-start-inline').show();
 	}
 
 	function hideControls() {
-		$('#div-apk-static-information-container').hide();
-		$('#div-apk-folder-selection-result').hide();
-		$('#button-show-static-information').hide();
-		$('#buttons-start-inline').hide();
+		jquery('#div-apk-static-information-container').hide();
+		jquery('#div-apk-folder-selection-result').hide();
+		jquery('#button-show-static-information').hide();
+		jquery('#buttons-start-inline').hide();
 	}
 
 	function enableAPKFolderSelectionButton() {
-		$('#button-apk-folder-selection').prop("disabled", false);
+		jquery('#button-apk-folder-selection').prop("disabled", false);
 	}
 	
 	function disableAPKFolderSelectionButton() {
-		$('#button-apk-folder-selection').prop("disabled", true);
+		jquery('#button-apk-folder-selection').prop("disabled", true);
 	}
 	
 	function updateUIControls(callback) {
 		// get current user status
-		$.droidmate.ajax.getUserStatus(true, function(data) {
+		DMAjax.getUserStatus(true, function(data) {
 			// check for error in data receiving
 			if (!data || !data.getUserStatus || !data.getUserStatus.result) {
-				$.droidmate.overlays.danger(
+				DMOverlays.danger(
 						"Could not parse server returned value.",
-						$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+						DMOverlays.ERROR_MESSAGE_TIMEOUT);
 				if(callback) {
 					callback(data);
 				}
@@ -65,7 +63,7 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 			// if more than zero entries are in the table, show buttons and
 			// table and indicator 
 			var rowsCount = table.getRows().length;
-			var apksLoadingResultDiv = $('#div-apk-folder-selection-result');
+			var apksLoadingResultDiv = jquery('#div-apk-folder-selection-result');
 			if (rowsCount) {
 				showControls();
 				apksLoadingResultDiv.html(
@@ -87,7 +85,7 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 
 			// if apks are selected, which are not inlined, disable exploration
 			// button
-			var notInlinedRows = $.map(selectedRows, function(val, i) {
+			var notInlinedRows = jquery.map(selectedRows, function(val, i) {
 				if (val.getInlinedStatus() == table.inlinedStatus.INLINED)
 					return null;
 				else
@@ -95,7 +93,7 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 			})
 			
 			if (notInlinedRows.length) {
-				$("#button-start-exploration").prop("disabled", true);
+				jquery("#button-start-exploration").prop("disabled", true);
 			}
 
 			// If status is inlining, disable exploration button
@@ -106,9 +104,9 @@ define([ 'require', 'jquery', 'jstree', '../index/apkFileInfoTable',
 				enableAPKFolderSelectionButton();
 				// if all apks are inlined, disable inline button
 				if (!notInlinedRows.length) {
-					$("#button-inline-files").prop("disabled", true);
+					jquery("#button-inline-files").prop("disabled", true);
 				} else {
-					$("#button-inline-files").prop("disabled", false);
+					jquery("#button-inline-files").prop("disabled", false);
 				}
 			}
 			

@@ -1,6 +1,6 @@
-define([ 'jquery'], function(require) {
+define([ 'require', 'jquery'], function(require, jquery) {
 	//ajax object
-	var droidmate = $.droidmate || {};
+	var droidmate = jquery.droidmate || {};
 	var explore = {};
 	
 	//constants
@@ -9,7 +9,7 @@ define([ 'jquery'], function(require) {
 	
 	
 	function startExploration(async, success, error, complete) {
-		return $.ajax({
+		return jquery.ajax({
 			async : async,
 			url : "/DroidMate/ExploreHandler",
 			method : "POST",
@@ -25,7 +25,7 @@ define([ 'jquery'], function(require) {
 	// -----------------------------------
 	
 	function stopExploration(async, success) {
-		$.ajax({
+		jquery.ajax({
 			url : "/DroidMate/StopExplorationHandler",
 			async : async,
 			dataType : "json",
@@ -40,6 +40,12 @@ define([ 'jquery'], function(require) {
 	// ----------------------------------
 	
 	droidmate.explore = explore;
-	$.droidmate = droidmate;
+	jquery.droidmate = droidmate;
+	
+	return {
+		UPDATE_EXPLORE_INTERVAL: explore.UPDATE_EXPLORE_INTERVAL,
+		startExploration : explore.startExploration,
+		stopExploration : explore.stopExploration,
+	};
 	
 });

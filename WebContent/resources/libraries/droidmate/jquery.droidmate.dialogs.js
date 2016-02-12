@@ -1,7 +1,8 @@
-define([ 'require', 'jquery', 'bootbox', 'jquery.droidmate.ajax',
-		'jquery.droidmate.explore', 'jquery.flot', 'jquery.flot.axislabels',
+define([ 'require', 'jquery', 'bootbox', 'jstree',
+		'jquery.flot', 'jquery.flot.axislabels',
 		'jquery.flot.tooltip', 'jquery.flot.excanvas', 'jquery.flot.navigate',
-		'jquery.flot.symbol' ], function(require, jquery, bootbox) {
+		'jquery.flot.symbol' ], 
+		function(require, jquery, bootbox, jstree, flot, flotAxisLabels, flotTooltip,flotExcanvas, flotNax, flotSymbol) {
 
 	var droidmate = $.droidmate || {};
 	var dialogs = {};
@@ -173,7 +174,7 @@ define([ 'require', 'jquery', 'bootbox', 'jquery.droidmate.ajax',
 		container.width(dialogWidth);
 		container.height(dialogHeight);
 
-		$.plot(container, dataset, options);
+		flot(container, dataset, options);
 
 		$(dialog).find(".btn-success").on('click', function() {
 			cb();
@@ -203,4 +204,11 @@ define([ 'require', 'jquery', 'bootbox', 'jquery.droidmate.ajax',
 
 	droidmate.dialogs = dialogs;
 	$.droidmate = droidmate;
+	
+	return {
+		createFileDialog : dialogs.createFileDialog,
+		createFileSizeHistogramDialog : dialogs.createFileSizeHistogramDialog,
+		createOKTextDialog : dialogs.createOKTextDialog,
+	};
+	
 })

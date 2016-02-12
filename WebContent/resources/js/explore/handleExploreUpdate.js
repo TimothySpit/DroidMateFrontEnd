@@ -1,15 +1,12 @@
-define([ 'require',
+define([ 'require', 'jquery',
 		'jquery.droidmate.overlays','jquery.droidmate.explore','jquery.droidmate.ajax',
-		'../explore/apkExplorationTable', 'jquery.droidmate.dialogs', '../explore/Console'], function(require) {
+		'../explore/apkExplorationTable', 'jquery.droidmate.dialogs', '../explore/Console','../explore/handleUpdate'], 
+		function(require, jquery, DMOverlays, DMExplore, DMAjax, tableCreator, DMDialogs,consoleCreator,updateHelper ) {
 
 	//get current apks exploration info table
-	var tableCreator = require('../explore/apkExplorationTable');
-	var table = tableCreator.initModul($('#table-apk-exploration-info'));
-	//get ui updater
-	var updateHelper = require('../explore/handleUpdate' );
+	var table = tableCreator.initModul(jquery('#table-apk-exploration-info'));
 	//create console
-	var consoleCreator = require('../explore/Console');
-	var console = consoleCreator.initModul($('#div-console-output'));
+	var console = consoleCreator.initModul(jquery('#div-console-output'));
 	console.addClassNamesForHeading('panel-heading');
 	console.addClassNamesForContent('panel-body');
 	
@@ -51,11 +48,11 @@ define([ 'require',
 			
 			//if finished or error, show message
 			if(userState.getUserStatus.payload.data === "FINISHED") {
-				$.droidmate.dialogs.createOKTextDialog("DroidMate finished exploration", "DroidMate finished exploration.");
+				DMDialogs.createOKTextDialog("DroidMate finished exploration", "DroidMate finished exploration.");
 				continueUpdateOnly();
 				return;
 			} else if(userState.getUserStatus.payload.data === "ERROR") {
-				$.droidmate.dialogs.createOKTextDialog("DroidMate crashed unexpectedly", "DroidMate crashed while exploring.");
+				DMDialogs.createOKTextDialog("DroidMate crashed unexpectedly", "DroidMate crashed while exploring.");
 				continueUpdateOnly();
 				return;
 			}
@@ -64,7 +61,7 @@ define([ 'require',
 			
 			updateConsoleData();
 			
-			setTimeout(updateTableLoop, $.droidmate.explore.UPDATE_EXPLORE_INTERVAL);
+			setTimeout(updateTableLoop, DMExplore.UPDATE_EXPLORE_INTERVAL);
 		});
 	}
 	
@@ -74,7 +71,7 @@ define([ 'require',
 	
 	function updateConsoleData() {
 		//get console data
-		$.droidmate.ajax.getConsoleOutput(true, 0, function(data) {
+		DMAjax.getConsoleOutput(true, 0, function(data) {
 			if(!data || !data.getConsoleOutput || !data.getConsoleOutput.result) {
 				//could not get console data
 				return;
@@ -94,7 +91,7 @@ define([ 'require',
 	
 	function updateTableData(apkData) {
 		function updateTable(apkDataResult) {
-			$.each(apkDataResult.getAPKSData.payload.data, function(index,value) {
+			jquery.each(apkDataResult.getAPKSData.payload.data, function(index,value) {
 				//get exploration info
 				var explorationInfo = value.explorationInfo;
 				if(!explorationInfo) {
@@ -140,19 +137,19 @@ define([ 'require',
 		
 		if(!apkData) {
 			//init apkdata
-			$.droidmate.ajax.getAPKSData(true,function(apkDataResult) {
+			DMAjax.getAPKSData(true,function(apkDataResult) {
 				//check result
 				if(!apkDataResult || !apkDataResult.getAPKSData || !apkDataResult.getAPKSData.result) {
 					//path could not been set, show error message
-					$.droidmate.overlays.danger("Could not parse server returned value. Is server running?", 
-							$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+					DMOverlays.danger("Could not parse server returned value. Is server running?", 
+							DMOverlays.ERROR_MESSAGE_TIMEOUT);
 					return;
 				}
 				
 				if(!apkDataResult.getAPKSData.payload || !apkDataResult.getAPKSData.payload.data) {
 					//path could not been set, show error message
-					$.droidmate.overlays.danger("APK data could not be parsed.", 
-							$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+					DMOverlays.danger("APK data could not be parsed.", 
+							DMOverlays.ERROR_MESSAGE_TIMEOUT);
 					return;
 				}
 					
@@ -200,29 +197,29 @@ define([ 'require',
 				var contextPath = document.referrer.split('/');
 				if(!contextPath[4] || contextPath[4] !== "ExplorationCharts") {
 					if(userState.getUserStatus.payload.data === "FINISHED") {
-						$.droidmate.dialogs.createOKTextDialog("DroidMate finished exploration", "DroidMate finished exploration.");
+						DMDialogs.createOKTextDialog("DroidMate finished exploration", "DroidMate finished exploration.");
 					} else if(userState.getUserStatus.payload.data === "ERROR") {
-						$.droidmate.dialogs.createOKTextDialog("DroidMate crashed unexpectedly", "DroidMate crashed while exploring.");
+						DMDialogs.createOKTextDialog("DroidMate crashed unexpectedly", "DroidMate crashed while exploring.");
 					}
 				}
 				//start updating table and charts
 				if(userState.getUserStatus.payload.data === "EXPLORING") {
 					//enable all needed buttons
-					$('#button-stop-all').prop("disabled",false);
-					$('#button-return-to-start').prop("disabled",false);
+					jquery('#button-stop-all').prop("disabled",false);
+					jquery('#button-return-to-start').prop("disabled",false);
 					
 					updateTableLoop();
 					return; //break out of this loop
 				}
 				
 				if(continueLoop) {
-					setTimeout(updateLoop, $.droidmate.explore.UPDATE_EXPLORE_INTERVAL);
+					setTimeout(updateLoop, DMExplore.UPDATE_EXPLORE_INTERVAL);
 				}
 			});
 		}
 		
 		//start update loop
-		setTimeout(updateLoop, $.droidmate.explore.UPDATE_EXPLORE_INTERVAL);
+		setTimeout(updateLoop, DMExplore.UPDATE_EXPLORE_INTERVAL);
 	}
 
 	return {

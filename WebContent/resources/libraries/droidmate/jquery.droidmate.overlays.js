@@ -1,6 +1,6 @@
-define([ 'jquery'], function(require) {
+define([ 'require', 'jquery'], function(require, jquery) {
 	//ajax object
-	var droidmate = $.droidmate || {};
+	var droidmate = jquery.droidmate || {};
 	var overlays = {};
 	
 	var DANGER_MESSAGE_TIMEOUT = 8000; //milliseconds
@@ -44,20 +44,20 @@ define([ 'jquery'], function(require) {
 	
 	//info window
 	function alert(message, alerttype, timeout) {
-		var res = $('<div class="alert ' + alerttype
+		var res = jquery('<div class="alert ' + alerttype
 				+ '"><a class="close" data-dismiss="alert">&times;</a><span>'
 				+ message + '</span></div>');
-		var parent = $('div#droidMate-alert-container');
+		var parent = jquery('div#droidMate-alert-container');
 		if(!parent.length) {
-			parent = $('<div id="droidMate-alert-container">');
-			$('body').append(parent);
+			parent = jquery('<div id="droidMate-alert-container">');
+			jquery('body').append(parent);
 		}
 		
 		parent.append(res);
 		if (timeout || timeout === 0) {
 			setTimeout(function() {
 				res.fadeTo(500, 0, function() {
-					$(this).remove();
+					jquery(this).remove();
 				});
 			}, timeout);
 		}
@@ -68,13 +68,26 @@ define([ 'jquery'], function(require) {
 	
 	//removes all alerts
 	function removeAllAlerts() {
-		var parent = $('div#droidMate-alert-container');
+		var parent = jquery('div#droidMate-alert-container');
 		parent.empty();
 	}
 	overlays.removeAllAlerts = removeAllAlerts;
 	//-------------------------------------------------------------------------
 	
 	droidmate.overlays = overlays;
-	$.droidmate = droidmate;
+	jquery.droidmate = droidmate;
+	
+	return {
+		DANGER_MESSAGE_TIMEOUT: overlays.DANGER_MESSAGE_TIMEOUT, 
+		INFO_MESSAGE_TIMEOUT :overlays.INFO_MESSAGE_TIMEOUT,
+		WARNING_MESSAGE_TIMEOUT:overlays.WARNING_MESSAGE_TIMEOUT,
+		SUCCESS_MESSAGE_TIMEOUT:overlays.SUCCESS_MESSAGE_TIMEOUT,
+		warning: overlays.warning,
+		success: overlays.success,
+		info: overlays.info,
+		warning: overlays.warning,
+		danger : overlays.danger,
+		removeAllAlerts : overlays.removeAllAlerts,
+	};
 	
 });

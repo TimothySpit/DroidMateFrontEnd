@@ -1,6 +1,6 @@
-define([ 'jquery' ], function(require) {
+define([ 'require', 'jquery' ], function(require, jquery) {
 	// ajax object
-	var droidmate = $.droidmate || {};
+	var droidmate = jquery.droidmate || {};
 	var ajax = {};
 
 	// constants
@@ -10,7 +10,7 @@ define([ 'jquery' ], function(require) {
 
 	function getAPKsRoot(async,success) {
 		var result = "";
-		$.ajax({
+		jquery.ajax({
 			url : "/DroidMate/APKRootFolderHandler",
 			async : async,
 			type : 'POST',
@@ -25,7 +25,7 @@ define([ 'jquery' ], function(require) {
 	// ----------------------------------
 
 	function getUserStatus(async, success) {
-		$.ajax({
+		jquery.ajax({
 			url : "/DroidMate/UserStatusHandler",
 			async : async,
 			type : 'POST',
@@ -41,7 +41,7 @@ define([ 'jquery' ], function(require) {
 	function getConsoleOutput(async, startLine, success) {
 		if (startLine == null || startLine < 0)
 			startLine = 0;
-		$.ajax({
+		jquery.ajax({
 			url : "/DroidMate/ConsoleOutputHandler",
 			async : async,
 			dataType : "json",
@@ -56,7 +56,7 @@ define([ 'jquery' ], function(require) {
 	// ----------------------------------
 
 	function getGlobalExploration(async, success) {
-		$.ajax({
+		jquery.ajax({
 			url : "/DroidMate/GlobalExploreHandler",
 			async : async,
 			dataType : "json",
@@ -71,7 +71,7 @@ define([ 'jquery' ], function(require) {
 	// ----------------------------------
 	
 	function getAPKSData(async, success) {
-		$.ajax({
+		jquery.ajax({
 			// Wait for the server to finish apk list and request the table data
 			// afterwards
 			async : async,
@@ -90,7 +90,7 @@ define([ 'jquery' ], function(require) {
 		if( Object.prototype.toString.call( names ) !== '[object Array]' ) {
 			names = [names];
 		}
-		$.ajax({
+		jquery.ajax({
 			// Wait for the server to finish apk list and request the table data
 			// afterwards
 			async : async,
@@ -108,7 +108,7 @@ define([ 'jquery' ], function(require) {
 	// ----------------------------------
 
 	function setAPKsRoot(newRoot, async, success, error, complete) {
-		$.ajax({
+		jquery.ajax({
 			// Wait for the server to finish apk list and request the table data
 			// afterwards
 			async : async,
@@ -127,7 +127,7 @@ define([ 'jquery' ], function(require) {
 	// ----------------------------------
 
 	function openOutputFolder(async, success) {
-		$.ajax({
+		jquery.ajax({
 			type : 'POST',
 			url : "/DroidMate/OutputFolderHandler",
 			async : async,
@@ -143,7 +143,7 @@ define([ 'jquery' ], function(require) {
 
 	function saveDroidMateSettings(outputPath, dmPath, aaptPath,
 			explorationTimeout, async, success, error, complete) {
-		$.ajax({
+		jquery.ajax({
 			async : async,
 			url : "/DroidMate/SettingsHandler",
 			type : 'POST',
@@ -163,7 +163,7 @@ define([ 'jquery' ], function(require) {
 	// ----------------------------------
 
 	function clearUser(async, success) {
-		$.ajax({
+		jquery.ajax({
 			url : "/DroidMate/ClearUserHandler",
 			async : async,
 			dataType : "json",
@@ -178,6 +178,21 @@ define([ 'jquery' ], function(require) {
 	// ----------------------------------
 	
 	droidmate.ajax = ajax;
-	$.droidmate = droidmate;
+	jquery.droidmate = droidmate;
 
+	return {
+		UPDATE_EXPLORATION_INFO_INTERVAL : ajax.UPDATE_EXPLORATION_INFO_INTERVAL,
+		UPDATE_CONSOLE_OUTPUT_INTERVAL : ajax.UPDATE_CONSOLE_OUTPUT_INTERVAL,
+		getAPKsRoot : ajax.getAPKsRoot,
+		getUserStatus : ajax.getUserStatus,
+		getConsoleOutput : ajax.getConsoleOutput,
+		getGlobalExploration : ajax.getGlobalExploration,
+		getAPKSData : ajax.getAPKSData,
+		setSelectedAPKS : ajax.setSelectedAPKS,
+		setAPKsRoot: ajax.setAPKsRoot,
+		openOutputFolder : ajax.openOutputFolder,
+		saveDroidMateSettings : ajax.saveDroidMateSettings,
+		clearUser : ajax.clearUser
+	};
+	
 });

@@ -1,4 +1,4 @@
-define([ 'require', 'jquery', 'jquery.droidmate.ajax' ], function(require) {
+define([ 'require', 'jquery' ], function(require, jquery) {
 
 	var divID = null;
 
@@ -8,17 +8,17 @@ define([ 'require', 'jquery', 'jquery.droidmate.ajax' ], function(require) {
 	function createNeededComponents(divID, headingText, cbText) {
 		function createDivs(divToAppend) {
 			// create needed divs
-			var heading = $('<div>');
+			var heading = jquery('<div>');
 			heading.append('<span>' + headingText + '</span>');
 			divToAppend.append(heading);
 			heading.addClass('console-heading');
 
-			var cb = $('<input type="checkbox" />');
+			var cb = jquery('<input type="checkbox" />');
 			heading.append(cb);
 			cb.wrap('<label></label>');
 			cb.parent().addClass('console-cb');
 			cb.parent().prepend('<span class="scroll-text">'+ cbText +'</span>');
-			var content = $('<div>');
+			var content = jquery('<div>');
 			content.css('overflow', 'scroll');
 			content.css('height', '500px');
 
@@ -97,7 +97,7 @@ define([ 'require', 'jquery', 'jquery.droidmate.ajax' ], function(require) {
 			divs.content.stop(true,true);
 		});
 		divs.heading.cb.change(function() {
-			if ($(this).is(":checked")) {
+			if (jquery(this).is(":checked")) {
 				scrollDown(divs.content);
 			}
 		});

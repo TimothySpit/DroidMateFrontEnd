@@ -1,29 +1,29 @@
-define([ 'require', 'jquery.droidmate.ajax'
-		, 'jquery.droidmate.dialogs',
-		'jquery.droidmate.overlays' ], function(require,Spinner) {
+define([ 'require', 'jquery', 'jquery.droidmate.ajax'
+		,'jquery.droidmate.overlays' ], 
+		function(require,jquery, DMAjax, DMOverlays) {
 
 	function showControls() {
-		$('#div-charts-elements-seen-screens-explored').show();
-		$('#div-charts-apk-status-elements-explored').show();
-		$('#div-chart-multiselect').show();
-		$('#div-explorationcharts-bottom-navi').show();
+		jquery('#div-charts-elements-seen-screens-explored').show();
+		jquery('#div-charts-apk-status-elements-explored').show();
+		jquery('#div-chart-multiselect').show();
+		jquery('#div-explorationcharts-bottom-navi').show();
 	}
 	
 	function hideControls() {
-		$('#div-charts-elements-seen-screens-explored').hide();
-		$('#div-charts-apk-status-elements-explored').hide();
-		$('#div-chart-multiselect').hide();
-		$('#div-explorationcharts-bottom-navi').hide();
+		jquery('#div-charts-elements-seen-screens-explored').hide();
+		jquery('#div-charts-apk-status-elements-explored').hide();
+		jquery('#div-chart-multiselect').hide();
+		jquery('#div-explorationcharts-bottom-navi').hide();
 	}
 	
 	function updateUIControls(async, callback) {
 		
-		$.droidmate.ajax.getUserStatus(async, function(data) {
+		DMAjax.getUserStatus(async, function(data) {
 			// check for error in data receiving
 			if (!data || !data.getUserStatus || !data.getUserStatus.result) {
-				$.droidmate.overlays.danger(
+				DMOverlays.danger(
 						"Could not parse server returned value.",
-						$.droidmate.overlays.DANGER_MESSAGE_TIMEOUT);
+						DMOverlays.DANGER_MESSAGE_TIMEOUT);
 				
 				if(callback) {
 					callback(data);

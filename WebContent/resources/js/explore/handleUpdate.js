@@ -1,31 +1,30 @@
-define([ 'require', 'Spinner',
+define([ 'require', 'jquery', 'Spinner',
 		'jquery.droidmate.ajax',
-		'jquery.droidmate.inlining', 'DataTables', 'jquery.droidmate.dialogs',
-		'jquery.droidmate.overlays' ], function(require,Spinner) {
+		'jquery.droidmate.overlays' ], function(require,jquery, Spinner, DMAjax, DMOverlays) {
 
 	//create loading indicator for STARTING state
 	var spinner = new Spinner().spin()
-	var spinnerContainerParent = $('#div-droidmate-starting-indicator-container');
-	var spinnerContainer = $('#div-starting-indicator');
-	var spinnerText = $('#div-starting-indicator-text');
+	var spinnerContainerParent = jquery('#div-droidmate-starting-indicator-container');
+	var spinnerContainer = jquery('#div-starting-indicator');
+	var spinnerText = jquery('#div-starting-indicator-text');
 	spinnerText.text("DroidMate is starting...");
 	//show console
-	$('#div-console-output').show();
+	jquery('#div-console-output').show();
 	
 	function showControls() {
-		$('#div-exploration-top-navigation').show();
-		$('#table-apk-exploration-info').show();
-		$('#div-exploration-bottom-navi').show();
-		$('#div-console-output').show();
-		$('#div-apk-exploration-table-container').show();
+		jquery('#div-exploration-top-navigation').show();
+		jquery('#table-apk-exploration-info').show();
+		jquery('#div-exploration-bottom-navi').show();
+		jquery('#div-console-output').show();
+		jquery('#div-apk-exploration-table-container').show();
 	}
 	
 	function hideControls() {
-		$('#div-exploration-top-navigation').hide();
-		$('#table-apk-exploration-info').hide();
-		$('#div-exploration-bottom-navi').hide();
-		$('#div-console-output').hide();
-		$('#div-apk-exploration-table-container').hide();
+		jquery('#div-exploration-top-navigation').hide();
+		jquery('#table-apk-exploration-info').hide();
+		jquery('#div-exploration-bottom-navi').hide();
+		jquery('#div-console-output').hide();
+		jquery('#div-apk-exploration-table-container').hide();
 	}
 	
 	function showReturnIndicator() {
@@ -38,12 +37,12 @@ define([ 'require', 'Spinner',
 	
 	function updateUIControls(callback) {
 		
-		$.droidmate.ajax.getUserStatus(true, function(data) {
+		DMAjax.getUserStatus(true, function(data) {
 			// check for error in data receiving
 			if (!data || !data.getUserStatus || !data.getUserStatus.result) {
-				$.droidmate.overlays.danger(
+				DMOverlays.danger(
 						"Could not parse server returned value.",
-						$.droidmate.overlays.DANGER_MESSAGE_TIMEOUT);
+						DMOverlays.DANGER_MESSAGE_TIMEOUT);
 				
 				if(callback) {
 					callback(data);
@@ -81,21 +80,13 @@ define([ 'require', 'Spinner',
 			}
 			//disable stop button
 			if(statusData === "FINISHED" || statusData === "ERROR") {
-				$('#button-stop-all').prop("disabled", true);
+				jquery('#button-stop-all').prop("disabled", true);
 			}
 			
 			if(callback) {
 				callback(data);
 			}
 		});
-	}
-	
-	function stopExplorationStart() {
-		
-	}
-
-	function stopExplorationEnd() {
-		
 	}
 	
 	return {

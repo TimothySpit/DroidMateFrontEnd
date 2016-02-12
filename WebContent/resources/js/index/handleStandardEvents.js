@@ -1,20 +1,18 @@
-define([ 'require', '../index/apkFileInfoTable', '../index/handleUpdate' ], function(require) {
+define([ 'require', 'jquery', '../index/apkFileInfoTable', '../index/handleUpdate', 'jquery.droidmate.overlays' ], 
+		function(require, jquery, tableCreator, updateHelper, DMOverlays) {
 
-	var tableCreator = require('../index/apkFileInfoTable');
-	var table = tableCreator.initModul($('#table-apk-static-information'));
-	
-	var updateHelper = require('../index/handleUpdate' );
+	var table = tableCreator.initModul(jquery('#table-apk-static-information'));
 	
 	table.on("row:select", function(e) {
 		updateHelper.updateUI();
 	});
 
 	//redirect to Explore, when state is is not IDLE or INLINING
-	$.droidmate.ajax.getUserStatus(true, function(data) {
+	jquery.droidmate.ajax.getUserStatus(true, function(data) {
 		//check for error in data receiving
 		if(!data || !data.getUserStatus || !data.getUserStatus.result) {
-			$.droidmate.overlays.danger("Could not parse server returned value.", 
-					$.droidmate.overlays.ERROR_MESSAGE_TIMEOUT);
+			DMOverlays.danger("Could not parse server returned value.", 
+					DMOverlays.ERROR_MESSAGE_TIMEOUT);
 			return;
 		}
 		

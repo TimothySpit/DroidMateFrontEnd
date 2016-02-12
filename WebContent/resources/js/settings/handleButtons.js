@@ -1,49 +1,50 @@
-define([ 'require', 'bootbox', 
-         'jstree', 'jquery.droidmate.dialogs','jquery.droidmate.ajax', 'jquery.droidmate.overlays' ],function(require, bootbox) {
+define([ 'require', 'jquery', 
+         'jquery.droidmate.dialogs','jquery.droidmate.ajax', 'jquery.droidmate.overlays' ],
+         function(require, jquery, DMDialogs, DMAjax, DMOverlays) {
 
 	//handle report output path button
-	$('#button-reports-output-path').click(function() {
+	jquery('#button-reports-output-path').click(function() {
 		var title = 'Please select a reports output path';
 		var callback = function(path) {
 			if(path) {
 				//set input text to selected path
-				$('#input-reports-path').val(path);
+				jquery('#input-reports-path').val(path);
 			}
 		}
-		$.droidmate.dialogs.createFileDialog(title,callback);
+		DMDialogs.createFileDialog(title,callback);
 	});
 	
 	//handle DroidMate path button
-	$('#button-droidmate-path').click(function() {
+	jquery('#button-droidmate-path').click(function() {
 		var title = 'Please select the path to DroidMate';
 		var callback = function(path) {
 			if(path) {
 				//set input text to selected path
-				$('#input-droidmate-path').val(path);
+				jquery('#input-droidmate-path').val(path);
 			}
 		}
-		$.droidmate.dialogs.createFileDialog(title,callback);
+		DMDialogs.createFileDialog(title,callback);
 	});
 	
 	//handle AAPT path button
-	$('#button-aapt-path').click(function() {
+	jquery('#button-aapt-path').click(function() {
 		var title = 'Please select the path to the AAPT tool';
 		var callback = function(path) {
 			if(path) {
 				//set input text to selected path
-				$('#input-aapt-path').val(path);
+				jquery('#input-aapt-path').val(path);
 			}
 		}
-		$.droidmate.dialogs.createFileDialog(title,callback);
+		DMDialogs.createFileDialog(title,callback);
 	});
 	
 	//save settings button
-	$('#button-save-changes').click(function() {
+	jquery('#button-save-changes').click(function() {
 		//get all currently set settings
-		var reportsOutputPath 	= $('#input-reports-path').val();
-		var droidmatePath		= $('#input-droidmate-path').val();
-		var aaptPath 			= $('#input-aapt-path').val();
-		var explorationTimeOut 	= $('#input-exploration-timeout').val();
+		var reportsOutputPath 	= jquery('#input-reports-path').val();
+		var droidmatePath		= jquery('#input-droidmate-path').val();
+		var aaptPath 			= jquery('#input-aapt-path').val();
+		var explorationTimeOut 	= jquery('#input-exploration-timeout').val();
 		
 		//check if input seems ok
 		var resultMessage = "";
@@ -56,14 +57,14 @@ define([ 'require', 'bootbox',
 		if(!aaptPath) {
 			resultMessage += 'Please specify an AAPT path.<br />';
 		}
-		if(!explorationTimeOut || !$.isNumeric(explorationTimeOut) || explorationTimeOut <= 0) {
+		if(!explorationTimeOut || !jquery.isNumeric(explorationTimeOut) || explorationTimeOut <= 0) {
 			resultMessage += 'Please specify an positive exploration Timeout.<br />';
 		}
 		
 		//show error, if any
 		if(resultMessage) {
-			$.droidmate.overlays.warning(resultMessage,
-					$.droidmate.overlays.DANGER_MESSAGE_TIMEOUT);
+			DMOverlays.warning(resultMessage,
+					DMOverlays.DANGER_MESSAGE_TIMEOUT);
 			return;
 		}
 		
@@ -73,20 +74,20 @@ define([ 'require', 'bootbox',
 			if(!data || !data.setSettings || !data.setSettings.result) {
 				//error in settings saving
 				if(data.setSettings.message) {
-				$.droidmate.overlays.danger(data.setSettings.message,
-						$.droidmate.overlays.DANGER_MESSAGE_TIMEOUT);
+				DMOverlays.danger(data.setSettings.message,
+						DMOverlays.DANGER_MESSAGE_TIMEOUT);
 				} else {
-					$.droidmate.overlays.danger("Could not parse server returned value.", 
-							$.droidmate.overlays.DANGER_MESSAGE_TIMEOUT);
+					DMOverlays.danger("Could not parse server returned value.", 
+							DMOverlays.DANGER_MESSAGE_TIMEOUT);
 				}
 				return;
 			}
 			
 			var saveResult = data.setSettings;
-			$.droidmate.overlays.success(saveResult.message,
-					$.droidmate.overlays.DANGER_MESSAGE_TIMEOUT);
+			DMOverlays.success(saveResult.message,
+					DMOverlays.DANGER_MESSAGE_TIMEOUT);
 		}
-		$.droidmate.ajax.saveDroidMateSettings(reportsOutputPath, droidmatePath, 
+		DMAjax.saveDroidMateSettings(reportsOutputPath, droidmatePath, 
 				aaptPath, explorationTimeOut, true,callback);
 	});
 })

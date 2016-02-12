@@ -1,8 +1,8 @@
-define([ 'require',
-		'jquery.droidmate.overlays','jquery.droidmate.explore','jquery.droidmate.ajax'], function(require) {
+define([ 'require', 'jquery'], 
+		function(require, jquery) {
 
 	//handle back button
-	$('#button-back').click(function() {
+	jquery('#button-back').click(function() {
 		window.location = "Explore";
 	});
 

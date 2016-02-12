@@ -1,9 +1,8 @@
 define(
-		[ 'require', 'jquery', 'DataTables', 'jquery.flot.symbol',
+		[ 'require', 'jquery', 'DataTables', 'jquery.flot', 'jquery.flot.symbol',
 				'jquery.flot.canvas', 'jquery.flot.axislabels',
-				'jquery.flot.navigate', 'jquery.flot', 'jquery.droidmate.ajax',
-				'jquery.droidmate.explore' ],
-		function(require) {
+				'jquery.flot.navigate' ],
+		function(require, jquery, DataTables, flot, flotSymbol, flotCanvas, flotAxisLabels, flotNav) {
 
 			// private members
 			var activeChartDivs = {};
@@ -275,7 +274,7 @@ define(
 				var elementsExplored = [ [ 0, 0 ] ];
 				graphChartOptions.xaxis.axisLabel = axisLabelx;
 				graphChartOptions.yaxis.axisLabel = axisLabelY;
-				return $.plot(divname, [ elementsExplored ], graphChartOptions);
+				return flot(divname, [ elementsExplored ], graphChartOptions);
 			}
 
 			function addStandardEvents(table) {
@@ -474,7 +473,7 @@ define(
 				// create new table
 				tableID = tableIDentifier;
 				var table = null;
-				if ($.fn.DataTable.isDataTable(tableID)) {
+				if (DataTables.isDataTable(tableID)) {
 					table = $(tableID).DataTable();
 				} else {
 					table = $(tableID).DataTable(datatableOptions);
