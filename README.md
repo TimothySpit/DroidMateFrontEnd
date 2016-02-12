@@ -85,4 +85,5 @@ To build DroidMateGUI for first time, follow these steps:
 
 see pom.xml in project root directory for dependencies.
 
-
+DroidMate project with DroidMateGUI hooks:
+https://github.com/rumpelheinz/droidmate 
