@@ -73,6 +73,10 @@ input#folder_name {
     height: 70%;
 }
 
+/* explore navi */
+#div-exploration-bottom-navi {
+	margin-top: 2em;
+}
 
 /* explore loading indicator container*/
 #div-droidmate-starting-indicator-container {
