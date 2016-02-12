@@ -20,29 +20,29 @@ import com.droidmate.interfaces.ProcessStreamObservable;
  *
  */
 public class ProcessWrapper extends ProcessStreamObservable {
-	
-	/**	An instance of ProcessBuilder	*/
+
+	/** An instance of ProcessBuilder */
 	private ProcessBuilder processBuilder;
-	
-	/**	An instance of ProcessBuilder	*/
+
+	/** An instance of ProcessBuilder */
 	private StringWriter infoWriter = new StringWriter();
-	
-	/**	An instance of ProcessBuilder	*/
+
+	/** An instance of ProcessBuilder */
 	private StringWriter errorWriter = new StringWriter();
-	
-	/**	Termination value of the Process	*/
+
+	/** Termination value of the Process */
 	private int exitValue;
-	
-	/**	An instance of Process	*/
+
+	/** An instance of Process */
 	protected Process process = null;
-	
-	/**	An instance of StreamBoozer	*/
+
+	/** An instance of StreamBoozer */
 	protected StreamBoozer seInfo = null;
-	
-	/**	An instance of StreamBoozer	*/
+
+	/** An instance of StreamBoozer */
 	protected StreamBoozer seError = null;
 
-	/**	The logger which is useful for debugging.	*/
+	/** The logger which is useful for debugging. */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**

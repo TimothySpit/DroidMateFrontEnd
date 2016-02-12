@@ -13,10 +13,10 @@ public class DroidMateProcessEvent {
 		EXPLORATION_STARTED, EXPLORATION_FINISHED, DROIDMATE_ERROR, CONSOLE_OUTPUT_STDOUT, CONSOLE_OUTPUT_STDERR
 	}
 
-	/**	The event type for this event	*/
+	/** The event type for this event */
 	private final EventType event;
-	
-	/**	The message of the event*/
+
+	/** The message of the event */
 	private final String message;
 
 	/**

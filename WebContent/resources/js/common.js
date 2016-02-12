@@ -14,6 +14,9 @@ requirejs
 				'jquery.flot.canvas' : {
 					deps : [ 'jquery.flot' ]
 				},
+				'jquery.flot.excanvas' : {
+					deps : [ 'jquery.flot' ]
+				},
 				'jquery.flot.symbol' : {
 					deps : [ 'jquery.flot' ]
 				},
@@ -71,6 +74,7 @@ requirejs
 				'jquery.flot' : 'flot/jquery.flot.min',
 				'jquery.flot.time' : 'flot/jquery.flot.time.min',
 				'jquery.flot.canvas' : 'flot/jquery.flot.canvas.min',
+				'jquery.flot.excanvas' : 'flot/excanvas.min',
 				'jquery.flot.symbol' : 'flot/jquery.flot.symbol.min',
 				'jquery.flot.tooltip' : 'flot/flot-tooltip/jquery.flot.tooltip.min',
 				'jquery.flot.pie' : 'flot/jquery.flot.pie.min',

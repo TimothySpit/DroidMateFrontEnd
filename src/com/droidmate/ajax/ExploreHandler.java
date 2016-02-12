@@ -24,7 +24,7 @@ public class ExploreHandler extends HttpServlet {
 	// request parameters
 	private static final String START_DROIDMATE = "startExploration";
 
-	/**	The logger which is useful for debugging.	*/
+	/** The logger which is useful for debugging. */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -40,7 +40,6 @@ public class ExploreHandler extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		logger.debug("Serve {} page request.", request.getRequestURI());
-
 		// return json
 		response.setContentType("application/json");
 		// Do not cache

@@ -5,7 +5,7 @@ package com.droidmate.processes.logfile;
  */
 public class APKExplorationEnded extends APKLogFileEvent {
 
-	/**	The ending time	*/
+	/** The ending time */
 	private final long endTime;
 
 	/**

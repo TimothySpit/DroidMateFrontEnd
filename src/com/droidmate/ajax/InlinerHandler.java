@@ -25,7 +25,7 @@ public class InlinerHandler extends HttpServlet {
 	// request parameters
 	private static final String START_INLINER = "startInlining";
 
-	/**	The logger which is useful for debugging.	*/
+	/** The logger which is useful for debugging. */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**

@@ -23,8 +23,8 @@ public class ClearUserHandler extends HttpServlet {
 
 	// request parameters
 	private static final String CLEAR_USER = "clearUser";
-	
-	/**	The logger which is useful for debugging.	*/
+
+	/** The logger which is useful for debugging. */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -53,6 +53,8 @@ public class ClearUserHandler extends HttpServlet {
 		// get apks root
 		String clearUserString = request.getParameter(CLEAR_USER);
 		if (clearUserString != null) {
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), CLEAR_USER, clearUserString);
+
 			JSONResponseWrapper clearUserResult = new JSONResponseWrapper();
 
 			try {

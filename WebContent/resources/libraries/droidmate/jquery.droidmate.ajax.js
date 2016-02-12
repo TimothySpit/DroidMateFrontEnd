@@ -112,6 +112,7 @@ define([ 'jquery' ], function(require) {
 			// Wait for the server to finish apk list and request the table data
 			// afterwards
 			async : async,
+			dataType : "json",
 			type : 'POST',
 			url : "/DroidMate/APKRootFolderHandler",
 			data : {

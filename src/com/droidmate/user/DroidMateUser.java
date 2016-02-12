@@ -524,7 +524,7 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 	 */
 	private JSONObject collectAPKData() {
 		JSONObject result = new JSONObject();
-		//per apk data
+		// per apk data
 		JSONArray apkInfoString = new JSONArray();
 		for (APKInformation apk : apksInformation.values()) {
 			if (apk.isAPKSelected()) {
@@ -532,10 +532,10 @@ public class DroidMateUser implements Observer<DroidMateProcessEvent> {
 			}
 		}
 		result.put("apks", apkInfoString);
-		
-		//global data
+
+		// global data
 		result.put("globalExploration", getGloblExplorationInfo().toJSONObject());
-		
+
 		return result;
 	}
 

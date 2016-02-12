@@ -28,7 +28,7 @@ public class APKRootFolderHandler extends HttpServlet {
 	private static final String APKS_ROOT_GET = "getAPKsRoot";
 	private static final String APKS_ROOT_SET = "setAPKsRoot";
 
-	/**	The logger which is useful for debugging.	*/
+	/** The logger which is useful for debugging. */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -62,7 +62,10 @@ public class APKRootFolderHandler extends HttpServlet {
 		// handle APKS_ROOT_GET request
 		String apkGetRoot = request.getParameter(APKS_ROOT_GET);
 		if (apkGetRoot != null) {
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), APKS_ROOT_GET, apkGetRoot);
+
 			JSONResponseWrapper apkGetRootResult = new JSONResponseWrapper();
+
 			if (user.getAPKPath() == null) {
 				apkGetRootResult = new JSONResponseWrapper(false, "Path is not yet set.");
 			} else {
@@ -80,19 +83,17 @@ public class APKRootFolderHandler extends HttpServlet {
 		if (apkSaveRoot != null) {
 			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), APKS_ROOT_SET, apkSaveRoot);
 
-			JSONObject setAPKRootresult = new JSONObject();
+			JSONResponseWrapper setAPKRootResult = new JSONResponseWrapper();
+
 			try {
 				user.setAPKPath(Paths.get(apkSaveRoot));
-				setAPKRootresult.put("result", true);
-				setAPKRootresult.put("message", "APK Root path has been set to: " + apkSaveRoot);
+				setAPKRootResult = new JSONResponseWrapper(true, "APK Root path has been set to: " + apkSaveRoot);
 			} catch (FileNotFoundException e) {
-				setAPKRootresult.put("result", false);
-				setAPKRootresult.put("message", e.getMessage());
+				setAPKRootResult = new JSONResponseWrapper(false, e.getMessage());
 			} catch (Exception e) {
-				setAPKRootresult.put("result", false);
-				setAPKRootresult.put("message", "APK Root path could not been set to : " + apkSaveRoot + ". Details: " + e.getMessage());
+				setAPKRootResult = new JSONResponseWrapper(false, "APK Root path could not been set to : " + apkSaveRoot + ". Details: " + e.getMessage());
 			}
-			result.put(APKS_ROOT_SET, setAPKRootresult);
+			result.put(APKS_ROOT_SET, setAPKRootResult.toJSONObject());
 		}
 
 		logger.debug("{}: Request result: {}", request.getRequestURI(), result);

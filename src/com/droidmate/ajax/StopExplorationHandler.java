@@ -24,7 +24,7 @@ public class StopExplorationHandler extends HttpServlet {
 	// request parameters
 	private static final String STOP_EXPLORATION = "stopExploration";
 
-	/**	The logger which is useful for debugging.	*/
+	/** The logger which is useful for debugging. */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -53,6 +53,8 @@ public class StopExplorationHandler extends HttpServlet {
 		// handle STOP_EXPLORATION request
 		String stopExplorationString = request.getParameter(STOP_EXPLORATION);
 		if (stopExplorationString != null) {
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), STOP_EXPLORATION, stopExplorationString);
+
 			JSONResponseWrapper stopExplorationResult = new JSONResponseWrapper();
 
 			try {

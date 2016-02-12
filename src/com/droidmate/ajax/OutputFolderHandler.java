@@ -27,7 +27,7 @@ public class OutputFolderHandler extends HttpServlet {
 	// request parameters
 	private static final String OPEN_OUTPUT_FOLDER_EXPLORER = "openOutputFolder";
 
-	/**	The logger which is useful for debugging.	*/
+	/** The logger which is useful for debugging. */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -56,6 +56,9 @@ public class OutputFolderHandler extends HttpServlet {
 		// handle OPEN_OUTPUT_FOLDER_EXPLORER request
 		String openOutputFolderString = request.getParameter(OPEN_OUTPUT_FOLDER_EXPLORER);
 		if (openOutputFolderString != null) {
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), OPEN_OUTPUT_FOLDER_EXPLORER,
+					openOutputFolderString);
+
 			JSONResponseWrapper openOutputFolderResult = new JSONResponseWrapper();
 
 			// get output folder path

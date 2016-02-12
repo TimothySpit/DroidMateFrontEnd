@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ForeverFileInputStream extends FileInputStream {
 
-	/**	A boolean value that may be updated atomically	*/
+	/** A boolean value that may be updated atomically */
 	private AtomicBoolean stopFlag = new AtomicBoolean(false);
 
 	public ForeverFileInputStream(File file) throws FileNotFoundException {

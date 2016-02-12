@@ -1,5 +1,4 @@
-define([ 'require',
-		'jquery.flot', 'jquery.droidmate.ajax'
+define([ 'require', 'jquery.droidmate.ajax'
 		, 'jquery.droidmate.dialogs',
 		'jquery.droidmate.overlays' ], function(require,Spinner) {
 

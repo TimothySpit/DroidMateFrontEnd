@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 public class Settings extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**	The logger which is useful for debugging.	*/
+	/** The logger which is useful for debugging. */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**

@@ -25,10 +25,10 @@ import com.droidmate.user.DroidMateUser;
 public class APKInformationHandler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**	Request parameters	*/
+	/** Request parameters */
 	private static final String APKS_DATA = "getAPKSData";
-	
-	/**	The logger which is useful for debugging.	*/
+
+	/** The logger which is useful for debugging. */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**

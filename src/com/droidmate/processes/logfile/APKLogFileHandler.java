@@ -24,7 +24,6 @@ import com.droidmate.interfaces.APKLogFileObservable;
  */
 public class APKLogFileHandler extends APKLogFileObservable {
 
-	
 	private final File inputFileToParse;
 
 	private final boolean waitForFileCreation;

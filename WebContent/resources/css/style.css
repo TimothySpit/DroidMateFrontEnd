@@ -158,3 +158,8 @@ tr.shown td.details-control {
     margin:-1px 4px 0 0;
     vertical-align:middle;
 }
+
+/* dialogs */
+.file-size-dialog .dialog-container {
+	margin: 0 auto;
+}

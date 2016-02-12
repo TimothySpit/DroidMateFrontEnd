@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class AAPTProcess {
 
-	/**	The aapt path	*/
+	/** The aapt path */
 	private final File aaptPath;
 
 	/**

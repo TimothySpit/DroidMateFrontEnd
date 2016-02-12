@@ -5,10 +5,10 @@ package com.droidmate.processes.logfile;
  */
 public class APKElementsExploredChanged extends APKLogFileEvent {
 
-	/**	The apk's name	*/
+	/** The apk's name */
 	private final String name;
-	
-	/**	The change in the apks explored	*/
+
+	/** The change in the apks explored */
 	private final int changeInElementsExplored;
 
 	/**

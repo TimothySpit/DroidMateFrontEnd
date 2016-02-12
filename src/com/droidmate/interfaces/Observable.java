@@ -9,8 +9,8 @@ import java.util.List;
  * @param <T>
  */
 public class Observable<T> {
-	
-	/**	List of observers	*/
+
+	/** List of observers */
 	private final List<Observer<T>> observers = new ArrayList<Observer<T>>();
 
 	/**

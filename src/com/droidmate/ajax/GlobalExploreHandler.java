@@ -25,7 +25,7 @@ public class GlobalExploreHandler extends HttpServlet {
 	// request parameters
 	private static final String GLOBAL_INFORMATION_GET = "getGlobalExploration";
 
-	/**	The logger which is useful for debugging.	*/
+	/** The logger which is useful for debugging. */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**

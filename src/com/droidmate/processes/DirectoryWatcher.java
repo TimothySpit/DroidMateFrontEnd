@@ -28,23 +28,25 @@ import com.droidmate.interfaces.Observable;
  * Observable for Directories
  */
 public class DirectoryWatcher extends Observable<DirectoryWatcherEvent> {
-	
-	/**	A watch service that watches registered objects for changes and events	*/
+
+	/**
+	 * A watch service that watches registered objects for changes and events
+	 */
 	private final WatchService watcher;
-	
-	/**	A Map watchKey to Path	*/
+
+	/** A Map watchKey to Path */
 	private final Map<WatchKey, Path> keys;
-	
-	/**	Indicates whether subfolders should be watched	*/
+
+	/** Indicates whether subfolders should be watched */
 	private final boolean recursive;
 
-	/**	A boolean value that may be updated atomically	*/
+	/** A boolean value that may be updated atomically */
 	private AtomicBoolean isWatchingEvents = new AtomicBoolean(false);
-	
-	/**	A boolean value that may be updated atomically	*/
+
+	/** A boolean value that may be updated atomically */
 	private AtomicBoolean shouldClose = new AtomicBoolean(false);
 
-	/**	Thread used as block	*/
+	/** Thread used as block */
 	private Thread readinThread = null;
 
 	/**
@@ -122,11 +124,11 @@ public class DirectoryWatcher extends Observable<DirectoryWatcherEvent> {
 		WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 		keys.put(key, dir);
 	}
-	
+
 	void stop() {
 		isWatchingEvents.set(false);
 	}
-	
+
 	void joinIfNoDataAvailable() throws InterruptedException {
 		if (readinThread == null)
 			return;

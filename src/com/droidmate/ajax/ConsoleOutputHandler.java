@@ -25,8 +25,8 @@ public class ConsoleOutputHandler extends HttpServlet {
 
 	// request parameters
 	private static final String CONSOLE_OUTPUT_GET = "getConsoleOutput";
-	
-	/**	The logger which is useful for debugging.	*/
+
+	/** The logger which is useful for debugging. */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -55,6 +55,8 @@ public class ConsoleOutputHandler extends HttpServlet {
 		// handle CONSOLE_OUTPUT_GET request
 		String getConsoleOutputString = request.getParameter(CONSOLE_OUTPUT_GET);
 		if (getConsoleOutputString != null) {
+			logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), CONSOLE_OUTPUT_GET, getConsoleOutputString);
+
 			JSONResponseWrapper getConsoleOutputResult = new JSONResponseWrapper();
 
 			if (!NumberUtils.isDigits(getConsoleOutputString)) {

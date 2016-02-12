@@ -5,13 +5,13 @@ package com.droidmate.processes.logfile;
  */
 public class APKEnded extends APKLogFileEvent {
 
-	/**	The apk's name	*/
+	/** The apk's name */
 	private final String name;
-	
-	/**	The ending time	*/
+
+	/** The ending time */
 	private final long endTime;
-	
-	/**	Boolean indicating the success	*/
+
+	/** Boolean indicating the success */
 	private final boolean success;
 
 	/**

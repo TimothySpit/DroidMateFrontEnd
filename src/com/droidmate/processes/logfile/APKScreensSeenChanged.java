@@ -4,11 +4,11 @@ package com.droidmate.processes.logfile;
  * Logs APK screens changed
  */
 public class APKScreensSeenChanged extends APKLogFileEvent {
-	
-	/**	The apk's name	*/
+
+	/** The apk's name */
 	private final String name;
-	
-	/**	The change in the screens seen	*/
+
+	/** The change in the screens seen */
 	private final int changeInScreensSeen;
 
 	/**

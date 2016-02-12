@@ -32,7 +32,7 @@ public class SettingsHandler extends HttpServlet {
 	private static final String SETTINGS_AAPT_PATH = "aaptPath";
 	private static final String SETTINGS_EXPLORATION_TIME = "time";
 
-	/**	The logger which is useful for debugging.	*/
+	/** The logger which is useful for debugging. */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -62,7 +62,7 @@ public class SettingsHandler extends HttpServlet {
 		GUISettings settings = new GUISettings();
 
 		JSONObject result = new JSONObject();
-		
+
 		// handle SETTINGS_SET request
 		String settingsSet = request.getParameter(SETTINGS_SET);
 		boolean allSettingsCorrect = true;
@@ -75,26 +75,23 @@ public class SettingsHandler extends HttpServlet {
 				logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_REPORTS_OUTPUT_PATH,
 						settingsParameter);
 
-				JSONObject reportsPathSetResult = new JSONObject();
+				JSONResponseWrapper reportsPathSetResult = new JSONResponseWrapper();
 				// check reports path
 				Path reportsPath = Paths.get(settingsParameter);
 				if (!reportsPath.toFile().exists()) {
 					// path does not exist
-					reportsPathSetResult.put("result", false);
-					reportsPathSetResult.put("message", "Report path " + reportsPath + " does not exist.");
+					reportsPathSetResult = new JSONResponseWrapper(false, "Report path " + reportsPath + " does not exist.");
 					allSettingsCorrect = false;
 				} else if (!reportsPath.toFile().isDirectory()) {
 					// path is no valid directory
-					reportsPathSetResult.put("result", false);
-					reportsPathSetResult.put("message", "Report path " + reportsPath + " is no valid directory.");
+					reportsPathSetResult = new JSONResponseWrapper(false, "Report path " + reportsPath + " is no valid directory.");
 					allSettingsCorrect = false;
 				} else {
 					// valid path, save it
 					settings.setOutputFolder(reportsPath);
-					reportsPathSetResult.put("result", true);
-					reportsPathSetResult.put("message", "Report path set to: " + reportsPath);
+					reportsPathSetResult = new JSONResponseWrapper(true, "Report path set to: " + reportsPath);
 				}
-				result.put(SETTINGS_REPORTS_OUTPUT_PATH, reportsPathSetResult);
+				result.put(SETTINGS_REPORTS_OUTPUT_PATH, reportsPathSetResult.toJSONObject());
 			}
 
 			// check for DroidMate path parameter
@@ -103,26 +100,23 @@ public class SettingsHandler extends HttpServlet {
 				logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_DROIDMATE_PATH,
 						settingsParameter);
 
-				JSONObject droidMatePathSetResult = new JSONObject();
+				JSONResponseWrapper droidMatePathSetResult = new JSONResponseWrapper();
 				// check DroidMate path
 				Path droidMatePath = Paths.get(settingsParameter);
 				if (!droidMatePath.toFile().exists()) {
 					// path does not exist
-					droidMatePathSetResult.put("result", false);
-					droidMatePathSetResult.put("message", "DroidMate path " + droidMatePath + " does not exist.");
+					droidMatePathSetResult = new JSONResponseWrapper(false, "DroidMate path " + droidMatePath + " does not exist.");
 					allSettingsCorrect = false;
 				} else if (!droidMatePath.toFile().isDirectory()) {
 					// path is no valid directory
-					droidMatePathSetResult.put("result", false);
-					droidMatePathSetResult.put("message", "DroidMate path " + droidMatePath + " is no valid directory.");
+					droidMatePathSetResult = new JSONResponseWrapper(false, "DroidMate path " + droidMatePath + " is no valid directory.");
 					allSettingsCorrect = false;
 				} else {
 					// valid path, save it
 					settings.setDroidMatePath(droidMatePath);
-					droidMatePathSetResult.put("result", true);
-					droidMatePathSetResult.put("message", "DroidMate path set to: " + droidMatePath);
+					droidMatePathSetResult = new JSONResponseWrapper(true, "DroidMate path set to: " + droidMatePath);
 				}
-				result.put(SETTINGS_DROIDMATE_PATH, droidMatePathSetResult);
+				result.put(SETTINGS_DROIDMATE_PATH, droidMatePathSetResult.toJSONObject());
 			}
 
 			// check for AAPT path parameter
@@ -130,26 +124,23 @@ public class SettingsHandler extends HttpServlet {
 			if (settingsParameter != null) {
 				logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_AAPT_PATH, settingsParameter);
 
-				JSONObject aaptPathSetResult = new JSONObject();
+				JSONResponseWrapper aaptPathSetResult = new JSONResponseWrapper();
 				// check DroidMate path
 				Path aaptPath = Paths.get(settingsParameter);
 				if (!aaptPath.toFile().exists()) {
 					// path does not exist
-					aaptPathSetResult.put("result", false);
-					aaptPathSetResult.put("message", "AAPT path " + aaptPath + " does not exist.");
+					aaptPathSetResult = new JSONResponseWrapper(false, "AAPT path " + aaptPath + " does not exist.");
 					allSettingsCorrect = false;
 				} else if (!aaptPath.toFile().isDirectory()) {
 					// path is no valid directory
-					aaptPathSetResult.put("result", false);
-					aaptPathSetResult.put("message", "AAPT path " + aaptPath + " is no valid directory.");
+					aaptPathSetResult = new JSONResponseWrapper(false, "AAPT path " + aaptPath + " is no valid directory.");
 					allSettingsCorrect = false;
 				} else {
 					// valid path, save it
 					settings.setAaptToolPath(aaptPath);
-					aaptPathSetResult.put("result", true);
-					aaptPathSetResult.put("message", "AAPT path set to: " + aaptPath);
+					aaptPathSetResult = new JSONResponseWrapper(true, "AAPT path set to: " + aaptPath);
 				}
-				result.put(SETTINGS_AAPT_PATH, aaptPathSetResult);
+				result.put(SETTINGS_AAPT_PATH, aaptPathSetResult.toJSONObject());
 			}
 
 			// check for exploration time parameter
@@ -158,12 +149,11 @@ public class SettingsHandler extends HttpServlet {
 				logger.debug("{}: Handle {} parameter {} with value {}", request.getRequestURI(), request.getMethod(), SETTINGS_EXPLORATION_TIME,
 						settingsParameter);
 
-				JSONObject explorationTimeSetResult = new JSONObject();
+				JSONResponseWrapper explorationTimeSetResult = new JSONResponseWrapper();
 				// check DroidMate path
 				if (!NumberUtils.isDigits(settingsParameter)) {
 					// exploration time is no number
-					explorationTimeSetResult.put("result", false);
-					explorationTimeSetResult.put("message", "Exploration time " + settingsParameter + " is no integer number.");
+					explorationTimeSetResult = new JSONResponseWrapper(false, "Exploration time " + settingsParameter + " is no integer number.");
 					allSettingsCorrect = false;
 				}
 				// try to cast exploration time
@@ -172,32 +162,28 @@ public class SettingsHandler extends HttpServlet {
 
 					if (explorationTime <= 0) {
 						// exploration time must be grater than zero
-						explorationTimeSetResult.put("result", false);
-						explorationTimeSetResult.put("message", "Exploration time " + settingsParameter + " is negative.");
+						explorationTimeSetResult = new JSONResponseWrapper(false, "Exploration time " + settingsParameter + " is negative.");
 						allSettingsCorrect = false;
 					} else {
 						// valid exploration time, save it
 						settings.setExplorationTimeout(explorationTime);
-						explorationTimeSetResult.put("result", true);
-						explorationTimeSetResult.put("message", "Exploration time set to " + explorationTime);
+						explorationTimeSetResult = new JSONResponseWrapper(true, "Exploration time set to " + explorationTime);
 					}
 				} catch (NumberFormatException e) {
-					explorationTimeSetResult.put("result", false);
-					explorationTimeSetResult.put("message", "Exploration time " + settingsParameter + " is no valid number.");
+					explorationTimeSetResult = new JSONResponseWrapper(false, "Exploration time " + settingsParameter + " is no valid number.");
 					allSettingsCorrect = false;
 				}
-				result.put(SETTINGS_EXPLORATION_TIME, explorationTimeSetResult);
+				result.put(SETTINGS_EXPLORATION_TIME, explorationTimeSetResult.toJSONObject());
 			}
 		}
 
-		JSONObject settingsSetResult = new JSONObject();
-		settingsSetResult.put("result", allSettingsCorrect);
+		JSONResponseWrapper settingsSetResult = new JSONResponseWrapper();
 		if (allSettingsCorrect) {
-			settingsSetResult.put("message", "All Settings have been saved successfully.");
+			settingsSetResult = new JSONResponseWrapper(allSettingsCorrect, "All Settings have been saved successfully.");
 		} else {
-			settingsSetResult.put("message", "There were errors in saving the settings.");
+			settingsSetResult = new JSONResponseWrapper(allSettingsCorrect, "There were errors in saving the settings.");
 		}
-		result.put(SETTINGS_SET, settingsSetResult);
+		result.put(SETTINGS_SET, settingsSetResult.toJSONObject());
 
 		logger.debug("{}: Request result: {}", request.getRequestURI(), result);
 		response.getWriter().print(result);
