@@ -1,5 +1,6 @@
-define([ 'require', 'jquery', '../index/apkFileInfoTable', '../index/handleUpdate', 'jquery.droidmate.overlays' ], 
-		function(require, jquery, tableCreator, updateHelper, DMOverlays) {
+define([ 'require', 'jquery', '../index/apkFileInfoTable',
+         '../index/handleUpdate', 'jquery.droidmate.overlays','jquery.droidmate.ajax' ], 
+		function(require, jquery, tableCreator, updateHelper, DMOverlays, DMAjax) {
 
 	var table = tableCreator.initModul(jquery('#table-apk-static-information'));
 	
@@ -8,7 +9,7 @@ define([ 'require', 'jquery', '../index/apkFileInfoTable', '../index/handleUpdat
 	});
 
 	//redirect to Explore, when state is is not IDLE or INLINING
-	jquery.droidmate.ajax.getUserStatus(true, function(data) {
+	DMAjax.getUserStatus(true, function(data) {
 		//check for error in data receiving
 		if(!data || !data.getUserStatus || !data.getUserStatus.result) {
 			DMOverlays.danger("Could not parse server returned value.", 

@@ -1,5 +1,6 @@
 define([ 'require', 'jquery',
-		'jquery.droidmate.overlays' ], function(require, jquery, DMOverlays) {
+		'jquery.droidmate.overlays', 'jquery.droidmate.ajax' ], 
+		function(require, jquery, DMOverlays, DMAjax) {
 
 	//handle settings button click
 	jquery('#button-settings').click(function() {
@@ -38,6 +39,6 @@ define([ 'require', 'jquery',
 		}
 		
 		//get apks
-		jquery.droidmate.ajax.getAPKSData(true,updateCallback);
+		DMAjax.getAPKSData(true,updateCallback);
 	});
 });

@@ -1,6 +1,6 @@
 define([ 'require', 'jquery', '../index/apkFileInfoTable', 'jquery.droidmate.inlining',
-		'jquery.droidmate.overlays','../index/handleUpdate' ], 
-		function(require, jquery, tableCreator, DMInlining, DMOverlays, updateHelper) {
+		'jquery.droidmate.overlays', 'jquery.droidmate.ajax','../index/handleUpdate' ], 
+		function(require, jquery, tableCreator, DMInlining, DMOverlays, DMAjax, updateHelper) {
 
 	// Get current table
 	var table = tableCreator.initModul(jquery('#table-apk-static-information'));
@@ -69,7 +69,7 @@ define([ 'require', 'jquery', '../index/apkFileInfoTable', 'jquery.droidmate.inl
 			}
 			
 			//get apks
-			jquery.droidmate.ajax.getAPKSData(true,updateAPKSCallback);
+			DMAjax.getAPKSData(true,updateAPKSCallback);
 		});
 	}
 	
