@@ -385,6 +385,9 @@ define(
 					case modul.apkStatus.ERROR:
 						labelContainer.addClass('glyphicon glyphicon-remove');
 						break;
+					case modul.apkStatus.ABORTED:
+						labelContainer.addClass('glyphicon glyphicon-stop');
+						break;
 					default:
 						labelContainer.addClass('glyphicon glyphicon-remove');
 						break;
