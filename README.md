@@ -40,7 +40,7 @@ After folder selection, DroidMateGUI passes the file path of the selected files 
 
 # Building and testing DroidMateGUI #
 
-DroidMateGUI is built as a .war using e.g. an IDE like eclipse EE (http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/mars1). 
+DroidMateGUI is built as a .war using e.g. an IDE like eclipse EE and maven (http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/mars1). 
 
 
 ## First build (just after cloning from repo)
@@ -61,7 +61,7 @@ To build DroidMateGUI for first time, follow these steps:
 
 ### 2. Do the build ###
 
-1. Import the project in Eclipse.
+1. Import the project in Eclipse as an maven project.
 
 2. Setup a Tomcat Server in Eclipse (Window->Preferences->Server->Runtime Environment->Add) by selecting a Apache Tomcat Server 8.0 and set the path to the installed Tomcat 8.0 directory.
 
@@ -79,10 +79,10 @@ To build DroidMateGUI for first time, follow these steps:
 
 9. Configure DroidMate Path and reports path in the settings (http://localhost.com:8080/DroidMate/Settings).
 
-10. Add Android-SDK AAPT build tool path in the settings.
+10. Configure Android-SDK AAPT build tool path in the settings (http://localhost.com:8080/DroidMate/Settings).
 
 ### Dependencies ###
 
-json: https://github.com/douglascrockford/JSON-java
+see pom.xml in project root directory for dependencies.
 
 
